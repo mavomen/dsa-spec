@@ -1,0 +1,72 @@
+spec_version: "1.0"
+metadata:
+  name: "DFS"
+  category: "graphs"
+  complexity:
+    time: "O(V + E)"
+    space: "O(V)"
+  tags: ["graph", "traversal", "depth-first", "recursive"]
+
+contracts:
+  invariants:
+    - "visited set contains no duplicates"
+    - "all visited vertices exist in graph"
+
+methods:
+  - name: "dfs"
+    params:
+      - name: "graph"
+        type: "&Graph<T>"
+      - name: "start"
+        type: "T"
+    returns: "Vec<T>"
+    preconditions:
+      - "start vertex exists in graph"
+    postconditions:
+      - "result contains all reachable vertices from start"
+      - "result has no duplicates"
+      - "order follows depth-first traversal"
+
+  - name: "dfs_recursive_helper"
+    params:
+      - name: "graph"
+        type: "&Graph<T>"
+      - name: "vertex"
+        type: "T"
+      - name: "visited"
+        type: "&mut HashSet<T>"
+      - name: "result"
+        type: "&mut Vec<T>"
+
+verification:
+  test_cases:
+    - name: "dfs_simple_path"
+      setup: |
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_vertex(3);
+        g.add_edge(1, 2);
+        g.add_edge(2, 3);
+      assertions:
+        - "assert_eq!(dfs(&g, 1), vec![1, 2, 3])"
+
+    - name: "dfs_disconnected"
+      setup: |
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+      assertions:
+        - "assert_eq!(dfs(&g, 1), vec![1])"
+
+    - name: "dfs_cyclic_graph"
+      setup: |
+        let mut g = Graph::new(true);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_vertex(3);
+        g.add_edge(1, 2);
+        g.add_edge(2, 3);
+        g.add_edge(3, 1);
+      assertions:
+        - "assert_eq!(dfs(&g, 1).len(), 3)"

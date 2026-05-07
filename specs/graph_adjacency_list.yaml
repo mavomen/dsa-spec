@@ -1,0 +1,113 @@
+spec_version: "1.0"
+metadata:
+  name: "Graph"
+  category: "graphs"
+  complexity:
+    time: "O(V+E) for traversal"
+    space: "O(V+E)"
+  tags: ["graph", "adjacency-list", "directed", "undirected"]
+
+contracts:
+  invariants:
+    - "all edges reference valid vertices"
+    - "vertex count >= 0"
+
+structs:
+  - name: "Graph"
+    generics:
+      - name: "T"
+        constraints: ["Clone", "Hash", "Eq"]
+    fields:
+      - name: "adjacency_list"
+        type: "HashMap<T, Vec<T>>"
+      - name: "directed"
+        type: "bool"
+
+methods:
+  - name: "new"
+    params:
+      - name: "directed"
+        type: "bool"
+    returns: "Self"
+    postconditions:
+      - "vertex_count == 0"
+      - "edge_count == 0"
+
+  - name: "add_vertex"
+    params:
+      - name: "vertex"
+        type: "T"
+    returns: "bool"
+    postconditions:
+      - "vertex exists in graph"
+
+  - name: "add_edge"
+    params:
+      - name: "from"
+        type: "T"
+      - name: "to"
+        type: "T"
+    returns: "bool"
+    preconditions:
+      - "from and to exist in graph"
+
+  - name: "neighbors"
+    params:
+      - name: "vertex"
+        type: "T"
+    returns: "Option<&Vec<T>>"
+
+  - name: "vertex_count"
+    returns: "usize"
+
+  - name: "edge_count"
+    returns: "usize"
+
+  - name: "has_vertex"
+    params:
+      - name: "vertex"
+        type: "T"
+    returns: "bool"
+
+  - name: "has_edge"
+    params:
+      - name: "from"
+        type: "T"
+      - name: "to"
+        type: "T"
+    returns: "bool"
+
+verification:
+  test_cases:
+    - name: "add_vertex_and_edge"
+      setup: "let mut g = Graph::new(false);"
+      actions:
+        - "g.add_vertex(1)"
+        - "g.add_vertex(2)"
+        - "g.add_edge(1, 2)"
+      assertions:
+        - "assert!(g.has_vertex(1))"
+        - "assert!(g.has_vertex(2))"
+        - "assert!(g.has_edge(1, 2))"
+        - "assert_eq!(g.vertex_count(), 2)"
+        - "assert_eq!(g.edge_count(), 1)"
+
+    - name: "undirected_graph_symmetric_edges"
+      setup: "let mut g = Graph::new(false);"
+      actions:
+        - "g.add_vertex(1)"
+        - "g.add_vertex(2)"
+        - "g.add_edge(1, 2)"
+      assertions:
+        - "assert!(g.has_edge(1, 2))"
+        - "assert!(g.has_edge(2, 1))"
+
+    - name: "directed_graph_no_symmetry"
+      setup: "let mut g = Graph::new(true);"
+      actions:
+        - "g.add_vertex(1)"
+        - "g.add_vertex(2)"
+        - "g.add_edge(1, 2)"
+      assertions:
+        - "assert!(g.has_edge(1, 2))"
+        - "assert!(!g.has_edge(2, 1))"

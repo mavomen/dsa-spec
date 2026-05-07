@@ -1,0 +1,97 @@
+spec_version: "1.0"
+metadata:
+  name: "DynamicArray"
+  category: "arrays"
+  complexity:
+    time: "O(1) amortized push, O(n) insert/remove"
+    space: "O(n)"
+  tags: ["array", "dynamic", "resizable"]
+
+contracts:
+  invariants:
+    - "length >= 0"
+    - "capacity >= length"
+
+structs:
+  - name: "DynamicArray"
+    generics:
+      - name: "T"
+        constraints: ["Clone"]
+    fields:
+      - name: "data"
+        type: "Vec<T>"
+      - name: "len"
+        type: "usize"
+
+methods:
+  - name: "new"
+    returns: "Self"
+    postconditions:
+      - "length == 0"
+      - "capacity >= 0"
+
+  - name: "push"
+    params:
+      - name: "item"
+        type: "T"
+    postconditions:
+      - "length == old.length + 1"
+      - "last element == item"
+
+  - name: "pop"
+    returns: "Option<T>"
+    preconditions:
+      - "length > 0"
+    postconditions:
+      - "length == old.length - 1"
+
+  - name: "get"
+    params:
+      - name: "index"
+        type: "usize"
+    returns: "Option<&T>"
+    preconditions:
+      - "index < length"
+
+  - name: "len"
+    returns: "usize"
+    postconditions:
+      - "result >= 0"
+
+  - name: "is_empty"
+    returns: "bool"
+
+verification:
+  test_cases:
+    - name: "push_increases_length"
+      setup: "let mut arr = DynamicArray::new();"
+      actions:
+        - "arr.push(1)"
+        - "arr.push(2)"
+      assertions:
+        - "assert_eq!(arr.len(), 2)"
+        - "assert!(!arr.is_empty())"
+
+    - name: "pop_returns_last_element"
+      setup: "let mut arr = DynamicArray::new();"
+      actions:
+        - "arr.push(10)"
+        - "arr.push(20)"
+      assertions:
+        - "assert_eq!(arr.pop(), Some(20))"
+        - "assert_eq!(arr.len(), 1)"
+
+    - name: "pop_empty_returns_none"
+      setup: "let arr = DynamicArray::<i32>::new();"
+      assertions:
+        - "assert_eq!(arr.pop(), None)"
+
+    - name: "get_valid_index"
+      setup: "let mut arr = DynamicArray::new(); arr.push(5);"
+      assertions:
+        - "assert_eq!(arr.get(0), Some(&5))"
+
+    - name: "get_out_of_bounds"
+      setup: "let mut arr = DynamicArray::new(); arr.push(5);"
+      assertions:
+        - "assert_eq!(arr.get(1), None)"

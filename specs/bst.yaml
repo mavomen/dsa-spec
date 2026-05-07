@@ -1,0 +1,95 @@
+spec_version: "1.0"
+metadata:
+  name: "BinarySearchTree"
+  category: "trees"
+  complexity:
+    time: "O(log n) average, O(n) worst"
+    space: "O(n)"
+  tags: ["binary-tree", "search", "ordered"]
+
+contracts:
+  invariants:
+    - "left.value < node.value < right.value"
+    - "no duplicate values"
+
+structs:
+  - name: "BSTNode"
+    generics:
+      - name: "T"
+        constraints: ["Ord", "Clone"]
+    fields:
+      - name: "value"
+        type: "T"
+      - name: "left"
+        type: "Option<Box<BSTNode<T>>>"
+      - name: "right"
+        type: "Option<Box<BSTNode<T>>>"
+
+  - name: "BinarySearchTree"
+    generics:
+      - name: "T"
+        constraints: ["Ord", "Clone"]
+    fields:
+      - name: "root"
+        type: "Option<Box<BSTNode<T>>>"
+
+methods:
+  - name: "new"
+    returns: "Self"
+    postconditions:
+      - "root is None"
+
+  - name: "insert"
+    params:
+      - name: "value"
+        type: "T"
+    returns: "bool"
+    postconditions:
+      - "tree contains value"
+      - "BST invariant maintained"
+
+  - name: "contains"
+    params:
+      - name: "value"
+        type: "T"
+    returns: "bool"
+
+  - name: "inorder"
+    returns: "Vec<T>"
+    postconditions:
+      - "result is sorted ascending"
+
+  - name: "is_empty"
+    returns: "bool"
+
+verification:
+  test_cases:
+    - name: "insert_and_contains"
+      setup: "let mut bst = BinarySearchTree::new();"
+      actions:
+        - "bst.insert(5)"
+        - "bst.insert(3)"
+        - "bst.insert(7)"
+      assertions:
+        - "assert!(bst.contains(5))"
+        - "assert!(bst.contains(3))"
+        - "assert!(bst.contains(7))"
+        - "assert!(!bst.contains(10))"
+
+    - name: "inorder_returns_sorted"
+      setup: "let mut bst = BinarySearchTree::new();"
+      actions:
+        - "bst.insert(5)"
+        - "bst.insert(3)"
+        - "bst.insert(7)"
+        - "bst.insert(1)"
+        - "bst.insert(9)"
+      assertions:
+        - "assert_eq!(bst.inorder(), vec![1, 3, 5, 7, 9])"
+
+    - name: "duplicate_insert_returns_false"
+      setup: "let mut bst = BinarySearchTree::new();"
+      actions:
+        - "bst.insert(10)"
+      assertions:
+        - "assert_eq!(bst.insert(10), false)"

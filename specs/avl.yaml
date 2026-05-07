@@ -1,0 +1,104 @@
+spec_version: "1.0"
+metadata:
+  name: "AVLTree"
+  category: "trees"
+  complexity:
+    time: "O(log n) search/insert/delete"
+    space: "O(n)"
+  tags: ["binary-tree", "balanced", "self-balancing", "avl"]
+
+contracts:
+  invariants:
+    - "left.value < node.value < right.value"
+    - "|left.height - right.height| <= 1"
+    - "height = 1 + max(left.height, right.height)"
+
+structs:
+  - name: "AVLNode"
+    generics:
+      - name: "T"
+        constraints: ["Ord", "Clone"]
+    fields:
+      - name: "value"
+        type: "T"
+      - name: "left"
+        type: "Option<Box<AVLNode<T>>>"
+      - name: "right"
+        type: "Option<Box<AVLNode<T>>>"
+      - name: "height"
+        type: "i32"
+
+  - name: "AVLTree"
+    generics:
+      - name: "T"
+        constraints: ["Ord", "Clone"]
+    fields:
+      - name: "root"
+        type: "Option<Box<AVLNode<T>>>"
+
+methods:
+  - name: "new"
+    returns: "Self"
+    postconditions:
+      - "root is None"
+
+  - name: "insert"
+    params:
+      - name: "value"
+        type: "T"
+    returns: "bool"
+    postconditions:
+      - "tree contains value"
+      - "AVL invariant maintained"
+
+  - name: "contains"
+    params:
+      - name: "value"
+        type: "T"
+    returns: "bool"
+
+  - name: "inorder"
+    returns: "Vec<T>"
+    postconditions:
+      - "result is sorted ascending"
+
+  - name: "height"
+    returns: "i32"
+
+  - name: "is_empty"
+    returns: "bool"
+
+verification:
+  test_cases:
+    - name: "insert_maintains_balance"
+      setup: "let mut avl = AVLTree::new();"
+      actions:
+        - "avl.insert(1)"
+        - "avl.insert(2)"
+        - "avl.insert(3)"
+      assertions:
+        - "assert!(avl.contains(2))"
+        - "assert_eq!(avl.height(), 2)"
+        - "assert_eq!(avl.inorder(), vec![1, 2, 3])"
+
+    - name: "left_heavy_rebalance"
+      setup: "let mut avl = AVLTree::new();"
+      actions:
+        - "avl.insert(3)"
+        - "avl.insert(2)"
+        - "avl.insert(1)"
+      assertions:
+        - "assert_eq!(avl.height(), 2)"
+        - "assert_eq!(avl.inorder(), vec![1, 2, 3])"
+
+    - name: "multiple_inserts_stay_balanced"
+      setup: "let mut avl = AVLTree::new();"
+      actions:
+        - "avl.insert(10)"
+        - "avl.insert(20)"
+        - "avl.insert(30)"
+        - "avl.insert(40)"
+        - "avl.insert(50)"
+        - "avl.insert(25)"
+      assertions:
+        - "assert!(avl.height() <= 3)"

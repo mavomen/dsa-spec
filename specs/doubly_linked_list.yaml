@@ -1,0 +1,104 @@
+spec_version: "1.0"
+metadata:
+  name: "DoublyLinkedList"
+  category: "linked-lists"
+  complexity:
+    time: "O(1) insert/remove at head/tail, O(n) search"
+    space: "O(n)"
+  tags: ["linked-list", "doubly", "bidirectional"]
+
+contracts:
+  invariants:
+    - "no cycles"
+    - "for each node, node.next.prev == node"
+
+structs:
+  - name: "Node"
+    generics:
+      - name: "T"
+        constraints: ["Clone"]
+    fields:
+      - name: "value"
+        type: "T"
+      - name: "prev"
+        type: "Option<Box<Node<T>>>"
+      - name: "next"
+        type: "Option<Box<Node<T>>>"
+
+  - name: "DoublyLinkedList"
+    generics:
+      - name: "T"
+        constraints: ["Clone"]
+    fields:
+      - name: "head"
+        type: "Option<Box<Node<T>>>"
+      - name: "tail"
+        type: "Option<Box<Node<T>>>"
+
+methods:
+  - name: "new"
+    returns: "Self"
+    postconditions:
+      - "head is None"
+      - "tail is None"
+
+  - name: "push_front"
+    params:
+      - name: "value"
+        type: "T"
+    postconditions:
+      - "head.value == value"
+
+  - name: "push_back"
+    params:
+      - name: "value"
+        type: "T"
+    postconditions:
+      - "tail.value == value"
+
+  - name: "pop_front"
+    returns: "Option<T>"
+    preconditions:
+      - "!is_empty()"
+
+  - name: "pop_back"
+    returns: "Option<T>"
+    preconditions:
+      - "!is_empty()"
+
+  - name: "is_empty"
+    returns: "bool"
+
+  - name: "len"
+    returns: "usize"
+
+verification:
+  test_cases:
+    - name: "push_front_pop_front"
+      setup: "let mut list = DoublyLinkedList::new();"
+      actions:
+        - "list.push_front(1)"
+        - "list.push_front(2)"
+      assertions:
+        - "assert_eq!(list.pop_front(), Some(2))"
+        - "assert_eq!(list.pop_front(), Some(1))"
+
+    - name: "push_back_pop_back"
+      setup: "let mut list = DoublyLinkedList::new();"
+      actions:
+        - "list.push_back(1)"
+        - "list.push_back(2)"
+      assertions:
+        - "assert_eq!(list.pop_back(), Some(2))"
+        - "assert_eq!(list.pop_back(), Some(1))"
+
+    - name: "mixed_operations"
+      setup: "let mut list = DoublyLinkedList::new();"
+      actions:
+        - "list.push_front(1)"
+        - "list.push_back(3)"
+        - "list.push_front(0)"
+      assertions:
+        - "assert_eq!(list.pop_front(), Some(0))"
+        - "assert_eq!(list.pop_back(), Some(3))"
+        - "assert_eq!(list.pop_back(), Some(1))"

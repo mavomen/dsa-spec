@@ -1,0 +1,90 @@
+spec_version: "1.0"
+metadata:
+  name: "SinglyLinkedList"
+  category: "linked-lists"
+  complexity:
+    time: "O(1) prepend, O(n) append/search"
+    space: "O(n)"
+  tags: ["linked-list", "singly", "recursive"]
+
+contracts:
+  invariants:
+    - "no cycles"
+    - "head is None iff tail is None"
+
+structs:
+  - name: "Node"
+    generics:
+      - name: "T"
+        constraints: ["Clone"]
+    fields:
+      - name: "value"
+        type: "T"
+      - name: "next"
+        type: "Option<Box<Node<T>>>"
+
+  - name: "SinglyLinkedList"
+    generics:
+      - name: "T"
+        constraints: ["Clone"]
+    fields:
+      - name: "head"
+        type: "Option<Box<Node<T>>>"
+
+methods:
+  - name: "new"
+    returns: "Self"
+    postconditions:
+      - "head is None"
+
+  - name: "prepend"
+    params:
+      - name: "value"
+        type: "T"
+    postconditions:
+      - "head.value == value"
+      - "list length increased by 1"
+
+  - name: "append"
+    params:
+      - name: "value"
+        type: "T"
+    postconditions:
+      - "last element == value"
+
+  - name: "pop_front"
+    returns: "Option<T>"
+    preconditions:
+      - "!is_empty()"
+    postconditions:
+      - "head == old.head.next"
+
+  - name: "is_empty"
+    returns: "bool"
+
+  - name: "len"
+    returns: "usize"
+
+verification:
+  test_cases:
+    - name: "prepend_pop_front"
+      setup: "let mut list = SinglyLinkedList::new();"
+      actions:
+        - "list.prepend(1)"
+        - "list.prepend(2)"
+      assertions:
+        - "assert_eq!(list.pop_front(), Some(2))"
+        - "assert_eq!(list.pop_front(), Some(1))"
+
+    - name: "append_order"
+      setup: "let mut list = SinglyLinkedList::new();"
+      actions:
+        - "list.append(1)"
+        - "list.append(2)"
+      assertions:
+        - "assert_eq!(list.pop_front(), Some(1))"
+
+    - name: "pop_front_empty"
+      setup: "let list = SinglyLinkedList::<i32>::new();"
+      assertions:
+        - "assert_eq!(list.pop_front(), None)"

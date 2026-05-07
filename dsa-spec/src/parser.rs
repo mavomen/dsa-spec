@@ -1,10 +1,8 @@
 use crate::ast::Spec;
-use serde_yaml;
 
 pub fn parse(spec_text: &str) -> Result<Spec, String> {
-    let value: serde_yaml::Value =
-        serde_yaml::from_str(spec_text).map_err(|e| format!("YAML syntax error: {}", e))?;
-    serde_yaml::from_value::<Spec>(value).map_err(|e| format!("Spec validation error: {}", e))
+    serde_yaml::from_str::<Spec>(spec_text)
+        .map_err(|e| format!("YAML parse error: {e}"))
 }
 
 #[cfg(test)]
@@ -47,9 +45,8 @@ verification:
     fn test_malformed_yaml_error_message() {
         let yaml = "invalid: [unclosed";
         let err = parse(yaml).unwrap_err();
-        // The error should mention YAML syntax (from the first step) and contain location info
-        assert!(err.contains("YAML syntax error"));
-        // serde_yaml's error typically includes line/column numbers, e.g. "line 1, column 14"
+        // serde_yaml errors contain the location (line, column)
+        assert!(err.contains("YAML parse error"));
         assert!(err.contains("line") || err.contains("column"));
     }
 }
