@@ -8,3 +8,4 @@ pub mod spec_schema;
 pub mod template_engine;
 pub mod typescript_backend;
 pub mod validator;
+pub mod go_backend;
