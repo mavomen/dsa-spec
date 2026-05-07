@@ -1,0 +1,106 @@
+spec_version: "1.0"
+metadata:
+  name: "CircularBuffer"
+  category: "arrays"
+  complexity:
+    time: "O(1) enqueue/dequeue"
+    space: "O(n)"
+  tags: ["circular", "buffer", "queue", "fixed-size"]
+
+contracts:
+  invariants:
+    - "length <= capacity"
+    - "0 <= head < capacity"
+    - "0 <= tail < capacity"
+
+structs:
+  - name: "CircularBuffer"
+    generics:
+      - name: "T"
+        constraints: ["Clone", "Default"]
+    fields:
+      - name: "buffer"
+        type: "Vec<Option<T>>"
+      - name: "head"
+        type: "usize"
+      - name: "tail"
+        type: "usize"
+      - name: "size"
+        type: "usize"
+      - name: "capacity"
+        type: "usize"
+
+methods:
+  - name: "new"
+    params:
+      - name: "capacity"
+        type: "usize"
+    returns: "Self"
+    preconditions:
+      - "capacity > 0"
+    postconditions:
+      - "is_empty() == true"
+      - "capacity == capacity"
+
+  - name: "enqueue"
+    params:
+      - name: "item"
+        type: "T"
+    returns: "Result<(), String>"
+    preconditions:
+      - "size < capacity"
+    postconditions:
+      - "size == old.size + 1"
+
+  - name: "dequeue"
+    returns: "Option<T>"
+    preconditions:
+      - "size > 0"
+    postconditions:
+      - "size == old.size - 1"
+
+  - name: "is_full"
+    returns: "bool"
+
+  - name: "is_empty"
+    returns: "bool"
+
+  - name: "len"
+    returns: "usize"
+
+verification:
+  test_cases:
+    - name: "enqueue_dequeue_fifo"
+      setup: "let mut buf = CircularBuffer::new(3);"
+      actions:
+        - "buf.enqueue(1)"
+        - "buf.enqueue(2)"
+      assertions:
+        - "assert_eq!(buf.dequeue(), Some(1))"
+        - "assert_eq!(buf.dequeue(), Some(2))"
+
+    - name: "full_buffer_prevents_enqueue"
+      setup: "let mut buf = CircularBuffer::new(1);"
+      actions:
+        - "buf.enqueue(42)"
+      assertions:
+        - "assert!(buf.is_full())"
+        - "assert!(buf.enqueue(43).is_err())"
+
+    - name: "empty_buffer_returns_none"
+      setup: "let buf = CircularBuffer::<i32>::new(5);"
+      assertions:
+        - "assert_eq!(buf.dequeue(), None)"
+
+    - name: "wrap_around_works"
+      setup: "let mut buf = CircularBuffer::new(3);"
+      actions:
+        - "buf.enqueue(1)"
+        - "buf.enqueue(2)"
+        - "buf.dequeue()"
+        - "buf.enqueue(3)"
+        - "buf.enqueue(4)"
+      assertions:
+        - "assert_eq!(buf.dequeue(), Some(2))"
+        - "assert_eq!(buf.dequeue(), Some(3))"
+        - "assert_eq!(buf.dequeue(), Some(4))"

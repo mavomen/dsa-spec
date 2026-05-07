@@ -1,0 +1,71 @@
+spec_version: "1.0"
+metadata:
+  name: "Mergesort"
+  category: "sorting"
+  complexity:
+    time: "O(n log n) always"
+    space: "O(n)"
+  tags: ["sorting", "divide-and-conquer", "stable"]
+
+contracts:
+  postconditions:
+    - "array is sorted in ascending order"
+    - "array contains same multiset of elements"
+    - "stable: equal elements preserve original order"
+
+methods:
+  - name: "mergesort"
+    params:
+      - name: "arr"
+        type: "&mut [T]"
+    preconditions:
+      - "arr is valid slice"
+    postconditions:
+      - "arr is sorted ascending"
+
+  - name: "merge"
+    params:
+      - name: "arr"
+        type: "&mut [T]"
+      - name: "left"
+        type: "usize"
+      - name: "mid"
+        type: "usize"
+      - name: "right"
+        type: "usize"
+    preconditions:
+      - "left <= mid <= right"
+      - "arr[left..mid] is sorted"
+      - "arr[mid..right] is sorted"
+    postconditions:
+      - "arr[left..right] is sorted"
+
+verification:
+  test_cases:
+    - name: "sort_unsorted_array"
+      setup: "let mut arr = vec![5, 3, 8, 1, 2];"
+      actions:
+        - "mergesort(&mut arr)"
+      assertions:
+        - "assert_eq!(arr, vec![1, 2, 3, 5, 8])"
+
+    - name: "sort_empty_array"
+      setup: "let mut arr: Vec<i32> = vec![];"
+      actions:
+        - "mergesort(&mut arr)"
+      assertions:
+        - "assert_eq!(arr, vec![])"
+
+    - name: "sort_single_element"
+      setup: "let mut arr = vec![7];"
+      actions:
+        - "mergesort(&mut arr)"
+      assertions:
+        - "assert_eq!(arr, vec![7])"
+
+    - name: "sort_already_sorted"
+      setup: "let mut arr = vec![1, 2, 3, 4, 5];"
+      actions:
+        - "mergesort(&mut arr)"
+      assertions:
+        - "assert_eq!(arr, vec![1, 2, 3, 4, 5])"

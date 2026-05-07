@@ -1,7 +1,7 @@
 use crate::ast::Spec;
 use crate::spec_schema::SPEC_JSON_SCHEMA;
-use jsonschema::{Draft, JSONSchema, ValidationError};
 use serde_json;
+use jsonschema::{Draft, JSONSchema, ValidationError};
 
 pub fn validate(spec: &Spec) -> Result<(), Vec<String>> {
     let value = serde_json::to_value(spec)
@@ -20,10 +20,9 @@ pub fn validate(spec: &Spec) -> Result<(), Vec<String>> {
         Err(errors) => errors.collect(),
     };
 
-    let messages: Vec<String> = errors
-        .iter()
-        .map(|e| format!("{} (at {})", e, e.instance_path))
-        .collect();
+    let messages: Vec<String> = errors.iter().map(|e| {
+        format!("{} (at {})", e, e.instance_path)
+    }).collect();
 
     Err(messages)
 }
@@ -32,8 +31,8 @@ pub fn validate(spec: &Spec) -> Result<(), Vec<String>> {
 mod tests {
     use super::*;
     use crate::ast::{
-        Complexity, Contracts, FieldDef, GenericParam, Metadata, MethodDef, ParamDef, Spec,
-        StructDef, TestCase, Type, Verification,
+        Spec, Metadata, Complexity, Contracts, StructDef, GenericParam,
+        FieldDef, MethodDef, ParamDef, Verification, TestCase, Type,
     };
 
     fn make_valid_spec() -> Spec {
@@ -141,5 +140,73 @@ mod tests {
             ..Default::default()
         };
         assert!(validate(&spec).is_err());
+    }
+
+    #[test]
+    fn test_bst_invariants_pass_validation() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "BST".into(),
+                category: "trees".into(),
+                ..Default::default()
+            },
+            contracts: Contracts {
+                invariants: vec![
+                    "left.value < node.value < right.value".into(),
+                    "no duplicate values".into(),
+                ],
+            },
+            structs: vec![
+                StructDef {
+                    name: "BSTNode".into(),
+                    generics: vec![GenericParam {
+                        name: "T".into(),
+                        constraints: vec!["Ord".into(), "Clone".into()],
+                    }],
+                    fields: vec![
+                        FieldDef {
+                            name: "value".into(),
+                            field_type: Type::Simple("T".into()),
+                        },
+                        FieldDef {
+                            name: "left".into(),
+                            field_type: Type::Simple("Option<Box<BSTNode<T>>>".into()),
+                        },
+                        FieldDef {
+                            name: "right".into(),
+                            field_type: Type::Simple("Option<Box<BSTNode<T>>>".into()),
+                        },
+                    ],
+                },
+                StructDef {
+                    name: "BinarySearchTree".into(),
+                    generics: vec![GenericParam {
+                        name: "T".into(),
+                        constraints: vec!["Ord".into(), "Clone".into()],
+                    }],
+                    fields: vec![
+                        FieldDef {
+                            name: "root".into(),
+                            field_type: Type::Simple("Option<Box<BSTNode<T>>>".into()),
+                        },
+                    ],
+                },
+            ],
+            methods: vec![
+                MethodDef {
+                    name: "insert".into(),
+                    params: vec![ParamDef {
+                        name: "value".into(),
+                        param_type: Type::Simple("T".into()),
+                    }],
+                    returns: Some("bool".into()),
+                    postconditions: vec!["tree contains value".into()],
+                    ..Default::default()
+                },
+            ],
+            ..Default::default()
+        };
+        assert!(validate(&spec).is_ok());
     }
 }
