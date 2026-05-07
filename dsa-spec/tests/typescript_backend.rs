@@ -91,3 +91,21 @@ verification:
     let code = generate(&spec);
     assert!(code.contains("string | null"));
 }
+
+#[test]
+fn test_complex_type_inference() {
+    let spec = parse_spec(r#"
+spec_version: "1.0"
+metadata:
+  name: "Test"
+  category: "test"
+structs: []
+methods:
+  - name: "getItems"
+    returns: "Vec<Option<string>>"
+verification:
+  test_cases: []
+"#);
+    let code = generate(&spec);
+    assert!(code.contains("(string | null)[]"));
+}
