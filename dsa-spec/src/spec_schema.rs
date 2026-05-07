@@ -1,5 +1,3 @@
-/// The JSON Schema for DSA-SPEC version 1.0.
-/// This schema is used to validate the parsed YAML before code generation.
 pub const SPEC_JSON_SCHEMA: &str = r#"{
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "DSA-SPEC Schema",
@@ -11,13 +9,19 @@ pub const SPEC_JSON_SCHEMA: &str = r#"{
       "type": "object",
       "required": ["name", "category"],
       "properties": {
-        "name": { "type": "string" },
-        "category": { "type": "string" },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1
+        },
         "complexity": {
           "type": "object",
           "properties": {
-            "time": { "type": "string" },
-            "space": { "type": "string" }
+            "time": { "type": ["string", "null"] },
+            "space": { "type": ["string", "null"] }
           }
         },
         "tags": {
@@ -41,7 +45,10 @@ pub const SPEC_JSON_SCHEMA: &str = r#"{
         "type": "object",
         "required": ["name"],
         "properties": {
-          "name": { "type": "string" },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
           "generics": {
             "type": "array",
             "items": {
@@ -76,7 +83,10 @@ pub const SPEC_JSON_SCHEMA: &str = r#"{
         "type": "object",
         "required": ["name"],
         "properties": {
-          "name": { "type": "string" },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
           "params": {
             "type": "array",
             "items": {
@@ -109,7 +119,10 @@ pub const SPEC_JSON_SCHEMA: &str = r#"{
             "type": "object",
             "required": ["name"],
             "properties": {
-              "name": { "type": "string" },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
               "setup": { "type": "string" },
               "actions": {
                 "type": "array",
