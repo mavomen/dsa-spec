@@ -1,0 +1,55 @@
+/// {{ metadata.name }}
+{% if metadata.complexity.time %}
+/// Time complexity: {{ metadata.complexity.time }}
+{% endif %}
+{% if metadata.complexity.space %}
+/// Space complexity: {{ metadata.complexity.space }}
+{% endif %}
+{% if contracts.invariants %}
+///
+/// # Invariants
+{% for inv in contracts.invariants %}
+/// - {{ inv }}
+{% endfor %}
+{% endif %}
+
+{% for struct in structs %}
+pub struct {{ struct.name }}<{% for generic in struct.generics %}{{ generic.name }}{% if generic.bounds != "" %}: {{ generic.bounds }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}> {
+    {% for field in struct.fields %}
+    {{ field.name }}: {{ field.field_type }}, // TODO: verify type mapping
+    {% endfor %}
+}
+
+impl<{% for generic in struct.generics %}{{ generic.name }}{% if generic.bounds != "" %}: {{ generic.bounds }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}> {{ struct.name }}<{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}> {
+    {% for method in methods %}
+    {% if method.preconditions or method.postconditions %}
+    /// # Contracts
+    {% for pre in method.preconditions %}
+    /// - **Precondition:** {{ pre }}
+    {% endfor %}
+    {% for post in method.postconditions %}
+    /// - **Postcondition:** {{ post }}
+    {% endfor %}
+    {% endif %}
+    pub fn {{ method.name }}(&self{% for param in method.params %}, {{ param.name }}: {{ param.param_type }}{% endfor %}){% if method.returns %} -> {{ method.returns }}{% endif %} {
+        // TODO: Implement {{ method.name }}
+        todo!()
+    }
+    {% endfor %}
+}
+{% endfor %}
+
+{% for test in verification.test_cases %}
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_{{ test.name }}() {
+        // TODO: Setup and assertions for {{ test.name }}
+        {% if test.setup %}{{ test.setup }}{% endif %}
+        {% for action in test.actions %}{{ action }};{% endfor %}
+        // Assertions: {% for assertion in test.assertions %}{{ assertion }};{% endfor %}
+    }
+}
+{% endfor %}
