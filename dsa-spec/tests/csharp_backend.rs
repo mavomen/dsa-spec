@@ -1,0 +1,114 @@
+use dsa_spec::ast::Spec;
+use dsa_spec::backend::Backend;
+use dsa_spec::csharp_backend::CSharpBackend;
+
+fn parse_spec(yaml: &str) -> Spec {
+    serde_yaml::from_str(yaml).expect("Failed to parse test spec")
+}
+
+fn generate(spec: &Spec) -> String {
+    let backend = CSharpBackend::new("templates").expect("Failed to create CSharpBackend");
+    backend.generate(spec).expect("Generation failed")
+}
+
+#[test]
+fn test_basic_class_generation() {
+    let spec = parse_spec(
+        r#"
+spec_version: "1.0"
+metadata:
+  name: "Stack"
+  category: "linear"
+structs:
+  - name: "Stack"
+    generics:
+      - name: "T"
+    fields:
+      - name: "_items"
+        type: "Vec<T>"
+methods:
+  - name: "Push"
+    params:
+      - name: "item"
+        type: "T"
+    returns: "void"
+verification:
+  test_cases: []
+"#,
+    );
+    let code = generate(&spec);
+    assert!(code.contains("public class Stack<T>"));
+    assert!(code.contains("public List<T> _items { get; set; }"));
+    assert!(code.contains("public void Push(T item)"));
+    assert!(code.contains("throw new NotImplementedException();"));
+}
+
+#[test]
+fn test_nullable_reference_types() {
+    let spec = parse_spec(
+        r#"
+spec_version: "1.0"
+metadata:
+  name: "Test"
+  category: "test"
+structs: []
+methods:
+  - name: "GetValue"
+    returns: "Option<string>"
+verification:
+  test_cases: []
+"#,
+    );
+    let code = generate(&spec);
+    // Static class generates: public static string? GetValue()
+    assert!(code.contains("string? GetValue()"));
+}
+
+#[test]
+fn test_xunit_test_generation() {
+    let spec = parse_spec(
+        r#"
+spec_version: "1.0"
+metadata:
+  name: "Test"
+  category: "test"
+structs: []
+methods: []
+verification:
+  test_cases:
+    - name: "SimpleTest"
+      setup: "var x = 1;"
+      actions:
+        - "x += 1"
+      assertions:
+        - "Assert.Equal(2, x)"
+"#,
+    );
+    let code = generate(&spec);
+    assert!(code.contains("[Fact]"));
+    assert!(code.contains("public void SimpleTest_Test()"));
+    assert!(code.contains("var x = 1;"));
+    assert!(code.contains("x += 1;"));
+    assert!(code.contains("Assert.Equal(2, x);"));
+}
+
+#[test]
+fn test_throws_exception_for_result_type() {
+    let spec = parse_spec(
+        r#"
+spec_version: "1.0"
+metadata:
+  name: "Test"
+  category: "test"
+structs: []
+methods:
+  - name: "TryParse"
+    returns: "Result<i32,string>"
+verification:
+  test_cases: []
+"#,
+    );
+    let code = generate(&spec);
+    // Static class generates: public static int TryParse()
+    assert!(code.contains("int TryParse()"));
+}

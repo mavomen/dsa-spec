@@ -1,0 +1,102 @@
+/// <summary>
+/// {{ metadata.name }}
+{% if metadata.complexity.time %}
+/// Time complexity: {{ metadata.complexity.time }}
+{% endif %}
+{% if metadata.complexity.space %}
+/// Space complexity: {{ metadata.complexity.space }}
+{% endif %}
+{% if contracts.invariants %}
+/// Invariants:
+{% for inv in contracts.invariants %}
+/// - {{ inv }}
+{% endfor %}
+{% endif %}
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace {{ metadata.name | replace(from=" ", to="") }}
+{
+{% if structs %}
+{% for struct in structs %}
+public class {{ struct.name }}<{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}>
+{% for generic in struct.generics %}{% if generic.bounds != "" %}    {{ generic.bounds }}
+{% endif %}{% endfor %}
+{
+    {% for field in struct.fields %}
+    public {{ field.csharp_type }} {{ field.name }} { get; set; }
+    {% endfor %}
+
+    {% for method in methods %}
+    /// <summary>
+    /// {{ method.name }}
+    /// {% if method.preconditions %}
+    /// Preconditions:
+    /// {% for pre in method.preconditions %}- {{ pre }}
+    /// {% endfor %}{% endif %}
+    /// {% if method.postconditions %}
+    /// Postconditions:
+    /// {% for post in method.postconditions %}- {{ post }}
+    /// {% endfor %}{% endif %}
+    /// {% if method.throws_exception %}
+    /// Throws: Exception (from Result type)
+    /// {% endif %}
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public {{ method.returns | default(value="void") }} {{ method.name }}({% for param in method.params %}{{ param.csharp_type }} {{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %})
+    {
+        // TODO: Implement {{ method.name }}
+        throw new NotImplementedException();
+    }
+    {% endfor %}
+}
+{% endfor %}
+{% else %}
+{# No structs – generate a static class with methods #}
+public static class {{ metadata.name | replace(from=" ", to="") }}Methods
+{
+    {% for method in methods %}
+    /// <summary>
+    /// {{ method.name }}
+    /// {% if method.preconditions %}
+    /// Preconditions:
+    /// {% for pre in method.preconditions %}- {{ pre }}
+    /// {% endfor %}{% endif %}
+    /// {% if method.postconditions %}
+    /// Postconditions:
+    /// {% for post in method.postconditions %}- {{ post }}
+    /// {% endfor %}{% endif %}
+    /// {% if method.throws_exception %}
+    /// Throws: Exception (from Result type)
+    /// {% endif %}
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public static {{ method.returns | default(value="void") }} {{ method.name }}({% for param in method.params %}{{ param.csharp_type }} {{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %})
+    {
+        // TODO: Implement {{ method.name }}
+        throw new NotImplementedException();
+    }
+    {% endfor %}
+}
+{% endif %}
+
+// ========== Generated xUnit tests ==========
+{% for test in verification.test_cases %}
+public class {{ test.name }}Tests
+{
+    [Fact]
+    public void {{ test.name }}_Test()
+    {
+        // Setup
+        {% if test.setup %}{{ test.setup }}{% endif %}
+        // Actions
+        {% for action in test.actions %}{{ action }};{% endfor %}
+        // Assertions
+        {% for assertion in test.assertions %}{{ assertion }};{% endfor %}
+    }
+}
+{% endfor %}
+}
