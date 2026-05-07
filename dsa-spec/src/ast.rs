@@ -1,16 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum Type {
-    Simple(String),
-    Parameterized {
-        base: String,
-        params: Vec<Type>,
-    },
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Spec {
     pub spec_version: String,
     pub metadata: Metadata,
@@ -24,7 +14,7 @@ pub struct Spec {
     pub verification: Verification,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Metadata {
     pub name: String,
     pub category: String,
@@ -46,7 +36,7 @@ pub struct Contracts {
     pub invariants: Vec<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct StructDef {
     pub name: String,
     #[serde(default)]
@@ -55,21 +45,21 @@ pub struct StructDef {
     pub fields: Vec<FieldDef>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GenericParam {
     pub name: String,
     #[serde(default)]
     pub constraints: Vec<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct FieldDef {
     pub name: String,
     #[serde(rename = "type")]
     pub field_type: Type,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct MethodDef {
     pub name: String,
     #[serde(default)]
@@ -82,7 +72,7 @@ pub struct MethodDef {
     pub postconditions: Vec<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ParamDef {
     pub name: String,
     #[serde(rename = "type")]
@@ -95,7 +85,7 @@ pub struct Verification {
     pub test_cases: Vec<TestCase>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct TestCase {
     pub name: String,
     #[serde(default)]
@@ -104,4 +94,17 @@ pub struct TestCase {
     pub actions: Vec<String>,
     #[serde(default)]
     pub assertions: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum Type {
+    Simple(String),
+    Parameterized { base: String, params: Vec<Type> },
+}
+
+impl Default for Type {
+    fn default() -> Self {
+        Type::Simple(String::new())
+    }
 }
