@@ -6,4 +6,5 @@ pub mod python_backend;
 pub mod rust_backend;
 pub mod spec_schema;
 pub mod template_engine;
+pub mod typescript_backend;
 pub mod validator;
