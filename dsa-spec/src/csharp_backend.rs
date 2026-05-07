@@ -276,8 +276,7 @@ struct TestContext<'a> {
 mod tests {
     use super::*;
     use crate::ast::{
-        Complexity, Contracts, FieldDef, Metadata, MethodDef, ParamDef, Spec, StructDef,
-        Verification,
+        Complexity, Contracts, FieldDef, Metadata, MethodDef, Spec, StructDef, Verification,
     };
 
     fn make_minimal_spec() -> Spec {
