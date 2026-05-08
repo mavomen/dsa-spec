@@ -1,0 +1,94 @@
+// {{ metadata.name }}
+{% if metadata.complexity.time %}
+// Time complexity: {{ metadata.complexity.time }}
+{% endif %}
+{% if metadata.complexity.space %}
+// Space complexity: {{ metadata.complexity.space }}
+{% endif %}
+{% if contracts.invariants %}
+// Invariants:
+{% for inv in contracts.invariants %}
+// - {{ inv }}
+{% endfor %}
+{% endif %}
+
+package {{ metadata.package_name }}
+
+import "testing"
+
+{% if structs %}
+{% for struct in structs %}
+{% if methods %}
+{% if struct.generics %}
+// {{ struct.name }}Interface defines the contract for {{ struct.name }}
+type {{ struct.name }}Interface[{% for generic in struct.generics %}{{ generic.name }} {{ generic.constraint }}{% if not loop.last %}, {% endif %}{% endfor %}] interface {
+{% else %}
+// {{ struct.name }}Interface defines the contract for {{ struct.name }}
+type {{ struct.name }}Interface interface {
+{% endif %}
+	{% for method in methods %}
+	{{ method.name }}({% for param in method.params %}{{ param.name }} {{ param.go_type }}{% if not loop.last %}, {% endif %}{% endfor %}) {% if method.returns %}{{ method.returns }}{% endif %}
+	{% endfor %}
+}
+
+{% endif %}
+// {{ struct.name }} represents a {{ metadata.name }}
+type {{ struct.name }}[{% for generic in struct.generics %}{{ generic.name }} {{ generic.constraint }}{% if not loop.last %}, {% endif %}{% endfor %}] struct {
+	{% for field in struct.fields %}
+	{{ field.name }} {{ field.go_type }}
+	{% endfor %}
+}
+
+{% for method in methods %}
+// {{ method.name }}
+{% if method.preconditions %}
+// Preconditions:
+{% for pre in method.preconditions %} // - {{ pre }}
+{% endfor %}
+{% endif %}
+{% if method.postconditions %}
+// Postconditions:
+{% for post in method.postconditions %} // - {{ post }}
+{% endfor %}
+{% endif %}
+{% if method.returns_error %}
+// Returns a (value, error) tuple.
+{% endif %}
+func (s *{{ struct.name }}[{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}]) {{ method.name }}({% for param in method.params %}{{ param.name }} {{ param.go_type }}{% if not loop.last %}, {% endif %}{% endfor %}) {% if method.returns %}{{ method.returns }}{% endif %} {
+	// TODO: Implement {{ method.name }}
+	panic("not implemented")
+}
+{% endfor %}
+{% endfor %}
+{% else %}
+// No structs – standalone functions
+{% for method in methods %}
+// {{ method.name }}
+{% if method.preconditions %}
+// Preconditions:
+{% for pre in method.preconditions %} // - {{ pre }}
+{% endfor %}
+{% endif %}
+{% if method.postconditions %}
+// Postconditions:
+{% for post in method.postconditions %} // - {{ post }}
+{% endfor %}
+{% endif %}
+{% if method.returns_error %}
+// Returns a (value, error) tuple.
+{% endif %}
+func {{ method.name }}({% for param in method.params %}{{ param.name }} {{ param.go_type }}{% if not loop.last %}, {% endif %}{% endfor %}) {% if method.returns %}{{ method.returns }}{% endif %} {
+	// TODO: Implement {{ method.name }}
+	panic("not implemented")
+}
+{% endfor %}
+{% endif %}
+
+// ========== Generated tests ==========
+{% for test in verification.test_cases %}
+func Test{{ test.name }}(t *testing.T) {
+	{% if test.setup %}{{ test.setup }}{% endif %}
+	{% for action in test.actions %}{{ action }}{% endfor %}
+	{% for assertion in test.assertions %}{{ assertion }}{% endfor %}
+}
+{% endfor %}

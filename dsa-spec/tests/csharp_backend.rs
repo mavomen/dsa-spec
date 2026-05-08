@@ -112,3 +112,21 @@ verification:
     // Static class generates: public static int TryParse()
     assert!(code.contains("int TryParse()"));
 }
+
+#[test]
+fn test_nullable_int_is_properly_handled() {
+    let spec = parse_spec(r#"
+spec_version: "1.0"
+metadata:
+  name: "Test"
+  category: "test"
+structs: []
+methods:
+  - name: "Get"
+    returns: "Option<i32>"
+verification:
+  test_cases: []
+"#);
+    let code = generate(&spec);
+    assert!(code.contains("int? Get()"));
+}

@@ -1,9 +1,12 @@
 pub mod ast;
 pub mod backend;
 pub mod csharp_backend;
+pub mod doc_gen;
+pub mod go_backend;
 pub mod parser;
 pub mod python_backend;
 pub mod rust_backend;
 pub mod spec_schema;
 pub mod template_engine;
+pub mod typescript_backend;
 pub mod validator;
