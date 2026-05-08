@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
-use std::path::PathBuf;
 use std::fs;
+use std::path::PathBuf;
 
 mod ast;
 mod backend;
@@ -11,6 +11,7 @@ mod python_backend;
 mod rust_backend;
 mod spec_schema;
 mod template_engine;
+mod typescript_backend;
 mod validator;
 
 use backend::Backend;
@@ -55,22 +56,49 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             let lang_lower = lang.to_lowercase();
             let backends: Vec<(&str, Box<dyn Backend>)> = match lang_lower.as_str() {
-                "rust" => vec![("rust", Box::new(rust_backend::RustBackend::new("templates")?))],
-                "python" => vec![("python", Box::new(python_backend::PythonBackend::new("templates")?))],
-                "csharp" | "c#" => vec![("csharp", Box::new(csharp_backend::CSharpBackend::new("templates")?))],
-                "typescript" | "ts" => vec![("typescript", Box::new(typescript_backend::TypeScriptBackend::new("templates")?))],
+                "rust" => vec![(
+                    "rust",
+                    Box::new(rust_backend::RustBackend::new("templates")?),
+                )],
+                "python" => vec![(
+                    "python",
+                    Box::new(python_backend::PythonBackend::new("templates")?),
+                )],
+                "csharp" | "c#" => vec![(
+                    "csharp",
+                    Box::new(csharp_backend::CSharpBackend::new("templates")?),
+                )],
+                "typescript" | "ts" => vec![(
+                    "typescript",
+                    Box::new(typescript_backend::TypeScriptBackend::new("templates")?),
+                )],
                 "go" => vec![("go", Box::new(go_backend::GoBackend::new("templates")?))],
                 "all" => {
                     vec![
-                        ("rust", Box::new(rust_backend::RustBackend::new("templates")?) as Box<dyn Backend>),
-                        ("python", Box::new(python_backend::PythonBackend::new("templates")?)),
-                        ("csharp", Box::new(csharp_backend::CSharpBackend::new("templates")?)),
-                        ("typescript", Box::new(typescript_backend::TypeScriptBackend::new("templates")?)),
+                        (
+                            "rust",
+                            Box::new(rust_backend::RustBackend::new("templates")?)
+                                as Box<dyn Backend>,
+                        ),
+                        (
+                            "python",
+                            Box::new(python_backend::PythonBackend::new("templates")?),
+                        ),
+                        (
+                            "csharp",
+                            Box::new(csharp_backend::CSharpBackend::new("templates")?),
+                        ),
+                        (
+                            "typescript",
+                            Box::new(typescript_backend::TypeScriptBackend::new("templates")?),
+                        ),
                         ("go", Box::new(go_backend::GoBackend::new("templates")?)),
                     ]
                 }
                 _ => {
-                    eprintln!("Unsupported language: {lang}. Use rust, python, csharp, typescript, go, or all.");
+                    eprintln!(
+                        "Unsupported language: {lang}. Use rust, python, csharp, typescript, go, or all."
+                    );
                     std::process::exit(1);
                 }
             };
@@ -88,7 +116,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 "go" => "go",
                                 _ => "txt",
                             };
-                            let file_name = format!("{}.{}", spec.file_stem().unwrap().to_string_lossy(), ext);
+                            let file_name =
+                                format!("{}.{}", spec.file_stem().unwrap().to_string_lossy(), ext);
                             let out_path = path.join(file_name);
                             fs::create_dir_all(path)?;
                             fs::write(&out_path, code)?;

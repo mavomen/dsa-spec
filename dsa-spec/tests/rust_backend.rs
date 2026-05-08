@@ -1,20 +1,16 @@
+use std::fs;
 use std::process::Command;
 
-#[test]
-fn test_rust_backend_generates_valid_syntax() {
-    // Write a minimal spec YAML
+fn create_temp_spec() -> tempfile::NamedTempFile {
     let spec_yaml = r#"
 spec_version: "1.0"
 metadata:
   name: "Stack"
   category: "linear"
-contracts:
-  invariants: []
 structs:
   - name: "Stack"
     generics:
       - name: "T"
-        constraints: ["Clone"]
     fields:
       - name: "items"
         type: "Vec<T>"
@@ -24,35 +20,39 @@ methods:
       - name: "item"
         type: "T"
     returns: "void"
-    preconditions: ["stack is valid"]
-    postconditions: ["item is on top"]
-  - name: "pop"
-    returns: "Option<T>"
 verification:
-  test_cases:
-    - name: "push_pop"
-      setup: "let mut s = Stack::new();"
-      actions: ["s.push(1)"]
-      assertions: ["assert_eq!(s.pop(), Some(1))"]
+  test_cases: []
 "#;
+    let file = tempfile::NamedTempFile::new().expect("Failed to create temp file");
+    fs::write(file.path(), spec_yaml).expect("Failed to write temp spec");
+    file
+}
 
-    // Write spec to temp file
-    let temp_dir = std::env::temp_dir().join("dsa-spec-test");
-    std::fs::create_dir_all(&temp_dir).unwrap();
-    let spec_path = temp_dir.join("test_spec.yaml");
-    std::fs::write(&spec_path, spec_yaml).unwrap();
-
-    // Run dsa-spec generate (it will just check generation for now since CLI is placeholder)
-    // Instead, we test the generation logic directly by running a small integration
-    // exercise: verify that cargo run -- generate doesn't crash
+#[test]
+fn test_rust_backend_generates_valid_syntax() {
+    let spec = create_temp_spec();
     let output = Command::new("cargo")
-        .args(["run", "--", "generate"])
+        .args([
+            "run",
+            "--",
+            "generate",
+            spec.path().to_str().unwrap(),
+            "--lang",
+            "rust",
+        ])
         .output()
-        .expect("Failed to run CLI generate");
-    // The generate command is still a placeholder, but should succeed
-    assert!(output.status.success());
-    // Cleanup
-    std::fs::remove_dir_all(&temp_dir).ok();
+        .expect("failed to run cli");
+    assert!(
+        output.status.success(),
+        "generate failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    // The generated Rust code should contain the struct and method stub
+    assert!(stdout.contains("pub struct Stack<T>"));
+    assert!(stdout.contains("fn push"));
+    assert!(stdout.contains("item: T"));
+    assert!(stdout.contains("todo!()"));
 }
 
 #[test]
@@ -69,7 +69,20 @@ methods: []
 verification:
   test_cases: []
 "#;
-    assert!(spec_yaml.contains("Empty"));
-    // Additional direct test of RustBackend via lib usage would go here,
-    // but for an integration test we keep it lightweight.
+    let file = tempfile::NamedTempFile::new().unwrap();
+    fs::write(file.path(), spec_yaml).unwrap();
+    let output = Command::new("cargo")
+        .args([
+            "run",
+            "--",
+            "generate",
+            file.path().to_str().unwrap(),
+            "--lang",
+            "rust",
+        ])
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("pub struct Empty"));
 }

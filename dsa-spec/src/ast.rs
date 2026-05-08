@@ -103,6 +103,24 @@ pub enum Type {
     Parameterized { base: String, params: Vec<Type> },
 }
 
+impl std::fmt::Display for Type {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Type::Simple(s) => write!(f, "{s}"),
+            Type::Parameterized { base, params } => {
+                write!(f, "{base}<")?;
+                for (i, p) in params.iter().enumerate() {
+                    if i > 0 {
+                        write!(f, ", ")?;
+                    }
+                    write!(f, "{p}")?;
+                }
+                write!(f, ">")
+            }
+        }
+    }
+}
+
 impl Default for Type {
     fn default() -> Self {
         Type::Simple(String::new())

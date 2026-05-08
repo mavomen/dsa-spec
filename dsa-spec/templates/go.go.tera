@@ -19,8 +19,13 @@ import "testing"
 {% if structs %}
 {% for struct in structs %}
 {% if methods %}
+{% if struct.generics %}
 // {{ struct.name }}Interface defines the contract for {{ struct.name }}
 type {{ struct.name }}Interface[{% for generic in struct.generics %}{{ generic.name }} {{ generic.constraint }}{% if not loop.last %}, {% endif %}{% endfor %}] interface {
+{% else %}
+// {{ struct.name }}Interface defines the contract for {{ struct.name }}
+type {{ struct.name }}Interface interface {
+{% endif %}
 	{% for method in methods %}
 	{{ method.name }}({% for param in method.params %}{{ param.name }} {{ param.go_type }}{% if not loop.last %}, {% endif %}{% endfor %}) {% if method.returns %}{{ method.returns }}{% endif %}
 	{% endfor %}
