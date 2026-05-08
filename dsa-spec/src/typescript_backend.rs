@@ -42,7 +42,12 @@ impl TypeScriptBackend {
             }
             s if s.starts_with("Vec<") => {
                 let inner = &s[4..s.len() - 1];
-                format!("{}[]", Self::translate_simple_type(inner))
+                let translated = Self::translate_simple_type(inner);
+                if translated.contains('|') {
+                    format!("({})[]", translated)
+                } else {
+                    format!("{}[]", translated)
+                }
             }
             s if s.starts_with("Result<") => {
                 let inner = &s[7..s.len() - 1];
