@@ -1,3 +1,5 @@
+//! Go code generation backend.
+
 use crate::assertion;
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
@@ -8,11 +10,13 @@ use serde::Serialize;
 use std::process::Command;
 use tera::Context;
 
+/// Go backend using Tera templates with gofmt formatting.
 pub struct GoBackend {
     engine: TemplateEngine,
 }
 
 impl GoBackend {
+    /// Create a new Go backend loading templates from the given directory.
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(GoBackend { engine })
@@ -55,6 +59,7 @@ impl GoBackend {
         }
     }
 
+    /// Convert an AST type to a Go type string with pointer-based optionality.
     pub(crate) fn to_go_type(typ: &Type) -> String {
         match typ {
             Type::Simple(s) => Self::translate_simple_type(s),
@@ -66,6 +71,7 @@ impl GoBackend {
         }
     }
 
+    /// Translate a type name string to a Go type expression.
     pub(crate) fn translate_simple_type(s: &str) -> String {
         match s {
             "Option<T>" => "*T".to_string(),
@@ -102,6 +108,7 @@ impl GoBackend {
         }
     }
 
+    /// Map spec constraint strings to Go generic constraints.
     pub(crate) fn go_constraint(constraints: &[String]) -> String {
         if constraints.is_empty() {
             return "any".to_string();
@@ -115,6 +122,7 @@ impl GoBackend {
         "any".to_string()
     }
 
+    /// Return true if the type is a `Result<T, E>` (Go uses `(T, error)` tuples).
     pub(crate) fn is_result_type(typ: &Type) -> bool {
         match typ {
             Type::Simple(s) => s.starts_with("Result<"),

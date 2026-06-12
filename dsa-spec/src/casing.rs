@@ -1,3 +1,7 @@
+//! Identifier casing transforms for language backends.
+//! Spec authors write snake_case; backends convert to each
+//! language's idiomatic casing convention.
+
 /// Convert snake_case to PascalCase.
 /// `is_empty` → `IsEmpty`, `new` → `New`
 pub fn to_pascal_case(s: &str) -> String {

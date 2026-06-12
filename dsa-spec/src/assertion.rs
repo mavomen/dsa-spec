@@ -1,3 +1,6 @@
+//! Utilities for parsing Rust assertion macros into structured components.
+//! Used by backends to translate spec test cases into per-language assertion syntax.
+
 /// Extract inner expression from `assert!(expr)`.
 pub fn parse_assert_bang(s: &str) -> Option<&str> {
     s.strip_prefix("assert!(")?.strip_suffix(')')

@@ -1,3 +1,5 @@
+//! Crate root. Re-exports all modules for the `dsa-spec` binary.
+
 pub mod assertion;
 pub mod ast;
 pub mod backend;

@@ -1,6 +1,12 @@
+//! YAML spec deserialization into the AST.
+//! Returns `SpecError` with line/column information on failure.
+
 use crate::ast::Spec;
 use crate::error::SpecError;
 
+/// Parse a YAML string into a `Spec` AST.
+///
+/// Returns parse errors with line and column numbers when available.
 pub fn parse(spec_text: &str) -> Result<Spec, SpecError> {
     serde_yaml::from_str::<Spec>(spec_text).map_err(|e| SpecError::ParseError {
         message: format!("YAML parse error: {e}"),

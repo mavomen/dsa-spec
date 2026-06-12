@@ -1,7 +1,18 @@
+//! Trait that all language backends must implement.
+
 use crate::ast::Spec;
 use crate::error::BackendError;
 
+/// Interface for a language code generator.
+///
+/// Each backend reads a language-agnostic AST and produces idiomatic
+/// source code for its target language, including method stubs, doc
+/// comments, and test suites.
 pub trait Backend {
+    /// Generate code from a spec.
+    ///
+    /// Returns formatted source code for the target language, or a
+    /// `BackendError` if rendering or formatting fails.
     fn generate(&self, spec: &Spec) -> Result<String, BackendError>;
 }
 

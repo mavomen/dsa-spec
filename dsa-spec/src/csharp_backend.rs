@@ -1,3 +1,5 @@
+//! C# code generation backend.
+
 use crate::assertion;
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
@@ -7,11 +9,13 @@ use crate::template_engine::TemplateEngine;
 use serde::Serialize;
 use tera::Context;
 
+/// C# backend using Tera templates with optional dotnet format.
 pub struct CSharpBackend {
     engine: TemplateEngine,
 }
 
 impl CSharpBackend {
+    /// Create a new C# backend loading templates from the given directory.
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(CSharpBackend { engine })
@@ -26,6 +30,7 @@ impl CSharpBackend {
         })
     }
 
+    /// Convert an AST type to a C# type string with nullable annotations.
     pub(crate) fn to_csharp_type(typ: &Type) -> String {
         match typ {
             Type::Simple(s) => Self::translate_simple_type(s),
@@ -37,6 +42,7 @@ impl CSharpBackend {
         }
     }
 
+    /// Translate a type name string to a C# type expression.
     pub(crate) fn translate_simple_type(s: &str) -> String {
         match s {
             "Option<T>" => "T?".to_string(),
@@ -73,6 +79,7 @@ impl CSharpBackend {
         }
     }
 
+    /// Return true if the type is a `Result<T, E>` (which C# handles via exceptions).
     pub(crate) fn is_result_type(typ: &Type) -> bool {
         match typ {
             Type::Simple(s) => s.starts_with("Result<"),

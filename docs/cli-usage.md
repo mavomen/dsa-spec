@@ -1,25 +1,33 @@
 # CLI Usage
 
-DSA‑SPEC is a command‑line tool. After installation you have the `dsa-spec` binary.
+DSA-SPEC is a command-line tool. After installation you have the `dsa-spec` binary.
 
 ## Installation
-```bash
+
+```
 cargo install dsa-spec
 ```
 
-## Built‑in help
-```bash
+## Built-in help
+
+```
 dsa-spec --help
 dsa-spec generate --help
 dsa-spec validate --help
 ```
 
+## Global flags
+
+- `-v`, `-vv` -- verbose diagnostic output (info, debug)
+- `--json` -- machine-readable JSON output
+
 ## Commands
 
-### `generate` – create code skeletons
+### `generate` -- create code skeletons
 
 Generate a single language:
-```bash
+
+```
 dsa-spec generate specs/bst.yaml --lang rust --output src/bst.rs
 dsa-spec generate specs/bst.yaml --lang python --output bst.py
 dsa-spec generate specs/bst.yaml --lang csharp -o Models/Bst.cs
@@ -28,49 +36,90 @@ dsa-spec generate specs/bst.yaml --lang go -o bst.go
 ```
 
 Generate all five languages at once:
-```bash
+
+```
 dsa-spec generate specs/bst.yaml --lang all --output-dir generated/
 ```
+
 This creates:
+
 ```
 generated/
-├── bst.rs
-├── bst.py
-├── bst.cs
-├── bst.ts
-└── bst.go
+  bst.rs
+  bst.py
+  bst.cs
+  bst.ts
+  bst.go
 ```
 
 If you omit `--output`, the code is printed to stdout.
 
-### `validate` – check a specification
+Generate with contract assertion injection:
 
-```bash
+```
+dsa-spec generate specs/stack.yaml --lang python --contracts --output stack.py
+```
+
+### `validate` -- check a specification
+
+```
 dsa-spec validate specs/stack.yaml
 ```
-Prints `Spec is valid.` or a list of descriptive errors.
 
-### `visualize` (future)
+Prints `Spec is valid.` or a list of descriptive errors with line/column information.
 
-```bash
-dsa-spec visualize specs/bst.yaml --format mermaid
-dsa-spec visualize specs/bst.yaml --format graphviz
+### `verify` -- inspect contract assertions
+
+Parses the spec, injects contract assertions, and prints the generated code.
+
 ```
+dsa-spec verify specs/dynamic_array.yaml --lang all
+```
+
+Only the `runtime` backend is supported currently.
+
+### `analyze` -- complexity reports
+
+```
+dsa-spec analyze specs/ --format table
+dsa-spec analyze specs/ --format chart
+dsa-spec analyze specs/ --format json
+```
+
+Generates reports from the `complexity` annotations in spec metadata.
+
+### `visualize` -- data structure diagrams
+
+```
+dsa-spec visualize specs/doubly_linked_list.yaml --format dot
+dsa-spec visualize specs/avl.yaml --format mermaid
+dsa-spec visualize specs/stack.yaml --format sequence
+```
+
+Supports Graphviz DOT, Mermaid class diagrams, and Mermaid sequence diagrams.
+
+### `migrate` -- upgrade spec schema version
+
+```
+dsa-spec migrate specs/old_format.yaml
+```
+
+Creates a `.bak` backup before modifying the file.
 
 ## Common workflows
 
-**Iterative development**
-```bash
-# edit spec > generate > run tests > repeat
+**Iterative development:**
+
+```
 dsa-spec generate my-algo.yaml -l rust -o src/my_algo.rs
 cargo test
 ```
 
-**CI pipeline**
-```bash
+**CI pipeline:**
+
+```
 for spec in specs/*.yaml; do
   dsa-spec validate "$spec"
   dsa-spec generate "$spec" -l all -o generated/
 done
 ```
-
