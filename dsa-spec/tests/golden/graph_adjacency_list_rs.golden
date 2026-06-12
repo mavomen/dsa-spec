@@ -1,0 +1,122 @@
+/// Graph
+
+/// Time complexity: O(V+E) for traversal
+
+/// Space complexity: O(V+E)
+
+///
+/// # Invariants
+
+/// - all edges reference valid vertices
+
+/// - vertex count >= 0
+
+pub struct Graph<T: Clone + Hash + Eq> {
+    adjacency_list: HashMap<T, Vec<T>>,
+
+    directed: bool,
+}
+
+impl<T: Clone + Hash + Eq> Graph<T> {
+    /// # Contracts
+
+    /// - **Postcondition:** vertex_count == 0
+
+    /// - **Postcondition:** edge_count == 0
+
+    pub fn new(&self, directed: bool) -> Self {
+        // TODO: Implement new
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Postcondition:** vertex exists in graph
+
+    pub fn add_vertex(&self, vertex: T) -> bool {
+        // TODO: Implement add_vertex
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Precondition:** from and to exist in graph
+
+    pub fn add_edge(&self, from: T, to: T) -> bool {
+        // TODO: Implement add_edge
+        todo!()
+    }
+
+    pub fn neighbors(&self, vertex: T) -> Option<&Vec<T>> {
+        // TODO: Implement neighbors
+        todo!()
+    }
+
+    pub fn vertex_count(&self) -> usize {
+        // TODO: Implement vertex_count
+        todo!()
+    }
+
+    pub fn edge_count(&self) -> usize {
+        // TODO: Implement edge_count
+        todo!()
+    }
+
+    pub fn has_vertex(&self, vertex: T) -> bool {
+        // TODO: Implement has_vertex
+        todo!()
+    }
+
+    pub fn has_edge(&self, from: T, to: T) -> bool {
+        // TODO: Implement has_edge
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add_vertex_and_edge() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_vertex(1));
+        assert!(g.has_vertex(2));
+        assert!(g.has_edge(1, 2));
+        assert_eq!(g.vertex_count(), 2);
+        assert_eq!(g.edge_count(), 1);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_undirected_graph_symmetric_edges() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(g.has_edge(2, 1));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_directed_graph_no_symmetry() {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(!g.has_edge(2, 1));
+    }
+}

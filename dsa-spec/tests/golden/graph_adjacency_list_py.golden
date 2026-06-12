@@ -1,0 +1,153 @@
+"""
+Graph
+
+Time complexity: O(V+E) for traversal
+
+
+Space complexity: O(V+E)
+
+
+# Invariants
+
+# - all edges reference valid vertices
+
+# - vertex count >= 0
+
+
+"""
+
+from dataclasses import dataclass
+from typing import TypeVar, Generic, Optional, List, Dict
+import pytest
+
+
+
+T = TypeVar('T')
+
+
+@dataclass
+class Graph(Generic[T]):
+    """Graph"""
+    
+    adjacency_list: Dict[T, List[T]]
+    
+    directed: bool
+    
+
+    
+    def new(self, directed: bool) -> Self:
+        """
+        
+        
+        Postconditions:
+        - vertex_count == 0
+        - edge_count == 0
+        
+        
+        """
+        
+        # TODO: Implement new
+        raise NotImplementedError
+    
+    def add_vertex(self, vertex: T) -> bool:
+        """
+        
+        
+        Postconditions:
+        - vertex exists in graph
+        
+        
+        """
+        
+        # TODO: Implement add_vertex
+        raise NotImplementedError
+    
+    def add_edge(self, from: T, to: T) -> bool:
+        """
+        
+        Preconditions:
+        - from and to exist in graph
+        
+        
+        
+        """
+        
+        # TODO: Implement add_edge
+        raise NotImplementedError
+    
+    def neighbors(self, vertex: T) -> Optional[&Vec<T>]:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement neighbors
+        raise NotImplementedError
+    
+    def vertex_count(self) -> int:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement vertex_count
+        raise NotImplementedError
+    
+    def edge_count(self) -> int:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement edge_count
+        raise NotImplementedError
+    
+    def has_vertex(self, vertex: T) -> bool:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement has_vertex
+        raise NotImplementedError
+    
+    def has_edge(self, from: T, to: T) -> bool:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement has_edge
+        raise NotImplementedError
+    
+
+
+
+# ========== Generated pytest tests ==========
+
+def test_add_vertex_and_edge():
+    """Test: add_vertex_and_edge"""
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_vertex(1)assert g.has_vertex(2)assert g.has_edge(1, 2)assert g.vertex_count() == 2assert g.edge_count() == 1
+
+def test_undirected_graph_symmetric_edges():
+    """Test: undirected_graph_symmetric_edges"""
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert g.has_edge(2, 1)
+
+def test_directed_graph_no_symmetry():
+    """Test: directed_graph_no_symmetry"""
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert !g.has_edge(2, 1)
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

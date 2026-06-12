@@ -38,7 +38,7 @@ verification:
     );
     let code = generate(&spec);
     assert!(code.contains("public class Stack<T>"));
-    assert!(code.contains("public List<T> _items { get; set; }"));
+    assert!(code.contains("public List<T> Items { get; set; }"));
     assert!(code.contains("public void Push(T item)"));
     assert!(code.contains("throw new NotImplementedException();"));
 }

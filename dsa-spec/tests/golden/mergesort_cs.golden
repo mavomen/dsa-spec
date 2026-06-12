@@ -1,0 +1,126 @@
+/// <summary>
+/// Mergesort
+
+/// Time complexity: O(n log n) always
+
+
+/// Space complexity: O(n)
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Mergesort
+{
+
+
+public static class MergesortMethods
+{
+    
+    /// <summary>
+    /// Mergesort
+    /// 
+    /// Preconditions:
+    /// - arr is valid slice
+    /// 
+    /// 
+    /// Postconditions:
+    /// - arr is sorted ascending
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public static void Mergesort(T[] arr)
+    {
+        
+        // TODO: Implement Mergesort
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Merge
+    /// 
+    /// Preconditions:
+    /// - left <= mid <= right
+    /// - arr[left..mid] is sorted
+    /// - arr[mid..right] is sorted
+    /// 
+    /// 
+    /// Postconditions:
+    /// - arr[left..right] is sorted
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public static void Merge(T[] arr, int left, int mid, int right)
+    {
+        
+        // TODO: Implement Merge
+        throw new NotImplementedException();
+    }
+    
+}
+
+
+// ========== Generated xUnit tests ==========
+
+public class sort_unsorted_arrayTests
+{
+    [Fact]
+    public void sort_unsorted_array_Test()
+    {
+        // Setup
+        let mut arr = vec![5, 3, 8, 1, 2];
+        // Actions
+        mergesort(&mut arr);
+        // Assertions
+        Assert.AreEqual(arr, vec![1, 2, 3, 5, 8]);
+    }
+}
+
+public class sort_empty_arrayTests
+{
+    [Fact]
+    public void sort_empty_array_Test()
+    {
+        // Setup
+        let mut arr: Vec<i32> = vec![];
+        // Actions
+        mergesort(&mut arr);
+        // Assertions
+        Assert.AreEqual(arr, vec![]);
+    }
+}
+
+public class sort_single_elementTests
+{
+    [Fact]
+    public void sort_single_element_Test()
+    {
+        // Setup
+        let mut arr = vec![7];
+        // Actions
+        mergesort(&mut arr);
+        // Assertions
+        Assert.AreEqual(arr, vec![7]);
+    }
+}
+
+public class sort_already_sortedTests
+{
+    [Fact]
+    public void sort_already_sorted_Test()
+    {
+        // Setup
+        let mut arr = vec![1, 2, 3, 4, 5];
+        // Actions
+        mergesort(&mut arr);
+        // Assertions
+        Assert.AreEqual(arr, vec![1, 2, 3, 4, 5]);
+    }
+}
+
+}

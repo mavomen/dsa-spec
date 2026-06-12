@@ -1,0 +1,129 @@
+/// <summary>
+/// DFS
+
+/// Time complexity: O(V + E)
+
+
+/// Space complexity: O(V)
+
+
+/// Invariants:
+
+/// - visited set contains no duplicates
+
+/// - all visited vertices exist in graph
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace DFS
+{
+
+
+public static class DFSMethods
+{
+    
+    /// <summary>
+    /// Dfs
+    /// 
+    /// Preconditions:
+    /// - start vertex exists in graph
+    /// 
+    /// 
+    /// Postconditions:
+    /// - result contains all reachable vertices from start
+    /// - result has no duplicates
+    /// - order follows depth-first traversal
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public static List<T> Dfs(&Graph<T> graph, T start)
+    {
+        
+        // TODO: Implement Dfs
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// DfsRecursiveHelper
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public static void DfsRecursiveHelper(&Graph<T> graph, T vertex, &mut HashSet<T> visited, &mut Vec<T> result)
+    {
+        
+        // TODO: Implement DfsRecursiveHelper
+        throw new NotImplementedException();
+    }
+    
+}
+
+
+// ========== Generated xUnit tests ==========
+
+public class dfs_simple_pathTests
+{
+    [Fact]
+    public void dfs_simple_path_Test()
+    {
+        // Setup
+        let mut g = Graph::new(false);
+g.add_vertex(1);
+g.add_vertex(2);
+g.add_vertex(3);
+g.add_edge(1, 2);
+g.add_edge(2, 3);
+
+        // Actions
+        
+        // Assertions
+        Assert.AreEqual(dfs(&g, 1), vec![1, 2, 3]);
+    }
+}
+
+public class dfs_disconnectedTests
+{
+    [Fact]
+    public void dfs_disconnected_Test()
+    {
+        // Setup
+        let mut g = Graph::new(false);
+g.add_vertex(1);
+g.add_vertex(2);
+
+        // Actions
+        
+        // Assertions
+        Assert.AreEqual(dfs(&g, 1), vec![1]);
+    }
+}
+
+public class dfs_cyclic_graphTests
+{
+    [Fact]
+    public void dfs_cyclic_graph_Test()
+    {
+        // Setup
+        let mut g = Graph::new(true);
+g.add_vertex(1);
+g.add_vertex(2);
+g.add_vertex(3);
+g.add_edge(1, 2);
+g.add_edge(2, 3);
+g.add_edge(3, 1);
+
+        // Actions
+        
+        // Assertions
+        Assert.AreEqual(dfs(&g, 1).len(), 3);
+    }
+}
+
+}

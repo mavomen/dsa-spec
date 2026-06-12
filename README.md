@@ -13,7 +13,9 @@ dsa-spec generate specs/bst.yaml --lang rust --output src/bst.rs
 
 ## Project Status
 
-🚧 **Phase 1: Rust Foundation** — in progress
+✅ Phase 1: Rust Foundation — complete
+✅ Phase 2: Multi-Language Generation — complete
+🚧 Phase 3: Contracts, Verification & Tooling — in progress
 
 ## License
 

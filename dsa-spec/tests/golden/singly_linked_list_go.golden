@@ -1,0 +1,268 @@
+// SinglyLinkedList
+
+// Time complexity: O(1) prepend, O(n) append/search
+
+
+// Space complexity: O(n)
+
+
+// Invariants:
+
+// - no cycles
+
+// - head is None iff tail is None
+
+
+
+package singlylinkedlist
+
+import "testing"
+
+
+
+
+
+// NodeInterface defines the contract for Node
+type NodeInterface[T any] interface {
+
+	
+	New() Self
+	
+	Prepend(value T) 
+	
+	Append(value T) 
+	
+	PopFront() *T
+	
+	IsEmpty() bool
+	
+	Len() int
+	
+}
+
+
+// Node represents a SinglyLinkedList
+type Node[T any] struct {
+	
+	value T
+	
+	next *Node<T>
+	
+}
+
+
+// New
+
+
+// Postconditions:
+ // - head is None
+
+
+
+func (s *Node[T]) New() Self {
+	
+	// TODO: Implement New
+	panic("not implemented")
+}
+
+// Prepend
+
+
+// Postconditions:
+ // - head.value == value
+ // - list length increased by 1
+
+
+
+func (s *Node[T]) Prepend(value T)  {
+	
+	// TODO: Implement Prepend
+	panic("not implemented")
+}
+
+// Append
+
+
+// Postconditions:
+ // - last element == value
+
+
+
+func (s *Node[T]) Append(value T)  {
+	
+	// TODO: Implement Append
+	panic("not implemented")
+}
+
+// PopFront
+
+// Preconditions:
+ // - !is_empty()
+
+
+
+// Postconditions:
+ // - head == old.head.next
+
+
+
+func (s *Node[T]) PopFront() *T {
+	
+	// TODO: Implement PopFront
+	panic("not implemented")
+}
+
+// IsEmpty
+
+
+
+func (s *Node[T]) IsEmpty() bool {
+	
+	// TODO: Implement IsEmpty
+	panic("not implemented")
+}
+
+// Len
+
+
+
+func (s *Node[T]) Len() int {
+	
+	// TODO: Implement Len
+	panic("not implemented")
+}
+
+
+
+
+// SinglyLinkedListInterface defines the contract for SinglyLinkedList
+type SinglyLinkedListInterface[T any] interface {
+
+	
+	New() Self
+	
+	Prepend(value T) 
+	
+	Append(value T) 
+	
+	PopFront() *T
+	
+	IsEmpty() bool
+	
+	Len() int
+	
+}
+
+
+// SinglyLinkedList represents a SinglyLinkedList
+type SinglyLinkedList[T any] struct {
+	
+	head *Node<T>
+	
+}
+
+
+// New
+
+
+// Postconditions:
+ // - head is None
+
+
+
+func (s *SinglyLinkedList[T]) New() Self {
+	
+	// TODO: Implement New
+	panic("not implemented")
+}
+
+// Prepend
+
+
+// Postconditions:
+ // - head.value == value
+ // - list length increased by 1
+
+
+
+func (s *SinglyLinkedList[T]) Prepend(value T)  {
+	
+	// TODO: Implement Prepend
+	panic("not implemented")
+}
+
+// Append
+
+
+// Postconditions:
+ // - last element == value
+
+
+
+func (s *SinglyLinkedList[T]) Append(value T)  {
+	
+	// TODO: Implement Append
+	panic("not implemented")
+}
+
+// PopFront
+
+// Preconditions:
+ // - !is_empty()
+
+
+
+// Postconditions:
+ // - head == old.head.next
+
+
+
+func (s *SinglyLinkedList[T]) PopFront() *T {
+	
+	// TODO: Implement PopFront
+	panic("not implemented")
+}
+
+// IsEmpty
+
+
+
+func (s *SinglyLinkedList[T]) IsEmpty() bool {
+	
+	// TODO: Implement IsEmpty
+	panic("not implemented")
+}
+
+// Len
+
+
+
+func (s *SinglyLinkedList[T]) Len() int {
+	
+	// TODO: Implement Len
+	panic("not implemented")
+}
+
+
+
+
+// ========== Generated tests ==========
+
+func Testprepend_pop_front(t *testing.T) {
+	let mut list = SinglyLinkedList::new();
+	list.prepend(1)list.prepend(2)
+	if list.pop_front() != Some(2) { t.Errorf("got %v, want %v", list.pop_front(), Some(2)) }if list.pop_front() != Some(1) { t.Errorf("got %v, want %v", list.pop_front(), Some(1)) }
+}
+
+func Testappend_order(t *testing.T) {
+	let mut list = SinglyLinkedList::new();
+	list.append(1)list.append(2)
+	if list.pop_front() != Some(1) { t.Errorf("got %v, want %v", list.pop_front(), Some(1)) }
+}
+
+func Testpop_front_empty(t *testing.T) {
+	let list = SinglyLinkedList::<i32>::new();
+	
+	if list.pop_front() != None { t.Errorf("got %v, want %v", list.pop_front(), None) }
+}
+
