@@ -442,4 +442,76 @@ mod tests {
         let code = backend.generate(&spec).unwrap();
         assert!(code.contains("package binarysearchtree"));
     }
+
+    #[test]
+    fn test_translate_hashmap() {
+        assert_eq!(GoBackend::translate_simple_type("HashMap<K,V>"), "map[K]V");
+    }
+
+    #[test]
+    fn test_translate_reference() {
+        assert_eq!(GoBackend::translate_simple_type("&T"), "T");
+        assert_eq!(GoBackend::translate_simple_type("&mut [T]"), "[]T");
+    }
+
+    #[test]
+    fn test_translate_primitives() {
+        assert_eq!(GoBackend::translate_simple_type("usize"), "int");
+        assert_eq!(GoBackend::translate_simple_type("i32"), "int32");
+        assert_eq!(GoBackend::translate_simple_type("bool"), "bool");
+        assert_eq!(GoBackend::translate_simple_type("void"), "");
+    }
+
+    #[test]
+    fn test_translate_box_unwrapping() {
+        assert_eq!(GoBackend::translate_simple_type("Box<T>"), "T");
+        assert_eq!(
+            GoBackend::translate_simple_type("Box<BSTNode<T>>"),
+            "BSTNode<T>"
+        );
+    }
+
+    #[test]
+    fn test_translate_nested_types() {
+        assert_eq!(
+            GoBackend::translate_simple_type("Vec<Option<string>>"),
+            "[]*string"
+        );
+        assert_eq!(
+            GoBackend::translate_simple_type("Option<Box<Node<T>>>"),
+            "*Node<T>"
+        );
+    }
+
+    #[test]
+    fn test_to_go_type_parameterized() {
+        let typ = Type::Parameterized {
+            base: "map".into(),
+            params: vec![Type::Simple("K".into()), Type::Simple("V".into())],
+        };
+        assert_eq!(GoBackend::to_go_type(&typ), "map[K, V]");
+    }
+
+    #[test]
+    fn test_go_constraint_ord() {
+        assert_eq!(
+            GoBackend::go_constraint(&["Ord".into()]),
+            "constraints.Ordered"
+        );
+    }
+
+    #[test]
+    fn test_is_result_type_parameterized_returns_false() {
+        let typ = Type::Parameterized {
+            base: "Result".into(),
+            params: vec![Type::Simple("T".into()), Type::Simple("E".into())],
+        };
+        assert!(!GoBackend::is_result_type(&typ));
+    }
+
+    #[test]
+    fn test_translate_unknown_type_passthrough() {
+        assert_eq!(GoBackend::translate_simple_type("MyType"), "MyType");
+        assert_eq!(GoBackend::translate_simple_type(""), "");
+    }
 }

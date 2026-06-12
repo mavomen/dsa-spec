@@ -44,8 +44,96 @@ verification:
     fn test_malformed_yaml_error_message() {
         let yaml = "invalid: [unclosed";
         let err = parse(yaml).unwrap_err();
-        // serde_yaml errors contain the location (line, column)
         assert!(err.contains("YAML parse error"));
         assert!(err.contains("line") || err.contains("column"));
+    }
+
+    #[test]
+    fn test_parse_empty_yaml_fails() {
+        assert!(parse("").is_err());
+        assert!(parse("   ").is_err());
+    }
+
+    #[test]
+    fn test_parse_empty_structs_and_methods() {
+        let yaml = r#"
+spec_version: "1.0"
+metadata:
+  name: "Empty"
+  category: "test"
+structs: []
+methods: []
+verification:
+  test_cases: []
+"#;
+        let spec = parse(yaml).expect("should parse");
+        assert!(spec.structs.is_empty());
+        assert!(spec.methods.is_empty());
+        assert_eq!(spec.metadata.name, "Empty");
+    }
+
+    #[test]
+    fn test_parse_unknown_fields_are_ignored() {
+        let yaml = r#"
+spec_version: "1.0"
+metadata:
+  name: "Test"
+  category: "test"
+  extra_field: "ignored"
+unknown_section:
+  - foo: bar
+structs: []
+methods: []
+verification:
+  test_cases: []
+"#;
+        // serde ignores unknown fields by default
+        assert!(parse(yaml).is_ok());
+    }
+
+    #[test]
+    fn test_parse_parameterized_type() {
+        let yaml = r#"
+spec_version: "1.0"
+metadata:
+  name: "ParamTest"
+  category: "test"
+structs:
+  - name: "Container"
+    fields:
+      - name: "items"
+        type:
+          base: "Vec"
+          params:
+            - base: "Option"
+              params:
+                - "T"
+methods: []
+verification:
+  test_cases: []
+"#;
+        let spec = parse(yaml).expect("should parse parameterized type");
+        let field = &spec.structs[0].fields[0];
+        match &field.field_type {
+            crate::ast::Type::Parameterized { base, params } => {
+                assert_eq!(base, "Vec");
+                assert_eq!(params.len(), 1);
+            }
+            _ => panic!("expected Parameterized type"),
+        }
+    }
+
+    #[test]
+    fn test_parse_no_verification() {
+        let yaml = r#"
+spec_version: "1.0"
+metadata:
+  name: "NoVerification"
+  category: "test"
+structs: []
+methods: []
+"#;
+        let spec = parse(yaml).expect("spec without verification should parse");
+        assert!(spec.verification.test_cases.is_empty());
     }
 }

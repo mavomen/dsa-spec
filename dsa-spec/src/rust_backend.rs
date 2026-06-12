@@ -205,3 +205,138 @@ struct TestContext<'a> {
     actions: &'a [String],
     assertions: &'a [String],
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::ast::{
+        Complexity, Contracts, FieldDef, GenericParam, Metadata, MethodDef, Spec, StructDef,
+        TestCase, Type, Verification,
+    };
+
+    #[test]
+    fn test_format_rust_fallback_on_missing_rustfmt() {
+        // Call format_rust with invalid Rust — should fail fmt but return Err
+        let code = "fn main() { let x = 1; }";
+        // This is valid Rust, so it should pass rustfmt if available, or return Err
+        let result = RustBackend::format_rust(code);
+        // Either result is valid: rustfmt may or may not be installed
+        if let Err(e) = &result {
+            assert!(e.contains("rustfmt error") || e.contains("Failed to spawn rustfmt"));
+        }
+    }
+
+    #[test]
+    fn test_build_context_populates_fields() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "MyStruct".into(),
+                category: "data".into(),
+                complexity: Complexity {
+                    time: Some("O(n)".into()),
+                    space: None,
+                },
+                tags: vec!["tag".into()],
+            },
+            contracts: Contracts {
+                invariants: vec!["invariant1".into()],
+            },
+            structs: vec![StructDef {
+                name: "MyStruct".into(),
+                generics: vec![GenericParam {
+                    name: "K".into(),
+                    constraints: vec!["Clone".into(), "Debug".into()],
+                }],
+                fields: vec![FieldDef {
+                    name: "value".into(),
+                    field_type: Type::Simple("K".into()),
+                }],
+            }],
+            methods: vec![MethodDef {
+                name: "get".into(),
+                params: vec![],
+                returns: Some("K".into()),
+                preconditions: vec!["self is valid".into()],
+                postconditions: vec!["returns value".into()],
+            }],
+            verification: Verification {
+                test_cases: vec![TestCase {
+                    name: "test_get".into(),
+                    setup: None,
+                    actions: vec!["let v = s.get()".into()],
+                    assertions: vec!["assert!(v.is_some())".into()],
+                }],
+            },
+        };
+        let ctx = build_context(&spec);
+        // Verify context values via rendering
+        let engine = TemplateEngine::new("templates").unwrap();
+        let output = engine.render("rust.rs.tera", &ctx).unwrap();
+        assert!(output.contains("struct MyStruct"), "output: {}", output);
+        assert!(output.contains("value: K"), "output: {}", output);
+        assert!(output.contains("fn get"), "output: {}", output);
+    }
+
+    #[test]
+    fn test_generate_with_result_return_type() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            contracts: Contracts::default(),
+            structs: vec![StructDef {
+                name: "Container".into(),
+                generics: vec![],
+                fields: vec![],
+            }],
+            methods: vec![MethodDef {
+                name: "try_get".into(),
+                params: vec![],
+                returns: Some("Result<i32,String>".into()),
+                ..Default::default()
+            }],
+            verification: Verification::default(),
+        };
+        let backend = RustBackend::new("templates").unwrap();
+        let code = backend.generate(&spec).unwrap();
+        assert!(code.contains("try_get"), "generated code: {}", code);
+        assert!(code.contains("Result"), "generated code: {}", code);
+        assert!(code.contains("todo!()"), "generated code: {}", code);
+    }
+
+    #[test]
+    fn test_generate_with_contracts() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Capped".into(),
+                category: "test".into(),
+                complexity: Complexity {
+                    time: Some("O(1)".into()),
+                    space: Some("O(n)".into()),
+                },
+                ..Default::default()
+            },
+            contracts: Contracts {
+                invariants: vec!["size <= capacity".into()],
+            },
+            structs: vec![StructDef {
+                name: "Capped".into(),
+                fields: vec![],
+                ..Default::default()
+            }],
+            methods: vec![],
+            verification: Verification::default(),
+        };
+        let backend = RustBackend::new("templates").unwrap();
+        let code = backend.generate(&spec).unwrap();
+        assert!(code.contains("Capped"));
+        assert!(code.contains("size <= capacity"));
+        assert!(code.contains("O(1)"));
+        assert!(code.contains("O(n)"));
+    }
+}

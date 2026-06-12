@@ -274,3 +274,77 @@ struct TestContext<'a> {
     actions: &'a [String],
     assertions: &'a [String],
 }
+
+#[cfg(test)]
+mod python_type_tests {
+    use super::*;
+    use crate::ast::Type;
+
+    #[test]
+    fn test_translate_hashmap() {
+        assert_eq!(translate_simple_type("HashMap<K,V>"), "Dict[K, V]");
+    }
+
+    #[test]
+    fn test_translate_reference() {
+        assert_eq!(translate_simple_type("&T"), "T");
+        assert_eq!(translate_simple_type("&mut [T]"), "List[T]");
+    }
+
+    #[test]
+    fn test_translate_primitives() {
+        assert_eq!(translate_simple_type("usize"), "int");
+        assert_eq!(translate_simple_type("i32"), "int");
+        assert_eq!(translate_simple_type("bool"), "bool");
+        assert_eq!(translate_simple_type("void"), "None");
+    }
+
+    #[test]
+    fn test_translate_box_unwrapping() {
+        assert_eq!(translate_simple_type("Box<T>"), "T");
+        assert_eq!(translate_simple_type("Box<BSTNode<T>>"), "BSTNode<T>");
+    }
+
+    #[test]
+    fn test_translate_nested_types() {
+        assert_eq!(
+            translate_simple_type("Vec<Option<i32>>"),
+            "List[Optional[int]]"
+        );
+        assert_eq!(
+            translate_simple_type("Option<Box<Node<T>>>"),
+            "Optional[Node<T>]"
+        );
+    }
+
+    #[test]
+    fn test_to_python_type_parameterized() {
+        let typ = Type::Parameterized {
+            base: "Vec".into(),
+            params: vec![Type::Parameterized {
+                base: "Option".into(),
+                params: vec![Type::Simple("i32".into())],
+            }],
+        };
+        // Note: Parameterized base types like "Vec" don't match
+        // the "Vec<T>" pattern; they pass through as-is via to_python_type
+        assert_eq!(to_python_type(&typ), "Vec[Option[int]]");
+    }
+
+    #[test]
+    fn test_translate_unknown_type_passthrough() {
+        assert_eq!(translate_simple_type("CustomType"), "CustomType");
+        assert_eq!(translate_simple_type(""), "");
+    }
+
+    #[test]
+    fn test_is_result_type_with_parameterized_returns_false() {
+        let typ = Type::Parameterized {
+            base: "Result".into(),
+            params: vec![Type::Simple("T".into()), Type::Simple("E".into())],
+        };
+        // is_result_type checks Type::Simple with starts_with("Result<")
+        // Parameterized won't match that pattern
+        assert!(!is_result_type(&typ));
+    }
+}

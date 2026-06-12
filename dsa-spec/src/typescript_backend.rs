@@ -320,4 +320,80 @@ mod tests {
         let code = backend.generate(&spec).unwrap();
         assert!(code.contains("throw new Error('Not implemented');"));
     }
+
+    #[test]
+    fn test_translate_hashmap() {
+        assert_eq!(
+            TypeScriptBackend::translate_simple_type("HashMap<K,V>"),
+            "Map<K, V>"
+        );
+    }
+
+    #[test]
+    fn test_translate_reference() {
+        assert_eq!(TypeScriptBackend::translate_simple_type("&T"), "T");
+        assert_eq!(TypeScriptBackend::translate_simple_type("&mut [T]"), "T[]");
+    }
+
+    #[test]
+    fn test_translate_primitives() {
+        assert_eq!(TypeScriptBackend::translate_simple_type("usize"), "number");
+        assert_eq!(TypeScriptBackend::translate_simple_type("i32"), "number");
+        assert_eq!(TypeScriptBackend::translate_simple_type("bool"), "boolean");
+        assert_eq!(TypeScriptBackend::translate_simple_type("void"), "void");
+    }
+
+    #[test]
+    fn test_translate_box_unwrapping() {
+        assert_eq!(TypeScriptBackend::translate_simple_type("Box<T>"), "T");
+        assert_eq!(
+            TypeScriptBackend::translate_simple_type("Box<BSTNode<T>>"),
+            "BSTNode<T>"
+        );
+    }
+
+    #[test]
+    fn test_translate_result_type() {
+        // Result<T,E> strips to T
+        assert_eq!(
+            TypeScriptBackend::translate_simple_type("Result<i32,String>"),
+            "number"
+        );
+    }
+
+    #[test]
+    fn test_translate_nested_types() {
+        assert_eq!(
+            TypeScriptBackend::translate_simple_type("Vec<Option<string>>"),
+            "(string | null)[]"
+        );
+        assert_eq!(
+            TypeScriptBackend::translate_simple_type("Option<Box<Node<T>>>"),
+            "Node<T> | null"
+        );
+    }
+
+    #[test]
+    fn test_to_typescript_type_parameterized() {
+        let typ = Type::Parameterized {
+            base: "Map".into(),
+            params: vec![Type::Simple("K".into()), Type::Simple("V".into())],
+        };
+        assert_eq!(TypeScriptBackend::to_typescript_type(&typ), "Map<K, V>");
+    }
+
+    #[test]
+    fn test_is_result_type_parameterized_returns_false() {
+        let typ = Type::Parameterized {
+            base: "Result".into(),
+            params: vec![Type::Simple("T".into()), Type::Simple("E".into())],
+        };
+        assert!(!TypeScriptBackend::is_result_type(&typ));
+    }
+
+    #[test]
+    fn test_translate_unknown_type_passthrough() {
+        assert_eq!(TypeScriptBackend::translate_simple_type("MyType"), "MyType");
+        assert_eq!(TypeScriptBackend::translate_simple_type(""), "");
+    }
 }

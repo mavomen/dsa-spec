@@ -132,3 +132,24 @@ verification:
     let code = generate(&spec);
     assert!(code.contains("int? Get()"));
 }
+
+#[test]
+fn test_formatting_fallback_when_dotnet_format_missing() {
+    use dsa_spec::ast::{Metadata, Spec, Verification};
+    let spec = Spec {
+        spec_version: "1.0".into(),
+        metadata: Metadata {
+            name: "Test".into(),
+            category: "test".into(),
+            ..Default::default()
+        },
+        structs: vec![],
+        methods: vec![],
+        verification: Verification::default(),
+        ..Default::default()
+    };
+    let backend = CSharpBackend::new("templates").unwrap();
+    let result = backend.generate(&spec);
+    assert!(result.is_ok(), "C# backend should fallback to raw code");
+    assert!(!result.unwrap().is_empty());
+}

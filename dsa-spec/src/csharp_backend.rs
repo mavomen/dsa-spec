@@ -372,4 +372,81 @@ mod tests {
         let code = backend.generate(&spec).unwrap();
         assert!(code.contains("throw new NotImplementedException();"));
     }
+
+    #[test]
+    fn test_translate_hashmap() {
+        assert_eq!(
+            CSharpBackend::translate_simple_type("HashMap<K,V>"),
+            "Dictionary<K,V>"
+        );
+    }
+
+    #[test]
+    fn test_translate_reference() {
+        assert_eq!(CSharpBackend::translate_simple_type("&T"), "T");
+        assert_eq!(CSharpBackend::translate_simple_type("&mut [T]"), "T[]");
+    }
+
+    #[test]
+    fn test_translate_primitives() {
+        assert_eq!(CSharpBackend::translate_simple_type("usize"), "int");
+        assert_eq!(CSharpBackend::translate_simple_type("i32"), "int");
+        assert_eq!(CSharpBackend::translate_simple_type("bool"), "bool");
+        assert_eq!(CSharpBackend::translate_simple_type("void"), "void");
+    }
+
+    #[test]
+    fn test_translate_box_unwrapping() {
+        assert_eq!(CSharpBackend::translate_simple_type("Box<T>"), "T");
+        assert_eq!(
+            CSharpBackend::translate_simple_type("Box<BSTNode<T>>"),
+            "BSTNode<T>"
+        );
+    }
+
+    #[test]
+    fn test_translate_nested_types() {
+        assert_eq!(
+            CSharpBackend::translate_simple_type("Vec<Option<i32>>"),
+            "List<int?>"
+        );
+        assert_eq!(
+            CSharpBackend::translate_simple_type("Option<Box<Node<T>>>"),
+            "Node<T>?"
+        );
+    }
+
+    #[test]
+    fn test_to_csharp_type_parameterized() {
+        let typ = Type::Parameterized {
+            base: "Dictionary".into(),
+            params: vec![Type::Simple("K".into()), Type::Simple("V".into())],
+        };
+        assert_eq!(CSharpBackend::to_csharp_type(&typ), "Dictionary<K, V>");
+    }
+
+    #[test]
+    fn test_is_result_type_with_simple() {
+        assert!(CSharpBackend::is_result_type(&Type::Simple(
+            "Result<i32,String>".into()
+        )));
+        assert!(!CSharpBackend::is_result_type(&Type::Simple(
+            "Option<i32>".into()
+        )));
+    }
+
+    #[test]
+    fn test_is_result_type_with_parameterized_returns_false() {
+        let typ = Type::Parameterized {
+            base: "Result".into(),
+            params: vec![Type::Simple("T".into()), Type::Simple("E".into())],
+        };
+        assert!(!CSharpBackend::is_result_type(&typ));
+    }
+
+    #[test]
+    fn test_translate_unknown_type_passthrough() {
+        assert_eq!(CSharpBackend::translate_simple_type("MyType"), "MyType");
+        assert_eq!(CSharpBackend::translate_simple_type(""), "");
+    }
 }

@@ -143,6 +143,87 @@ mod tests {
     }
 
     #[test]
+    fn test_missing_metadata_name_fails() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "".into(),
+                category: "real".into(),
+                ..Default::default()
+            },
+            structs: vec![],
+            methods: vec![],
+            ..Default::default()
+        };
+        let result = validate(&spec);
+        assert!(result.is_err(), "empty name should fail: {:?}", result);
+        let errors = result.unwrap_err();
+        assert!(errors.iter().any(|e| e.contains("name")));
+    }
+
+    #[test]
+    fn test_missing_field_type_fails() {
+        // The schema requires field to have "type" key. If we omit it
+        // via Default, the Type defaults to Simple("") which is still a
+        // valid string. The schema doesn't enforce minLength on field type.
+        // So this validates that a missing type key in YAML would fail.
+        let yaml = r#"
+spec_version: "1.0"
+metadata:
+  name: "Test"
+  category: "test"
+structs:
+  - name: "Foo"
+    fields:
+      - name: "bar"
+methods: []
+verification:
+  test_cases: []
+"#;
+        // Missing "type" key in field fails at deserialization (serde requires it)
+        let result = serde_yaml::from_str::<crate::ast::Spec>(yaml);
+        assert!(
+            result.is_err(),
+            "missing field 'type' should fail deserialization"
+        );
+    }
+
+    #[test]
+    fn test_non_object_complexity_yaml_fails_parse() {
+        let yaml = r#"
+spec_version: "1.0"
+metadata:
+  name: "Test"
+  category: "test"
+  complexity: "O(1)"
+structs: []
+methods: []
+verification:
+  test_cases: []
+"#;
+        // YAML type mismatch: complexity expects an object, got a string
+        assert!(serde_yaml::from_str::<crate::ast::Spec>(yaml).is_err());
+    }
+
+    #[test]
+    fn test_tags_as_string_fails() {
+        // Should this pass? serde_yaml will fail to deserialize tags: "lifo"
+        let yaml = r#"
+spec_version: "1.0"
+metadata:
+  name: "Test"
+  category: "test"
+  tags: "lifo"
+structs: []
+methods: []
+verification:
+  test_cases: []
+"#;
+        // YAML type mismatch: tags is expected to be an array
+        assert!(serde_yaml::from_str::<crate::ast::Spec>(yaml).is_err());
+    }
+
+    #[test]
     fn test_bst_invariants_pass_validation() {
         let spec = Spec {
             spec_version: "1.0".into(),
