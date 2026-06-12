@@ -169,12 +169,10 @@ fn build_context(spec: &Spec) -> Context {
                         csharp_type: CSharpBackend::to_csharp_type(&p.param_type),
                     })
                     .collect(),
-                returns: return_type
-                    .as_ref()
-                    .map(|t| CSharpBackend::to_csharp_type(t)),
+                returns: return_type.as_ref().map(CSharpBackend::to_csharp_type),
                 throws_exception: return_type
                     .as_ref()
-                    .map(|t| CSharpBackend::is_result_type(t))
+                    .map(CSharpBackend::is_result_type)
                     .unwrap_or(false),
                 preconditions: &m.preconditions,
                 postconditions: &m.postconditions,

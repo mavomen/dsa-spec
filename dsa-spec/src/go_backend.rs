@@ -183,10 +183,10 @@ fn build_context(spec: &Spec) -> Context {
                         go_type: GoBackend::to_go_type(&p.param_type),
                     })
                     .collect(),
-                returns: return_type.as_ref().map(|t| GoBackend::to_go_type(t)),
+                returns: return_type.as_ref().map(GoBackend::to_go_type),
                 returns_error: return_type
                     .as_ref()
-                    .map(|t| GoBackend::is_result_type(t))
+                    .map(GoBackend::is_result_type)
                     .unwrap_or(false),
                 preconditions: m.preconditions.clone(),
                 postconditions: m.postconditions.clone(),

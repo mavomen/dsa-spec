@@ -139,10 +139,10 @@ fn build_context(spec: &Spec) -> Context {
                     .collect(),
                 returns: return_type
                     .as_ref()
-                    .map(|t| TypeScriptBackend::to_typescript_type(t)),
+                    .map(TypeScriptBackend::to_typescript_type),
                 throws_exception: return_type
                     .as_ref()
-                    .map(|t| TypeScriptBackend::is_result_type(t))
+                    .map(TypeScriptBackend::is_result_type)
                     .unwrap_or(false),
                 preconditions: &m.preconditions,
                 postconditions: &m.postconditions,

@@ -185,11 +185,8 @@ fn build_context(spec: &Spec) -> Context {
                         python_type: to_python_type(&p.param_type),
                     })
                     .collect(),
-                returns: return_type.as_ref().map(|t| to_python_type(t)),
-                raises_exception: return_type
-                    .as_ref()
-                    .map(|t| is_result_type(t))
-                    .unwrap_or(false),
+                returns: return_type.as_ref().map(to_python_type),
+                raises_exception: return_type.as_ref().map(is_result_type).unwrap_or(false),
                 preconditions: &m.preconditions,
                 postconditions: &m.postconditions,
             }

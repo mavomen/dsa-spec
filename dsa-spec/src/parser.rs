@@ -1,8 +1,7 @@
 use crate::ast::Spec;
 
 pub fn parse(spec_text: &str) -> Result<Spec, String> {
-    serde_yaml::from_str::<Spec>(spec_text)
-        .map_err(|e| format!("YAML parse error: {e}"))
+    serde_yaml::from_str::<Spec>(spec_text).map_err(|e| format!("YAML parse error: {e}"))
 }
 
 #[cfg(test)]

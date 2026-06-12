@@ -1,6 +1,5 @@
 use crate::ast::Spec;
 use crate::spec_schema::SPEC_JSON_SCHEMA;
-use serde_json;
 use jsonschema::{Draft, JSONSchema, ValidationError};
 
 pub fn validate(spec: &Spec) -> Result<(), Vec<String>> {
@@ -20,9 +19,10 @@ pub fn validate(spec: &Spec) -> Result<(), Vec<String>> {
         Err(errors) => errors.collect(),
     };
 
-    let messages: Vec<String> = errors.iter().map(|e| {
-        format!("{} (at {})", e, e.instance_path)
-    }).collect();
+    let messages: Vec<String> = errors
+        .iter()
+        .map(|e| format!("{} (at {})", e, e.instance_path))
+        .collect();
 
     Err(messages)
 }
@@ -31,8 +31,8 @@ pub fn validate(spec: &Spec) -> Result<(), Vec<String>> {
 mod tests {
     use super::*;
     use crate::ast::{
-        Spec, Metadata, Complexity, Contracts, StructDef, GenericParam,
-        FieldDef, MethodDef, ParamDef, Verification, TestCase, Type,
+        Complexity, Contracts, FieldDef, GenericParam, Metadata, MethodDef, ParamDef, Spec,
+        StructDef, TestCase, Type, Verification,
     };
 
     fn make_valid_spec() -> Spec {
@@ -185,26 +185,22 @@ mod tests {
                         name: "T".into(),
                         constraints: vec!["Ord".into(), "Clone".into()],
                     }],
-                    fields: vec![
-                        FieldDef {
-                            name: "root".into(),
-                            field_type: Type::Simple("Option<Box<BSTNode<T>>>".into()),
-                        },
-                    ],
-                },
-            ],
-            methods: vec![
-                MethodDef {
-                    name: "insert".into(),
-                    params: vec![ParamDef {
-                        name: "value".into(),
-                        param_type: Type::Simple("T".into()),
+                    fields: vec![FieldDef {
+                        name: "root".into(),
+                        field_type: Type::Simple("Option<Box<BSTNode<T>>>".into()),
                     }],
-                    returns: Some("bool".into()),
-                    postconditions: vec!["tree contains value".into()],
-                    ..Default::default()
                 },
             ],
+            methods: vec![MethodDef {
+                name: "insert".into(),
+                params: vec![ParamDef {
+                    name: "value".into(),
+                    param_type: Type::Simple("T".into()),
+                }],
+                returns: Some("bool".into()),
+                postconditions: vec!["tree contains value".into()],
+                ..Default::default()
+            }],
             ..Default::default()
         };
         assert!(validate(&spec).is_ok());

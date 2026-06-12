@@ -108,8 +108,8 @@ pub fn generate_doc(spec: &Spec) -> String {
 mod tests {
     use super::*;
     use crate::ast::{
-        Spec, Metadata, Complexity, Contracts, StructDef, FieldDef,
-        MethodDef, ParamDef, Verification, TestCase, Type,
+        Complexity, Contracts, FieldDef, Metadata, MethodDef, ParamDef, Spec, StructDef, TestCase,
+        Type, Verification,
     };
 
     fn sample_spec() -> Spec {
