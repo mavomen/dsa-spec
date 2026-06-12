@@ -1,5 +1,6 @@
 pub mod ast;
 pub mod backend;
+pub mod complexity;
 pub mod contracts;
 pub mod csharp_backend;
 pub mod doc_gen;
@@ -12,3 +13,4 @@ pub mod spec_schema;
 pub mod template_engine;
 pub mod typescript_backend;
 pub mod validator;
+pub mod visualization;

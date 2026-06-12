@@ -342,6 +342,54 @@ verification:
 }
 
 #[test]
+fn test_analyze_command_exists() {
+    let output = Command::new("cargo")
+        .args(["run", "--", "analyze", "../specs"])
+        .output()
+        .expect("failed to run cli");
+    assert!(
+        output.status.success(),
+        "analyze failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("| DSA | Category |"));
+    assert!(stdout.contains("BinarySearchTree"));
+    assert!(stdout.contains("O(log n)"));
+}
+
+#[test]
+fn test_analyze_json_format() {
+    let output = Command::new("cargo")
+        .args(["run", "--", "analyze", "../specs", "--format", "json"])
+        .output()
+        .expect("failed to run cli");
+    assert!(
+        output.status.success(),
+        "analyze --format json failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.trim_start().starts_with('['));
+}
+
+#[test]
+fn test_analyze_chart_format() {
+    let output = Command::new("cargo")
+        .args(["run", "--", "analyze", "../specs", "--format", "chart"])
+        .output()
+        .expect("failed to run cli");
+    assert!(
+        output.status.success(),
+        "analyze --format chart failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("quadrantChart"));
+    assert!(stdout.contains("BinarySearchTree"));
+}
+
+#[test]
 fn test_verify_unsupported_backend_fails() {
     let spec = create_temp_spec();
     let output = Command::new("cargo")
@@ -358,4 +406,95 @@ fn test_verify_unsupported_backend_fails() {
     assert!(!output.status.success(), "unsupported backend should fail");
     let stderr = String::from_utf8_lossy(&output.stderr);
     assert!(stderr.contains("Unsupported verification backend"));
+}
+
+#[test]
+fn test_visualize_dot_format() {
+    let output = Command::new("cargo")
+        .args(["run", "--", "visualize", "../specs/bst.yaml"])
+        .output()
+        .expect("failed to run cli");
+    assert!(
+        output.status.success(),
+        "visualize dot failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("digraph \"BinarySearchTree\""));
+    assert!(stdout.contains("BSTNode"));
+    assert!(stdout.contains("BinarySearchTree"));
+    assert!(stdout.contains("shape=record"));
+}
+
+#[test]
+fn test_visualize_mermaid_format() {
+    let output = Command::new("cargo")
+        .args([
+            "run",
+            "--",
+            "visualize",
+            "../specs/singly_linked_list.yaml",
+            "--format",
+            "mermaid",
+        ])
+        .output()
+        .expect("failed to run cli");
+    assert!(
+        output.status.success(),
+        "visualize mermaid failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("classDiagram"));
+    assert!(stdout.contains("class Node"));
+    assert!(stdout.contains("class SinglyLinkedList"));
+}
+
+#[test]
+fn test_visualize_method_only_spec() {
+    let output = Command::new("cargo")
+        .args(["run", "--", "visualize", "../specs/quicksort.yaml"])
+        .output()
+        .expect("failed to run cli");
+    assert!(
+        output.status.success(),
+        "visualize method-only spec failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("digraph \"Quicksort\""));
+    assert!(stdout.contains("quicksort"));
+    assert!(stdout.contains("partition"));
+    assert!(stdout.contains("&mut [T]"));
+}
+
+#[test]
+fn test_visualize_graphviz_format_alias() {
+    let output = Command::new("cargo")
+        .args([
+            "run",
+            "--",
+            "visualize",
+            "../specs/bst.yaml",
+            "--format",
+            "graphviz",
+        ])
+        .output()
+        .expect("failed to run cli");
+    assert!(
+        output.status.success(),
+        "visualize graphviz failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("digraph"));
+}
+
+#[test]
+fn test_visualize_missing_spec_fails() {
+    let output = Command::new("cargo")
+        .args(["run", "--", "visualize", "/nonexistent/spec.yaml"])
+        .output()
+        .expect("failed to run cli");
+    assert!(!output.status.success(), "missing spec should fail");
 }
