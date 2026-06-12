@@ -108,8 +108,8 @@ pub fn generate_doc(spec: &Spec) -> String {
 mod tests {
     use super::*;
     use crate::ast::{
-        Spec, Metadata, Complexity, Contracts, StructDef, FieldDef,
-        MethodDef, ParamDef, Verification, TestCase, Type,
+        Complexity, Contracts, FieldDef, Metadata, MethodDef, ParamDef, Spec, StructDef, TestCase,
+        Type, Verification,
     };
 
     fn sample_spec() -> Spec {
@@ -144,6 +144,7 @@ mod tests {
                 returns: Some("void".into()),
                 preconditions: vec!["stack not full".into()],
                 postconditions: vec!["item on top".into()],
+                injected_assertions: vec![],
             }],
             verification: Verification {
                 test_cases: vec![TestCase {
@@ -188,5 +189,190 @@ mod tests {
         assert!(doc.contains("**Returns:** `void`"));
         assert!(doc.contains("stack not full"));
         assert!(doc.contains("item on top"));
+    }
+
+    #[test]
+    fn test_empty_spec_does_not_crash() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Empty".into(),
+                category: "empty".into(),
+                ..Default::default()
+            },
+            ..Default::default()
+        };
+        let doc = generate_doc(&spec);
+        assert!(doc.contains("# Empty"));
+        assert!(!doc.contains("## Data Structures"));
+        assert!(!doc.contains("## Methods"));
+        assert!(!doc.contains("## Invariants"));
+        assert!(!doc.contains("## Test Cases"));
+    }
+
+    #[test]
+    fn test_no_structs_with_methods() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Functions".into(),
+                category: "utils".into(),
+                ..Default::default()
+            },
+            methods: vec![MethodDef {
+                name: "compute".into(),
+                returns: Some("i32".into()),
+                ..Default::default()
+            }],
+            ..Default::default()
+        };
+        let doc = generate_doc(&spec);
+        assert!(!doc.contains("## Data Structures"));
+        assert!(doc.contains("## Methods"));
+        assert!(doc.contains("compute"));
+    }
+
+    #[test]
+    fn test_no_methods_with_structs() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "DataOnly".into(),
+                category: "data".into(),
+                ..Default::default()
+            },
+            structs: vec![StructDef {
+                name: "Record".into(),
+                fields: vec![FieldDef {
+                    name: "id".into(),
+                    field_type: Type::Simple("i32".into()),
+                }],
+                ..Default::default()
+            }],
+            ..Default::default()
+        };
+        let doc = generate_doc(&spec);
+        assert!(doc.contains("## Data Structures"));
+        assert!(doc.contains("Record"));
+        assert!(!doc.contains("## Methods"));
+    }
+
+    #[test]
+    fn test_no_complexity_no_tags_no_contracts() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Bare".into(),
+                category: "minimal".into(),
+                ..Default::default()
+            },
+            ..Default::default()
+        };
+        let doc = generate_doc(&spec);
+        assert!(doc.contains("# Bare"));
+        assert!(!doc.contains("Time complexity"));
+        assert!(!doc.contains("Space complexity"));
+        assert!(!doc.contains("**Tags:**"));
+        assert!(!doc.contains("## Invariants"));
+    }
+
+    #[test]
+    fn test_no_setup_in_test_case() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "NoSetup".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            verification: Verification {
+                test_cases: vec![TestCase {
+                    name: "no_setup".into(),
+                    setup: None,
+                    actions: vec!["do_something()".into()],
+                    assertions: vec!["assert(success)".into()],
+                }],
+            },
+            ..Default::default()
+        };
+        let doc = generate_doc(&spec);
+        assert!(doc.contains("no_setup"));
+        assert!(!doc.contains("**Setup:**"));
+        assert!(doc.contains("do_something()"));
+        assert!(doc.contains("assert(success)"));
+    }
+
+    #[test]
+    fn test_test_case_no_actions_no_assertions() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "MinimalTest".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            verification: Verification {
+                test_cases: vec![TestCase {
+                    name: "empty_test".into(),
+                    setup: Some("let x = 1".into()),
+                    actions: vec![],
+                    assertions: vec![],
+                }],
+            },
+            ..Default::default()
+        };
+        let doc = generate_doc(&spec);
+        assert!(doc.contains("empty_test"));
+        assert!(doc.contains("**Setup:**"));
+        assert!(!doc.contains("**Actions:**"));
+        assert!(!doc.contains("**Assertions:**"));
+    }
+
+    #[test]
+    fn test_multiple_structs_and_methods() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Multi".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            structs: vec![
+                StructDef {
+                    name: "First".into(),
+                    fields: vec![FieldDef {
+                        name: "a".into(),
+                        field_type: Type::Simple("i32".into()),
+                    }],
+                    ..Default::default()
+                },
+                StructDef {
+                    name: "Second".into(),
+                    fields: vec![FieldDef {
+                        name: "b".into(),
+                        field_type: Type::Simple("bool".into()),
+                    }],
+                    ..Default::default()
+                },
+            ],
+            methods: vec![
+                MethodDef {
+                    name: "alpha".into(),
+                    returns: Some("void".into()),
+                    ..Default::default()
+                },
+                MethodDef {
+                    name: "beta".into(),
+                    returns: Some("i32".into()),
+                    ..Default::default()
+                },
+            ],
+            ..Default::default()
+        };
+        let doc = generate_doc(&spec);
+        assert!(doc.contains("### `First`"));
+        assert!(doc.contains("### `Second`"));
+        assert!(doc.contains("### `alpha`"));
+        assert!(doc.contains("### `beta`"));
     }
 }

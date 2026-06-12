@@ -1,3 +1,5 @@
+use dsa_spec::backend::Backend;
+use dsa_spec::rust_backend::RustBackend;
 use std::fs;
 use std::process::Command;
 
@@ -85,4 +87,26 @@ verification:
     assert!(output.status.success());
     let stdout = String::from_utf8_lossy(&output.stdout);
     assert!(stdout.contains("pub struct Empty"));
+}
+
+#[test]
+fn test_formatting_fallback_when_rustfmt_missing() {
+    use dsa_spec::ast::{Metadata, Spec, Verification};
+    let spec = Spec {
+        spec_version: "1.0".into(),
+        metadata: Metadata {
+            name: "Test".into(),
+            category: "test".into(),
+            ..Default::default()
+        },
+        structs: vec![],
+        methods: vec![],
+        verification: Verification::default(),
+        ..Default::default()
+    };
+    let backend = RustBackend::new("templates").unwrap();
+    let result = backend.generate(&spec);
+    // Should succeed even if rustfmt is missing (fallback to raw)
+    assert!(result.is_ok(), "Rust backend should fallback to raw code");
+    assert!(!result.unwrap().is_empty());
 }

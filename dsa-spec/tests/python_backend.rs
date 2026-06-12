@@ -165,7 +165,8 @@ verification:
 
 #[test]
 fn test_edge_case_empty_spec_does_not_crash() {
-    let spec = parse_spec(r#"
+    let spec = parse_spec(
+        r#"
 spec_version: "1.0"
 metadata:
   name: "Empty"
@@ -174,7 +175,8 @@ structs: []
 methods: []
 verification:
   test_cases: []
-"#);
+"#,
+    );
     let code = generate(&spec);
     assert!(!code.is_empty()); // at least docstring and imports
 }

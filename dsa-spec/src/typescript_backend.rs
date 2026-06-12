@@ -1,5 +1,8 @@
+use crate::assertion;
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
+use crate::casing;
+use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
 use serde::Serialize;
 use tera::Context;
@@ -9,7 +12,7 @@ pub struct TypeScriptBackend {
 }
 
 impl TypeScriptBackend {
-    pub fn new(template_dir: &str) -> Result<Self, String> {
+    pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(TypeScriptBackend { engine })
     }
@@ -74,6 +77,16 @@ impl TypeScriptBackend {
     }
 }
 
+fn translate_assertion(a: &str) -> String {
+    if let Some(expr) = assertion::parse_assert_bang(a) {
+        format!("expect({}).toBe(true)", expr.trim())
+    } else if let Some((left, right)) = assertion::parse_assert_eq(a) {
+        format!("expect({}).toBe({})", left, right)
+    } else {
+        a.to_string()
+    }
+}
+
 fn build_context(spec: &Spec) -> Context {
     let mut context = Context::new();
 
@@ -114,7 +127,7 @@ fn build_context(spec: &Spec) -> Context {
                 .fields
                 .iter()
                 .map(|f| FieldContext {
-                    name: &f.name,
+                    name: casing::to_camel_case(&f.name),
                     ts_type: TypeScriptBackend::to_typescript_type(&f.field_type),
                 })
                 .collect(),
@@ -128,38 +141,52 @@ fn build_context(spec: &Spec) -> Context {
         .map(|m| {
             let return_type = m.returns.as_deref().map(|r| Type::Simple(r.to_string()));
             MethodContext {
-                name: &m.name,
+                name: casing::to_camel_case(&m.name),
                 params: m
                     .params
                     .iter()
                     .map(|p| ParamContext {
-                        name: &p.name,
+                        name: casing::to_camel_case(&p.name),
                         ts_type: TypeScriptBackend::to_typescript_type(&p.param_type),
                     })
                     .collect(),
                 returns: return_type
                     .as_ref()
-                    .map(|t| TypeScriptBackend::to_typescript_type(t)),
+                    .map(TypeScriptBackend::to_typescript_type),
                 throws_exception: return_type
                     .as_ref()
-                    .map(|t| TypeScriptBackend::is_result_type(t))
+                    .map(TypeScriptBackend::is_result_type)
                     .unwrap_or(false),
                 preconditions: &m.preconditions,
                 postconditions: &m.postconditions,
+                injected_assertions: &m.injected_assertions,
             }
         })
         .collect();
     context.insert("methods", &methods);
 
+    let translated_assertions: Vec<Vec<String>> = spec
+        .verification
+        .test_cases
+        .iter()
+        .map(|t| {
+            t.assertions
+                .iter()
+                .map(|a| translate_assertion(a))
+                .collect()
+        })
+        .collect();
+
     let tests: Vec<TestContext> = spec
         .verification
         .test_cases
         .iter()
-        .map(|t| TestContext {
+        .enumerate()
+        .map(|(i, t)| TestContext {
             name: &t.name,
             setup: t.setup.as_deref(),
             actions: &t.actions,
-            assertions: &t.assertions,
+            assertions: &translated_assertions[i],
         })
         .collect();
     context.insert("verification", &VerificationContext { test_cases: tests });
@@ -168,7 +195,7 @@ fn build_context(spec: &Spec) -> Context {
 }
 
 impl Backend for TypeScriptBackend {
-    fn generate(&self, spec: &Spec) -> Result<String, String> {
+    fn generate(&self, spec: &Spec) -> Result<String, BackendError> {
         let context = build_context(spec);
         self.engine.render("typescript.ts.tera", &context)
     }
@@ -195,7 +222,7 @@ struct ContractsContext<'a> {
 struct StructContext<'a> {
     name: &'a str,
     generics: Vec<GenericParamContext<'a>>,
-    fields: Vec<FieldContext<'a>>,
+    fields: Vec<FieldContext>,
 }
 
 #[derive(Serialize)]
@@ -205,24 +232,25 @@ struct GenericParamContext<'a> {
 }
 
 #[derive(Serialize)]
-struct FieldContext<'a> {
-    name: &'a str,
+struct FieldContext {
+    name: String,
     ts_type: String,
 }
 
 #[derive(Serialize)]
 struct MethodContext<'a> {
-    name: &'a str,
-    params: Vec<ParamContext<'a>>,
+    name: String,
+    params: Vec<ParamContext>,
     returns: Option<String>,
     throws_exception: bool,
     preconditions: &'a [String],
     postconditions: &'a [String],
+    injected_assertions: &'a [String],
 }
 
 #[derive(Serialize)]
-struct ParamContext<'a> {
-    name: &'a str,
+struct ParamContext {
+    name: String,
     ts_type: String,
 }
 
@@ -313,11 +341,122 @@ mod tests {
                 returns: Some("void".into()),
                 preconditions: vec![],
                 postconditions: vec![],
+                injected_assertions: vec![],
             }],
             verification: Verification::default(),
         };
         let backend = TypeScriptBackend::new("templates").unwrap();
         let code = backend.generate(&spec).unwrap();
         assert!(code.contains("throw new Error('Not implemented');"));
+    }
+
+    #[test]
+    fn test_translate_hashmap() {
+        assert_eq!(
+            TypeScriptBackend::translate_simple_type("HashMap<K,V>"),
+            "Map<K, V>"
+        );
+    }
+
+    #[test]
+    fn test_translate_reference() {
+        assert_eq!(TypeScriptBackend::translate_simple_type("&T"), "T");
+        assert_eq!(TypeScriptBackend::translate_simple_type("&mut [T]"), "T[]");
+    }
+
+    #[test]
+    fn test_translate_primitives() {
+        assert_eq!(TypeScriptBackend::translate_simple_type("usize"), "number");
+        assert_eq!(TypeScriptBackend::translate_simple_type("i32"), "number");
+        assert_eq!(TypeScriptBackend::translate_simple_type("bool"), "boolean");
+        assert_eq!(TypeScriptBackend::translate_simple_type("void"), "void");
+    }
+
+    #[test]
+    fn test_translate_box_unwrapping() {
+        assert_eq!(TypeScriptBackend::translate_simple_type("Box<T>"), "T");
+        assert_eq!(
+            TypeScriptBackend::translate_simple_type("Box<BSTNode<T>>"),
+            "BSTNode<T>"
+        );
+    }
+
+    #[test]
+    fn test_translate_result_type() {
+        // Result<T,E> strips to T
+        assert_eq!(
+            TypeScriptBackend::translate_simple_type("Result<i32,String>"),
+            "number"
+        );
+    }
+
+    #[test]
+    fn test_translate_nested_types() {
+        assert_eq!(
+            TypeScriptBackend::translate_simple_type("Vec<Option<string>>"),
+            "(string | null)[]"
+        );
+        assert_eq!(
+            TypeScriptBackend::translate_simple_type("Option<Box<Node<T>>>"),
+            "Node<T> | null"
+        );
+    }
+
+    #[test]
+    fn test_to_typescript_type_parameterized() {
+        let typ = Type::Parameterized {
+            base: "Map".into(),
+            params: vec![Type::Simple("K".into()), Type::Simple("V".into())],
+        };
+        assert_eq!(TypeScriptBackend::to_typescript_type(&typ), "Map<K, V>");
+    }
+
+    #[test]
+    fn test_is_result_type_parameterized_returns_false() {
+        let typ = Type::Parameterized {
+            base: "Result".into(),
+            params: vec![Type::Simple("T".into()), Type::Simple("E".into())],
+        };
+        assert!(!TypeScriptBackend::is_result_type(&typ));
+    }
+
+    #[test]
+    fn test_translate_unknown_type_passthrough() {
+        assert_eq!(TypeScriptBackend::translate_simple_type("MyType"), "MyType");
+        assert_eq!(TypeScriptBackend::translate_simple_type(""), "");
+    }
+
+    #[test]
+    fn test_contract_assertions_injected_in_typescript() {
+        use crate::ast::{Contracts, Metadata, MethodDef, Spec, StructDef, Verification};
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            contracts: Contracts {
+                invariants: vec!["size >= 0".into()],
+            },
+            structs: vec![StructDef {
+                name: "Foo".into(),
+                ..Default::default()
+            }],
+            methods: vec![MethodDef {
+                name: "bar".into(),
+                preconditions: vec!["x > 0".into()],
+                postconditions: vec!["result ok".into()],
+                ..Default::default()
+            }],
+            verification: Verification::default(),
+        };
+        let injected = crate::contracts::inject_assertions(&spec);
+        let backend = TypeScriptBackend::new("templates").unwrap();
+        let code = backend.generate(&injected).unwrap();
+        assert!(code.contains("// Contract: precondition: x > 0"));
+        assert!(code.contains("console.assert(false, \"precondition: x > 0\");"));
+        assert!(code.contains("// Contract: postcondition: result ok"));
+        assert!(code.contains("// Contract: invariant: size >= 0"));
     }
 }

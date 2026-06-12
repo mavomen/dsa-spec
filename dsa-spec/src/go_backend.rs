@@ -1,5 +1,8 @@
+use crate::assertion;
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
+use crate::casing;
+use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
 use serde::Serialize;
 use std::process::Command;
@@ -10,37 +13,45 @@ pub struct GoBackend {
 }
 
 impl GoBackend {
-    pub fn new(template_dir: &str) -> Result<Self, String> {
+    pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(GoBackend { engine })
     }
 
-    fn format_go(code: &str) -> Result<String, String> {
+    fn format_go(code: &str) -> Result<String, BackendError> {
         let mut child = Command::new("gofmt")
             .stdin(std::process::Stdio::piped())
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .spawn()
-            .map_err(|e| format!("Failed to spawn gofmt: {}", e))?;
+            .map_err(|e| BackendError::Formatter {
+                message: format!("Failed to spawn gofmt: {e}"),
+            })?;
 
         if let Some(stdin) = child.stdin.as_mut() {
             use std::io::Write;
             stdin
                 .write_all(code.as_bytes())
-                .map_err(|e| format!("Failed to write to gofmt stdin: {}", e))?;
+                .map_err(|e| BackendError::Formatter {
+                    message: format!("Failed to write to gofmt stdin: {e}"),
+                })?;
         }
 
         let output = child
             .wait_with_output()
-            .map_err(|e| format!("Failed to wait on gofmt: {}", e))?;
+            .map_err(|e| BackendError::Formatter {
+                message: format!("Failed to wait on gofmt: {e}"),
+            })?;
 
         if output.status.success() {
             Ok(String::from_utf8_lossy(&output.stdout).to_string())
         } else {
-            Err(format!(
-                "gofmt error: {} (falling back to unformatted)",
-                String::from_utf8_lossy(&output.stderr)
-            ))
+            Err(BackendError::Formatter {
+                message: format!(
+                    "gofmt error: {} (falling back to unformatted)",
+                    String::from_utf8_lossy(&output.stderr)
+                ),
+            })
         }
     }
 
@@ -112,6 +123,16 @@ impl GoBackend {
     }
 }
 
+fn translate_assertion(a: &str) -> String {
+    if let Some(expr) = assertion::parse_assert_bang(a) {
+        format!("if !({expr}) {{ t.Errorf(\"assertion failed: {expr}\") }}")
+    } else if let Some((left, right)) = assertion::parse_assert_eq(a) {
+        format!("if {left} != {right} {{ t.Errorf(\"got %v, want %v\", {left}, {right}) }}")
+    } else {
+        a.to_string()
+    }
+}
+
 fn build_context(spec: &Spec) -> Context {
     let mut context = Context::new();
 
@@ -174,7 +195,7 @@ fn build_context(spec: &Spec) -> Context {
         .map(|m| {
             let return_type = m.returns.as_deref().map(|r| Type::Simple(r.to_string()));
             MethodContext {
-                name: m.name.clone(),
+                name: casing::to_pascal_case(&m.name),
                 params: m
                     .params
                     .iter()
@@ -183,13 +204,14 @@ fn build_context(spec: &Spec) -> Context {
                         go_type: GoBackend::to_go_type(&p.param_type),
                     })
                     .collect(),
-                returns: return_type.as_ref().map(|t| GoBackend::to_go_type(t)),
+                returns: return_type.as_ref().map(GoBackend::to_go_type),
                 returns_error: return_type
                     .as_ref()
-                    .map(|t| GoBackend::is_result_type(t))
+                    .map(GoBackend::is_result_type)
                     .unwrap_or(false),
                 preconditions: m.preconditions.clone(),
                 postconditions: m.postconditions.clone(),
+                injected_assertions: m.injected_assertions.clone(),
             }
         })
         .collect();
@@ -203,7 +225,11 @@ fn build_context(spec: &Spec) -> Context {
             name: t.name.clone(),
             setup: t.setup.clone(),
             actions: t.actions.clone(),
-            assertions: t.assertions.clone(),
+            assertions: t
+                .assertions
+                .iter()
+                .map(|a| translate_assertion(a))
+                .collect(),
         })
         .collect();
     context.insert("verification", &VerificationContext { test_cases: tests });
@@ -212,7 +238,7 @@ fn build_context(spec: &Spec) -> Context {
 }
 
 impl Backend for GoBackend {
-    fn generate(&self, spec: &Spec) -> Result<String, String> {
+    fn generate(&self, spec: &Spec) -> Result<String, BackendError> {
         let context = build_context(spec);
         let raw_code = self.engine.render("go.go.tera", &context)?;
         Ok(Self::format_go(&raw_code).unwrap_or(raw_code))
@@ -264,6 +290,7 @@ struct MethodContext {
     returns_error: bool,
     preconditions: Vec<String>,
     postconditions: Vec<String>,
+    injected_assertions: Vec<String>,
 }
 
 #[derive(Serialize)]
@@ -370,6 +397,7 @@ mod tests {
                 returns: Some("Result<i32,String>".into()),
                 preconditions: vec![],
                 postconditions: vec![],
+                injected_assertions: vec![],
             }],
             verification: Verification::default(),
         };
@@ -415,6 +443,7 @@ mod tests {
                 returns: Some("void".into()),
                 preconditions: vec![],
                 postconditions: vec![],
+                injected_assertions: vec![],
             }],
             verification: Verification::default(),
         };
@@ -441,5 +470,113 @@ mod tests {
         let backend = GoBackend::new("templates").unwrap();
         let code = backend.generate(&spec).unwrap();
         assert!(code.contains("package binarysearchtree"));
+    }
+
+    #[test]
+    fn test_translate_hashmap() {
+        assert_eq!(GoBackend::translate_simple_type("HashMap<K,V>"), "map[K]V");
+    }
+
+    #[test]
+    fn test_translate_reference() {
+        assert_eq!(GoBackend::translate_simple_type("&T"), "T");
+        assert_eq!(GoBackend::translate_simple_type("&mut [T]"), "[]T");
+    }
+
+    #[test]
+    fn test_translate_primitives() {
+        assert_eq!(GoBackend::translate_simple_type("usize"), "int");
+        assert_eq!(GoBackend::translate_simple_type("i32"), "int32");
+        assert_eq!(GoBackend::translate_simple_type("bool"), "bool");
+        assert_eq!(GoBackend::translate_simple_type("void"), "");
+    }
+
+    #[test]
+    fn test_translate_box_unwrapping() {
+        assert_eq!(GoBackend::translate_simple_type("Box<T>"), "T");
+        assert_eq!(
+            GoBackend::translate_simple_type("Box<BSTNode<T>>"),
+            "BSTNode<T>"
+        );
+    }
+
+    #[test]
+    fn test_translate_nested_types() {
+        assert_eq!(
+            GoBackend::translate_simple_type("Vec<Option<string>>"),
+            "[]*string"
+        );
+        assert_eq!(
+            GoBackend::translate_simple_type("Option<Box<Node<T>>>"),
+            "*Node<T>"
+        );
+    }
+
+    #[test]
+    fn test_to_go_type_parameterized() {
+        let typ = Type::Parameterized {
+            base: "map".into(),
+            params: vec![Type::Simple("K".into()), Type::Simple("V".into())],
+        };
+        assert_eq!(GoBackend::to_go_type(&typ), "map[K, V]");
+    }
+
+    #[test]
+    fn test_go_constraint_ord() {
+        assert_eq!(
+            GoBackend::go_constraint(&["Ord".into()]),
+            "constraints.Ordered"
+        );
+    }
+
+    #[test]
+    fn test_is_result_type_parameterized_returns_false() {
+        let typ = Type::Parameterized {
+            base: "Result".into(),
+            params: vec![Type::Simple("T".into()), Type::Simple("E".into())],
+        };
+        assert!(!GoBackend::is_result_type(&typ));
+    }
+
+    #[test]
+    fn test_translate_unknown_type_passthrough() {
+        assert_eq!(GoBackend::translate_simple_type("MyType"), "MyType");
+        assert_eq!(GoBackend::translate_simple_type(""), "");
+    }
+
+    #[test]
+    fn test_contract_assertions_injected_in_go() {
+        use crate::ast::{Contracts, Metadata, MethodDef, Spec, StructDef, Verification};
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            contracts: Contracts {
+                invariants: vec!["size >= 0".into()],
+            },
+            structs: vec![StructDef {
+                name: "Foo".into(),
+                ..Default::default()
+            }],
+            methods: vec![MethodDef {
+                name: "Bar".into(),
+                preconditions: vec!["x > 0".into()],
+                postconditions: vec!["result ok".into()],
+                ..Default::default()
+            }],
+            verification: Verification::default(),
+        };
+        let injected = crate::contracts::inject_assertions(&spec);
+        let backend = GoBackend::new("templates").unwrap();
+        let code = backend.generate(&injected).unwrap();
+        assert!(code.contains("// Contract: precondition: x > 0"));
+        assert!(code.contains(r#"panic("test: contract violation: precondition: x > 0")"#));
+        assert!(code.contains("// Contract: postcondition: result ok"));
+        assert!(code.contains(r#"panic("test: contract violation: postcondition: result ok")"#));
+        assert!(code.contains("// Contract: invariant: size >= 0"));
+        assert!(code.contains(r#"panic("test: contract violation: invariant: size >= 0")"#));
     }
 }

@@ -1,0 +1,297 @@
+/// <summary>
+/// SinglyLinkedList
+
+/// Time complexity: O(1) prepend, O(n) append/search
+
+
+/// Space complexity: O(n)
+
+
+/// Invariants:
+
+/// - no cycles
+
+/// - head is None iff tail is None
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace SinglyLinkedList
+{
+
+
+public class Node<T>
+    where T : Clone
+
+{
+    
+    public T Value { get; set; }
+    
+    public Node<T>? Next { get; set; }
+    
+
+    
+    /// <summary>
+    /// New
+    /// 
+    /// 
+    /// Postconditions:
+    /// - head is None
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public Self New()
+    {
+        
+        // TODO: Implement New
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Prepend
+    /// 
+    /// 
+    /// Postconditions:
+    /// - head.value == value
+    /// - list length increased by 1
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public void Prepend(T value)
+    {
+        
+        // TODO: Implement Prepend
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Append
+    /// 
+    /// 
+    /// Postconditions:
+    /// - last element == value
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public void Append(T value)
+    {
+        
+        // TODO: Implement Append
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// PopFront
+    /// 
+    /// Preconditions:
+    /// - !is_empty()
+    /// 
+    /// 
+    /// Postconditions:
+    /// - head == old.head.next
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public T? PopFront()
+    {
+        
+        // TODO: Implement PopFront
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// IsEmpty
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public bool IsEmpty()
+    {
+        
+        // TODO: Implement IsEmpty
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Len
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public int Len()
+    {
+        
+        // TODO: Implement Len
+        throw new NotImplementedException();
+    }
+    
+}
+
+public class SinglyLinkedList<T>
+    where T : Clone
+
+{
+    
+    public Node<T>? Head { get; set; }
+    
+
+    
+    /// <summary>
+    /// New
+    /// 
+    /// 
+    /// Postconditions:
+    /// - head is None
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public Self New()
+    {
+        
+        // TODO: Implement New
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Prepend
+    /// 
+    /// 
+    /// Postconditions:
+    /// - head.value == value
+    /// - list length increased by 1
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public void Prepend(T value)
+    {
+        
+        // TODO: Implement Prepend
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Append
+    /// 
+    /// 
+    /// Postconditions:
+    /// - last element == value
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public void Append(T value)
+    {
+        
+        // TODO: Implement Append
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// PopFront
+    /// 
+    /// Preconditions:
+    /// - !is_empty()
+    /// 
+    /// 
+    /// Postconditions:
+    /// - head == old.head.next
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public T? PopFront()
+    {
+        
+        // TODO: Implement PopFront
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// IsEmpty
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public bool IsEmpty()
+    {
+        
+        // TODO: Implement IsEmpty
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Len
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public int Len()
+    {
+        
+        // TODO: Implement Len
+        throw new NotImplementedException();
+    }
+    
+}
+
+
+
+// ========== Generated xUnit tests ==========
+
+public class prepend_pop_frontTests
+{
+    [Fact]
+    public void prepend_pop_front_Test()
+    {
+        // Setup
+        let mut list = SinglyLinkedList::new();
+        // Actions
+        list.prepend(1);list.prepend(2);
+        // Assertions
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class append_orderTests
+{
+    [Fact]
+    public void append_order_Test()
+    {
+        // Setup
+        let mut list = SinglyLinkedList::new();
+        // Actions
+        list.append(1);list.append(2);
+        // Assertions
+        Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class pop_front_emptyTests
+{
+    [Fact]
+    public void pop_front_empty_Test()
+    {
+        // Setup
+        let list = SinglyLinkedList::<i32>::new();
+        // Actions
+        
+        // Assertions
+        Assert.AreEqual(list.pop_front(), None);
+    }
+}
+
+}

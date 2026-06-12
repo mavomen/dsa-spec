@@ -1,0 +1,142 @@
+/// DynamicArray
+
+/// Time complexity: O(1) amortized push, O(n) insert/remove
+
+/// Space complexity: O(n)
+
+///
+/// # Invariants
+
+/// - length >= 0
+
+/// - capacity >= length
+
+pub struct DynamicArray<T: Clone> {
+    data: Vec<T>,
+
+    len: usize,
+}
+
+impl<T: Clone> DynamicArray<T> {
+    /// # Contracts
+
+    /// - **Postcondition:** length == 0
+
+    /// - **Postcondition:** capacity >= 0
+
+    pub fn new(&self) -> Self {
+        // TODO: Implement new
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Postcondition:** length == old.length + 1
+
+    /// - **Postcondition:** last element == item
+
+    pub fn push(&self, item: T) {
+        // TODO: Implement push
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Precondition:** length > 0
+
+    /// - **Postcondition:** length == old.length - 1
+
+    pub fn pop(&self) -> Option<T> {
+        // TODO: Implement pop
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Precondition:** index < length
+
+    pub fn get(&self, index: usize) -> Option<&T> {
+        // TODO: Implement get
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Postcondition:** result >= 0
+
+    pub fn len(&self) -> usize {
+        // TODO: Implement len
+        todo!()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        // TODO: Implement is_empty
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_push_increases_length() {
+        let mut arr = DynamicArray::new();
+        arr.push(1);
+        arr.push(2);
+        assert_eq!(arr.len(), 2);
+        assert!(!arr.is_empty());
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_pop_returns_last_element() {
+        let mut arr = DynamicArray::new();
+        arr.push(10);
+        arr.push(20);
+        assert_eq!(arr.pop(), Some(20));
+        assert_eq!(arr.len(), 1);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_pop_empty_returns_none() {
+        let arr = DynamicArray::<i32>::new();
+
+        assert_eq!(arr.pop(), None);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_valid_index() {
+        let mut arr = DynamicArray::new();
+        arr.push(5);
+
+        assert_eq!(arr.get(0), Some(&5));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_out_of_bounds() {
+        let mut arr = DynamicArray::new();
+        arr.push(5);
+
+        assert_eq!(arr.get(1), None);
+    }
+}

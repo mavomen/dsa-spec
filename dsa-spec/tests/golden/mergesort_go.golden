@@ -1,0 +1,82 @@
+// Mergesort
+
+// Time complexity: O(n log n) always
+
+
+// Space complexity: O(n)
+
+
+
+package mergesort
+
+import "testing"
+
+
+// No structs – standalone functions
+
+// Mergesort
+
+// Preconditions:
+ // - arr is valid slice
+
+
+
+// Postconditions:
+ // - arr is sorted ascending
+
+
+
+func Mergesort(arr []T)  {
+	
+	// TODO: Implement Mergesort
+	panic("not implemented")
+}
+
+// Merge
+
+// Preconditions:
+ // - left <= mid <= right
+ // - arr[left..mid] is sorted
+ // - arr[mid..right] is sorted
+
+
+
+// Postconditions:
+ // - arr[left..right] is sorted
+
+
+
+func Merge(arr []T, left int, mid int, right int)  {
+	
+	// TODO: Implement Merge
+	panic("not implemented")
+}
+
+
+
+// ========== Generated tests ==========
+
+func Testsort_unsorted_array(t *testing.T) {
+	let mut arr = vec![5, 3, 8, 1, 2];
+	mergesort(&mut arr)
+	if arr != vec![1, 2, 3, 5, 8] { t.Errorf("got %v, want %v", arr, vec![1, 2, 3, 5, 8]) }
+}
+
+func Testsort_empty_array(t *testing.T) {
+	let mut arr: Vec<i32> = vec![];
+	mergesort(&mut arr)
+	if arr != vec![] { t.Errorf("got %v, want %v", arr, vec![]) }
+}
+
+func Testsort_single_element(t *testing.T) {
+	let mut arr = vec![7];
+	mergesort(&mut arr)
+	if arr != vec![7] { t.Errorf("got %v, want %v", arr, vec![7]) }
+}
+
+func Testsort_already_sorted(t *testing.T) {
+	let mut arr = vec![1, 2, 3, 4, 5];
+	mergesort(&mut arr)
+	if arr != vec![1, 2, 3, 4, 5] { t.Errorf("got %v, want %v", arr, vec![1, 2, 3, 4, 5]) }
+}
+

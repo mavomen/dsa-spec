@@ -1,0 +1,106 @@
+/**
+ * DFS
+
+ * Time complexity: O(V + E)
+
+
+ * Space complexity: O(V)
+
+
+ * Invariants:
+
+ * - visited set contains no duplicates
+
+ * - all visited vertices exist in graph
+
+
+ */
+
+
+
+
+/**
+ * dfs
+ 
+ * Preconditions:
+  * - start vertex exists in graph
+ 
+ 
+ * Postconditions:
+  * - result contains all reachable vertices from start
+  * - result has no duplicates
+  * - order follows depth-first traversal
+ 
+ 
+ */
+export function dfs(graph: &Graph<T>, start: T): T[] {
+    
+    // TODO: Implement dfs
+    throw new Error('Not implemented');
+}
+
+/**
+ * dfsRecursiveHelper
+ 
+ 
+ 
+ */
+export function dfsRecursiveHelper(graph: &Graph<T>, vertex: T, visited: &mut HashSet<T>, result: &mut Vec<T>): void {
+    
+    // TODO: Implement dfsRecursiveHelper
+    throw new Error('Not implemented');
+}
+
+
+
+// ========== Generated Jest tests ==========
+
+describe('dfs_simple_path', () => {
+    it('should work', () => {
+        // Setup
+        let mut g = Graph::new(false);
+g.add_vertex(1);
+g.add_vertex(2);
+g.add_vertex(3);
+g.add_edge(1, 2);
+g.add_edge(2, 3);
+
+        // Actions
+        
+        // Assertions
+        expect(dfs(&g, 1)).toBe(vec![1, 2, 3]);
+    });
+});
+
+describe('dfs_disconnected', () => {
+    it('should work', () => {
+        // Setup
+        let mut g = Graph::new(false);
+g.add_vertex(1);
+g.add_vertex(2);
+
+        // Actions
+        
+        // Assertions
+        expect(dfs(&g, 1)).toBe(vec![1]);
+    });
+});
+
+describe('dfs_cyclic_graph', () => {
+    it('should work', () => {
+        // Setup
+        let mut g = Graph::new(true);
+g.add_vertex(1);
+g.add_vertex(2);
+g.add_vertex(3);
+g.add_edge(1, 2);
+g.add_edge(2, 3);
+g.add_edge(3, 1);
+
+        // Actions
+        
+        // Assertions
+        expect(dfs(&g, 1).len()).toBe(3);
+    });
+});
+

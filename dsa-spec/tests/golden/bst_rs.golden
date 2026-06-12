@@ -1,0 +1,151 @@
+/// BinarySearchTree
+
+/// Time complexity: O(log n) average, O(n) worst
+
+/// Space complexity: O(n)
+
+///
+/// # Invariants
+
+/// - left.value < node.value < right.value
+
+/// - no duplicate values
+
+pub struct BSTNode<T: Ord + Clone> {
+    value: T,
+
+    left: Option<Box<BSTNode<T>>>,
+
+    right: Option<Box<BSTNode<T>>>,
+}
+
+impl<T: Ord + Clone> BSTNode<T> {
+    /// # Contracts
+
+    /// - **Postcondition:** root is None
+
+    pub fn new(&self) -> Self {
+        // TODO: Implement new
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Postcondition:** tree contains value
+
+    /// - **Postcondition:** BST invariant maintained
+
+    pub fn insert(&self, value: T) -> bool {
+        // TODO: Implement insert
+        todo!()
+    }
+
+    pub fn contains(&self, value: T) -> bool {
+        // TODO: Implement contains
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Postcondition:** result is sorted ascending
+
+    pub fn inorder(&self) -> Vec<T> {
+        // TODO: Implement inorder
+        todo!()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        // TODO: Implement is_empty
+        todo!()
+    }
+}
+
+pub struct BinarySearchTree<T: Ord + Clone> {
+    root: Option<Box<BSTNode<T>>>,
+}
+
+impl<T: Ord + Clone> BinarySearchTree<T> {
+    /// # Contracts
+
+    /// - **Postcondition:** root is None
+
+    pub fn new(&self) -> Self {
+        // TODO: Implement new
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Postcondition:** tree contains value
+
+    /// - **Postcondition:** BST invariant maintained
+
+    pub fn insert(&self, value: T) -> bool {
+        // TODO: Implement insert
+        todo!()
+    }
+
+    pub fn contains(&self, value: T) -> bool {
+        // TODO: Implement contains
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Postcondition:** result is sorted ascending
+
+    pub fn inorder(&self) -> Vec<T> {
+        // TODO: Implement inorder
+        todo!()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        // TODO: Implement is_empty
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_insert_and_contains() {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);
+        bst.insert(3);
+        bst.insert(7);
+        assert!(bst.contains(5));
+        assert!(bst.contains(3));
+        assert!(bst.contains(7));
+        assert!(!bst.contains(10));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_inorder_returns_sorted() {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);
+        bst.insert(3);
+        bst.insert(7);
+        bst.insert(1);
+        bst.insert(9);
+        assert_eq!(bst.inorder(), vec![1, 3, 5, 7, 9]);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_duplicate_insert_returns_false() {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(10);
+        assert_eq!(bst.insert(10), false);
+    }
+}

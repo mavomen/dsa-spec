@@ -1,0 +1,197 @@
+"""
+BinarySearchTree
+
+Time complexity: O(log n) average, O(n) worst
+
+
+Space complexity: O(n)
+
+
+# Invariants
+
+# - left.value < node.value < right.value
+
+# - no duplicate values
+
+
+"""
+
+from dataclasses import dataclass
+from typing import TypeVar, Generic, Optional, List, Dict
+import pytest
+
+
+
+T = TypeVar('T')
+
+
+@dataclass
+class BSTNode(Generic[T]):
+    """BinarySearchTree"""
+    
+    value: T
+    
+    left: Optional[BSTNode<T>]
+    
+    right: Optional[BSTNode<T>]
+    
+
+    
+    def new(self) -> Self:
+        """
+        
+        
+        Postconditions:
+        - root is None
+        
+        
+        """
+        
+        # TODO: Implement new
+        raise NotImplementedError
+    
+    def insert(self, value: T) -> bool:
+        """
+        
+        
+        Postconditions:
+        - tree contains value
+        - BST invariant maintained
+        
+        
+        """
+        
+        # TODO: Implement insert
+        raise NotImplementedError
+    
+    def contains(self, value: T) -> bool:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement contains
+        raise NotImplementedError
+    
+    def inorder(self) -> List[T]:
+        """
+        
+        
+        Postconditions:
+        - result is sorted ascending
+        
+        
+        """
+        
+        # TODO: Implement inorder
+        raise NotImplementedError
+    
+    def is_empty(self) -> bool:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement is_empty
+        raise NotImplementedError
+    
+
+T = TypeVar('T')
+
+
+@dataclass
+class BinarySearchTree(Generic[T]):
+    """BinarySearchTree"""
+    
+    root: Optional[BSTNode<T>]
+    
+
+    
+    def new(self) -> Self:
+        """
+        
+        
+        Postconditions:
+        - root is None
+        
+        
+        """
+        
+        # TODO: Implement new
+        raise NotImplementedError
+    
+    def insert(self, value: T) -> bool:
+        """
+        
+        
+        Postconditions:
+        - tree contains value
+        - BST invariant maintained
+        
+        
+        """
+        
+        # TODO: Implement insert
+        raise NotImplementedError
+    
+    def contains(self, value: T) -> bool:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement contains
+        raise NotImplementedError
+    
+    def inorder(self) -> List[T]:
+        """
+        
+        
+        Postconditions:
+        - result is sorted ascending
+        
+        
+        """
+        
+        # TODO: Implement inorder
+        raise NotImplementedError
+    
+    def is_empty(self) -> bool:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement is_empty
+        raise NotImplementedError
+    
+
+
+
+# ========== Generated pytest tests ==========
+
+def test_insert_and_contains():
+    """Test: insert_and_contains"""
+    let mut bst = BinarySearchTree::new();
+    bst.insert(5)bst.insert(3)bst.insert(7)
+    assert bst.contains(5)assert bst.contains(3)assert bst.contains(7)assert !bst.contains(10)
+
+def test_inorder_returns_sorted():
+    """Test: inorder_returns_sorted"""
+    let mut bst = BinarySearchTree::new();
+    bst.insert(5)bst.insert(3)bst.insert(7)bst.insert(1)bst.insert(9)
+    assert bst.inorder() == vec![1, 3, 5, 7, 9]
+
+def test_duplicate_insert_returns_false():
+    """Test: duplicate_insert_returns_false"""
+    let mut bst = BinarySearchTree::new();
+    bst.insert(10)
+    assert bst.insert(10) == false
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

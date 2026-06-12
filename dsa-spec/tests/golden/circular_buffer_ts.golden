@@ -1,0 +1,195 @@
+/**
+ * CircularBuffer
+
+ * Time complexity: O(1) enqueue/dequeue
+
+
+ * Space complexity: O(n)
+
+
+ * Invariants:
+
+ * - length <= capacity
+
+ * - 0 <= head < capacity
+
+ * - 0 <= tail < capacity
+
+
+ */
+
+
+
+export interface CircularBuffer<T extends Clone & Default> {
+    
+    buffer: (T | null)[];
+    
+    head: number;
+    
+    tail: number;
+    
+    size: number;
+    
+    capacity: number;
+    
+}
+
+export class CircularBufferImpl<T extends Clone & Default> implements CircularBuffer<T> {
+    constructor(
+        
+        public buffer: (T | null)[],
+        
+        public head: number,
+        
+        public tail: number,
+        
+        public size: number,
+        
+        public capacity: number
+        
+    ) {}
+
+    
+    /**
+     * new
+     
+     * Preconditions:
+      * - capacity > 0
+     
+     
+     * Postconditions:
+      * - is_empty() == true
+      * - capacity == capacity
+     
+     
+     */
+    new(capacity: number): Self {
+        
+        // TODO: Implement new
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * enqueue
+     
+     * Preconditions:
+      * - size < capacity
+     
+     
+     * Postconditions:
+      * - size == old.size + 1
+     
+     
+     * @throws Error (from Result type)
+     
+     */
+    enqueue(item: T): () {
+        
+        // TODO: Implement enqueue
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * dequeue
+     
+     * Preconditions:
+      * - size > 0
+     
+     
+     * Postconditions:
+      * - size == old.size - 1
+     
+     
+     */
+    dequeue(): T | null {
+        
+        // TODO: Implement dequeue
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * isFull
+     
+     
+     
+     */
+    isFull(): boolean {
+        
+        // TODO: Implement isFull
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * isEmpty
+     
+     
+     
+     */
+    isEmpty(): boolean {
+        
+        // TODO: Implement isEmpty
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * len
+     
+     
+     
+     */
+    len(): number {
+        
+        // TODO: Implement len
+        throw new Error('Not implemented');
+    }
+    
+}
+
+
+
+// ========== Generated Jest tests ==========
+
+describe('enqueue_dequeue_fifo', () => {
+    it('should work', () => {
+        // Setup
+        let mut buf = CircularBuffer::new(3);
+        // Actions
+        buf.enqueue(1);buf.enqueue(2);
+        // Assertions
+        expect(buf.dequeue()).toBe(Some(1));expect(buf.dequeue()).toBe(Some(2));
+    });
+});
+
+describe('full_buffer_prevents_enqueue', () => {
+    it('should work', () => {
+        // Setup
+        let mut buf = CircularBuffer::new(1);
+        // Actions
+        buf.enqueue(42);
+        // Assertions
+        expect(buf.is_full()).toBe(true);expect(buf.enqueue(43).is_err()).toBe(true);
+    });
+});
+
+describe('empty_buffer_returns_none', () => {
+    it('should work', () => {
+        // Setup
+        let buf = CircularBuffer::<i32>::new(5);
+        // Actions
+        
+        // Assertions
+        expect(buf.dequeue()).toBe(None);
+    });
+});
+
+describe('wrap_around_works', () => {
+    it('should work', () => {
+        // Setup
+        let mut buf = CircularBuffer::new(3);
+        // Actions
+        buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
+        // Assertions
+        expect(buf.dequeue()).toBe(Some(2));expect(buf.dequeue()).toBe(Some(3));expect(buf.dequeue()).toBe(Some(4));
+    });
+});
+

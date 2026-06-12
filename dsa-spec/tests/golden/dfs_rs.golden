@@ -1,0 +1,61 @@
+/// DFS
+
+/// Time complexity: O(V + E)
+
+/// Space complexity: O(V)
+
+///
+/// # Invariants
+
+/// - visited set contains no duplicates
+
+/// - all visited vertices exist in graph
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_dfs_simple_path() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_vertex(3);
+        g.add_edge(1, 2);
+        g.add_edge(2, 3);
+
+        assert_eq!(dfs(&g, 1), vec![1, 2, 3]);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_dfs_disconnected() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+
+        assert_eq!(dfs(&g, 1), vec![1]);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_dfs_cyclic_graph() {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_vertex(3);
+        g.add_edge(1, 2);
+        g.add_edge(2, 3);
+        g.add_edge(3, 1);
+
+        assert_eq!(dfs(&g, 1).len(), 3);
+    }
+}

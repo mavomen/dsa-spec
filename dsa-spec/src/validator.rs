@@ -1,28 +1,45 @@
 use crate::ast::Spec;
+use crate::error::SpecError;
 use crate::spec_schema::SPEC_JSON_SCHEMA;
-use serde_json;
 use jsonschema::{Draft, JSONSchema, ValidationError};
 
-pub fn validate(spec: &Spec) -> Result<(), Vec<String>> {
-    let value = serde_json::to_value(spec)
-        .map_err(|e| vec![format!("Internal serialization error: {}", e)])?;
+pub fn validate(spec: &Spec) -> Result<(), Vec<SpecError>> {
+    let value = serde_json::to_value(spec).map_err(|e| {
+        vec![SpecError::SchemaError {
+            message: format!("Internal serialization error: {e}"),
+        }]
+    })?;
 
-    let schema_json: serde_json::Value = serde_json::from_str(SPEC_JSON_SCHEMA)
-        .map_err(|e| vec![format!("Internal schema parse error: {}", e)])?;
+    let schema_json: serde_json::Value = serde_json::from_str(SPEC_JSON_SCHEMA).map_err(|e| {
+        vec![SpecError::SchemaError {
+            message: format!("Internal schema parse error: {e}"),
+        }]
+    })?;
 
     let schema = JSONSchema::options()
         .with_draft(Draft::Draft7)
         .compile(&schema_json)
-        .map_err(|e| vec![format!("Schema compilation error: {}", e)])?;
+        .map_err(|e| {
+            vec![SpecError::SchemaError {
+                message: format!("Schema compilation error: {e}"),
+            }]
+        })?;
 
     let errors: Vec<ValidationError> = match schema.validate(&value) {
         Ok(()) => return Ok(()),
         Err(errors) => errors.collect(),
     };
 
-    let messages: Vec<String> = errors.iter().map(|e| {
-        format!("{} (at {})", e, e.instance_path)
-    }).collect();
+    let messages: Vec<SpecError> = errors
+        .iter()
+        .map(|e| {
+            let path = e.instance_path.to_string();
+            SpecError::ValidationError {
+                message: format!("{e}"),
+                path,
+            }
+        })
+        .collect();
 
     Err(messages)
 }
@@ -31,8 +48,8 @@ pub fn validate(spec: &Spec) -> Result<(), Vec<String>> {
 mod tests {
     use super::*;
     use crate::ast::{
-        Spec, Metadata, Complexity, Contracts, StructDef, GenericParam,
-        FieldDef, MethodDef, ParamDef, Verification, TestCase, Type,
+        Complexity, Contracts, FieldDef, GenericParam, Metadata, MethodDef, ParamDef, Spec,
+        StructDef, TestCase, Type, Verification,
     };
 
     fn make_valid_spec() -> Spec {
@@ -70,6 +87,7 @@ mod tests {
                 returns: Some("void".into()),
                 preconditions: vec!["stack not full".into()],
                 postconditions: vec!["item on top".into()],
+                injected_assertions: vec![],
             }],
             verification: Verification {
                 test_cases: vec![TestCase {
@@ -102,8 +120,8 @@ mod tests {
         let result = validate(&spec);
         assert!(result.is_err());
         let errors = result.unwrap_err();
-        assert!(errors.iter().any(|e| e.contains("name")));
-        assert!(errors.iter().any(|e| e.contains("category")));
+        assert!(errors.iter().any(|e| e.to_string().contains("name")));
+        assert!(errors.iter().any(|e| e.to_string().contains("category")));
     }
 
     #[test]
@@ -140,6 +158,87 @@ mod tests {
             ..Default::default()
         };
         assert!(validate(&spec).is_err());
+    }
+
+    #[test]
+    fn test_missing_metadata_name_fails() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "".into(),
+                category: "real".into(),
+                ..Default::default()
+            },
+            structs: vec![],
+            methods: vec![],
+            ..Default::default()
+        };
+        let result = validate(&spec);
+        assert!(result.is_err(), "empty name should fail: {:?}", result);
+        let errors = result.unwrap_err();
+        assert!(errors.iter().any(|e| e.to_string().contains("name")));
+    }
+
+    #[test]
+    fn test_missing_field_type_fails() {
+        // The schema requires field to have "type" key. If we omit it
+        // via Default, the Type defaults to Simple("") which is still a
+        // valid string. The schema doesn't enforce minLength on field type.
+        // So this validates that a missing type key in YAML would fail.
+        let yaml = r#"
+spec_version: "1.0"
+metadata:
+  name: "Test"
+  category: "test"
+structs:
+  - name: "Foo"
+    fields:
+      - name: "bar"
+methods: []
+verification:
+  test_cases: []
+"#;
+        // Missing "type" key in field fails at deserialization (serde requires it)
+        let result = serde_yaml::from_str::<crate::ast::Spec>(yaml);
+        assert!(
+            result.is_err(),
+            "missing field 'type' should fail deserialization"
+        );
+    }
+
+    #[test]
+    fn test_non_object_complexity_yaml_fails_parse() {
+        let yaml = r#"
+spec_version: "1.0"
+metadata:
+  name: "Test"
+  category: "test"
+  complexity: "O(1)"
+structs: []
+methods: []
+verification:
+  test_cases: []
+"#;
+        // YAML type mismatch: complexity expects an object, got a string
+        assert!(serde_yaml::from_str::<crate::ast::Spec>(yaml).is_err());
+    }
+
+    #[test]
+    fn test_tags_as_string_fails() {
+        // Should this pass? serde_yaml will fail to deserialize tags: "lifo"
+        let yaml = r#"
+spec_version: "1.0"
+metadata:
+  name: "Test"
+  category: "test"
+  tags: "lifo"
+structs: []
+methods: []
+verification:
+  test_cases: []
+"#;
+        // YAML type mismatch: tags is expected to be an array
+        assert!(serde_yaml::from_str::<crate::ast::Spec>(yaml).is_err());
     }
 
     #[test]
@@ -185,26 +284,22 @@ mod tests {
                         name: "T".into(),
                         constraints: vec!["Ord".into(), "Clone".into()],
                     }],
-                    fields: vec![
-                        FieldDef {
-                            name: "root".into(),
-                            field_type: Type::Simple("Option<Box<BSTNode<T>>>".into()),
-                        },
-                    ],
-                },
-            ],
-            methods: vec![
-                MethodDef {
-                    name: "insert".into(),
-                    params: vec![ParamDef {
-                        name: "value".into(),
-                        param_type: Type::Simple("T".into()),
+                    fields: vec![FieldDef {
+                        name: "root".into(),
+                        field_type: Type::Simple("Option<Box<BSTNode<T>>>".into()),
                     }],
-                    returns: Some("bool".into()),
-                    postconditions: vec!["tree contains value".into()],
-                    ..Default::default()
                 },
             ],
+            methods: vec![MethodDef {
+                name: "insert".into(),
+                params: vec![ParamDef {
+                    name: "value".into(),
+                    param_type: Type::Simple("T".into()),
+                }],
+                returns: Some("bool".into()),
+                postconditions: vec!["tree contains value".into()],
+                ..Default::default()
+            }],
             ..Default::default()
         };
         assert!(validate(&spec).is_ok());

@@ -1,0 +1,218 @@
+/// <summary>
+/// DynamicArray
+
+/// Time complexity: O(1) amortized push, O(n) insert/remove
+
+
+/// Space complexity: O(n)
+
+
+/// Invariants:
+
+/// - length >= 0
+
+/// - capacity >= length
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace DynamicArray
+{
+
+
+public class DynamicArray<T>
+    where T : Clone
+
+{
+    
+    public List<T> Data { get; set; }
+    
+    public int Len { get; set; }
+    
+
+    
+    /// <summary>
+    /// New
+    /// 
+    /// 
+    /// Postconditions:
+    /// - length == 0
+    /// - capacity >= 0
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public Self New()
+    {
+        
+        // TODO: Implement New
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Push
+    /// 
+    /// 
+    /// Postconditions:
+    /// - length == old.length + 1
+    /// - last element == item
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public void Push(T item)
+    {
+        
+        // TODO: Implement Push
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Pop
+    /// 
+    /// Preconditions:
+    /// - length > 0
+    /// 
+    /// 
+    /// Postconditions:
+    /// - length == old.length - 1
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public T? Pop()
+    {
+        
+        // TODO: Implement Pop
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Get
+    /// 
+    /// Preconditions:
+    /// - index < length
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public T? Get(int index)
+    {
+        
+        // TODO: Implement Get
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Len
+    /// 
+    /// 
+    /// Postconditions:
+    /// - result >= 0
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public int Len()
+    {
+        
+        // TODO: Implement Len
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// IsEmpty
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public bool IsEmpty()
+    {
+        
+        // TODO: Implement IsEmpty
+        throw new NotImplementedException();
+    }
+    
+}
+
+
+
+// ========== Generated xUnit tests ==========
+
+public class push_increases_lengthTests
+{
+    [Fact]
+    public void push_increases_length_Test()
+    {
+        // Setup
+        let mut arr = DynamicArray::new();
+        // Actions
+        arr.push(1);arr.push(2);
+        // Assertions
+        Assert.AreEqual(arr.len(), 2);Assert.IsTrue(!arr.is_empty());
+    }
+}
+
+public class pop_returns_last_elementTests
+{
+    [Fact]
+    public void pop_returns_last_element_Test()
+    {
+        // Setup
+        let mut arr = DynamicArray::new();
+        // Actions
+        arr.push(10);arr.push(20);
+        // Assertions
+        Assert.AreEqual(arr.pop(), Some(20));Assert.AreEqual(arr.len(), 1);
+    }
+}
+
+public class pop_empty_returns_noneTests
+{
+    [Fact]
+    public void pop_empty_returns_none_Test()
+    {
+        // Setup
+        let arr = DynamicArray::<i32>::new();
+        // Actions
+        
+        // Assertions
+        Assert.AreEqual(arr.pop(), None);
+    }
+}
+
+public class get_valid_indexTests
+{
+    [Fact]
+    public void get_valid_index_Test()
+    {
+        // Setup
+        let mut arr = DynamicArray::new(); arr.push(5);
+        // Actions
+        
+        // Assertions
+        Assert.AreEqual(arr.get(0), Some(&5));
+    }
+}
+
+public class get_out_of_boundsTests
+{
+    [Fact]
+    public void get_out_of_bounds_Test()
+    {
+        // Setup
+        let mut arr = DynamicArray::new(); arr.push(5);
+        // Actions
+        
+        // Assertions
+        Assert.AreEqual(arr.get(1), None);
+    }
+}
+
+}

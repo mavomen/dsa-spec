@@ -1,8 +1,10 @@
+use crate::assertion;
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
+use crate::casing;
+use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
 use serde::Serialize;
-use std::process::Command;
 use tera::Context;
 
 pub struct CSharpBackend {
@@ -10,41 +12,18 @@ pub struct CSharpBackend {
 }
 
 impl CSharpBackend {
-    pub fn new(template_dir: &str) -> Result<Self, String> {
+    pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(CSharpBackend { engine })
     }
 
-    fn format_csharp(code: &str) -> Result<String, String> {
-        let mut child = Command::new("dotnet")
-            .arg("format")
-            .arg("--no-restore")
-            .stdin(std::process::Stdio::piped())
-            .stdout(std::process::Stdio::piped())
-            .stderr(std::process::Stdio::piped())
-            .spawn()
-            .map_err(|e| format!("Failed to spawn dotnet format: {}", e))?;
-
-        if let Some(stdin) = child.stdin.as_mut() {
-            use std::io::Write;
-            stdin
-                .write_all(code.as_bytes())
-                .map_err(|e| format!("Failed to write to dotnet format stdin: {}", e))?;
-        }
-
-        let output = child
-            .wait_with_output()
-            .map_err(|e| format!("Failed to wait on dotnet format: {}", e))?;
-
-        if output.status.success() {
-            Ok(String::from_utf8_lossy(&output.stdout).to_string())
-        } else {
-            // Fallback: return original code
-            Err(format!(
-                "dotnet format error: {} (falling back to unformatted)",
-                String::from_utf8_lossy(&output.stderr)
-            ))
-        }
+    fn format_csharp(_code: &str) -> Result<String, BackendError> {
+        // dotnet format only works on project files (requires .csproj + .NET SDK).
+        // The templates already emit clean C# with proper indentation — skip formatting.
+        // Users can run `dotnet format` manually on generated files if desired.
+        Err(BackendError::Formatter {
+            message: "C# formatting skipped: dotnet format requires a project file".into(),
+        })
     }
 
     pub(crate) fn to_csharp_type(typ: &Type) -> String {
@@ -102,6 +81,16 @@ impl CSharpBackend {
     }
 }
 
+fn translate_assertion(a: &str) -> String {
+    if let Some(expr) = assertion::parse_assert_bang(a) {
+        format!("Assert.IsTrue({})", expr.trim())
+    } else if let Some((left, right)) = assertion::parse_assert_eq(a) {
+        format!("Assert.AreEqual({}, {})", left, right)
+    } else {
+        a.to_string()
+    }
+}
+
 fn build_context(spec: &Spec) -> Context {
     let mut context = Context::new();
 
@@ -130,6 +119,14 @@ fn build_context(spec: &Spec) -> Context {
         .iter()
         .map(|s| StructContext {
             name: &s.name,
+            fields: s
+                .fields
+                .iter()
+                .map(|f| FieldContext {
+                    name: casing::to_pascal_case(&f.name),
+                    csharp_type: CSharpBackend::to_csharp_type(&f.field_type),
+                })
+                .collect(),
             generics: s
                 .generics
                 .iter()
@@ -142,14 +139,6 @@ fn build_context(spec: &Spec) -> Context {
                     },
                 })
                 .collect(),
-            fields: s
-                .fields
-                .iter()
-                .map(|f| FieldContext {
-                    name: &f.name,
-                    csharp_type: CSharpBackend::to_csharp_type(&f.field_type),
-                })
-                .collect(),
         })
         .collect();
     context.insert("structs", &structs);
@@ -160,38 +149,50 @@ fn build_context(spec: &Spec) -> Context {
         .map(|m| {
             let return_type = m.returns.as_deref().map(|r| Type::Simple(r.to_string()));
             MethodContext {
-                name: &m.name,
+                name: casing::to_pascal_case(&m.name),
                 params: m
                     .params
                     .iter()
                     .map(|p| ParamContext {
-                        name: &p.name,
+                        name: casing::to_camel_case(&p.name),
                         csharp_type: CSharpBackend::to_csharp_type(&p.param_type),
                     })
                     .collect(),
-                returns: return_type
-                    .as_ref()
-                    .map(|t| CSharpBackend::to_csharp_type(t)),
+                returns: return_type.as_ref().map(CSharpBackend::to_csharp_type),
                 throws_exception: return_type
                     .as_ref()
-                    .map(|t| CSharpBackend::is_result_type(t))
+                    .map(CSharpBackend::is_result_type)
                     .unwrap_or(false),
                 preconditions: &m.preconditions,
                 postconditions: &m.postconditions,
+                injected_assertions: &m.injected_assertions,
             }
         })
         .collect();
     context.insert("methods", &methods);
 
+    let translated_assertions: Vec<Vec<String>> = spec
+        .verification
+        .test_cases
+        .iter()
+        .map(|t| {
+            t.assertions
+                .iter()
+                .map(|a| translate_assertion(a))
+                .collect()
+        })
+        .collect();
+
     let tests: Vec<TestContext> = spec
         .verification
         .test_cases
         .iter()
-        .map(|t| TestContext {
+        .enumerate()
+        .map(|(i, t)| TestContext {
             name: &t.name,
             setup: t.setup.as_deref(),
             actions: &t.actions,
-            assertions: &t.assertions,
+            assertions: &translated_assertions[i],
         })
         .collect();
     context.insert("verification", &VerificationContext { test_cases: tests });
@@ -200,7 +201,7 @@ fn build_context(spec: &Spec) -> Context {
 }
 
 impl Backend for CSharpBackend {
-    fn generate(&self, spec: &Spec) -> Result<String, String> {
+    fn generate(&self, spec: &Spec) -> Result<String, BackendError> {
         let context = build_context(spec);
         let raw_code = self.engine.render("csharp.cs.tera", &context)?;
         Ok(Self::format_csharp(&raw_code).unwrap_or(raw_code))
@@ -228,7 +229,7 @@ struct ContractsContext<'a> {
 struct StructContext<'a> {
     name: &'a str,
     generics: Vec<GenericParamContext<'a>>,
-    fields: Vec<FieldContext<'a>>,
+    fields: Vec<FieldContext>,
 }
 
 #[derive(Serialize)]
@@ -238,24 +239,25 @@ struct GenericParamContext<'a> {
 }
 
 #[derive(Serialize)]
-struct FieldContext<'a> {
-    name: &'a str,
+struct FieldContext {
+    name: String,
     csharp_type: String,
 }
 
 #[derive(Serialize)]
 struct MethodContext<'a> {
-    name: &'a str,
-    params: Vec<ParamContext<'a>>,
+    name: String,
+    params: Vec<ParamContext>,
     returns: Option<String>,
     throws_exception: bool,
     preconditions: &'a [String],
     postconditions: &'a [String],
+    injected_assertions: &'a [String],
 }
 
 #[derive(Serialize)]
-struct ParamContext<'a> {
-    name: &'a str,
+struct ParamContext {
+    name: String,
     csharp_type: String,
 }
 
@@ -367,11 +369,123 @@ mod tests {
                 returns: Some("void".into()),
                 preconditions: vec![],
                 postconditions: vec![],
+                injected_assertions: vec![],
             }],
             verification: Verification::default(),
         };
         let backend = CSharpBackend::new("templates").unwrap();
         let code = backend.generate(&spec).unwrap();
         assert!(code.contains("throw new NotImplementedException();"));
+    }
+
+    #[test]
+    fn test_translate_hashmap() {
+        assert_eq!(
+            CSharpBackend::translate_simple_type("HashMap<K,V>"),
+            "Dictionary<K,V>"
+        );
+    }
+
+    #[test]
+    fn test_translate_reference() {
+        assert_eq!(CSharpBackend::translate_simple_type("&T"), "T");
+        assert_eq!(CSharpBackend::translate_simple_type("&mut [T]"), "T[]");
+    }
+
+    #[test]
+    fn test_translate_primitives() {
+        assert_eq!(CSharpBackend::translate_simple_type("usize"), "int");
+        assert_eq!(CSharpBackend::translate_simple_type("i32"), "int");
+        assert_eq!(CSharpBackend::translate_simple_type("bool"), "bool");
+        assert_eq!(CSharpBackend::translate_simple_type("void"), "void");
+    }
+
+    #[test]
+    fn test_translate_box_unwrapping() {
+        assert_eq!(CSharpBackend::translate_simple_type("Box<T>"), "T");
+        assert_eq!(
+            CSharpBackend::translate_simple_type("Box<BSTNode<T>>"),
+            "BSTNode<T>"
+        );
+    }
+
+    #[test]
+    fn test_translate_nested_types() {
+        assert_eq!(
+            CSharpBackend::translate_simple_type("Vec<Option<i32>>"),
+            "List<int?>"
+        );
+        assert_eq!(
+            CSharpBackend::translate_simple_type("Option<Box<Node<T>>>"),
+            "Node<T>?"
+        );
+    }
+
+    #[test]
+    fn test_to_csharp_type_parameterized() {
+        let typ = Type::Parameterized {
+            base: "Dictionary".into(),
+            params: vec![Type::Simple("K".into()), Type::Simple("V".into())],
+        };
+        assert_eq!(CSharpBackend::to_csharp_type(&typ), "Dictionary<K, V>");
+    }
+
+    #[test]
+    fn test_is_result_type_with_simple() {
+        assert!(CSharpBackend::is_result_type(&Type::Simple(
+            "Result<i32,String>".into()
+        )));
+        assert!(!CSharpBackend::is_result_type(&Type::Simple(
+            "Option<i32>".into()
+        )));
+    }
+
+    #[test]
+    fn test_is_result_type_with_parameterized_returns_false() {
+        let typ = Type::Parameterized {
+            base: "Result".into(),
+            params: vec![Type::Simple("T".into()), Type::Simple("E".into())],
+        };
+        assert!(!CSharpBackend::is_result_type(&typ));
+    }
+
+    #[test]
+    fn test_translate_unknown_type_passthrough() {
+        assert_eq!(CSharpBackend::translate_simple_type("MyType"), "MyType");
+        assert_eq!(CSharpBackend::translate_simple_type(""), "");
+    }
+
+    #[test]
+    fn test_contract_assertions_injected_in_csharp() {
+        use crate::ast::{Contracts, Metadata, MethodDef, Spec, StructDef, Verification};
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            contracts: Contracts {
+                invariants: vec!["size >= 0".into()],
+            },
+            structs: vec![StructDef {
+                name: "Foo".into(),
+                ..Default::default()
+            }],
+            methods: vec![MethodDef {
+                name: "Bar".into(),
+                preconditions: vec!["x > 0".into()],
+                postconditions: vec!["result ok".into()],
+                ..Default::default()
+            }],
+            verification: Verification::default(),
+        };
+        let injected = crate::contracts::inject_assertions(&spec);
+        let backend = CSharpBackend::new("templates").unwrap();
+        let code = backend.generate(&injected).unwrap();
+        assert!(code.contains("// Contract: precondition: x > 0"));
+        assert!(code.contains("System.Diagnostics.Debug.Assert(false, \"precondition: x > 0\");"));
+        assert!(code.contains("// Contract: postcondition: result ok"));
+        assert!(code.contains("// Contract: invariant: size >= 0"));
     }
 }

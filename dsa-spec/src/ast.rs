@@ -70,6 +70,8 @@ pub struct MethodDef {
     pub preconditions: Vec<String>,
     #[serde(default)]
     pub postconditions: Vec<String>,
+    #[serde(default)]
+    pub injected_assertions: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -124,5 +126,112 @@ impl std::fmt::Display for Type {
 impl Default for Type {
     fn default() -> Self {
         Type::Simple(String::new())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_type_display_simple() {
+        let t = Type::Simple("i32".into());
+        assert_eq!(t.to_string(), "i32");
+    }
+
+    #[test]
+    fn test_type_display_parameterized() {
+        let t = Type::Parameterized {
+            base: "Vec".into(),
+            params: vec![Type::Simple("T".into())],
+        };
+        assert_eq!(t.to_string(), "Vec<T>");
+    }
+
+    #[test]
+    fn test_type_display_nested_parameterized() {
+        let t = Type::Parameterized {
+            base: "Option".into(),
+            params: vec![Type::Parameterized {
+                base: "Box".into(),
+                params: vec![Type::Parameterized {
+                    base: "BSTNode".into(),
+                    params: vec![Type::Simple("T".into())],
+                }],
+            }],
+        };
+        assert_eq!(t.to_string(), "Option<Box<BSTNode<T>>>");
+    }
+
+    #[test]
+    fn test_type_display_multiple_params() {
+        let t = Type::Parameterized {
+            base: "HashMap".into(),
+            params: vec![Type::Simple("K".into()), Type::Simple("V".into())],
+        };
+        assert_eq!(t.to_string(), "HashMap<K, V>");
+    }
+
+    #[test]
+    fn test_type_default_is_empty_simple() {
+        let t = Type::default();
+        assert_eq!(t.to_string(), "");
+    }
+
+    #[test]
+    fn test_spec_serde_roundtrip() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                complexity: Complexity {
+                    time: Some("O(1)".into()),
+                    space: Some("O(n)".into()),
+                },
+                tags: vec!["tag1".into()],
+            },
+            contracts: Contracts {
+                invariants: vec!["invariant 1".into()],
+            },
+            structs: vec![StructDef {
+                name: "Foo".into(),
+                generics: vec![GenericParam {
+                    name: "T".into(),
+                    constraints: vec!["Clone".into()],
+                }],
+                fields: vec![FieldDef {
+                    name: "bar".into(),
+                    field_type: Type::Simple("T".into()),
+                }],
+            }],
+            methods: vec![MethodDef {
+                name: "do_stuff".into(),
+                params: vec![ParamDef {
+                    name: "x".into(),
+                    param_type: Type::Simple("i32".into()),
+                }],
+                returns: Some("bool".into()),
+                preconditions: vec!["x > 0".into()],
+                postconditions: vec!["result is valid".into()],
+                injected_assertions: vec![],
+            }],
+            verification: Verification {
+                test_cases: vec![TestCase {
+                    name: "test_it".into(),
+                    setup: Some("let f = Foo::new();".into()),
+                    actions: vec!["f.do_stuff(1)".into()],
+                    assertions: vec!["assert!(result)".into()],
+                }],
+            },
+        };
+        let json = serde_json::to_string(&spec).expect("serialize");
+        let roundtrip: Spec = serde_json::from_str(&json).expect("deserialize");
+        assert_eq!(roundtrip.spec_version, "1.0");
+        assert_eq!(roundtrip.metadata.name, "Test");
+        assert_eq!(roundtrip.structs.len(), 1);
+        assert_eq!(roundtrip.structs[0].fields[0].name, "bar");
+        assert_eq!(roundtrip.methods[0].name, "do_stuff");
+        assert_eq!(roundtrip.verification.test_cases[0].name, "test_it");
     }
 }

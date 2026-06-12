@@ -1,0 +1,53 @@
+/// Quicksort
+
+/// Time complexity: O(n log n) average, O(n^2) worst
+
+/// Space complexity: O(log n) average
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_sort_unsorted_array() {
+        let mut arr = vec![3, 1, 4, 1, 5, 9, 2, 6];
+        quicksort(&mut arr);
+        assert_eq!(arr, vec![1, 1, 2, 3, 4, 5, 6, 9]);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_sort_empty_array() {
+        let mut arr: Vec<i32> = vec![];
+        quicksort(&mut arr);
+        assert_eq!(arr, vec![]);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_sort_single_element() {
+        let mut arr = vec![42];
+        quicksort(&mut arr);
+        assert_eq!(arr, vec![42]);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_sort_already_sorted() {
+        let mut arr = vec![1, 2, 3, 4, 5];
+        quicksort(&mut arr);
+        assert_eq!(arr, vec![1, 2, 3, 4, 5]);
+    }
+}

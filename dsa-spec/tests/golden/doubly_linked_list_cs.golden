@@ -1,0 +1,329 @@
+/// <summary>
+/// DoublyLinkedList
+
+/// Time complexity: O(1) insert/remove at head/tail, O(n) search
+
+
+/// Space complexity: O(n)
+
+
+/// Invariants:
+
+/// - no cycles
+
+/// - for each node, node.next.prev == node
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace DoublyLinkedList
+{
+
+
+public class Node<T>
+    where T : Clone
+
+{
+    
+    public T Value { get; set; }
+    
+    public Node<T>? Prev { get; set; }
+    
+    public Node<T>? Next { get; set; }
+    
+
+    
+    /// <summary>
+    /// New
+    /// 
+    /// 
+    /// Postconditions:
+    /// - head is None
+    /// - tail is None
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public Self New()
+    {
+        
+        // TODO: Implement New
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// PushFront
+    /// 
+    /// 
+    /// Postconditions:
+    /// - head.value == value
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public void PushFront(T value)
+    {
+        
+        // TODO: Implement PushFront
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// PushBack
+    /// 
+    /// 
+    /// Postconditions:
+    /// - tail.value == value
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public void PushBack(T value)
+    {
+        
+        // TODO: Implement PushBack
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// PopFront
+    /// 
+    /// Preconditions:
+    /// - !is_empty()
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public T? PopFront()
+    {
+        
+        // TODO: Implement PopFront
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// PopBack
+    /// 
+    /// Preconditions:
+    /// - !is_empty()
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public T? PopBack()
+    {
+        
+        // TODO: Implement PopBack
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// IsEmpty
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public bool IsEmpty()
+    {
+        
+        // TODO: Implement IsEmpty
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Len
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public int Len()
+    {
+        
+        // TODO: Implement Len
+        throw new NotImplementedException();
+    }
+    
+}
+
+public class DoublyLinkedList<T>
+    where T : Clone
+
+{
+    
+    public Node<T>? Head { get; set; }
+    
+    public Node<T>? Tail { get; set; }
+    
+
+    
+    /// <summary>
+    /// New
+    /// 
+    /// 
+    /// Postconditions:
+    /// - head is None
+    /// - tail is None
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public Self New()
+    {
+        
+        // TODO: Implement New
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// PushFront
+    /// 
+    /// 
+    /// Postconditions:
+    /// - head.value == value
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public void PushFront(T value)
+    {
+        
+        // TODO: Implement PushFront
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// PushBack
+    /// 
+    /// 
+    /// Postconditions:
+    /// - tail.value == value
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public void PushBack(T value)
+    {
+        
+        // TODO: Implement PushBack
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// PopFront
+    /// 
+    /// Preconditions:
+    /// - !is_empty()
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public T? PopFront()
+    {
+        
+        // TODO: Implement PopFront
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// PopBack
+    /// 
+    /// Preconditions:
+    /// - !is_empty()
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public T? PopBack()
+    {
+        
+        // TODO: Implement PopBack
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// IsEmpty
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public bool IsEmpty()
+    {
+        
+        // TODO: Implement IsEmpty
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Len
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public int Len()
+    {
+        
+        // TODO: Implement Len
+        throw new NotImplementedException();
+    }
+    
+}
+
+
+
+// ========== Generated xUnit tests ==========
+
+public class push_front_pop_frontTests
+{
+    [Fact]
+    public void push_front_pop_front_Test()
+    {
+        // Setup
+        let mut list = DoublyLinkedList::new();
+        // Actions
+        list.push_front(1);list.push_front(2);
+        // Assertions
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class push_back_pop_backTests
+{
+    [Fact]
+    public void push_back_pop_back_Test()
+    {
+        // Setup
+        let mut list = DoublyLinkedList::new();
+        // Actions
+        list.push_back(1);list.push_back(2);
+        // Assertions
+        Assert.AreEqual(list.pop_back(), Some(2));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+public class mixed_operationsTests
+{
+    [Fact]
+    public void mixed_operations_Test()
+    {
+        // Setup
+        let mut list = DoublyLinkedList::new();
+        // Actions
+        list.push_front(1);list.push_back(3);list.push_front(0);
+        // Assertions
+        Assert.AreEqual(list.pop_front(), Some(0));Assert.AreEqual(list.pop_back(), Some(3));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+}
