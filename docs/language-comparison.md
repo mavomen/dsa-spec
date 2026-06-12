@@ -1,8 +1,6 @@
 # Language Comparison Guide
 
-When you generate code from the same DSA-SPEC, the skeleton you get is
-idiomatic to each target language. Here’s how the same `Stack<T>` spec
-looks across all five.
+When you generate code from the same DSA-SPEC, the skeleton you get is idiomatic to each target language. Here is how the same `Stack<T>` spec looks across all five.
 
 ## Stack specification (excerpt)
 
@@ -87,9 +85,9 @@ export class StackImpl<T> implements Stack<T> {
     }
 }
 ```
-- Structural interface + class.
+- Structural interface + implementation class.
 - `T | null` union for `Option<T>`.
-- Stub: `throw new Error(…)`.
+- Stub: `throw new Error(...)`.
 
 ### Go
 ```go
@@ -107,23 +105,14 @@ func (s *Stack[T]) Pop() *T {
 - Pointer `*T` for `Option<T>`.
 - Stub: `panic("not implemented")`.
 
-## Stub philosophy
-The tool deliberately **does not** generate the algorithm body.
-You implement the logic yourself. This makes DSA-SPEC ideal for:
-- Interview practice (write the hard part, skip the boilerplate)
-- Teaching (students fill in the blanks)
-- Polyglot teams (consistent interfaces everywhere)
+## Test frameworks per language
 
-## Test generation
-Each language gets its native test framework:
+| Language   | Test Framework |
+|------------|----------------|
+| Rust       | `#[test]`      |
+| Python     | pytest         |
+| C#         | xUnit          |
+| TypeScript | Jest           |
+| Go         | `testing`      |
 
-| Language | Test Framework |
-|----------|----------------|
-| Rust     | `#[test]`      |
-| Python   | pytest         |
-| C#       | xUnit          |
-| TypeScript | Jest         |
-| Go       | `testing`      |
-
-All generated tests **fail** until you implement the stubs – they
-serve as acceptance criteria.
+All generated tests fail until the stubs are implemented.

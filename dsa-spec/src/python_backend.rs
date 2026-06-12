@@ -1,3 +1,5 @@
+//! Python code generation backend.
+
 use crate::assertion;
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
@@ -7,11 +9,13 @@ use serde::Serialize;
 use std::process::Command;
 use tera::Context;
 
+/// Python backend using Tera templates with black formatting.
 pub struct PythonBackend {
     engine: TemplateEngine,
 }
 
 impl PythonBackend {
+    /// Create a new Python backend loading templates from the given directory.
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(PythonBackend { engine })
@@ -65,6 +69,7 @@ impl Backend for PythonBackend {
     }
 }
 
+/// Convert an AST type to a Python type string.
 pub(crate) fn to_python_type(typ: &Type) -> String {
     match typ {
         Type::Simple(s) => translate_simple_type(s),
@@ -76,6 +81,7 @@ pub(crate) fn to_python_type(typ: &Type) -> String {
     }
 }
 
+/// Translate a type name string to a Python type expression.
 pub(crate) fn translate_simple_type(s: &str) -> String {
     match s {
         "Option<T>" => "Optional[T]".to_string(),
@@ -125,6 +131,7 @@ pub(crate) fn translate_simple_type(s: &str) -> String {
     }
 }
 
+/// Return true if the type is a `Result<T, E>` (which Python handles via exceptions).
 pub(crate) fn is_result_type(typ: &Type) -> bool {
     match typ {
         Type::Simple(s) => s.starts_with("Result<"),

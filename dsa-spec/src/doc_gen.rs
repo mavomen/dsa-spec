@@ -1,3 +1,5 @@
+//! Markdown documentation generator from spec metadata and contracts.
+
 use crate::ast::Spec;
 
 /// Generates a markdown summary from a specification's metadata and contracts.
@@ -8,7 +10,6 @@ pub fn generate_doc(spec: &Spec) -> String {
     doc.push_str(&format!("# {}\n\n", spec.metadata.name));
     doc.push_str(&format!("**Category:** {}\n\n", spec.metadata.category));
 
-    // Complexity
     if let Some(time) = &spec.metadata.complexity.time {
         doc.push_str(&format!("- **Time complexity:** {time}\n"));
     }
@@ -19,7 +20,6 @@ pub fn generate_doc(spec: &Spec) -> String {
         doc.push('\n');
     }
 
-    // Tags
     if !spec.metadata.tags.is_empty() {
         doc.push_str("**Tags:** ");
         let tags: Vec<&str> = spec.metadata.tags.iter().map(|s| s.as_str()).collect();
@@ -27,7 +27,6 @@ pub fn generate_doc(spec: &Spec) -> String {
         doc.push_str("\n\n");
     }
 
-    // Invariants
     if !spec.contracts.invariants.is_empty() {
         doc.push_str("## Invariants\n\n");
         for inv in &spec.contracts.invariants {
@@ -36,7 +35,6 @@ pub fn generate_doc(spec: &Spec) -> String {
         doc.push('\n');
     }
 
-    // Structs
     if !spec.structs.is_empty() {
         doc.push_str("## Data Structures\n\n");
         for s in &spec.structs {
@@ -51,7 +49,6 @@ pub fn generate_doc(spec: &Spec) -> String {
         }
     }
 
-    // Methods
     if !spec.methods.is_empty() {
         doc.push_str("## Methods\n\n");
         for m in &spec.methods {
@@ -76,7 +73,6 @@ pub fn generate_doc(spec: &Spec) -> String {
         }
     }
 
-    // Test cases
     if !spec.verification.test_cases.is_empty() {
         doc.push_str("## Test Cases\n\n");
         for tc in &spec.verification.test_cases {

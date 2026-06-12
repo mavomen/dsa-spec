@@ -1,8 +1,14 @@
+//! JSON Schema validation for parsed specs.
+
 use crate::ast::Spec;
 use crate::error::SpecError;
 use crate::spec_schema::SPEC_JSON_SCHEMA;
 use jsonschema::{Draft, JSONSchema, ValidationError};
 
+/// Validate a parsed spec against the JSON Schema.
+///
+/// Returns `Ok(())` on success or a list of `SpecError` values with
+/// path information for each validation failure.
 pub fn validate(spec: &Spec) -> Result<(), Vec<SpecError>> {
     let value = serde_json::to_value(spec).map_err(|e| {
         vec![SpecError::SchemaError {

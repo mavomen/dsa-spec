@@ -1,3 +1,5 @@
+//! Rust code generation backend.
+
 use crate::ast::Spec;
 use crate::backend::Backend;
 use crate::error::BackendError;
@@ -6,16 +8,20 @@ use serde::Serialize;
 use std::process::Command;
 use tera::Context;
 
+/// Rust backend using Tera templates with rustfmt formatting.
 pub struct RustBackend {
     engine: TemplateEngine,
 }
 
 impl RustBackend {
+    /// Create a new Rust backend loading templates from the given directory.
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(RustBackend { engine })
     }
 
+    /// Format Rust code via rustfmt (edition 2024).
+    /// Falls back to raw code if rustfmt is not installed.
     fn format_rust(code: &str) -> Result<String, BackendError> {
         let mut child = Command::new("rustfmt")
             .arg("--edition")
@@ -60,13 +66,12 @@ impl Backend for RustBackend {
     fn generate(&self, spec: &Spec) -> Result<String, BackendError> {
         let context = build_context(spec);
         let raw_code = self.engine.render("rust.rs.tera", &context)?;
-        // Try to format, fallback to raw if rustfmt fails
         Ok(Self::format_rust(&raw_code).unwrap_or(raw_code))
     }
 }
 
+/// Build the Tera context from a spec AST for the Rust template.
 fn build_context(spec: &Spec) -> Context {
-    // ... unchanged ...
     let mut context = Context::new();
 
     let metadata = &spec.metadata;
@@ -151,7 +156,7 @@ fn build_context(spec: &Spec) -> Context {
     context
 }
 
-// Context types unchanged...
+// Tera context structs mirroring the AST for template rendering.
 #[derive(Serialize)]
 struct MetadataContext<'a> {
     name: &'a str,

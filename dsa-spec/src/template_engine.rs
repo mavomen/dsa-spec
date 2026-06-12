@@ -1,6 +1,9 @@
+//! Thin wrapper around the Tera template engine.
+
 use crate::error::BackendError;
 use tera::{Context, Tera};
 
+/// Tera template engine wrapper.
 #[derive(Debug)]
 pub struct TemplateEngine {
     tera: Tera,
@@ -16,6 +19,10 @@ impl TemplateEngine {
         Ok(TemplateEngine { tera })
     }
 
+    /// Render a template with the given context.
+    ///
+    /// Template names correspond to filenames in the template directory
+    /// (e.g. `"rust.rs.tera"`).
     pub fn render(&self, template_name: &str, context: &Context) -> Result<String, BackendError> {
         self.tera
             .render(template_name, context)
@@ -44,12 +51,10 @@ mod tests {
         let ctx = Context::new();
         let result = engine.render("nonexistent.html.tera", &ctx);
         assert!(result.is_err());
-        assert!(
-            result
-                .unwrap_err()
-                .to_string()
-                .contains("template render error")
-        );
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("template render error"));
     }
 
     #[test]

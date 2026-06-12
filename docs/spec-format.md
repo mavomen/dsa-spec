@@ -1,11 +1,10 @@
-# DSA-SPEC Format Guide
+# Spec Format
 
 ## Overview
 
-DSA-SPEC uses YAML to define the interface, contracts, and tests of a data structure or algorithm.  
-The actual implementation is left as a `// TODO` placeholder for the user.
+DSA-SPEC uses YAML to define the interface, contracts, and tests of a data structure or algorithm. The actual implementation is left as a stub for the user.
 
-## Top‑Level Fields
+## Top-level fields
 
 | Field            | Required | Description                                          |
 | ---------------- | -------- | ---------------------------------------------------- |
@@ -16,7 +15,7 @@ The actual implementation is left as a `// TODO` placeholder for the user.
 | `methods`        | no       | Function/method signatures with pre/postconditions   |
 | `verification`   | no       | Test cases: setup, actions, assertions               |
 
-## Example Specification (Stack)
+## Example specification (Stack)
 
 ```yaml
 spec_version: "1.0"
@@ -60,21 +59,25 @@ verification:
         - "assert_eq!(s.pop(), Some(1))"
 ```
 
-## Type System
+## Type system
 
 - Simple types: `"T"`, `"i32"`, `"Vec<T>"`
-- Parameterized types (future): `{ base: "Vec", params: ["T"] }`
+- Parameterized types: `{ base: "Vec", params: ["T"] }`
+
+Backends translate these into language-idiomatic types (e.g. `Option<T>` becomes `Optional[T]` in Python, `T?` in C#, `T | null` in TypeScript, `*T` in Go).
 
 ## Contracts
 
-- **Invariants:** conditions that must always be true
-- **Preconditions:** conditions that must be true before a method call
-- **Postconditions:** conditions guaranteed after a method call
+- **Invariants** -- conditions that must always be true for all instances
+- **Preconditions** -- conditions that must be true before a method executes
+- **Postconditions** -- conditions guaranteed after a method returns
 
-## Generation Output
+Contracts can be injected as runtime assertions using the `--contracts` flag or `verify` command.
 
-DSA-SPEC generates:
-- Struct/class definitions
-- Method stubs with `todo!()` / `NotImplementedError`
-- Documentation comments from metadata + contracts
-- Test files that compile but **fail** until the user implements the logic
+## Generation output
+
+For each language, DSA-SPEC generates:
+- Struct / class / interface definitions
+- Method stubs with `todo!()` / `NotImplementedError` / `NotImplementedException` / `throw new Error(...)` / `panic("not implemented")`
+- Doc comments containing contracts and complexity annotations
+- Test files that compile but fail until the user implements the logic

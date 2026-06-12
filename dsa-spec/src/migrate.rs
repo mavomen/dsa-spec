@@ -1,3 +1,6 @@
+//! Spec migration between schema versions.
+//! Upgrades a spec file in place with a `.bak` backup.
+
 use crate::ast::Spec;
 use crate::error::SpecError;
 use std::fs;
