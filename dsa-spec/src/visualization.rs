@@ -1,3 +1,6 @@
+//! Visualization generators for Graphviz DOT, Mermaid class diagrams,
+//! and Mermaid sequence diagrams.
+
 use crate::ast::Spec;
 use std::collections::HashSet;
 

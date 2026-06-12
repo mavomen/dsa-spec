@@ -1,3 +1,6 @@
+//! CLI entrypoint for dsa-spec.
+//! Handles argument parsing, backend dispatch, and file I/O.
+
 use clap::{Parser, Subcommand};
 use std::fs;
 use std::path::PathBuf;
@@ -24,6 +27,7 @@ mod visualization;
 
 use backend::Backend;
 
+/// Result type for backend instantiation across one or more languages.
 type BackendResult = Result<Vec<(&'static str, Box<dyn Backend>)>, Box<dyn std::error::Error>>;
 
 #[derive(Parser)]
@@ -42,6 +46,7 @@ struct Cli {
     json: bool,
 }
 
+/// CLI subcommands.
 #[derive(Subcommand)]
 enum Command {
     /// Generate code stubs
@@ -113,6 +118,8 @@ enum Command {
     },
 }
 
+/// Program entrypoint. Parses arguments, dispatches to the appropriate
+/// command handler, and prints errors to stderr.
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
 

@@ -1,3 +1,6 @@
+//! JSON Schema (Draft 7) for DSA-SPEC specification files.
+
+/// JSON Schema (Draft 7) defining the required structure of a spec file.
 pub const SPEC_JSON_SCHEMA: &str = r#"{
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "DSA-SPEC Schema",

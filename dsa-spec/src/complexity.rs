@@ -1,3 +1,6 @@
+//! Complexity analysis: reports, JSON output, and Mermaid quadrant charts
+//! parsed from spec metadata annotations.
+
 use crate::ast::Spec;
 use crate::error::SpecError;
 use std::fs;

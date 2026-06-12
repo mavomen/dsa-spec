@@ -1,3 +1,7 @@
+//! Contract assertion injection into AST methods.
+//! Preconditions, postconditions, and invariants are collected into
+//! each method's `injected_assertions` vector for backend rendering.
+
 use crate::ast::Spec;
 
 /// Injects contract assertions into each method's `injected_assertions` field.

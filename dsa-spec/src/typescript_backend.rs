@@ -1,3 +1,5 @@
+//! TypeScript code generation backend.
+
 use crate::assertion;
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
@@ -7,16 +9,19 @@ use crate::template_engine::TemplateEngine;
 use serde::Serialize;
 use tera::Context;
 
+/// TypeScript backend using Tera templates.
 pub struct TypeScriptBackend {
     engine: TemplateEngine,
 }
 
 impl TypeScriptBackend {
+    /// Create a new TypeScript backend loading templates from the given directory.
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(TypeScriptBackend { engine })
     }
 
+    /// Convert an AST type to a TypeScript type string with union types.
     pub(crate) fn to_typescript_type(typ: &Type) -> String {
         match typ {
             Type::Simple(s) => Self::translate_simple_type(s),
@@ -28,6 +33,7 @@ impl TypeScriptBackend {
         }
     }
 
+    /// Translate a type name string to a TypeScript type expression.
     pub(crate) fn translate_simple_type(s: &str) -> String {
         match s {
             "Option<T>" => "T | null".to_string(),
@@ -69,6 +75,7 @@ impl TypeScriptBackend {
         }
     }
 
+    /// Return true if the type is a `Result<T, E>` (TypeScript uses exceptions).
     pub(crate) fn is_result_type(typ: &Type) -> bool {
         match typ {
             Type::Simple(s) => s.starts_with("Result<"),

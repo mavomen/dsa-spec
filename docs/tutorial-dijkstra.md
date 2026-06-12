@@ -1,12 +1,11 @@
-# Tutorial: Implementing Dijkstra's Algorithm from a DSA‑SPEC Skeleton
+# Tutorial: Implementing Dijkstra's Algorithm from a DSA-SPEC Skeleton
 
-In this tutorial you'll use DSA‑SPEC to generate the boilerplate for a
-weighted graph and Dijkstra's shortest‑path algorithm, then fill in the
-implementation yourself.
+In this tutorial you will use DSA-SPEC to generate the boilerplate for a weighted graph and Dijkstra's shortest-path algorithm, then fill in the implementation yourself.
 
 ## Prerequisites
-- DSA‑SPEC installed (`cargo install dsa-spec`)
-- Your favourite editor for Rust (or any of the 5 supported languages)
+
+- DSA-SPEC installed (`cargo install dsa-spec`)
+- A Rust toolchain (or any of the 5 supported languages)
 
 ---
 
@@ -72,73 +71,44 @@ verification:
 
 ## 2. Generate the skeleton
 
-```bash
+```
 dsa-spec generate dijkstra.yaml --lang rust --output src/dijkstra.rs
 ```
 
-This creates `src/dijkstra.rs` with the struct and method stubs,
-documentation, and failing tests.
+This creates `src/dijkstra.rs` with the struct and method stubs, documentation, and failing tests.
 
-## 3. Look at the generated skeleton
+## 3. Inspect the generated skeleton
 
-```rust
-// … doc comments, struct definition, and:
+The file contains:
 
-pub fn dijkstra(&self, start: &str) -> HashMap<String, i32> {
-    // TODO: Implement dijkstra
-    todo!()
-}
-```
+- A `WeightedGraph` struct with the `adj` field
+- A `dijkstra` method stub with `todo!()`, pre/postconditions in doc comments, and contract assertions (if `--contracts` was used)
+- An `add_edge` method stub
+- A `simple_graph` test that asserts expected distances
 
-The tests already know what to expect — they'll fail until you write the logic.
+All tests fail initially because every method body is `todo!()`.
 
 ## 4. Implement the algorithm
 
-Replace the `todo!()` with your implementation. A typical solution uses a
-binary heap:
+Replace the `todo!()` in `dijkstra` with your implementation. A standard approach uses a binary heap for the priority queue:
 
-```rust
-use std::collections::{BinaryHeap, HashMap};
-use std::cmp::Reverse;
+1. Initialize a distance map with `start` at distance 0
+2. Push `(0, start)` onto a binary heap (using `Reverse` for min-heap behavior)
+3. While the heap is not empty, pop the closest vertex and relax its edges
+4. Return the distance map
 
-pub fn dijkstra(&self, start: &str) -> HashMap<String, i32> {
-    let mut dist = HashMap::new();
-    let mut heap = BinaryHeap::new();
-
-    dist.insert(start.to_string(), 0);
-    heap.push(Reverse((0, start.to_string())));
-
-    while let Some(Reverse((d, u))) = heap.pop() {
-        if let Some(&cur) = dist.get(&u) {
-            if d > cur { continue; }
-        }
-        if let Some(neighbors) = self.adj.get(&u) {
-            for (v, w) in neighbors {
-                let nd = d + w;
-                if nd < *dist.get(v).unwrap_or(&i32::MAX) {
-                    dist.insert(v.clone(), nd);
-                    heap.push(Reverse((nd, v.clone())));
-                }
-            }
-        }
-    }
-    dist
-}
-```
+The `add_edge` method appends `(to, weight)` to the adjacency list of `from`.
 
 ## 5. Run the tests
 
-```bash
+```
 cargo test
 ```
 
-If your implementation is correct, the generated test will pass.  
-You now have a working Dijkstra solver that you wrote yourself,
-with all the type safety and documentation provided by DSA‑SPEC.
-
----
+If your implementation is correct, the generated test passes. You now have a working Dijkstra solver with all the type safety and documentation provided by DSA-SPEC.
 
 ## Next steps
+
 - Try the same spec in another language: `dsa-spec generate dijkstra.yaml --lang python`
 - Add more test cases (disconnected graphs, negative weights, etc.)
-- Explore the other 10+ DSA specifications in the `specs/` directory
+- Explore the other specs in the `specs/` directory
