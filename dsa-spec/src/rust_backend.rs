@@ -1,5 +1,6 @@
 use crate::ast::Spec;
 use crate::backend::Backend;
+use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
 use serde::Serialize;
 use std::process::Command;
@@ -10,45 +11,53 @@ pub struct RustBackend {
 }
 
 impl RustBackend {
-    pub fn new(template_dir: &str) -> Result<Self, String> {
+    pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(RustBackend { engine })
     }
 
-    fn format_rust(code: &str) -> Result<String, String> {
+    fn format_rust(code: &str) -> Result<String, BackendError> {
         let mut child = Command::new("rustfmt")
             .arg("--edition")
-            .arg("2021")
+            .arg("2024")
             .stdin(std::process::Stdio::piped())
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .spawn()
-            .map_err(|e| format!("Failed to spawn rustfmt: {}", e))?;
+            .map_err(|e| BackendError::Formatter {
+                message: format!("Failed to spawn rustfmt: {e}"),
+            })?;
 
         if let Some(stdin) = child.stdin.as_mut() {
             use std::io::Write;
             stdin
                 .write_all(code.as_bytes())
-                .map_err(|e| format!("Failed to write to rustfmt stdin: {}", e))?;
+                .map_err(|e| BackendError::Formatter {
+                    message: format!("Failed to write to rustfmt stdin: {e}"),
+                })?;
         }
 
         let output = child
             .wait_with_output()
-            .map_err(|e| format!("Failed to wait on rustfmt: {}", e))?;
+            .map_err(|e| BackendError::Formatter {
+                message: format!("Failed to wait on rustfmt: {e}"),
+            })?;
 
         if output.status.success() {
             Ok(String::from_utf8_lossy(&output.stdout).to_string())
         } else {
-            Err(format!(
-                "rustfmt error: {} (falling back to unformatted)",
-                String::from_utf8_lossy(&output.stderr)
-            ))
+            Err(BackendError::Formatter {
+                message: format!(
+                    "rustfmt error: {} (falling back to unformatted)",
+                    String::from_utf8_lossy(&output.stderr)
+                ),
+            })
         }
     }
 }
 
 impl Backend for RustBackend {
-    fn generate(&self, spec: &Spec) -> Result<String, String> {
+    fn generate(&self, spec: &Spec) -> Result<String, BackendError> {
         let context = build_context(spec);
         let raw_code = self.engine.render("rust.rs.tera", &context)?;
         // Try to format, fallback to raw if rustfmt fails
@@ -121,6 +130,7 @@ fn build_context(spec: &Spec) -> Context {
             returns: m.returns.as_deref(),
             preconditions: &m.preconditions,
             postconditions: &m.postconditions,
+            injected_assertions: &m.injected_assertions,
         })
         .collect();
     context.insert("methods", &methods);
@@ -185,6 +195,7 @@ struct MethodContext<'a> {
     returns: Option<&'a str>,
     preconditions: &'a [String],
     postconditions: &'a [String],
+    injected_assertions: &'a [String],
 }
 
 #[derive(Serialize)]
@@ -222,7 +233,8 @@ mod tests {
         let result = RustBackend::format_rust(code);
         // Either result is valid: rustfmt may or may not be installed
         if let Err(e) = &result {
-            assert!(e.contains("rustfmt error") || e.contains("Failed to spawn rustfmt"));
+            let msg = e.to_string();
+            assert!(msg.contains("rustfmt error") || msg.contains("Failed to spawn rustfmt"));
         }
     }
 
@@ -259,6 +271,7 @@ mod tests {
                 returns: Some("K".into()),
                 preconditions: vec!["self is valid".into()],
                 postconditions: vec!["returns value".into()],
+                injected_assertions: vec![],
             }],
             verification: Verification {
                 test_cases: vec![TestCase {
@@ -338,5 +351,39 @@ mod tests {
         assert!(code.contains("size <= capacity"));
         assert!(code.contains("O(1)"));
         assert!(code.contains("O(n)"));
+    }
+
+    #[test]
+    fn test_contract_assertions_injected_in_rust() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            contracts: Contracts {
+                invariants: vec!["size >= 0".into()],
+            },
+            structs: vec![StructDef {
+                name: "Foo".into(),
+                fields: vec![],
+                ..Default::default()
+            }],
+            methods: vec![MethodDef {
+                name: "bar".into(),
+                preconditions: vec!["x > 0".into()],
+                postconditions: vec!["result ok".into()],
+                ..Default::default()
+            }],
+            verification: Verification::default(),
+        };
+        let injected = crate::contracts::inject_assertions(&spec);
+        let backend = RustBackend::new("templates").unwrap();
+        let code = backend.generate(&injected).unwrap();
+        assert!(code.contains("// Contract: precondition: x > 0"));
+        assert!(code.contains("assert!(false, \"precondition: x > 0\");"));
+        assert!(code.contains("// Contract: postcondition: result ok"));
+        assert!(code.contains("// Contract: invariant: size >= 0"));
     }
 }

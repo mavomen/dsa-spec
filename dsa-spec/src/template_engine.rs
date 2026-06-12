@@ -1,3 +1,4 @@
+use crate::error::BackendError;
 use tera::{Context, Tera};
 
 #[derive(Debug)]
@@ -6,16 +7,21 @@ pub struct TemplateEngine {
 }
 
 impl TemplateEngine {
-    pub fn new(template_dir: &str) -> Result<Self, String> {
-        let tera = Tera::new(&format!("{}/**/*", template_dir))
-            .map_err(|e| format!("Failed to init Tera: {}", e))?;
+    pub fn new(template_dir: &str) -> Result<Self, BackendError> {
+        let tera = Tera::new(&format!("{}/**/*", template_dir)).map_err(|e| {
+            BackendError::TemplateInit {
+                message: format!("{e}"),
+            }
+        })?;
         Ok(TemplateEngine { tera })
     }
 
-    pub fn render(&self, template_name: &str, context: &Context) -> Result<String, String> {
+    pub fn render(&self, template_name: &str, context: &Context) -> Result<String, BackendError> {
         self.tera
             .render(template_name, context)
-            .map_err(|e| format!("Template render error: {}", e))
+            .map_err(|e| BackendError::TemplateRender {
+                message: format!("{e}"),
+            })
     }
 }
 
@@ -38,7 +44,12 @@ mod tests {
         let ctx = Context::new();
         let result = engine.render("nonexistent.html.tera", &ctx);
         assert!(result.is_err());
-        assert!(result.unwrap_err().contains("Template render error"));
+        assert!(
+            result
+                .unwrap_err()
+                .to_string()
+                .contains("template render error")
+        );
     }
 
     #[test]

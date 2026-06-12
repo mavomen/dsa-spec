@@ -144,6 +144,7 @@ mod tests {
                 returns: Some("void".into()),
                 preconditions: vec!["stack not full".into()],
                 postconditions: vec!["item on top".into()],
+                injected_assertions: vec![],
             }],
             verification: Verification {
                 test_cases: vec![TestCase {

@@ -48,6 +48,10 @@ public class {{ struct.name }}<{% for generic in struct.generics %}{{ generic.na
     /// </summary>
     public {{ method.returns | default(value="void") }} {{ method.name }}({% for param in method.params %}{{ param.csharp_type }} {{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %})
     {
+        {% for assertion in method.injected_assertions %}
+        // Contract: {{ assertion }}
+        System.Diagnostics.Debug.Assert(false, "{{ assertion }}");
+        {% endfor %}
         // TODO: Implement {{ method.name }}
         throw new NotImplementedException();
     }
@@ -76,6 +80,10 @@ public static class {{ metadata.name | replace(from=" ", to="") }}Methods
     /// </summary>
     public static {{ method.returns | default(value="void") }} {{ method.name }}({% for param in method.params %}{{ param.csharp_type }} {{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %})
     {
+        {% for assertion in method.injected_assertions %}
+        // Contract: {{ assertion }}
+        System.Diagnostics.Debug.Assert(false, "{{ assertion }}");
+        {% endfor %}
         // TODO: Implement {{ method.name }}
         throw new NotImplementedException();
     }

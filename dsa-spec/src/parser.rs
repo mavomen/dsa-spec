@@ -1,7 +1,12 @@
 use crate::ast::Spec;
+use crate::error::SpecError;
 
-pub fn parse(spec_text: &str) -> Result<Spec, String> {
-    serde_yaml::from_str::<Spec>(spec_text).map_err(|e| format!("YAML parse error: {e}"))
+pub fn parse(spec_text: &str) -> Result<Spec, SpecError> {
+    serde_yaml::from_str::<Spec>(spec_text).map_err(|e| SpecError::ParseError {
+        message: format!("YAML parse error: {e}"),
+        line: e.location().map(|loc| loc.line()),
+        column: e.location().map(|loc| loc.column()),
+    })
 }
 
 #[cfg(test)]
@@ -44,8 +49,10 @@ verification:
     fn test_malformed_yaml_error_message() {
         let yaml = "invalid: [unclosed";
         let err = parse(yaml).unwrap_err();
-        assert!(err.contains("YAML parse error"));
-        assert!(err.contains("line") || err.contains("column"));
+        let msg = err.to_string();
+        assert!(msg.contains("parse error"));
+        assert!(msg.contains("YAML parse error"));
+        assert!(msg.contains("line") || msg.contains("column"));
     }
 
     #[test]

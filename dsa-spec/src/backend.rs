@@ -1,7 +1,8 @@
 use crate::ast::Spec;
+use crate::error::BackendError;
 
 pub trait Backend {
-    fn generate(&self, spec: &Spec) -> Result<String, String>;
+    fn generate(&self, spec: &Spec) -> Result<String, BackendError>;
 }
 
 #[cfg(test)]

@@ -55,6 +55,10 @@ type {{ struct.name }}[{% for generic in struct.generics %}{{ generic.name }} {{
 // Returns a (value, error) tuple.
 {% endif %}
 func (s *{{ struct.name }}[{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}]) {{ method.name }}({% for param in method.params %}{{ param.name }} {{ param.go_type }}{% if not loop.last %}, {% endif %}{% endfor %}) {% if method.returns %}{{ method.returns }}{% endif %} {
+	{% for assertion in method.injected_assertions %}
+	// Contract: {{ assertion }}
+	panic("test: contract violation: {{ assertion }}")
+	{% endfor %}
 	// TODO: Implement {{ method.name }}
 	panic("not implemented")
 }
@@ -78,6 +82,10 @@ func (s *{{ struct.name }}[{% for generic in struct.generics %}{{ generic.name }
 // Returns a (value, error) tuple.
 {% endif %}
 func {{ method.name }}({% for param in method.params %}{{ param.name }} {{ param.go_type }}{% if not loop.last %}, {% endif %}{% endfor %}) {% if method.returns %}{{ method.returns }}{% endif %} {
+	{% for assertion in method.injected_assertions %}
+	// Contract: {{ assertion }}
+	panic("test: contract violation: {{ assertion }}")
+	{% endfor %}
 	// TODO: Implement {{ method.name }}
 	panic("not implemented")
 }

@@ -46,6 +46,10 @@ class {{ struct.name }}(Generic[{% for generic in struct.generics %}{{ generic.n
             Exception: on error (from Result type)
         {% endif %}
         """
+        {% for assertion in method.injected_assertions %}
+        # Contract: {{ assertion }}
+        assert False, "{{ assertion }}"
+        {% endfor %}
         # TODO: Implement {{ method.name }}
         raise NotImplementedError
     {% endfor %}
@@ -68,6 +72,10 @@ def {{ method.name }}({% for param in method.params %}{{ param.name }}: {{ param
         Exception: on error (from Result type)
     {% endif %}
     """
+    {% for assertion in method.injected_assertions %}
+    # Contract: {{ assertion }}
+    assert False, "{{ assertion }}"
+    {% endfor %}
     # TODO: Implement {{ method.name }}
     raise NotImplementedError
 {% endfor %}

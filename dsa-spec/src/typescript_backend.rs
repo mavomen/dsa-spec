@@ -1,5 +1,6 @@
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
+use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
 use serde::Serialize;
 use tera::Context;
@@ -9,7 +10,7 @@ pub struct TypeScriptBackend {
 }
 
 impl TypeScriptBackend {
-    pub fn new(template_dir: &str) -> Result<Self, String> {
+    pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(TypeScriptBackend { engine })
     }
@@ -146,6 +147,7 @@ fn build_context(spec: &Spec) -> Context {
                     .unwrap_or(false),
                 preconditions: &m.preconditions,
                 postconditions: &m.postconditions,
+                injected_assertions: &m.injected_assertions,
             }
         })
         .collect();
@@ -168,7 +170,7 @@ fn build_context(spec: &Spec) -> Context {
 }
 
 impl Backend for TypeScriptBackend {
-    fn generate(&self, spec: &Spec) -> Result<String, String> {
+    fn generate(&self, spec: &Spec) -> Result<String, BackendError> {
         let context = build_context(spec);
         self.engine.render("typescript.ts.tera", &context)
     }
@@ -218,6 +220,7 @@ struct MethodContext<'a> {
     throws_exception: bool,
     preconditions: &'a [String],
     postconditions: &'a [String],
+    injected_assertions: &'a [String],
 }
 
 #[derive(Serialize)]
@@ -313,6 +316,7 @@ mod tests {
                 returns: Some("void".into()),
                 preconditions: vec![],
                 postconditions: vec![],
+                injected_assertions: vec![],
             }],
             verification: Verification::default(),
         };
@@ -395,5 +399,39 @@ mod tests {
     fn test_translate_unknown_type_passthrough() {
         assert_eq!(TypeScriptBackend::translate_simple_type("MyType"), "MyType");
         assert_eq!(TypeScriptBackend::translate_simple_type(""), "");
+    }
+
+    #[test]
+    fn test_contract_assertions_injected_in_typescript() {
+        use crate::ast::{Contracts, Metadata, MethodDef, Spec, StructDef, Verification};
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            contracts: Contracts {
+                invariants: vec!["size >= 0".into()],
+            },
+            structs: vec![StructDef {
+                name: "Foo".into(),
+                ..Default::default()
+            }],
+            methods: vec![MethodDef {
+                name: "bar".into(),
+                preconditions: vec!["x > 0".into()],
+                postconditions: vec!["result ok".into()],
+                ..Default::default()
+            }],
+            verification: Verification::default(),
+        };
+        let injected = crate::contracts::inject_assertions(&spec);
+        let backend = TypeScriptBackend::new("templates").unwrap();
+        let code = backend.generate(&injected).unwrap();
+        assert!(code.contains("// Contract: precondition: x > 0"));
+        assert!(code.contains("console.assert(false, \"precondition: x > 0\");"));
+        assert!(code.contains("// Contract: postcondition: result ok"));
+        assert!(code.contains("// Contract: invariant: size >= 0"));
     }
 }
