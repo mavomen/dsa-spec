@@ -4,6 +4,7 @@ use std::path::PathBuf;
 
 mod ast;
 mod backend;
+mod complexity;
 mod contracts;
 mod csharp_backend;
 mod error;
@@ -15,6 +16,7 @@ mod spec_schema;
 mod template_engine;
 mod typescript_backend;
 mod validator;
+mod visualization;
 
 use backend::Backend;
 
@@ -49,6 +51,25 @@ enum Command {
     Validate {
         /// Path to the spec YAML file
         spec: PathBuf,
+    },
+    /// Analyze complexity across DSA specifications
+    Analyze {
+        /// Path to specs directory
+        #[arg(default_value = "specs")]
+        dir: PathBuf,
+
+        /// Output format: table, markdown, json, chart
+        #[arg(short, long, default_value = "table")]
+        format: String,
+    },
+    /// Visualize data structures or algorithms as diagrams
+    Visualize {
+        /// Path to the spec YAML file
+        spec: PathBuf,
+
+        /// Output format: dot/graphviz or mermaid
+        #[arg(short, long, default_value = "dot")]
+        format: String,
     },
     /// Verify contracts — generates stubs with contract assertions
     Verify {
@@ -176,6 +197,31 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     std::process::exit(1);
                 }
             }
+        }
+        Command::Analyze { dir, format } => {
+            let specs = match complexity::load_specs_from_dir(&dir.to_string_lossy()) {
+                Ok(s) => s,
+                Err(errs) => {
+                    for e in &errs {
+                        eprintln!("  - {e}");
+                    }
+                    std::process::exit(1);
+                }
+            };
+            match format.to_lowercase().as_str() {
+                "json" => println!("{}", complexity::generate_json_report(&specs)),
+                "chart" => println!("{}", complexity::generate_tradeoff_chart(&specs)),
+                _ => {
+                    // default "table" and "markdown": produce the comparison table
+                    println!("{}", complexity::generate_report(&specs));
+                }
+            }
+        }
+        Command::Visualize { spec, format } => {
+            let yaml = fs::read_to_string(&spec)?;
+            let parsed = parser::parse(&yaml)?;
+            let output = visualization::generate(&parsed, &format);
+            println!("{output}");
         }
         Command::Verify {
             spec,
