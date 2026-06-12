@@ -1,5 +1,6 @@
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
+use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
 use serde::Serialize;
 use std::process::Command;
@@ -10,12 +11,12 @@ pub struct PythonBackend {
 }
 
 impl PythonBackend {
-    pub fn new(template_dir: &str) -> Result<Self, String> {
+    pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(PythonBackend { engine })
     }
 
-    fn format_python(code: &str) -> Result<String, String> {
+    fn format_python(code: &str) -> Result<String, BackendError> {
         let mut child = Command::new("black")
             .arg("-c")
             .arg(code)
@@ -23,32 +24,40 @@ impl PythonBackend {
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .spawn()
-            .map_err(|e| format!("Failed to spawn black: {}", e))?;
+            .map_err(|e| BackendError::Formatter {
+                message: format!("Failed to spawn black: {e}"),
+            })?;
 
         if let Some(stdin) = child.stdin.as_mut() {
             use std::io::Write;
             stdin
                 .write_all(code.as_bytes())
-                .map_err(|e| format!("Failed to write to black stdin: {}", e))?;
+                .map_err(|e| BackendError::Formatter {
+                    message: format!("Failed to write to black stdin: {e}"),
+                })?;
         }
 
         let output = child
             .wait_with_output()
-            .map_err(|e| format!("Failed to wait on black: {}", e))?;
+            .map_err(|e| BackendError::Formatter {
+                message: format!("Failed to wait on black: {e}"),
+            })?;
 
         if output.status.success() {
             Ok(String::from_utf8_lossy(&output.stdout).to_string())
         } else {
-            Err(format!(
-                "black error: {} (falling back to unformatted)",
-                String::from_utf8_lossy(&output.stderr)
-            ))
+            Err(BackendError::Formatter {
+                message: format!(
+                    "black error: {} (falling back to unformatted)",
+                    String::from_utf8_lossy(&output.stderr)
+                ),
+            })
         }
     }
 }
 
 impl Backend for PythonBackend {
-    fn generate(&self, spec: &Spec) -> Result<String, String> {
+    fn generate(&self, spec: &Spec) -> Result<String, BackendError> {
         let context = build_context(spec);
         let raw_code = self.engine.render("python.py.tera", &context)?;
         Ok(Self::format_python(&raw_code).unwrap_or(raw_code))
@@ -189,6 +198,7 @@ fn build_context(spec: &Spec) -> Context {
                 raises_exception: return_type.as_ref().map(is_result_type).unwrap_or(false),
                 preconditions: &m.preconditions,
                 postconditions: &m.postconditions,
+                injected_assertions: &m.injected_assertions,
             }
         })
         .collect();
@@ -254,6 +264,7 @@ struct MethodContext<'a> {
     raises_exception: bool,
     preconditions: &'a [String],
     postconditions: &'a [String],
+    injected_assertions: &'a [String],
 }
 
 #[derive(Serialize)]
@@ -346,5 +357,37 @@ mod python_type_tests {
         // is_result_type checks Type::Simple with starts_with("Result<")
         // Parameterized won't match that pattern
         assert!(!is_result_type(&typ));
+    }
+
+    #[test]
+    fn test_contract_assertions_injected_in_python() {
+        let spec = crate::ast::Spec {
+            spec_version: "1.0".into(),
+            metadata: crate::ast::Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            contracts: crate::ast::Contracts {
+                invariants: vec!["size >= 0".into()],
+            },
+            structs: vec![],
+            methods: vec![crate::ast::MethodDef {
+                name: "bar".into(),
+                preconditions: vec!["x > 0".into()],
+                postconditions: vec!["result ok".into()],
+                ..Default::default()
+            }],
+            verification: crate::ast::Verification::default(),
+        };
+        let injected = crate::contracts::inject_assertions(&spec);
+        let code = super::build_context(&injected);
+        // Verify template renders assertions
+        let engine = crate::template_engine::TemplateEngine::new("templates").unwrap();
+        let output = engine.render("python.py.tera", &code).unwrap();
+        assert!(output.contains("# Contract: precondition: x > 0"));
+        assert!(output.contains("assert False, \"precondition: x > 0\""));
+        assert!(output.contains("# Contract: postcondition: result ok"));
+        assert!(output.contains("# Contract: invariant: size >= 0"));
     }
 }

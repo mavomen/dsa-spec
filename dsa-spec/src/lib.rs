@@ -1,7 +1,9 @@
 pub mod ast;
 pub mod backend;
+pub mod contracts;
 pub mod csharp_backend;
 pub mod doc_gen;
+pub mod error;
 pub mod go_backend;
 pub mod parser;
 pub mod python_backend;

@@ -1,27 +1,44 @@
 use crate::ast::Spec;
+use crate::error::SpecError;
 use crate::spec_schema::SPEC_JSON_SCHEMA;
 use jsonschema::{Draft, JSONSchema, ValidationError};
 
-pub fn validate(spec: &Spec) -> Result<(), Vec<String>> {
-    let value = serde_json::to_value(spec)
-        .map_err(|e| vec![format!("Internal serialization error: {}", e)])?;
+pub fn validate(spec: &Spec) -> Result<(), Vec<SpecError>> {
+    let value = serde_json::to_value(spec).map_err(|e| {
+        vec![SpecError::SchemaError {
+            message: format!("Internal serialization error: {e}"),
+        }]
+    })?;
 
-    let schema_json: serde_json::Value = serde_json::from_str(SPEC_JSON_SCHEMA)
-        .map_err(|e| vec![format!("Internal schema parse error: {}", e)])?;
+    let schema_json: serde_json::Value = serde_json::from_str(SPEC_JSON_SCHEMA).map_err(|e| {
+        vec![SpecError::SchemaError {
+            message: format!("Internal schema parse error: {e}"),
+        }]
+    })?;
 
     let schema = JSONSchema::options()
         .with_draft(Draft::Draft7)
         .compile(&schema_json)
-        .map_err(|e| vec![format!("Schema compilation error: {}", e)])?;
+        .map_err(|e| {
+            vec![SpecError::SchemaError {
+                message: format!("Schema compilation error: {e}"),
+            }]
+        })?;
 
     let errors: Vec<ValidationError> = match schema.validate(&value) {
         Ok(()) => return Ok(()),
         Err(errors) => errors.collect(),
     };
 
-    let messages: Vec<String> = errors
+    let messages: Vec<SpecError> = errors
         .iter()
-        .map(|e| format!("{} (at {})", e, e.instance_path))
+        .map(|e| {
+            let path = e.instance_path.to_string();
+            SpecError::ValidationError {
+                message: format!("{e}"),
+                path,
+            }
+        })
         .collect();
 
     Err(messages)
@@ -70,6 +87,7 @@ mod tests {
                 returns: Some("void".into()),
                 preconditions: vec!["stack not full".into()],
                 postconditions: vec!["item on top".into()],
+                injected_assertions: vec![],
             }],
             verification: Verification {
                 test_cases: vec![TestCase {
@@ -102,8 +120,8 @@ mod tests {
         let result = validate(&spec);
         assert!(result.is_err());
         let errors = result.unwrap_err();
-        assert!(errors.iter().any(|e| e.contains("name")));
-        assert!(errors.iter().any(|e| e.contains("category")));
+        assert!(errors.iter().any(|e| e.to_string().contains("name")));
+        assert!(errors.iter().any(|e| e.to_string().contains("category")));
     }
 
     #[test]
@@ -158,7 +176,7 @@ mod tests {
         let result = validate(&spec);
         assert!(result.is_err(), "empty name should fail: {:?}", result);
         let errors = result.unwrap_err();
-        assert!(errors.iter().any(|e| e.contains("name")));
+        assert!(errors.iter().any(|e| e.to_string().contains("name")));
     }
 
     #[test]

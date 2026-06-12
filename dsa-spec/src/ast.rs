@@ -70,6 +70,8 @@ pub struct MethodDef {
     pub preconditions: Vec<String>,
     #[serde(default)]
     pub postconditions: Vec<String>,
+    #[serde(default)]
+    pub injected_assertions: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -212,6 +214,7 @@ mod tests {
                 returns: Some("bool".into()),
                 preconditions: vec!["x > 0".into()],
                 postconditions: vec!["result is valid".into()],
+                injected_assertions: vec![],
             }],
             verification: Verification {
                 test_cases: vec![TestCase {

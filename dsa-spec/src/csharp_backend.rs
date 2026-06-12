@@ -1,5 +1,6 @@
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
+use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
 use serde::Serialize;
 use std::process::Command;
@@ -10,12 +11,12 @@ pub struct CSharpBackend {
 }
 
 impl CSharpBackend {
-    pub fn new(template_dir: &str) -> Result<Self, String> {
+    pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(CSharpBackend { engine })
     }
 
-    fn format_csharp(code: &str) -> Result<String, String> {
+    fn format_csharp(code: &str) -> Result<String, BackendError> {
         let mut child = Command::new("dotnet")
             .arg("format")
             .arg("--no-restore")
@@ -23,27 +24,34 @@ impl CSharpBackend {
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .spawn()
-            .map_err(|e| format!("Failed to spawn dotnet format: {}", e))?;
+            .map_err(|e| BackendError::Formatter {
+                message: format!("Failed to spawn dotnet format: {e}"),
+            })?;
 
         if let Some(stdin) = child.stdin.as_mut() {
             use std::io::Write;
             stdin
                 .write_all(code.as_bytes())
-                .map_err(|e| format!("Failed to write to dotnet format stdin: {}", e))?;
+                .map_err(|e| BackendError::Formatter {
+                    message: format!("Failed to write to dotnet format stdin: {e}"),
+                })?;
         }
 
         let output = child
             .wait_with_output()
-            .map_err(|e| format!("Failed to wait on dotnet format: {}", e))?;
+            .map_err(|e| BackendError::Formatter {
+                message: format!("Failed to wait on dotnet format: {e}"),
+            })?;
 
         if output.status.success() {
             Ok(String::from_utf8_lossy(&output.stdout).to_string())
         } else {
-            // Fallback: return original code
-            Err(format!(
-                "dotnet format error: {} (falling back to unformatted)",
-                String::from_utf8_lossy(&output.stderr)
-            ))
+            Err(BackendError::Formatter {
+                message: format!(
+                    "dotnet format error: {} (falling back to unformatted)",
+                    String::from_utf8_lossy(&output.stderr)
+                ),
+            })
         }
     }
 
@@ -176,6 +184,7 @@ fn build_context(spec: &Spec) -> Context {
                     .unwrap_or(false),
                 preconditions: &m.preconditions,
                 postconditions: &m.postconditions,
+                injected_assertions: &m.injected_assertions,
             }
         })
         .collect();
@@ -198,7 +207,7 @@ fn build_context(spec: &Spec) -> Context {
 }
 
 impl Backend for CSharpBackend {
-    fn generate(&self, spec: &Spec) -> Result<String, String> {
+    fn generate(&self, spec: &Spec) -> Result<String, BackendError> {
         let context = build_context(spec);
         let raw_code = self.engine.render("csharp.cs.tera", &context)?;
         Ok(Self::format_csharp(&raw_code).unwrap_or(raw_code))
@@ -249,6 +258,7 @@ struct MethodContext<'a> {
     throws_exception: bool,
     preconditions: &'a [String],
     postconditions: &'a [String],
+    injected_assertions: &'a [String],
 }
 
 #[derive(Serialize)]
@@ -365,6 +375,7 @@ mod tests {
                 returns: Some("void".into()),
                 preconditions: vec![],
                 postconditions: vec![],
+                injected_assertions: vec![],
             }],
             verification: Verification::default(),
         };
@@ -448,5 +459,39 @@ mod tests {
     fn test_translate_unknown_type_passthrough() {
         assert_eq!(CSharpBackend::translate_simple_type("MyType"), "MyType");
         assert_eq!(CSharpBackend::translate_simple_type(""), "");
+    }
+
+    #[test]
+    fn test_contract_assertions_injected_in_csharp() {
+        use crate::ast::{Contracts, Metadata, MethodDef, Spec, StructDef, Verification};
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            contracts: Contracts {
+                invariants: vec!["size >= 0".into()],
+            },
+            structs: vec![StructDef {
+                name: "Foo".into(),
+                ..Default::default()
+            }],
+            methods: vec![MethodDef {
+                name: "Bar".into(),
+                preconditions: vec!["x > 0".into()],
+                postconditions: vec!["result ok".into()],
+                ..Default::default()
+            }],
+            verification: Verification::default(),
+        };
+        let injected = crate::contracts::inject_assertions(&spec);
+        let backend = CSharpBackend::new("templates").unwrap();
+        let code = backend.generate(&injected).unwrap();
+        assert!(code.contains("// Contract: precondition: x > 0"));
+        assert!(code.contains("System.Diagnostics.Debug.Assert(false, \"precondition: x > 0\");"));
+        assert!(code.contains("// Contract: postcondition: result ok"));
+        assert!(code.contains("// Contract: invariant: size >= 0"));
     }
 }

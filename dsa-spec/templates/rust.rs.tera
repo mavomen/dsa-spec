@@ -16,7 +16,7 @@
 {% for struct in structs %}
 pub struct {{ struct.name }}<{% for generic in struct.generics %}{{ generic.name }}{% if generic.bounds != "" %}: {{ generic.bounds }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}> {
     {% for field in struct.fields %}
-    {{ field.name }}: {{ field.field_type }}, // TODO: verify type mapping
+    {{ field.name }}: {{ field.field_type }},
     {% endfor %}
 }
 
@@ -32,6 +32,10 @@ impl<{% for generic in struct.generics %}{{ generic.name }}{% if generic.bounds 
     {% endfor %}
     {% endif %}
     pub fn {{ method.name }}(&self{% for param in method.params %}, {{ param.name }}: {{ param.param_type }}{% endfor %}){% if method.returns %} -> {{ method.returns }}{% endif %} {
+        {% for assertion in method.injected_assertions %}
+        // Contract: {{ assertion }}
+        assert!(false, "{{ assertion }}");
+        {% endfor %}
         // TODO: Implement {{ method.name }}
         todo!()
     }

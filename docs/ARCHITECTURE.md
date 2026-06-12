@@ -23,13 +23,15 @@ src/
   parser.rs            # YAML → AST deserialization via serde_yaml
   spec_schema.rs       # JSON Schema for spec validation (Draft 7)
   validator.rs         # Runs JSON Schema validation against parsed Spec
-  backend.rs           # Backend trait: generate(&self, spec: &Spec) -> Result<String, String>
+  backend.rs           # Backend trait: generate(&self, spec: &Spec) -> Result<String, BackendError>
   template_engine.rs   # Tera-based template rendering
-  rust_backend.rs      # Rust backend — todo!() stubs, rustfmt integration
-  python_backend.rs    # Python backend — NotImplementedError, type hints, black
-  csharp_backend.rs    # C# backend — NotImplementedException, nullable refs, dotnet format
-  typescript_backend.rs # TypeScript backend — Error('Not implemented'), union types
-  go_backend.rs        # Go backend — panic("not implemented"), gofmt
+  contracts.rs         # Contract assertion injection into AST methods (pre/post/invariant)
+  error.rs             # Hand-rolled error enums: SpecError, BackendError
+  rust_backend.rs      # Rust backend — assert!(false, ...), rustfmt integration
+  python_backend.rs    # Python backend — assert False, ..., type hints, black
+  csharp_backend.rs    # C# backend — Debug.Assert(false, ...), nullable refs, dotnet format
+  typescript_backend.rs # TypeScript backend — console.assert(false, ...), union types
+  go_backend.rs        # Go backend — panic("contract violation: ..."), gofmt
   doc_gen.rs           # Markdown documentation generator from spec metadata
 templates/
   rust.rs.tera
@@ -60,9 +62,11 @@ docs/
 
 | Module | Role | Constraints |
 |---|---|---|
-| `parser` | YAML → AST deserialization | Returns `Result<Spec, String>`; no panics on malformed input |
+| `parser` | YAML → AST deserialization | Returns `Result<Spec, SpecError>`; no panics on malformed input |
 | `spec_schema` | JSON Schema constant | Single string; defines required fields, types, constraints |
-| `validator` | Schema validation against parsed Spec | Uses `jsonschema` crate (Draft 7); returns `Result<(), Vec<String>>` |
+| `validator` | Schema validation against parsed Spec | Uses `jsonschema` crate (Draft 7); returns `Result<(), Vec<SpecError>>` |
+| `contracts` | Pre/post/invariant assertion injection | Pure AST → AST transformation; no side effects |
+| `error` | Hand-rolled error enums | `SpecError` (parser/validation), `BackendError` (template/formatter) |
 | `backends/*` | AST → formatted code string | Pure functions + template rendering; no file I/O |
 | `template_engine` | Tera template rendering | Thin wrapper over `tera::Tera` |
 | `doc_gen` | Markdown doc generation | Produces human-readable spec docs from AST |
@@ -98,7 +102,8 @@ Spec
 │   ├── params: Vec<ParamDef>
 │   ├── returns: Option<String>
 │   ├── preconditions: Vec<String>
-│   └── postconditions: Vec<String>
+│   ├── postconditions: Vec<String>
+│   └── injected_assertions: Vec<String>   # Populated by contracts::inject_assertions
 └── verification: Verification
     └── test_cases: Vec<TestCase>
         ├── name: String
@@ -135,7 +140,7 @@ This schema is frozen. Breaking changes bump the major version; additive changes
 ## Backend Architecture
 
 Each backend:
-1. Implements the `Backend` trait: `fn generate(&self, spec: &Spec) -> Result<String, String>`
+1. Implements the `Backend` trait: `fn generate(&self, spec: &Spec) -> Result<String, BackendError>`
 2. Constructs a Tera `Context` from the spec (via a per-backend `build_context` function)
 3. Renders a language-specific template
 4. Attempts to format via an external formatter; falls back to raw output on failure
@@ -161,7 +166,7 @@ Each backend translates Rust-centric types from the spec into language-idiomatic
 
 | Language | Formatter | Backend Method |
 |---|---|---|
-| Rust | `rustfmt --edition 2021` | `RustBackend::format_rust` |
+| Rust | `rustfmt --edition 2024` | `RustBackend::format_rust` |
 | Python | `black -c <code>` | `PythonBackend::format_python` |
 | C# | `dotnet format` | `CSharpBackend::format_csharp` |
 | TypeScript | none (returns raw) | N/A |
@@ -179,6 +184,20 @@ All formatters are best-effort: if the formatter isn't installed or fails, the b
 | TypeScript | `throw new Error('Not implemented');` |
 | Go | `panic("not implemented")` |
 
+### Contract Assertion Injection
+
+Generated stubs optionally include runtime-checkable contract assertions. Pass `--contracts` to `generate` or use the `verify` subcommand to inject them.
+
+| Language | Assertion Pattern | Always Fails? |
+|---|---|---|
+| Rust | `assert!(false, "...");` | Yes (placeholder) |
+| Python | `assert False, "..."` | Yes (placeholder) |
+| C# | `System.Diagnostics.Debug.Assert(false, "...");` | Yes (debug builds) |
+| TypeScript | `console.assert(false, "...");` | Yes (logs) |
+| Go | `panic("contract violation: ...")` | Yes (placeholder) |
+
+Assertions are rendered as comments (`// Contract: ...`) followed by the failing assertion before the method body stub.
+
 ---
 
 ## Naming Conventions
@@ -195,39 +214,59 @@ Currently, spec field and method names pass through directly without transformat
 ## CLI Interface
 
 ```
-dsa-spec generate <spec> [--lang <lang>] [--output <path>]
+dsa-spec generate <spec> [--lang <lang>] [--output <path>] [--contracts]
 dsa-spec validate <spec>
+dsa-spec verify <spec> [--lang <lang>] [--backend <backend>]
 ```
 
 ### `generate` command
 - `--lang`: target language (`rust`, `python`, `csharp`/`c#`, `typescript`/`ts`, `go`, or `all`)
 - `--output`: output file path (single language) or directory (`--lang all`)
+- `--contracts`: inject runtime assertion code for preconditions, postconditions, and invariants
 - `--lang all`: generates all 5 backends; outputs to `--output` directory with `<name>.<ext>` per file
 
 ### `validate` command
 - Parses and validates the spec against JSON Schema
 - Exits 0 on valid, 1 with error messages on invalid
 
+### `verify` command
+- Parses the spec, injects contract assertions, and generates code for the given language
+- `--lang`: target language (default `rust`)
+- `--backend`: verification backend (currently only `runtime` supported; `z3` is a placeholder for future SMT-based verification)
+- Useful for inspecting what contract assertions would look like in generated code
+
 ### Exit codes
 - 0: success
-- 1: validation error, generation error, or unsupported language
+- 1: validation error, generation error, or unsupported language/backend
 
 ---
 
 ## Error Handling
 
-Currently all errors are `String`-based:
+Errors use hand-rolled enums implementing `std::error::Error`. No `anyhow` or `thiserror`.
 
-- `parser::parse` returns `Result<Spec, String>`
-- `Backend::generate` returns `Result<String, String>`
-- `validator::validate` returns `Result<(), Vec<String>>`
+### `SpecError` (src/error.rs)
+Used by parser and validator:
+- `ParseError { message, line, column }` — YAML parse failures with location info
+- `ValidationError { message, path }` — JSON Schema validation failures
+- `SchemaError { message }` — Internal schema compilation errors
+- `VersionMismatch { expected, found }` — Spec version incompatibility (future)
+- `IoError { message }` — I/O failures (future)
 
-The top-level `main.rs` uses `Box<dyn std::error::Error>` and prints errors to stderr.
+### `BackendError` (src/error.rs)
+Used by all backend modules and template engine:
+- `TemplateInit { message }` — Tera initialization failures
+- `TemplateRender { message }` — Template rendering errors
+- `Formatter { message }` — External formatter (rustfmt/black/etc.) failures
+- `TypeMapping { message }` — Unsupported type mapping (future)
+- `Io { message }` — I/O failures (future)
 
-**Desired** (not yet implemented): hand-rolled error enums per module boundary:
-- `SpecError` (parser) — line/column info per variant
-- `BackendError` (per backend)
-- `EmitError` (emitter)
+### Error flow
+- `parser::parse()` → `Result<Spec, SpecError>`
+- `validator::validate()` → `Result<(), Vec<SpecError>>`
+- `Backend::generate()` → `Result<String, BackendError>`
+- `TemplateEngine::new()` / `render()` → `Result<..., BackendError>`
+- `main.rs` returns `Box<dyn std::error::Error>` (all error types satisfy the trait)
 
 ---
 

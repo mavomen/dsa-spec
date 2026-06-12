@@ -245,3 +245,117 @@ fn test_generate_with_output_file() {
     let content = std::fs::read_to_string(&out_file).unwrap();
     assert!(!content.is_empty());
 }
+
+#[test]
+fn test_generate_with_contracts_flag() {
+    let spec_yaml = r#"
+spec_version: "1.0"
+metadata:
+  name: "TestContracts"
+  category: "test"
+structs:
+  - name: "Foo"
+    fields:
+      - name: "val"
+        type: "i32"
+methods:
+  - name: "check"
+    preconditions:
+      - "val > 0"
+    postconditions:
+      - "result is valid"
+verification:
+  test_cases: []
+"#;
+    let file = tempfile::NamedTempFile::new().expect("temp file");
+    std::fs::write(file.path(), spec_yaml).unwrap();
+    let output = Command::new("cargo")
+        .args([
+            "run",
+            "--",
+            "generate",
+            file.path().to_str().unwrap(),
+            "--lang",
+            "rust",
+            "--contracts",
+        ])
+        .output()
+        .expect("failed to run");
+    assert!(
+        output.status.success(),
+        "generate --contracts failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(
+        stdout.contains("assert!(false, \"precondition: val > 0\");"),
+        "should contain contract assertion, got: {}",
+        stdout
+    );
+    assert!(
+        stdout.contains("assert!(false, \"postcondition: result is valid\");"),
+        "should contain postcondition assertion"
+    );
+}
+
+#[test]
+fn test_verify_command_exists() {
+    let spec_yaml = r#"
+spec_version: "1.0"
+metadata:
+  name: "VerifyTest"
+  category: "test"
+structs:
+  - name: "Foo"
+    fields:
+      - name: "val"
+        type: "i32"
+methods:
+  - name: "check"
+    preconditions:
+      - "val > 0"
+    postconditions: []
+verification:
+  test_cases: []
+"#;
+    let file = tempfile::NamedTempFile::new().expect("temp file");
+    std::fs::write(file.path(), spec_yaml).unwrap();
+    let output = Command::new("cargo")
+        .args([
+            "run",
+            "--",
+            "verify",
+            file.path().to_str().unwrap(),
+            "--lang",
+            "rust",
+        ])
+        .output()
+        .expect("failed to run");
+    assert!(
+        output.status.success(),
+        "verify failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("--- rust ---"));
+    assert!(stdout.contains("todo!()"));
+}
+
+#[test]
+fn test_verify_unsupported_backend_fails() {
+    let spec = create_temp_spec();
+    let output = Command::new("cargo")
+        .args([
+            "run",
+            "--",
+            "verify",
+            spec.path().to_str().unwrap(),
+            "--backend",
+            "z3",
+        ])
+        .output()
+        .expect("failed to run");
+    assert!(!output.status.success(), "unsupported backend should fail");
+    let stderr = String::from_utf8_lossy(&output.stderr);
+    assert!(stderr.contains("Unsupported verification backend"));
+}
