@@ -1,0 +1,237 @@
+/**
+ * BinarySearchTree
+
+ * Time complexity: O(log n) average, O(n) worst
+
+
+ * Space complexity: O(n)
+
+
+ * Invariants:
+
+ * - left.value < node.value < right.value
+
+ * - no duplicate values
+
+
+ */
+
+
+
+export interface BSTNode<T extends Ord & Clone> {
+    
+    value: T;
+    
+    left: BSTNode<T> | null;
+    
+    right: BSTNode<T> | null;
+    
+}
+
+export class BSTNodeImpl<T extends Ord & Clone> implements BSTNode<T> {
+    constructor(
+        
+        public value: T,
+        
+        public left: BSTNode<T> | null,
+        
+        public right: BSTNode<T> | null
+        
+    ) {}
+
+    
+    /**
+     * new
+     
+     
+     * Postconditions:
+      * - root is None
+     
+     
+     */
+    new(): Self {
+        
+        // TODO: Implement new
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * insert
+     
+     
+     * Postconditions:
+      * - tree contains value
+      * - BST invariant maintained
+     
+     
+     */
+    insert(value: T): boolean {
+        
+        // TODO: Implement insert
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * contains
+     
+     
+     
+     */
+    contains(value: T): boolean {
+        
+        // TODO: Implement contains
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * inorder
+     
+     
+     * Postconditions:
+      * - result is sorted ascending
+     
+     
+     */
+    inorder(): T[] {
+        
+        // TODO: Implement inorder
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * isEmpty
+     
+     
+     
+     */
+    isEmpty(): boolean {
+        
+        // TODO: Implement isEmpty
+        throw new Error('Not implemented');
+    }
+    
+}
+
+export interface BinarySearchTree<T extends Ord & Clone> {
+    
+    root: BSTNode<T> | null;
+    
+}
+
+export class BinarySearchTreeImpl<T extends Ord & Clone> implements BinarySearchTree<T> {
+    constructor(
+        
+        public root: BSTNode<T> | null
+        
+    ) {}
+
+    
+    /**
+     * new
+     
+     
+     * Postconditions:
+      * - root is None
+     
+     
+     */
+    new(): Self {
+        
+        // TODO: Implement new
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * insert
+     
+     
+     * Postconditions:
+      * - tree contains value
+      * - BST invariant maintained
+     
+     
+     */
+    insert(value: T): boolean {
+        
+        // TODO: Implement insert
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * contains
+     
+     
+     
+     */
+    contains(value: T): boolean {
+        
+        // TODO: Implement contains
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * inorder
+     
+     
+     * Postconditions:
+      * - result is sorted ascending
+     
+     
+     */
+    inorder(): T[] {
+        
+        // TODO: Implement inorder
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * isEmpty
+     
+     
+     
+     */
+    isEmpty(): boolean {
+        
+        // TODO: Implement isEmpty
+        throw new Error('Not implemented');
+    }
+    
+}
+
+
+
+// ========== Generated Jest tests ==========
+
+describe('insert_and_contains', () => {
+    it('should work', () => {
+        // Setup
+        let mut bst = BinarySearchTree::new();
+        // Actions
+        bst.insert(5);bst.insert(3);bst.insert(7);
+        // Assertions
+        expect(bst.contains(5)).toBe(true);expect(bst.contains(3)).toBe(true);expect(bst.contains(7)).toBe(true);expect(!bst.contains(10)).toBe(true);
+    });
+});
+
+describe('inorder_returns_sorted', () => {
+    it('should work', () => {
+        // Setup
+        let mut bst = BinarySearchTree::new();
+        // Actions
+        bst.insert(5);bst.insert(3);bst.insert(7);bst.insert(1);bst.insert(9);
+        // Assertions
+        expect(bst.inorder()).toBe(vec![1, 3, 5, 7, 9]);
+    });
+});
+
+describe('duplicate_insert_returns_false', () => {
+    it('should work', () => {
+        // Setup
+        let mut bst = BinarySearchTree::new();
+        // Actions
+        bst.insert(10);
+        // Assertions
+        expect(bst.insert(10)).toBe(false);
+    });
+});
+

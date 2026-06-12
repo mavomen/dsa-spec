@@ -1,11 +1,14 @@
+pub mod assertion;
 pub mod ast;
 pub mod backend;
+pub mod casing;
 pub mod complexity;
 pub mod contracts;
 pub mod csharp_backend;
 pub mod doc_gen;
 pub mod error;
 pub mod go_backend;
+pub mod migrate;
 pub mod parser;
 pub mod python_backend;
 pub mod rust_backend;

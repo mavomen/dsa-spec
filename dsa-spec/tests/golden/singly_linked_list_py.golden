@@ -1,0 +1,227 @@
+"""
+SinglyLinkedList
+
+Time complexity: O(1) prepend, O(n) append/search
+
+
+Space complexity: O(n)
+
+
+# Invariants
+
+# - no cycles
+
+# - head is None iff tail is None
+
+
+"""
+
+from dataclasses import dataclass
+from typing import TypeVar, Generic, Optional, List, Dict
+import pytest
+
+
+
+T = TypeVar('T')
+
+
+@dataclass
+class Node(Generic[T]):
+    """SinglyLinkedList"""
+    
+    value: T
+    
+    next: Optional[Node<T>]
+    
+
+    
+    def new(self) -> Self:
+        """
+        
+        
+        Postconditions:
+        - head is None
+        
+        
+        """
+        
+        # TODO: Implement new
+        raise NotImplementedError
+    
+    def prepend(self, value: T) -> None:
+        """
+        
+        
+        Postconditions:
+        - head.value == value
+        - list length increased by 1
+        
+        
+        """
+        
+        # TODO: Implement prepend
+        raise NotImplementedError
+    
+    def append(self, value: T) -> None:
+        """
+        
+        
+        Postconditions:
+        - last element == value
+        
+        
+        """
+        
+        # TODO: Implement append
+        raise NotImplementedError
+    
+    def pop_front(self) -> Optional[T]:
+        """
+        
+        Preconditions:
+        - !is_empty()
+        
+        
+        Postconditions:
+        - head == old.head.next
+        
+        
+        """
+        
+        # TODO: Implement pop_front
+        raise NotImplementedError
+    
+    def is_empty(self) -> bool:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement is_empty
+        raise NotImplementedError
+    
+    def len(self) -> int:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement len
+        raise NotImplementedError
+    
+
+T = TypeVar('T')
+
+
+@dataclass
+class SinglyLinkedList(Generic[T]):
+    """SinglyLinkedList"""
+    
+    head: Optional[Node<T>]
+    
+
+    
+    def new(self) -> Self:
+        """
+        
+        
+        Postconditions:
+        - head is None
+        
+        
+        """
+        
+        # TODO: Implement new
+        raise NotImplementedError
+    
+    def prepend(self, value: T) -> None:
+        """
+        
+        
+        Postconditions:
+        - head.value == value
+        - list length increased by 1
+        
+        
+        """
+        
+        # TODO: Implement prepend
+        raise NotImplementedError
+    
+    def append(self, value: T) -> None:
+        """
+        
+        
+        Postconditions:
+        - last element == value
+        
+        
+        """
+        
+        # TODO: Implement append
+        raise NotImplementedError
+    
+    def pop_front(self) -> Optional[T]:
+        """
+        
+        Preconditions:
+        - !is_empty()
+        
+        
+        Postconditions:
+        - head == old.head.next
+        
+        
+        """
+        
+        # TODO: Implement pop_front
+        raise NotImplementedError
+    
+    def is_empty(self) -> bool:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement is_empty
+        raise NotImplementedError
+    
+    def len(self) -> int:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement len
+        raise NotImplementedError
+    
+
+
+
+# ========== Generated pytest tests ==========
+
+def test_prepend_pop_front():
+    """Test: prepend_pop_front"""
+    let mut list = SinglyLinkedList::new();
+    list.prepend(1)list.prepend(2)
+    assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
+
+def test_append_order():
+    """Test: append_order"""
+    let mut list = SinglyLinkedList::new();
+    list.append(1)list.append(2)
+    assert list.pop_front() == Some(1)
+
+def test_pop_front_empty():
+    """Test: pop_front_empty"""
+    let list = SinglyLinkedList::<i32>::new();
+    
+    assert list.pop_front() == None
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

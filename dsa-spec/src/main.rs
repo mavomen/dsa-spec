@@ -1,14 +1,18 @@
 use clap::{Parser, Subcommand};
 use std::fs;
 use std::path::PathBuf;
+use tracing_subscriber::EnvFilter;
 
+mod assertion;
 mod ast;
 mod backend;
+mod casing;
 mod complexity;
 mod contracts;
 mod csharp_backend;
 mod error;
 mod go_backend;
+mod migrate;
 mod parser;
 mod python_backend;
 mod rust_backend;
@@ -20,12 +24,22 @@ mod visualization;
 
 use backend::Backend;
 
+type BackendResult = Result<Vec<(&'static str, Box<dyn Backend>)>, Box<dyn std::error::Error>>;
+
 #[derive(Parser)]
 #[command(name = "dsa-spec")]
 #[command(about = "Generate code skeletons from DSA specifications")]
 struct Cli {
     #[command(subcommand)]
     command: Command,
+
+    /// Verbosity level (-v for info, -vv for debug)
+    #[arg(short, long, action = clap::ArgAction::Count, global = true)]
+    verbose: u8,
+
+    /// Machine-readable JSON output
+    #[arg(long, global = true)]
+    json: bool,
 }
 
 #[derive(Subcommand)]
@@ -39,9 +53,13 @@ enum Command {
         #[arg(short, long, default_value = "rust")]
         lang: String,
 
-        /// Output file or directory (stdout if omitted)
+        /// Output file (single language) — stdout if omitted
         #[arg(short, long)]
         output: Option<PathBuf>,
+
+        /// Output directory (for --lang all). Defaults to "generated/"
+        #[arg(long)]
+        output_dir: Option<PathBuf>,
 
         /// Inject contract assertions into generated stubs
         #[arg(long)]
@@ -71,6 +89,15 @@ enum Command {
         #[arg(short, long, default_value = "dot")]
         format: String,
     },
+    /// Migrate a spec file to a newer spec version
+    Migrate {
+        /// Path to the spec YAML file
+        spec: PathBuf,
+
+        /// Target spec version (default: latest)
+        #[arg(short, long, default_value = "2.0")]
+        target_version: String,
+    },
     /// Verify contracts — generates stubs with contract assertions
     Verify {
         /// Path to the spec YAML file
@@ -89,139 +116,234 @@ enum Command {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
 
+    let filter = match cli.verbose {
+        0 => "dsa_spec=warn",
+        1 => "dsa_spec=info",
+        _ => "dsa_spec=debug",
+    };
+    let _ = tracing_subscriber::fmt()
+        .with_env_filter(EnvFilter::try_new(filter).unwrap_or_else(|_| EnvFilter::new("warn")))
+        .try_init();
+
+    let use_json = cli.json;
+
+    let make_backends = |lang_lower: &str| -> BackendResult {
+        match lang_lower {
+            "rust" => Ok(vec![(
+                "rust",
+                Box::new(rust_backend::RustBackend::new("templates")?) as Box<dyn Backend>,
+            )]),
+            "python" => Ok(vec![(
+                "python",
+                Box::new(python_backend::PythonBackend::new("templates")?),
+            )]),
+            "csharp" | "c#" => Ok(vec![(
+                "csharp",
+                Box::new(csharp_backend::CSharpBackend::new("templates")?),
+            )]),
+            "typescript" | "ts" => Ok(vec![(
+                "typescript",
+                Box::new(typescript_backend::TypeScriptBackend::new("templates")?),
+            )]),
+            "go" => Ok(vec![(
+                "go",
+                Box::new(go_backend::GoBackend::new("templates")?),
+            )]),
+            "all" => Ok(vec![
+                (
+                    "rust",
+                    Box::new(rust_backend::RustBackend::new("templates")?) as Box<dyn Backend>,
+                ),
+                (
+                    "python",
+                    Box::new(python_backend::PythonBackend::new("templates")?),
+                ),
+                (
+                    "csharp",
+                    Box::new(csharp_backend::CSharpBackend::new("templates")?),
+                ),
+                (
+                    "typescript",
+                    Box::new(typescript_backend::TypeScriptBackend::new("templates")?),
+                ),
+                ("go", Box::new(go_backend::GoBackend::new("templates")?)),
+            ]),
+            _ => {
+                tracing::error!(lang = %lang_lower, "unsupported language");
+                eprintln!(
+                    "Unsupported language: {lang_lower}. Use rust, python, csharp, typescript, go, or all."
+                );
+                std::process::exit(1);
+            }
+        }
+    };
+
+    let lang_ext = |name: &str| -> &str {
+        match name {
+            "rust" => "rs",
+            "python" => "py",
+            "csharp" => "cs",
+            "typescript" => "ts",
+            "go" => "go",
+            _ => "txt",
+        }
+    };
+
+    let json_str = |val: &serde_json::Value| -> String {
+        serde_json::to_string(val).unwrap_or_else(|_| r#"{"error":"serialization failed"}"#.into())
+    };
+
     match cli.command {
         Command::Generate {
             spec,
             lang,
             output,
+            output_dir,
             contracts,
         } => {
             let yaml = fs::read_to_string(&spec)?;
+            tracing::info!(path = %spec.display(), "parsing spec");
             let parsed = parser::parse(&yaml)?;
 
             let active_spec = if contracts {
+                tracing::info!("injecting contract assertions");
                 contracts::inject_assertions(&parsed)
             } else {
                 parsed
             };
 
-            let spec_path = &spec;
             let lang_lower = lang.to_lowercase();
-            let backends: Vec<(&str, Box<dyn Backend>)> = match lang_lower.as_str() {
-                "rust" => vec![(
-                    "rust",
-                    Box::new(rust_backend::RustBackend::new("templates")?),
-                )],
-                "python" => vec![(
-                    "python",
-                    Box::new(python_backend::PythonBackend::new("templates")?),
-                )],
-                "csharp" | "c#" => vec![(
-                    "csharp",
-                    Box::new(csharp_backend::CSharpBackend::new("templates")?),
-                )],
-                "typescript" | "ts" => vec![(
-                    "typescript",
-                    Box::new(typescript_backend::TypeScriptBackend::new("templates")?),
-                )],
-                "go" => vec![("go", Box::new(go_backend::GoBackend::new("templates")?))],
-                "all" => {
-                    vec![
-                        (
-                            "rust",
-                            Box::new(rust_backend::RustBackend::new("templates")?)
-                                as Box<dyn Backend>,
-                        ),
-                        (
-                            "python",
-                            Box::new(python_backend::PythonBackend::new("templates")?),
-                        ),
-                        (
-                            "csharp",
-                            Box::new(csharp_backend::CSharpBackend::new("templates")?),
-                        ),
-                        (
-                            "typescript",
-                            Box::new(typescript_backend::TypeScriptBackend::new("templates")?),
-                        ),
-                        ("go", Box::new(go_backend::GoBackend::new("templates")?)),
-                    ]
-                }
-                _ => {
-                    eprintln!(
-                        "Unsupported language: {lang}. Use rust, python, csharp, typescript, go, or all."
-                    );
-                    std::process::exit(1);
-                }
-            };
+            let backends = make_backends(&lang_lower)?;
+            let spec_stem = spec.file_stem().unwrap().to_string_lossy().to_string();
 
-            for (lang_name, backend) in backends {
+            let mut results: Vec<(&str, String)> = Vec::new();
+            for (lang_name, backend) in &backends {
+                tracing::info!(lang = %lang_name, "generating code");
                 let code = backend.generate(&active_spec)?;
+                results.push((lang_name, code));
+            }
+
+            let out_dir = output_dir.unwrap_or_else(|| {
+                if lang_lower == "all" {
+                    PathBuf::from("generated")
+                } else {
+                    PathBuf::new()
+                }
+            });
+
+            for (lang_name, code) in &results {
                 match &output {
-                    Some(path) => {
-                        if lang_lower == "all" {
-                            let ext = match lang_name {
-                                "rust" => "rs",
-                                "python" => "py",
-                                "csharp" => "cs",
-                                "typescript" => "ts",
-                                "go" => "go",
-                                _ => "txt",
-                            };
-                            let file_name = format!(
-                                "{}.{}",
-                                spec_path.file_stem().unwrap().to_string_lossy(),
-                                ext
-                            );
-                            let out_path = path.join(file_name);
-                            fs::create_dir_all(path)?;
-                            fs::write(&out_path, code)?;
+                    Some(path) if lang_lower != "all" => {
+                        fs::write(path, code)?;
+                        tracing::info!(out = %path.display(), "wrote output");
+                    }
+                    _ if lang_lower == "all" || !out_dir.as_os_str().is_empty() => {
+                        let file_name = format!("{}.{}", spec_stem, lang_ext(lang_name));
+                        let out_path = out_dir.join(&file_name);
+                        fs::create_dir_all(&out_dir)?;
+                        fs::write(&out_path, code)?;
+                        tracing::info!(out = %out_path.display(), "wrote output");
+                    }
+                    _ => {
+                        if use_json {
+                            let entry = serde_json::json!({"lang": lang_name, "code": code});
+                            println!("{}", json_str(&entry));
                         } else {
-                            fs::write(path, code)?;
+                            println!("--- {lang_name} ---");
+                            println!("{code}");
                         }
                     }
-                    None => println!("{code}"),
                 }
             }
         }
         Command::Validate { spec } => {
             let yaml = fs::read_to_string(&spec)?;
+            tracing::info!(path = %spec.display(), "validating spec");
             let parsed = parser::parse(&yaml)?;
             match validator::validate(&parsed) {
-                Ok(()) => println!("Spec is valid."),
+                Ok(()) => {
+                    if use_json {
+                        println!(r#"{{"valid":true}}"#);
+                    } else {
+                        println!("Spec is valid.");
+                    }
+                }
                 Err(errs) => {
-                    eprintln!("Validation errors:");
-                    for e in errs {
-                        eprintln!("  - {e}");
+                    for e in &errs {
+                        tracing::error!(error = %e, "validation error");
+                    }
+                    if use_json {
+                        let err_list: Vec<String> = errs.iter().map(|e| e.to_string()).collect();
+                        println!(
+                            r#"{{"valid":false,"errors":{}}}"#,
+                            serde_json::to_string(&err_list).unwrap()
+                        );
+                    } else {
+                        eprintln!("Validation errors:");
+                        for e in errs {
+                            eprintln!("  - {e}");
+                        }
                     }
                     std::process::exit(1);
                 }
             }
         }
         Command::Analyze { dir, format } => {
+            tracing::info!(dir = %dir.display(), "analyzing specs");
             let specs = match complexity::load_specs_from_dir(&dir.to_string_lossy()) {
                 Ok(s) => s,
                 Err(errs) => {
                     for e in &errs {
+                        tracing::error!(error = %e, "analyze error");
                         eprintln!("  - {e}");
                     }
                     std::process::exit(1);
                 }
             };
-            match format.to_lowercase().as_str() {
-                "json" => println!("{}", complexity::generate_json_report(&specs)),
-                "chart" => println!("{}", complexity::generate_tradeoff_chart(&specs)),
-                _ => {
-                    // default "table" and "markdown": produce the comparison table
-                    println!("{}", complexity::generate_report(&specs));
-                }
+            if use_json || format.to_lowercase() == "json" {
+                println!("{}", complexity::generate_json_report(&specs));
+            } else if format.to_lowercase() == "chart" {
+                println!("{}", complexity::generate_tradeoff_chart(&specs));
+            } else {
+                println!("{}", complexity::generate_report(&specs));
             }
         }
         Command::Visualize { spec, format } => {
             let yaml = fs::read_to_string(&spec)?;
             let parsed = parser::parse(&yaml)?;
             let output = visualization::generate(&parsed, &format);
-            println!("{output}");
+            if use_json {
+                let entry = serde_json::json!({"format": format, "content": output});
+                println!("{}", json_str(&entry));
+            } else {
+                println!("{output}");
+            }
+        }
+        Command::Migrate {
+            spec,
+            target_version,
+        } => {
+            tracing::info!(path = %spec.display(), target = %target_version, "migrating spec");
+            match migrate::migrate_spec_file(&spec.to_string_lossy(), &target_version) {
+                Ok(()) => {
+                    let bak_path = format!("{}.bak", spec.display());
+                    if use_json {
+                        println!(
+                            r#"{{"status":"ok","path":"{}","backup":"{}"}}"#,
+                            spec.display(),
+                            bak_path
+                        );
+                    } else {
+                        println!("Migrated {} to version {}", spec.display(), target_version);
+                        println!("Backup saved as {bak_path}");
+                    }
+                }
+                Err(e) => {
+                    tracing::error!(error = %e, "migration failed");
+                    eprintln!("Migration error: {e}");
+                    std::process::exit(1);
+                }
+            }
         }
         Command::Verify {
             spec,
@@ -229,6 +351,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             backend,
         } => {
             if backend != "runtime" {
+                tracing::error!(backend = %backend, "unsupported verification backend");
                 eprintln!(
                     "Unsupported verification backend: {backend}. Only 'runtime' is supported."
                 );
@@ -240,57 +363,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let spec = contracts::inject_assertions(&parsed);
 
             let lang_lower = lang.to_lowercase();
-            let backends: Vec<(&str, Box<dyn Backend>)> = match lang_lower.as_str() {
-                "rust" => vec![(
-                    "rust",
-                    Box::new(rust_backend::RustBackend::new("templates")?),
-                )],
-                "python" => vec![(
-                    "python",
-                    Box::new(python_backend::PythonBackend::new("templates")?),
-                )],
-                "csharp" | "c#" => vec![(
-                    "csharp",
-                    Box::new(csharp_backend::CSharpBackend::new("templates")?),
-                )],
-                "typescript" | "ts" => vec![(
-                    "typescript",
-                    Box::new(typescript_backend::TypeScriptBackend::new("templates")?),
-                )],
-                "go" => vec![("go", Box::new(go_backend::GoBackend::new("templates")?))],
-                "all" => {
-                    vec![
-                        (
-                            "rust",
-                            Box::new(rust_backend::RustBackend::new("templates")?)
-                                as Box<dyn Backend>,
-                        ),
-                        (
-                            "python",
-                            Box::new(python_backend::PythonBackend::new("templates")?),
-                        ),
-                        (
-                            "csharp",
-                            Box::new(csharp_backend::CSharpBackend::new("templates")?),
-                        ),
-                        (
-                            "typescript",
-                            Box::new(typescript_backend::TypeScriptBackend::new("templates")?),
-                        ),
-                        ("go", Box::new(go_backend::GoBackend::new("templates")?)),
-                    ]
-                }
-                _ => {
-                    eprintln!(
-                        "Unsupported language: {lang}. Use rust, python, csharp, typescript, go, or all."
-                    );
-                    std::process::exit(1);
-                }
-            };
+            let backends = make_backends(&lang_lower)?;
 
-            for (lang_name, backend) in backends {
+            for (lang_name, backend) in &backends {
                 let code = backend.generate(&spec)?;
-                println!("--- {lang_name} ---\n{code}");
+                if use_json {
+                    let entry = serde_json::json!({"lang": lang_name, "code": code});
+                    println!("{}", json_str(&entry));
+                } else {
+                    println!("--- {lang_name} ---\n{code}");
+                }
             }
         }
     }

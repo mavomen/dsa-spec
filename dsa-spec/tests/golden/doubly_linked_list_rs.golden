@@ -1,0 +1,188 @@
+/// DoublyLinkedList
+
+/// Time complexity: O(1) insert/remove at head/tail, O(n) search
+
+/// Space complexity: O(n)
+
+///
+/// # Invariants
+
+/// - no cycles
+
+/// - for each node, node.next.prev == node
+
+pub struct Node<T: Clone> {
+    value: T,
+
+    prev: Option<Box<Node<T>>>,
+
+    next: Option<Box<Node<T>>>,
+}
+
+impl<T: Clone> Node<T> {
+    /// # Contracts
+
+    /// - **Postcondition:** head is None
+
+    /// - **Postcondition:** tail is None
+
+    pub fn new(&self) -> Self {
+        // TODO: Implement new
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Postcondition:** head.value == value
+
+    pub fn push_front(&self, value: T) {
+        // TODO: Implement push_front
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Postcondition:** tail.value == value
+
+    pub fn push_back(&self, value: T) {
+        // TODO: Implement push_back
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Precondition:** !is_empty()
+
+    pub fn pop_front(&self) -> Option<T> {
+        // TODO: Implement pop_front
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Precondition:** !is_empty()
+
+    pub fn pop_back(&self) -> Option<T> {
+        // TODO: Implement pop_back
+        todo!()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        // TODO: Implement is_empty
+        todo!()
+    }
+
+    pub fn len(&self) -> usize {
+        // TODO: Implement len
+        todo!()
+    }
+}
+
+pub struct DoublyLinkedList<T: Clone> {
+    head: Option<Box<Node<T>>>,
+
+    tail: Option<Box<Node<T>>>,
+}
+
+impl<T: Clone> DoublyLinkedList<T> {
+    /// # Contracts
+
+    /// - **Postcondition:** head is None
+
+    /// - **Postcondition:** tail is None
+
+    pub fn new(&self) -> Self {
+        // TODO: Implement new
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Postcondition:** head.value == value
+
+    pub fn push_front(&self, value: T) {
+        // TODO: Implement push_front
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Postcondition:** tail.value == value
+
+    pub fn push_back(&self, value: T) {
+        // TODO: Implement push_back
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Precondition:** !is_empty()
+
+    pub fn pop_front(&self) -> Option<T> {
+        // TODO: Implement pop_front
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Precondition:** !is_empty()
+
+    pub fn pop_back(&self) -> Option<T> {
+        // TODO: Implement pop_back
+        todo!()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        // TODO: Implement is_empty
+        todo!()
+    }
+
+    pub fn len(&self) -> usize {
+        // TODO: Implement len
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_push_front_pop_front() {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);
+        list.push_front(2);
+        assert_eq!(list.pop_front(), Some(2));
+        assert_eq!(list.pop_front(), Some(1));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_push_back_pop_back() {
+        let mut list = DoublyLinkedList::new();
+        list.push_back(1);
+        list.push_back(2);
+        assert_eq!(list.pop_back(), Some(2));
+        assert_eq!(list.pop_back(), Some(1));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_mixed_operations() {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);
+        list.push_back(3);
+        list.push_front(0);
+        assert_eq!(list.pop_front(), Some(0));
+        assert_eq!(list.pop_back(), Some(3));
+        assert_eq!(list.pop_back(), Some(1));
+    }
+}

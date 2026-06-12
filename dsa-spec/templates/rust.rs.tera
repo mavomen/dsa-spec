@@ -50,10 +50,9 @@ mod tests {
 
     #[test]
     fn test_{{ test.name }}() {
-        // TODO: Setup and assertions for {{ test.name }}
         {% if test.setup %}{{ test.setup }}{% endif %}
         {% for action in test.actions %}{{ action }};{% endfor %}
-        // Assertions: {% for assertion in test.assertions %}{{ assertion }};{% endfor %}
+        {% for assertion in test.assertions %}{{ assertion }};{% endfor %}
     }
 }
 {% endfor %}

@@ -1,0 +1,100 @@
+/**
+ * Mergesort
+
+ * Time complexity: O(n log n) always
+
+
+ * Space complexity: O(n)
+
+
+ */
+
+
+
+
+/**
+ * mergesort
+ 
+ * Preconditions:
+  * - arr is valid slice
+ 
+ 
+ * Postconditions:
+  * - arr is sorted ascending
+ 
+ 
+ */
+export function mergesort(arr: T[]): void {
+    
+    // TODO: Implement mergesort
+    throw new Error('Not implemented');
+}
+
+/**
+ * merge
+ 
+ * Preconditions:
+  * - left <= mid <= right
+  * - arr[left..mid] is sorted
+  * - arr[mid..right] is sorted
+ 
+ 
+ * Postconditions:
+  * - arr[left..right] is sorted
+ 
+ 
+ */
+export function merge(arr: T[], left: number, mid: number, right: number): void {
+    
+    // TODO: Implement merge
+    throw new Error('Not implemented');
+}
+
+
+
+// ========== Generated Jest tests ==========
+
+describe('sort_unsorted_array', () => {
+    it('should work', () => {
+        // Setup
+        let mut arr = vec![5, 3, 8, 1, 2];
+        // Actions
+        mergesort(&mut arr);
+        // Assertions
+        expect(arr).toBe(vec![1, 2, 3, 5, 8]);
+    });
+});
+
+describe('sort_empty_array', () => {
+    it('should work', () => {
+        // Setup
+        let mut arr: Vec<i32> = vec![];
+        // Actions
+        mergesort(&mut arr);
+        // Assertions
+        expect(arr).toBe(vec![]);
+    });
+});
+
+describe('sort_single_element', () => {
+    it('should work', () => {
+        // Setup
+        let mut arr = vec![7];
+        // Actions
+        mergesort(&mut arr);
+        // Assertions
+        expect(arr).toBe(vec![7]);
+    });
+});
+
+describe('sort_already_sorted', () => {
+    it('should work', () => {
+        // Setup
+        let mut arr = vec![1, 2, 3, 4, 5];
+        // Actions
+        mergesort(&mut arr);
+        // Assertions
+        expect(arr).toBe(vec![1, 2, 3, 4, 5]);
+    });
+});
+

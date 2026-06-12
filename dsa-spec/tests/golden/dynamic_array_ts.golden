@@ -1,0 +1,191 @@
+/**
+ * DynamicArray
+
+ * Time complexity: O(1) amortized push, O(n) insert/remove
+
+
+ * Space complexity: O(n)
+
+
+ * Invariants:
+
+ * - length >= 0
+
+ * - capacity >= length
+
+
+ */
+
+
+
+export interface DynamicArray<T extends Clone> {
+    
+    data: T[];
+    
+    len: number;
+    
+}
+
+export class DynamicArrayImpl<T extends Clone> implements DynamicArray<T> {
+    constructor(
+        
+        public data: T[],
+        
+        public len: number
+        
+    ) {}
+
+    
+    /**
+     * new
+     
+     
+     * Postconditions:
+      * - length == 0
+      * - capacity >= 0
+     
+     
+     */
+    new(): Self {
+        
+        // TODO: Implement new
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * push
+     
+     
+     * Postconditions:
+      * - length == old.length + 1
+      * - last element == item
+     
+     
+     */
+    push(item: T): void {
+        
+        // TODO: Implement push
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * pop
+     
+     * Preconditions:
+      * - length > 0
+     
+     
+     * Postconditions:
+      * - length == old.length - 1
+     
+     
+     */
+    pop(): T | null {
+        
+        // TODO: Implement pop
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * get
+     
+     * Preconditions:
+      * - index < length
+     
+     
+     
+     */
+    get(index: number): T | null {
+        
+        // TODO: Implement get
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * len
+     
+     
+     * Postconditions:
+      * - result >= 0
+     
+     
+     */
+    len(): number {
+        
+        // TODO: Implement len
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * isEmpty
+     
+     
+     
+     */
+    isEmpty(): boolean {
+        
+        // TODO: Implement isEmpty
+        throw new Error('Not implemented');
+    }
+    
+}
+
+
+
+// ========== Generated Jest tests ==========
+
+describe('push_increases_length', () => {
+    it('should work', () => {
+        // Setup
+        let mut arr = DynamicArray::new();
+        // Actions
+        arr.push(1);arr.push(2);
+        // Assertions
+        expect(arr.len()).toBe(2);expect(!arr.is_empty()).toBe(true);
+    });
+});
+
+describe('pop_returns_last_element', () => {
+    it('should work', () => {
+        // Setup
+        let mut arr = DynamicArray::new();
+        // Actions
+        arr.push(10);arr.push(20);
+        // Assertions
+        expect(arr.pop()).toBe(Some(20));expect(arr.len()).toBe(1);
+    });
+});
+
+describe('pop_empty_returns_none', () => {
+    it('should work', () => {
+        // Setup
+        let arr = DynamicArray::<i32>::new();
+        // Actions
+        
+        // Assertions
+        expect(arr.pop()).toBe(None);
+    });
+});
+
+describe('get_valid_index', () => {
+    it('should work', () => {
+        // Setup
+        let mut arr = DynamicArray::new(); arr.push(5);
+        // Actions
+        
+        // Assertions
+        expect(arr.get(0)).toBe(Some(&5));
+    });
+});
+
+describe('get_out_of_bounds', () => {
+    it('should work', () => {
+        // Setup
+        let mut arr = DynamicArray::new(); arr.push(5);
+        // Actions
+        
+        // Assertions
+        expect(arr.get(1)).toBe(None);
+    });
+});
+

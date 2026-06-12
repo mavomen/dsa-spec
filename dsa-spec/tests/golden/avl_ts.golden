@@ -1,0 +1,267 @@
+/**
+ * AVLTree
+
+ * Time complexity: O(log n) search/insert/delete
+
+
+ * Space complexity: O(n)
+
+
+ * Invariants:
+
+ * - left.value < node.value < right.value
+
+ * - |left.height - right.height| <= 1
+
+ * - height = 1 + max(left.height, right.height)
+
+
+ */
+
+
+
+export interface AVLNode<T extends Ord & Clone> {
+    
+    value: T;
+    
+    left: AVLNode<T> | null;
+    
+    right: AVLNode<T> | null;
+    
+    height: number;
+    
+}
+
+export class AVLNodeImpl<T extends Ord & Clone> implements AVLNode<T> {
+    constructor(
+        
+        public value: T,
+        
+        public left: AVLNode<T> | null,
+        
+        public right: AVLNode<T> | null,
+        
+        public height: number
+        
+    ) {}
+
+    
+    /**
+     * new
+     
+     
+     * Postconditions:
+      * - root is None
+     
+     
+     */
+    new(): Self {
+        
+        // TODO: Implement new
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * insert
+     
+     
+     * Postconditions:
+      * - tree contains value
+      * - AVL invariant maintained
+     
+     
+     */
+    insert(value: T): boolean {
+        
+        // TODO: Implement insert
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * contains
+     
+     
+     
+     */
+    contains(value: T): boolean {
+        
+        // TODO: Implement contains
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * inorder
+     
+     
+     * Postconditions:
+      * - result is sorted ascending
+     
+     
+     */
+    inorder(): T[] {
+        
+        // TODO: Implement inorder
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * height
+     
+     
+     
+     */
+    height(): number {
+        
+        // TODO: Implement height
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * isEmpty
+     
+     
+     
+     */
+    isEmpty(): boolean {
+        
+        // TODO: Implement isEmpty
+        throw new Error('Not implemented');
+    }
+    
+}
+
+export interface AVLTree<T extends Ord & Clone> {
+    
+    root: AVLNode<T> | null;
+    
+}
+
+export class AVLTreeImpl<T extends Ord & Clone> implements AVLTree<T> {
+    constructor(
+        
+        public root: AVLNode<T> | null
+        
+    ) {}
+
+    
+    /**
+     * new
+     
+     
+     * Postconditions:
+      * - root is None
+     
+     
+     */
+    new(): Self {
+        
+        // TODO: Implement new
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * insert
+     
+     
+     * Postconditions:
+      * - tree contains value
+      * - AVL invariant maintained
+     
+     
+     */
+    insert(value: T): boolean {
+        
+        // TODO: Implement insert
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * contains
+     
+     
+     
+     */
+    contains(value: T): boolean {
+        
+        // TODO: Implement contains
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * inorder
+     
+     
+     * Postconditions:
+      * - result is sorted ascending
+     
+     
+     */
+    inorder(): T[] {
+        
+        // TODO: Implement inorder
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * height
+     
+     
+     
+     */
+    height(): number {
+        
+        // TODO: Implement height
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * isEmpty
+     
+     
+     
+     */
+    isEmpty(): boolean {
+        
+        // TODO: Implement isEmpty
+        throw new Error('Not implemented');
+    }
+    
+}
+
+
+
+// ========== Generated Jest tests ==========
+
+describe('insert_maintains_balance', () => {
+    it('should work', () => {
+        // Setup
+        let mut avl = AVLTree::new();
+        // Actions
+        avl.insert(1);avl.insert(2);avl.insert(3);
+        // Assertions
+        expect(avl.contains(2)).toBe(true);expect(avl.height()).toBe(2);expect(avl.inorder()).toBe(vec![1, 2, 3]);
+    });
+});
+
+describe('left_heavy_rebalance', () => {
+    it('should work', () => {
+        // Setup
+        let mut avl = AVLTree::new();
+        // Actions
+        avl.insert(3);avl.insert(2);avl.insert(1);
+        // Assertions
+        expect(avl.height()).toBe(2);expect(avl.inorder()).toBe(vec![1, 2, 3]);
+    });
+});
+
+describe('multiple_inserts_stay_balanced', () => {
+    it('should work', () => {
+        // Setup
+        let mut avl = AVLTree::new();
+        // Actions
+        avl.insert(10);avl.insert(20);avl.insert(30);avl.insert(40);avl.insert(50);avl.insert(25);
+        // Assertions
+        expect(avl.height() <= 3).toBe(true);
+    });
+});
+

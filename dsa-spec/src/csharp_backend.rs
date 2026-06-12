@@ -1,9 +1,10 @@
+use crate::assertion;
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
+use crate::casing;
 use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
 use serde::Serialize;
-use std::process::Command;
 use tera::Context;
 
 pub struct CSharpBackend {
@@ -16,43 +17,13 @@ impl CSharpBackend {
         Ok(CSharpBackend { engine })
     }
 
-    fn format_csharp(code: &str) -> Result<String, BackendError> {
-        let mut child = Command::new("dotnet")
-            .arg("format")
-            .arg("--no-restore")
-            .stdin(std::process::Stdio::piped())
-            .stdout(std::process::Stdio::piped())
-            .stderr(std::process::Stdio::piped())
-            .spawn()
-            .map_err(|e| BackendError::Formatter {
-                message: format!("Failed to spawn dotnet format: {e}"),
-            })?;
-
-        if let Some(stdin) = child.stdin.as_mut() {
-            use std::io::Write;
-            stdin
-                .write_all(code.as_bytes())
-                .map_err(|e| BackendError::Formatter {
-                    message: format!("Failed to write to dotnet format stdin: {e}"),
-                })?;
-        }
-
-        let output = child
-            .wait_with_output()
-            .map_err(|e| BackendError::Formatter {
-                message: format!("Failed to wait on dotnet format: {e}"),
-            })?;
-
-        if output.status.success() {
-            Ok(String::from_utf8_lossy(&output.stdout).to_string())
-        } else {
-            Err(BackendError::Formatter {
-                message: format!(
-                    "dotnet format error: {} (falling back to unformatted)",
-                    String::from_utf8_lossy(&output.stderr)
-                ),
-            })
-        }
+    fn format_csharp(_code: &str) -> Result<String, BackendError> {
+        // dotnet format only works on project files (requires .csproj + .NET SDK).
+        // The templates already emit clean C# with proper indentation — skip formatting.
+        // Users can run `dotnet format` manually on generated files if desired.
+        Err(BackendError::Formatter {
+            message: "C# formatting skipped: dotnet format requires a project file".into(),
+        })
     }
 
     pub(crate) fn to_csharp_type(typ: &Type) -> String {
@@ -110,6 +81,16 @@ impl CSharpBackend {
     }
 }
 
+fn translate_assertion(a: &str) -> String {
+    if let Some(expr) = assertion::parse_assert_bang(a) {
+        format!("Assert.IsTrue({})", expr.trim())
+    } else if let Some((left, right)) = assertion::parse_assert_eq(a) {
+        format!("Assert.AreEqual({}, {})", left, right)
+    } else {
+        a.to_string()
+    }
+}
+
 fn build_context(spec: &Spec) -> Context {
     let mut context = Context::new();
 
@@ -138,6 +119,14 @@ fn build_context(spec: &Spec) -> Context {
         .iter()
         .map(|s| StructContext {
             name: &s.name,
+            fields: s
+                .fields
+                .iter()
+                .map(|f| FieldContext {
+                    name: casing::to_pascal_case(&f.name),
+                    csharp_type: CSharpBackend::to_csharp_type(&f.field_type),
+                })
+                .collect(),
             generics: s
                 .generics
                 .iter()
@@ -150,14 +139,6 @@ fn build_context(spec: &Spec) -> Context {
                     },
                 })
                 .collect(),
-            fields: s
-                .fields
-                .iter()
-                .map(|f| FieldContext {
-                    name: &f.name,
-                    csharp_type: CSharpBackend::to_csharp_type(&f.field_type),
-                })
-                .collect(),
         })
         .collect();
     context.insert("structs", &structs);
@@ -168,12 +149,12 @@ fn build_context(spec: &Spec) -> Context {
         .map(|m| {
             let return_type = m.returns.as_deref().map(|r| Type::Simple(r.to_string()));
             MethodContext {
-                name: &m.name,
+                name: casing::to_pascal_case(&m.name),
                 params: m
                     .params
                     .iter()
                     .map(|p| ParamContext {
-                        name: &p.name,
+                        name: casing::to_camel_case(&p.name),
                         csharp_type: CSharpBackend::to_csharp_type(&p.param_type),
                     })
                     .collect(),
@@ -190,15 +171,28 @@ fn build_context(spec: &Spec) -> Context {
         .collect();
     context.insert("methods", &methods);
 
+    let translated_assertions: Vec<Vec<String>> = spec
+        .verification
+        .test_cases
+        .iter()
+        .map(|t| {
+            t.assertions
+                .iter()
+                .map(|a| translate_assertion(a))
+                .collect()
+        })
+        .collect();
+
     let tests: Vec<TestContext> = spec
         .verification
         .test_cases
         .iter()
-        .map(|t| TestContext {
+        .enumerate()
+        .map(|(i, t)| TestContext {
             name: &t.name,
             setup: t.setup.as_deref(),
             actions: &t.actions,
-            assertions: &t.assertions,
+            assertions: &translated_assertions[i],
         })
         .collect();
     context.insert("verification", &VerificationContext { test_cases: tests });
@@ -235,7 +229,7 @@ struct ContractsContext<'a> {
 struct StructContext<'a> {
     name: &'a str,
     generics: Vec<GenericParamContext<'a>>,
-    fields: Vec<FieldContext<'a>>,
+    fields: Vec<FieldContext>,
 }
 
 #[derive(Serialize)]
@@ -245,15 +239,15 @@ struct GenericParamContext<'a> {
 }
 
 #[derive(Serialize)]
-struct FieldContext<'a> {
-    name: &'a str,
+struct FieldContext {
+    name: String,
     csharp_type: String,
 }
 
 #[derive(Serialize)]
 struct MethodContext<'a> {
-    name: &'a str,
-    params: Vec<ParamContext<'a>>,
+    name: String,
+    params: Vec<ParamContext>,
     returns: Option<String>,
     throws_exception: bool,
     preconditions: &'a [String],
@@ -262,8 +256,8 @@ struct MethodContext<'a> {
 }
 
 #[derive(Serialize)]
-struct ParamContext<'a> {
-    name: &'a str,
+struct ParamContext {
+    name: String,
     csharp_type: String,
 }
 

@@ -1,5 +1,7 @@
+use crate::assertion;
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
+use crate::casing;
 use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
 use serde::Serialize;
@@ -75,6 +77,16 @@ impl TypeScriptBackend {
     }
 }
 
+fn translate_assertion(a: &str) -> String {
+    if let Some(expr) = assertion::parse_assert_bang(a) {
+        format!("expect({}).toBe(true)", expr.trim())
+    } else if let Some((left, right)) = assertion::parse_assert_eq(a) {
+        format!("expect({}).toBe({})", left, right)
+    } else {
+        a.to_string()
+    }
+}
+
 fn build_context(spec: &Spec) -> Context {
     let mut context = Context::new();
 
@@ -115,7 +127,7 @@ fn build_context(spec: &Spec) -> Context {
                 .fields
                 .iter()
                 .map(|f| FieldContext {
-                    name: &f.name,
+                    name: casing::to_camel_case(&f.name),
                     ts_type: TypeScriptBackend::to_typescript_type(&f.field_type),
                 })
                 .collect(),
@@ -129,12 +141,12 @@ fn build_context(spec: &Spec) -> Context {
         .map(|m| {
             let return_type = m.returns.as_deref().map(|r| Type::Simple(r.to_string()));
             MethodContext {
-                name: &m.name,
+                name: casing::to_camel_case(&m.name),
                 params: m
                     .params
                     .iter()
                     .map(|p| ParamContext {
-                        name: &p.name,
+                        name: casing::to_camel_case(&p.name),
                         ts_type: TypeScriptBackend::to_typescript_type(&p.param_type),
                     })
                     .collect(),
@@ -153,15 +165,28 @@ fn build_context(spec: &Spec) -> Context {
         .collect();
     context.insert("methods", &methods);
 
+    let translated_assertions: Vec<Vec<String>> = spec
+        .verification
+        .test_cases
+        .iter()
+        .map(|t| {
+            t.assertions
+                .iter()
+                .map(|a| translate_assertion(a))
+                .collect()
+        })
+        .collect();
+
     let tests: Vec<TestContext> = spec
         .verification
         .test_cases
         .iter()
-        .map(|t| TestContext {
+        .enumerate()
+        .map(|(i, t)| TestContext {
             name: &t.name,
             setup: t.setup.as_deref(),
             actions: &t.actions,
-            assertions: &t.assertions,
+            assertions: &translated_assertions[i],
         })
         .collect();
     context.insert("verification", &VerificationContext { test_cases: tests });
@@ -197,7 +222,7 @@ struct ContractsContext<'a> {
 struct StructContext<'a> {
     name: &'a str,
     generics: Vec<GenericParamContext<'a>>,
-    fields: Vec<FieldContext<'a>>,
+    fields: Vec<FieldContext>,
 }
 
 #[derive(Serialize)]
@@ -207,15 +232,15 @@ struct GenericParamContext<'a> {
 }
 
 #[derive(Serialize)]
-struct FieldContext<'a> {
-    name: &'a str,
+struct FieldContext {
+    name: String,
     ts_type: String,
 }
 
 #[derive(Serialize)]
 struct MethodContext<'a> {
-    name: &'a str,
-    params: Vec<ParamContext<'a>>,
+    name: String,
+    params: Vec<ParamContext>,
     returns: Option<String>,
     throws_exception: bool,
     preconditions: &'a [String],
@@ -224,8 +249,8 @@ struct MethodContext<'a> {
 }
 
 #[derive(Serialize)]
-struct ParamContext<'a> {
-    name: &'a str,
+struct ParamContext {
+    name: String,
     ts_type: String,
 }
 

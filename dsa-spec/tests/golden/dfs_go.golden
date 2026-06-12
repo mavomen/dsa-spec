@@ -1,0 +1,91 @@
+// DFS
+
+// Time complexity: O(V + E)
+
+
+// Space complexity: O(V)
+
+
+// Invariants:
+
+// - visited set contains no duplicates
+
+// - all visited vertices exist in graph
+
+
+
+package dfs
+
+import "testing"
+
+
+// No structs – standalone functions
+
+// Dfs
+
+// Preconditions:
+ // - start vertex exists in graph
+
+
+
+// Postconditions:
+ // - result contains all reachable vertices from start
+ // - result has no duplicates
+ // - order follows depth-first traversal
+
+
+
+func Dfs(graph &Graph<T>, start T) []T {
+	
+	// TODO: Implement Dfs
+	panic("not implemented")
+}
+
+// DfsRecursiveHelper
+
+
+
+func DfsRecursiveHelper(graph &Graph<T>, vertex T, visited &mut HashSet<T>, result &mut Vec<T>)  {
+	
+	// TODO: Implement DfsRecursiveHelper
+	panic("not implemented")
+}
+
+
+
+// ========== Generated tests ==========
+
+func Testdfs_simple_path(t *testing.T) {
+	let mut g = Graph::new(false);
+g.add_vertex(1);
+g.add_vertex(2);
+g.add_vertex(3);
+g.add_edge(1, 2);
+g.add_edge(2, 3);
+
+	
+	if dfs(&g, 1) != vec![1, 2, 3] { t.Errorf("got %v, want %v", dfs(&g, 1), vec![1, 2, 3]) }
+}
+
+func Testdfs_disconnected(t *testing.T) {
+	let mut g = Graph::new(false);
+g.add_vertex(1);
+g.add_vertex(2);
+
+	
+	if dfs(&g, 1) != vec![1] { t.Errorf("got %v, want %v", dfs(&g, 1), vec![1]) }
+}
+
+func Testdfs_cyclic_graph(t *testing.T) {
+	let mut g = Graph::new(true);
+g.add_vertex(1);
+g.add_vertex(2);
+g.add_vertex(3);
+g.add_edge(1, 2);
+g.add_edge(2, 3);
+g.add_edge(3, 1);
+
+	
+	if dfs(&g, 1).len() != 3 { t.Errorf("got %v, want %v", dfs(&g, 1).len(), 3) }
+}
+

@@ -1,0 +1,97 @@
+/**
+ * Quicksort
+
+ * Time complexity: O(n log n) average, O(n^2) worst
+
+
+ * Space complexity: O(log n) average
+
+
+ */
+
+
+
+
+/**
+ * quicksort
+ 
+ * Preconditions:
+  * - arr is valid slice
+ 
+ 
+ * Postconditions:
+  * - arr is sorted ascending
+ 
+ 
+ */
+export function quicksort(arr: T[]): void {
+    
+    // TODO: Implement quicksort
+    throw new Error('Not implemented');
+}
+
+/**
+ * partition
+ 
+ 
+ * Postconditions:
+  * - pivot is in final sorted position
+  * - elements left of pivot <= pivot
+  * - elements right of pivot >= pivot
+ 
+ 
+ */
+export function partition(arr: T[], low: number, high: number): number {
+    
+    // TODO: Implement partition
+    throw new Error('Not implemented');
+}
+
+
+
+// ========== Generated Jest tests ==========
+
+describe('sort_unsorted_array', () => {
+    it('should work', () => {
+        // Setup
+        let mut arr = vec![3, 1, 4, 1, 5, 9, 2, 6];
+        // Actions
+        quicksort(&mut arr);
+        // Assertions
+        expect(arr).toBe(vec![1, 1, 2, 3, 4, 5, 6, 9]);
+    });
+});
+
+describe('sort_empty_array', () => {
+    it('should work', () => {
+        // Setup
+        let mut arr: Vec<i32> = vec![];
+        // Actions
+        quicksort(&mut arr);
+        // Assertions
+        expect(arr).toBe(vec![]);
+    });
+});
+
+describe('sort_single_element', () => {
+    it('should work', () => {
+        // Setup
+        let mut arr = vec![42];
+        // Actions
+        quicksort(&mut arr);
+        // Assertions
+        expect(arr).toBe(vec![42]);
+    });
+});
+
+describe('sort_already_sorted', () => {
+    it('should work', () => {
+        // Setup
+        let mut arr = vec![1, 2, 3, 4, 5];
+        // Actions
+        quicksort(&mut arr);
+        // Assertions
+        expect(arr).toBe(vec![1, 2, 3, 4, 5]);
+    });
+});
+

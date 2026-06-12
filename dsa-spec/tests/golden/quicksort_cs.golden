@@ -1,0 +1,123 @@
+/// <summary>
+/// Quicksort
+
+/// Time complexity: O(n log n) average, O(n^2) worst
+
+
+/// Space complexity: O(log n) average
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Quicksort
+{
+
+
+public static class QuicksortMethods
+{
+    
+    /// <summary>
+    /// Quicksort
+    /// 
+    /// Preconditions:
+    /// - arr is valid slice
+    /// 
+    /// 
+    /// Postconditions:
+    /// - arr is sorted ascending
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public static void Quicksort(T[] arr)
+    {
+        
+        // TODO: Implement Quicksort
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Partition
+    /// 
+    /// 
+    /// Postconditions:
+    /// - pivot is in final sorted position
+    /// - elements left of pivot <= pivot
+    /// - elements right of pivot >= pivot
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public static int Partition(T[] arr, int low, int high)
+    {
+        
+        // TODO: Implement Partition
+        throw new NotImplementedException();
+    }
+    
+}
+
+
+// ========== Generated xUnit tests ==========
+
+public class sort_unsorted_arrayTests
+{
+    [Fact]
+    public void sort_unsorted_array_Test()
+    {
+        // Setup
+        let mut arr = vec![3, 1, 4, 1, 5, 9, 2, 6];
+        // Actions
+        quicksort(&mut arr);
+        // Assertions
+        Assert.AreEqual(arr, vec![1, 1, 2, 3, 4, 5, 6, 9]);
+    }
+}
+
+public class sort_empty_arrayTests
+{
+    [Fact]
+    public void sort_empty_array_Test()
+    {
+        // Setup
+        let mut arr: Vec<i32> = vec![];
+        // Actions
+        quicksort(&mut arr);
+        // Assertions
+        Assert.AreEqual(arr, vec![]);
+    }
+}
+
+public class sort_single_elementTests
+{
+    [Fact]
+    public void sort_single_element_Test()
+    {
+        // Setup
+        let mut arr = vec![42];
+        // Actions
+        quicksort(&mut arr);
+        // Assertions
+        Assert.AreEqual(arr, vec![42]);
+    }
+}
+
+public class sort_already_sortedTests
+{
+    [Fact]
+    public void sort_already_sorted_Test()
+    {
+        // Setup
+        let mut arr = vec![1, 2, 3, 4, 5];
+        // Actions
+        quicksort(&mut arr);
+        // Assertions
+        Assert.AreEqual(arr, vec![1, 2, 3, 4, 5]);
+    }
+}
+
+}

@@ -1,0 +1,53 @@
+/// Mergesort
+
+/// Time complexity: O(n log n) always
+
+/// Space complexity: O(n)
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_sort_unsorted_array() {
+        let mut arr = vec![5, 3, 8, 1, 2];
+        mergesort(&mut arr);
+        assert_eq!(arr, vec![1, 2, 3, 5, 8]);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_sort_empty_array() {
+        let mut arr: Vec<i32> = vec![];
+        mergesort(&mut arr);
+        assert_eq!(arr, vec![]);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_sort_single_element() {
+        let mut arr = vec![7];
+        mergesort(&mut arr);
+        assert_eq!(arr, vec![7]);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_sort_already_sorted() {
+        let mut arr = vec![1, 2, 3, 4, 5];
+        mergesort(&mut arr);
+        assert_eq!(arr, vec![1, 2, 3, 4, 5]);
+    }
+}

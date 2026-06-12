@@ -1,0 +1,78 @@
+// Quicksort
+
+// Time complexity: O(n log n) average, O(n^2) worst
+
+
+// Space complexity: O(log n) average
+
+
+
+package quicksort
+
+import "testing"
+
+
+// No structs – standalone functions
+
+// Quicksort
+
+// Preconditions:
+ // - arr is valid slice
+
+
+
+// Postconditions:
+ // - arr is sorted ascending
+
+
+
+func Quicksort(arr []T)  {
+	
+	// TODO: Implement Quicksort
+	panic("not implemented")
+}
+
+// Partition
+
+
+// Postconditions:
+ // - pivot is in final sorted position
+ // - elements left of pivot <= pivot
+ // - elements right of pivot >= pivot
+
+
+
+func Partition(arr []T, low int, high int) int {
+	
+	// TODO: Implement Partition
+	panic("not implemented")
+}
+
+
+
+// ========== Generated tests ==========
+
+func Testsort_unsorted_array(t *testing.T) {
+	let mut arr = vec![3, 1, 4, 1, 5, 9, 2, 6];
+	quicksort(&mut arr)
+	if arr != vec![1, 1, 2, 3, 4, 5, 6, 9] { t.Errorf("got %v, want %v", arr, vec![1, 1, 2, 3, 4, 5, 6, 9]) }
+}
+
+func Testsort_empty_array(t *testing.T) {
+	let mut arr: Vec<i32> = vec![];
+	quicksort(&mut arr)
+	if arr != vec![] { t.Errorf("got %v, want %v", arr, vec![]) }
+}
+
+func Testsort_single_element(t *testing.T) {
+	let mut arr = vec![42];
+	quicksort(&mut arr)
+	if arr != vec![42] { t.Errorf("got %v, want %v", arr, vec![42]) }
+}
+
+func Testsort_already_sorted(t *testing.T) {
+	let mut arr = vec![1, 2, 3, 4, 5];
+	quicksort(&mut arr)
+	if arr != vec![1, 2, 3, 4, 5] { t.Errorf("got %v, want %v", arr, vec![1, 2, 3, 4, 5]) }
+}
+

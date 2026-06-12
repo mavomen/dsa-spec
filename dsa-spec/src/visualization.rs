@@ -6,6 +6,7 @@ pub fn generate(spec: &Spec, format: &str) -> String {
     match format.to_lowercase().as_str() {
         "dot" | "graphviz" => generate_dot(spec),
         "mermaid" => generate_mermaid(spec),
+        "sequence" => generate_sequence(spec),
         _ => generate_dot(spec),
     }
 }
@@ -17,7 +18,10 @@ pub fn generate_dot(spec: &Spec) -> String {
 
     dot.push_str(&format!("digraph \"{}\" {{\n", spec.metadata.name));
     dot.push_str("    rankdir=TB;\n");
-    dot.push_str("    node [shape=record, fontname=\"monospace\"];\n");
+    dot.push_str("    ranksep=0.6;\n");
+    dot.push_str("    nodesep=0.4;\n");
+    dot.push_str("    node [shape=record, fontname=\"monospace\", fontsize=10];\n");
+    dot.push_str("    edge [fontname=\"monospace\", fontsize=9, arrowsize=0.7];\n");
     dot.push_str("    splines=true;\n\n");
 
     if spec.structs.is_empty() {
@@ -68,9 +72,16 @@ pub fn generate_dot(spec: &Spec) -> String {
             for target in &targets {
                 let sname = &s.name;
                 let edge = if sname == target {
-                    format!("    {}:{} -> {} [dir=both];\n", sname, f.name, target)
+                    // Self-reference: use constraint=false to avoid forcing layout rank
+                    format!(
+                        "    {}:{} -> {} [label=\"{}\", dir=both, constraint=false];\n",
+                        sname, f.name, target, f.name
+                    )
                 } else {
-                    format!("    {}:{} -> {};\n", sname, f.name, target)
+                    format!(
+                        "    {}:{} -> {} [label=\"{}\"];\n",
+                        sname, f.name, target, f.name
+                    )
                 };
                 dot.push_str(&edge);
             }
@@ -156,6 +167,41 @@ fn escape_mermaid_type(s: &str) -> String {
     s.replace(['<', '>'], "~").replace('&', "&amp;")
 }
 
+/// Generate a Mermaid sequence diagram from test cases.
+///
+/// Each test case is rendered as a separate sequenceDiagram fragment.
+pub fn generate_sequence(spec: &Spec) -> String {
+    let actor = &spec.metadata.name;
+    let mut out = String::new();
+
+    if spec.verification.test_cases.is_empty() {
+        return out;
+    }
+
+    for tc in &spec.verification.test_cases {
+        out.push_str("sequenceDiagram\n");
+        out.push_str(&format!(
+            "    participant Client\n    participant {actor}\n\n"
+        ));
+
+        if let Some(setup) = &tc.setup {
+            out.push_str(&format!("    Note over {actor}: setup: {setup}\n"));
+        }
+
+        for action in &tc.actions {
+            out.push_str(&format!("    Client->>{actor}: {action}\n"));
+        }
+
+        for assertion in &tc.assertions {
+            out.push_str(&format!("    Note over {actor}: assert: {assertion}\n"));
+        }
+
+        out.push('\n');
+    }
+
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -237,7 +283,11 @@ mod tests {
         assert!(dot.contains("digraph \"SinglyLinkedList\""));
         assert!(dot.contains("Node"));
         assert!(dot.contains("Option<Box<Node<T>>>"));
-        assert!(dot.contains("Node:next -> Node [dir=both]"));
+        assert!(dot.contains("Node:next -> Node"));
+        // Self-referencing edge includes label, dir=both, and constraint=false
+        assert!(dot.contains(r#"label="next""#));
+        assert!(dot.contains("dir=both"));
+        assert!(dot.contains("constraint=false"));
     }
 
     #[test]
@@ -259,11 +309,14 @@ mod tests {
         assert!(dot.contains("digraph \"BinarySearchTree\""));
         assert!(dot.contains("BSTNode"));
         assert!(dot.contains("BinarySearchTree"));
-        // BSTNode self-edges
+        // BSTNode self-edges with labels
         assert!(dot.contains("BSTNode:left -> BSTNode"));
         assert!(dot.contains("BSTNode:right -> BSTNode"));
+        assert!(dot.contains(r#"label="left""#));
+        assert!(dot.contains(r#"label="right""#));
         // Tree -> Node edge
         assert!(dot.contains("BinarySearchTree:root -> BSTNode"));
+        assert!(dot.contains(r#"label="root""#));
     }
 
     #[test]
@@ -311,8 +364,8 @@ mod tests {
         assert!(m.contains("+value: T"));
         // Mermaid uses ~ instead of <>
         assert!(m.contains("Option~Box~BSTNode~T~~"));
-        // Relationship
-        assert!(m.contains("BSTNode --> BSTNode"));
+        // Mermaid now shows relationship labels
+        assert!(m.contains("BSTNode --> BSTNode : left"));
     }
 
     #[test]
@@ -324,7 +377,7 @@ mod tests {
         );
         let spec = make_spec_with_structs("List", vec![node, list], vec![]);
         let m = generate_mermaid(&spec);
-        assert!(m.contains("SinglyLinkedList --> Node"));
+        assert!(m.contains("SinglyLinkedList --> Node : head"));
     }
 
     #[test]
@@ -388,5 +441,73 @@ mod tests {
         assert!(dot.contains("Node:next -> Node"));
         assert!(dot.contains("DoublyLinkedList:head -> Node"));
         assert!(dot.contains("DoublyLinkedList:tail -> Node"));
+        assert!(dot.contains(r#"label="prev""#));
+        assert!(dot.contains(r#"label="next""#));
+        assert!(dot.contains(r#"label="head""#));
+        assert!(dot.contains(r#"label="tail""#));
+    }
+
+    #[test]
+    fn test_sequence_format_dispatch() {
+        use crate::ast::TestCase;
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Stack".into(),
+                category: "linear".into(),
+                ..Default::default()
+            },
+            structs: vec![],
+            methods: vec![],
+            contracts: Contracts::default(),
+            verification: Verification {
+                test_cases: vec![TestCase {
+                    name: "test".into(),
+                    setup: None,
+                    actions: vec!["do_thing()".into()],
+                    assertions: vec![],
+                }],
+            },
+        };
+        let result = generate(&spec, "sequence");
+        assert!(result.contains("sequenceDiagram"));
+    }
+
+    #[test]
+    fn test_sequence_with_actions_and_assertions() {
+        use crate::ast::TestCase;
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Stack".into(),
+                category: "linear".into(),
+                ..Default::default()
+            },
+            structs: vec![],
+            methods: vec![],
+            contracts: Contracts::default(),
+            verification: Verification {
+                test_cases: vec![TestCase {
+                    name: "push_pop".into(),
+                    setup: Some("let mut s = Stack::new();".into()),
+                    actions: vec!["s.push(1)".into(), "s.push(2)".into()],
+                    assertions: vec!["assert_eq!(s.pop(), 2)".into()],
+                }],
+            },
+        };
+        let seq = generate_sequence(&spec);
+        assert!(seq.contains("sequenceDiagram"));
+        assert!(seq.contains("participant Stack"));
+        assert!(seq.contains("Client->>Stack: s.push(1)"));
+        assert!(seq.contains("Client->>Stack: s.push(2)"));
+        assert!(seq.contains("Note over Stack: setup: let mut s = Stack::new()"));
+        assert!(seq.contains("Note over Stack: assert: assert_eq!(s.pop(), 2)"));
+    }
+
+    #[test]
+    fn test_sequence_empty_test_cases() {
+        let spec = make_spec_with_structs("Empty", vec![], vec![]);
+        let seq = generate_sequence(&spec);
+        assert!(seq.is_empty());
     }
 }

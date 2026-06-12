@@ -1,0 +1,135 @@
+/// CircularBuffer
+
+/// Time complexity: O(1) enqueue/dequeue
+
+/// Space complexity: O(n)
+
+///
+/// # Invariants
+
+/// - length <= capacity
+
+/// - 0 <= head < capacity
+
+/// - 0 <= tail < capacity
+
+pub struct CircularBuffer<T: Clone + Default> {
+    buffer: Vec<Option<T>>,
+
+    head: usize,
+
+    tail: usize,
+
+    size: usize,
+
+    capacity: usize,
+}
+
+impl<T: Clone + Default> CircularBuffer<T> {
+    /// # Contracts
+
+    /// - **Precondition:** capacity > 0
+
+    /// - **Postcondition:** is_empty() == true
+
+    /// - **Postcondition:** capacity == capacity
+
+    pub fn new(&self, capacity: usize) -> Self {
+        // TODO: Implement new
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Precondition:** size < capacity
+
+    /// - **Postcondition:** size == old.size + 1
+
+    pub fn enqueue(&self, item: T) -> Result<(), String> {
+        // TODO: Implement enqueue
+        todo!()
+    }
+
+    /// # Contracts
+
+    /// - **Precondition:** size > 0
+
+    /// - **Postcondition:** size == old.size - 1
+
+    pub fn dequeue(&self) -> Option<T> {
+        // TODO: Implement dequeue
+        todo!()
+    }
+
+    pub fn is_full(&self) -> bool {
+        // TODO: Implement is_full
+        todo!()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        // TODO: Implement is_empty
+        todo!()
+    }
+
+    pub fn len(&self) -> usize {
+        // TODO: Implement len
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_enqueue_dequeue_fifo() {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);
+        buf.enqueue(2);
+        assert_eq!(buf.dequeue(), Some(1));
+        assert_eq!(buf.dequeue(), Some(2));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_full_buffer_prevents_enqueue() {
+        let mut buf = CircularBuffer::new(1);
+        buf.enqueue(42);
+        assert!(buf.is_full());
+        assert!(buf.enqueue(43).is_err());
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_buffer_returns_none() {
+        let buf = CircularBuffer::<i32>::new(5);
+
+        assert_eq!(buf.dequeue(), None);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_wrap_around_works() {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);
+        buf.enqueue(2);
+        buf.dequeue();
+        buf.enqueue(3);
+        buf.enqueue(4);
+        assert_eq!(buf.dequeue(), Some(2));
+        assert_eq!(buf.dequeue(), Some(3));
+        assert_eq!(buf.dequeue(), Some(4));
+    }
+}

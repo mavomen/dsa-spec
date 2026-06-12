@@ -1,3 +1,4 @@
+use crate::assertion;
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
 use crate::error::BackendError;
@@ -131,6 +132,16 @@ pub(crate) fn is_result_type(typ: &Type) -> bool {
     }
 }
 
+fn translate_assertion(a: &str) -> String {
+    if let Some(expr) = assertion::parse_assert_bang(a) {
+        format!("assert {}", expr.trim())
+    } else if let Some((left, right)) = assertion::parse_assert_eq(a) {
+        format!("assert {} == {}", left, right)
+    } else {
+        a.to_string()
+    }
+}
+
 fn build_context(spec: &Spec) -> Context {
     let mut context = Context::new();
 
@@ -204,15 +215,28 @@ fn build_context(spec: &Spec) -> Context {
         .collect();
     context.insert("methods", &methods);
 
+    let translated_assertions: Vec<Vec<String>> = spec
+        .verification
+        .test_cases
+        .iter()
+        .map(|t| {
+            t.assertions
+                .iter()
+                .map(|a| translate_assertion(a))
+                .collect()
+        })
+        .collect();
+
     let tests: Vec<TestContext> = spec
         .verification
         .test_cases
         .iter()
-        .map(|t| TestContext {
+        .enumerate()
+        .map(|(i, t)| TestContext {
             name: &t.name,
             setup: t.setup.as_deref(),
             actions: &t.actions,
-            assertions: &t.assertions,
+            assertions: &translated_assertions[i],
         })
         .collect();
     context.insert("verification", &VerificationContext { test_cases: tests });

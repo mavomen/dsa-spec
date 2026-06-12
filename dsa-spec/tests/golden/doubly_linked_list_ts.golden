@@ -1,0 +1,301 @@
+/**
+ * DoublyLinkedList
+
+ * Time complexity: O(1) insert/remove at head/tail, O(n) search
+
+
+ * Space complexity: O(n)
+
+
+ * Invariants:
+
+ * - no cycles
+
+ * - for each node, node.next.prev == node
+
+
+ */
+
+
+
+export interface Node<T extends Clone> {
+    
+    value: T;
+    
+    prev: Node<T> | null;
+    
+    next: Node<T> | null;
+    
+}
+
+export class NodeImpl<T extends Clone> implements Node<T> {
+    constructor(
+        
+        public value: T,
+        
+        public prev: Node<T> | null,
+        
+        public next: Node<T> | null
+        
+    ) {}
+
+    
+    /**
+     * new
+     
+     
+     * Postconditions:
+      * - head is None
+      * - tail is None
+     
+     
+     */
+    new(): Self {
+        
+        // TODO: Implement new
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * pushFront
+     
+     
+     * Postconditions:
+      * - head.value == value
+     
+     
+     */
+    pushFront(value: T): void {
+        
+        // TODO: Implement pushFront
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * pushBack
+     
+     
+     * Postconditions:
+      * - tail.value == value
+     
+     
+     */
+    pushBack(value: T): void {
+        
+        // TODO: Implement pushBack
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * popFront
+     
+     * Preconditions:
+      * - !is_empty()
+     
+     
+     
+     */
+    popFront(): T | null {
+        
+        // TODO: Implement popFront
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * popBack
+     
+     * Preconditions:
+      * - !is_empty()
+     
+     
+     
+     */
+    popBack(): T | null {
+        
+        // TODO: Implement popBack
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * isEmpty
+     
+     
+     
+     */
+    isEmpty(): boolean {
+        
+        // TODO: Implement isEmpty
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * len
+     
+     
+     
+     */
+    len(): number {
+        
+        // TODO: Implement len
+        throw new Error('Not implemented');
+    }
+    
+}
+
+export interface DoublyLinkedList<T extends Clone> {
+    
+    head: Node<T> | null;
+    
+    tail: Node<T> | null;
+    
+}
+
+export class DoublyLinkedListImpl<T extends Clone> implements DoublyLinkedList<T> {
+    constructor(
+        
+        public head: Node<T> | null,
+        
+        public tail: Node<T> | null
+        
+    ) {}
+
+    
+    /**
+     * new
+     
+     
+     * Postconditions:
+      * - head is None
+      * - tail is None
+     
+     
+     */
+    new(): Self {
+        
+        // TODO: Implement new
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * pushFront
+     
+     
+     * Postconditions:
+      * - head.value == value
+     
+     
+     */
+    pushFront(value: T): void {
+        
+        // TODO: Implement pushFront
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * pushBack
+     
+     
+     * Postconditions:
+      * - tail.value == value
+     
+     
+     */
+    pushBack(value: T): void {
+        
+        // TODO: Implement pushBack
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * popFront
+     
+     * Preconditions:
+      * - !is_empty()
+     
+     
+     
+     */
+    popFront(): T | null {
+        
+        // TODO: Implement popFront
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * popBack
+     
+     * Preconditions:
+      * - !is_empty()
+     
+     
+     
+     */
+    popBack(): T | null {
+        
+        // TODO: Implement popBack
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * isEmpty
+     
+     
+     
+     */
+    isEmpty(): boolean {
+        
+        // TODO: Implement isEmpty
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * len
+     
+     
+     
+     */
+    len(): number {
+        
+        // TODO: Implement len
+        throw new Error('Not implemented');
+    }
+    
+}
+
+
+
+// ========== Generated Jest tests ==========
+
+describe('push_front_pop_front', () => {
+    it('should work', () => {
+        // Setup
+        let mut list = DoublyLinkedList::new();
+        // Actions
+        list.push_front(1);list.push_front(2);
+        // Assertions
+        expect(list.pop_front()).toBe(Some(2));expect(list.pop_front()).toBe(Some(1));
+    });
+});
+
+describe('push_back_pop_back', () => {
+    it('should work', () => {
+        // Setup
+        let mut list = DoublyLinkedList::new();
+        // Actions
+        list.push_back(1);list.push_back(2);
+        // Assertions
+        expect(list.pop_back()).toBe(Some(2));expect(list.pop_back()).toBe(Some(1));
+    });
+});
+
+describe('mixed_operations', () => {
+    it('should work', () => {
+        // Setup
+        let mut list = DoublyLinkedList::new();
+        // Actions
+        list.push_front(1);list.push_back(3);list.push_front(0);
+        // Assertions
+        expect(list.pop_front()).toBe(Some(0));expect(list.pop_back()).toBe(Some(3));expect(list.pop_back()).toBe(Some(1));
+    });
+});
+

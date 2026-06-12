@@ -1,0 +1,159 @@
+"""
+CircularBuffer
+
+Time complexity: O(1) enqueue/dequeue
+
+
+Space complexity: O(n)
+
+
+# Invariants
+
+# - length <= capacity
+
+# - 0 <= head < capacity
+
+# - 0 <= tail < capacity
+
+
+"""
+
+from dataclasses import dataclass
+from typing import TypeVar, Generic, Optional, List, Dict
+import pytest
+
+
+
+T = TypeVar('T')
+
+
+@dataclass
+class CircularBuffer(Generic[T]):
+    """CircularBuffer"""
+    
+    buffer: List[Optional[T]]
+    
+    head: int
+    
+    tail: int
+    
+    size: int
+    
+    capacity: int
+    
+
+    
+    def new(self, capacity: int) -> Self:
+        """
+        
+        Preconditions:
+        - capacity > 0
+        
+        
+        Postconditions:
+        - is_empty() == true
+        - capacity == capacity
+        
+        
+        """
+        
+        # TODO: Implement new
+        raise NotImplementedError
+    
+    def enqueue(self, item: T) -> ():
+        """
+        
+        Preconditions:
+        - size < capacity
+        
+        
+        Postconditions:
+        - size == old.size + 1
+        
+        
+        Raises:
+            Exception: on error (from Result type)
+        
+        """
+        
+        # TODO: Implement enqueue
+        raise NotImplementedError
+    
+    def dequeue(self) -> Optional[T]:
+        """
+        
+        Preconditions:
+        - size > 0
+        
+        
+        Postconditions:
+        - size == old.size - 1
+        
+        
+        """
+        
+        # TODO: Implement dequeue
+        raise NotImplementedError
+    
+    def is_full(self) -> bool:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement is_full
+        raise NotImplementedError
+    
+    def is_empty(self) -> bool:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement is_empty
+        raise NotImplementedError
+    
+    def len(self) -> int:
+        """
+        
+        
+        
+        """
+        
+        # TODO: Implement len
+        raise NotImplementedError
+    
+
+
+
+# ========== Generated pytest tests ==========
+
+def test_enqueue_dequeue_fifo():
+    """Test: enqueue_dequeue_fifo"""
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)
+    assert buf.dequeue() == Some(1)assert buf.dequeue() == Some(2)
+
+def test_full_buffer_prevents_enqueue():
+    """Test: full_buffer_prevents_enqueue"""
+    let mut buf = CircularBuffer::new(1);
+    buf.enqueue(42)
+    assert buf.is_full()assert buf.enqueue(43).is_err()
+
+def test_empty_buffer_returns_none():
+    """Test: empty_buffer_returns_none"""
+    let buf = CircularBuffer::<i32>::new(5);
+    
+    assert buf.dequeue() == None
+
+def test_wrap_around_works():
+    """Test: wrap_around_works"""
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
+    assert buf.dequeue() == Some(2)assert buf.dequeue() == Some(3)assert buf.dequeue() == Some(4)
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

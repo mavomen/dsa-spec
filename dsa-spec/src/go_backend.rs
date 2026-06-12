@@ -1,5 +1,7 @@
+use crate::assertion;
 use crate::ast::{Spec, Type};
 use crate::backend::Backend;
+use crate::casing;
 use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
 use serde::Serialize;
@@ -121,6 +123,16 @@ impl GoBackend {
     }
 }
 
+fn translate_assertion(a: &str) -> String {
+    if let Some(expr) = assertion::parse_assert_bang(a) {
+        format!("if !({expr}) {{ t.Errorf(\"assertion failed: {expr}\") }}")
+    } else if let Some((left, right)) = assertion::parse_assert_eq(a) {
+        format!("if {left} != {right} {{ t.Errorf(\"got %v, want %v\", {left}, {right}) }}")
+    } else {
+        a.to_string()
+    }
+}
+
 fn build_context(spec: &Spec) -> Context {
     let mut context = Context::new();
 
@@ -183,7 +195,7 @@ fn build_context(spec: &Spec) -> Context {
         .map(|m| {
             let return_type = m.returns.as_deref().map(|r| Type::Simple(r.to_string()));
             MethodContext {
-                name: m.name.clone(),
+                name: casing::to_pascal_case(&m.name),
                 params: m
                     .params
                     .iter()
@@ -213,7 +225,11 @@ fn build_context(spec: &Spec) -> Context {
             name: t.name.clone(),
             setup: t.setup.clone(),
             actions: t.actions.clone(),
-            assertions: t.assertions.clone(),
+            assertions: t
+                .assertions
+                .iter()
+                .map(|a| translate_assertion(a))
+                .collect(),
         })
         .collect();
     context.insert("verification", &VerificationContext { test_cases: tests });

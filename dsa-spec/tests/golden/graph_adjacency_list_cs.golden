@@ -1,0 +1,208 @@
+/// <summary>
+/// Graph
+
+/// Time complexity: O(V+E) for traversal
+
+
+/// Space complexity: O(V+E)
+
+
+/// Invariants:
+
+/// - all edges reference valid vertices
+
+/// - vertex count >= 0
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Graph
+{
+
+
+public class Graph<T>
+    where T : Clone, Hash, Eq
+
+{
+    
+    public HashMap<T, Vec<T>> AdjacencyList { get; set; }
+    
+    public bool Directed { get; set; }
+    
+
+    
+    /// <summary>
+    /// New
+    /// 
+    /// 
+    /// Postconditions:
+    /// - vertex_count == 0
+    /// - edge_count == 0
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public Self New(bool directed)
+    {
+        
+        // TODO: Implement New
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// AddVertex
+    /// 
+    /// 
+    /// Postconditions:
+    /// - vertex exists in graph
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public bool AddVertex(T vertex)
+    {
+        
+        // TODO: Implement AddVertex
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// AddEdge
+    /// 
+    /// Preconditions:
+    /// - from and to exist in graph
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public bool AddEdge(T from, T to)
+    {
+        
+        // TODO: Implement AddEdge
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Neighbors
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public &Vec<T>? Neighbors(T vertex)
+    {
+        
+        // TODO: Implement Neighbors
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// VertexCount
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public int VertexCount()
+    {
+        
+        // TODO: Implement VertexCount
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// EdgeCount
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public int EdgeCount()
+    {
+        
+        // TODO: Implement EdgeCount
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// HasVertex
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public bool HasVertex(T vertex)
+    {
+        
+        // TODO: Implement HasVertex
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// HasEdge
+    /// 
+    /// 
+    /// 
+    /// Consider using LINQ for expressive iteration and transformations.
+    /// </summary>
+    public bool HasEdge(T from, T to)
+    {
+        
+        // TODO: Implement HasEdge
+        throw new NotImplementedException();
+    }
+    
+}
+
+
+
+// ========== Generated xUnit tests ==========
+
+public class add_vertex_and_edgeTests
+{
+    [Fact]
+    public void add_vertex_and_edge_Test()
+    {
+        // Setup
+        let mut g = Graph::new(false);
+        // Actions
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        // Assertions
+        Assert.IsTrue(g.has_vertex(1));Assert.IsTrue(g.has_vertex(2));Assert.IsTrue(g.has_edge(1, 2));Assert.AreEqual(g.vertex_count(), 2);Assert.AreEqual(g.edge_count(), 1);
+    }
+}
+
+public class undirected_graph_symmetric_edgesTests
+{
+    [Fact]
+    public void undirected_graph_symmetric_edges_Test()
+    {
+        // Setup
+        let mut g = Graph::new(false);
+        // Actions
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        // Assertions
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(g.has_edge(2, 1));
+    }
+}
+
+public class directed_graph_no_symmetryTests
+{
+    [Fact]
+    public void directed_graph_no_symmetry_Test()
+    {
+        // Setup
+        let mut g = Graph::new(true);
+        // Actions
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        // Assertions
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(!g.has_edge(2, 1));
+    }
+}
+
+}
