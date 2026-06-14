@@ -235,6 +235,7 @@ Casing logic lives in `src/casing.rs` and is shared by all backends.
 ```
 dsa-spec generate <spec> [--lang <lang>] [--output <path>] [--contracts]
 dsa-spec validate <spec>
+dsa-spec doc <spec> [--output <path>]
 dsa-spec verify <spec> [--lang <lang>] [--backend <backend>]
 ```
 

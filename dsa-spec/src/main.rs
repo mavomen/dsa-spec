@@ -25,6 +25,8 @@ mod typescript_backend;
 mod validator;
 mod visualization;
 
+mod doc_gen;
+
 use backend::Backend;
 
 /// Result type for backend instantiation across one or more languages.
@@ -102,6 +104,15 @@ enum Command {
         /// Target spec version (default: latest)
         #[arg(short, long, default_value = "2.0")]
         target_version: String,
+    },
+    /// Generate markdown documentation from a spec
+    Doc {
+        /// Path to the spec YAML file
+        spec: PathBuf,
+
+        /// Output file (stdout if omitted)
+        #[arg(short, long)]
+        output: Option<PathBuf>,
     },
     /// Verify contracts — generates stubs with contract assertions
     Verify {
@@ -372,6 +383,30 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     tracing::error!(error = %e, "migration failed");
                     eprintln!("Migration error: {e}");
                     std::process::exit(1);
+                }
+            }
+        }
+        Command::Doc { spec, output } => {
+            let yaml = fs::read_to_string(&spec)?;
+            let parsed = parser::parse(&yaml)?;
+            let doc = doc_gen::generate_doc(&parsed);
+            match output {
+                Some(path) => {
+                    fs::write(&path, &doc)?;
+                    if use_json {
+                        let entry = serde_json::json!({"path": path});
+                        println!("{}", json_str(&entry));
+                    } else {
+                        println!("Documentation written to {}", path.display());
+                    }
+                }
+                None => {
+                    if use_json {
+                        let entry = serde_json::json!({"doc": doc});
+                        println!("{}", json_str(&entry));
+                    } else {
+                        println!("{}", doc);
+                    }
                 }
             }
         }
