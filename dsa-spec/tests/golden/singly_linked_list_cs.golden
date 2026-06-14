@@ -1,3 +1,4 @@
+// --- Node.cs ---
 /// <summary>
 /// SinglyLinkedList
 
@@ -22,354 +23,417 @@ using System.Linq;
 
 namespace SinglyLinkedList
 {
-
-
-public class Node<T>
+    public partial class Node<T>
     where T : Clone
 
-{
-    
-    public T Value { get; set; }
-    
-    public Node<T>? Next { get; set; }
-    
-
-    
-    /// <summary>
-    /// New.
-    /// </summary>
-    
-    
-    /// <returns>Self.</returns>
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - head is None
-    
-    /// </remarks>
-    
-    
-    public Self New()
     {
         
-        // TODO: Implement New
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Prepend.
-    /// </summary>
-    
-    /// <param name="value">T.</param>
-    
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - head.value == value
-    
-    /// - list length increased by 1
-    
-    /// </remarks>
-    
-    
-    public void Prepend(T value)
-    {
+        public T Value { get; set; }
         
-        // TODO: Implement Prepend
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Append.
-    /// </summary>
-    
-    /// <param name="value">T.</param>
-    
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - last element == value
-    
-    /// </remarks>
-    
-    
-    public void Append(T value)
-    {
+        public Node<T>? Next { get; set; }
         
-        // TODO: Implement Append
-        throw new NotImplementedException();
     }
-    
-    /// <summary>
-    /// Popfront.
-    /// </summary>
-    
-    
-    /// <returns>T?.</returns>
-    
-    
-    /// <remarks>
-    /// Preconditions:
-    
-    /// - !is_empty()
-    
-    /// </remarks>
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - head == old.head.next
-    
-    /// </remarks>
-    
-    
-    public T? PopFront()
-    {
-        
-        // TODO: Implement PopFront
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Isempty.
-    /// </summary>
-    
-    
-    /// <returns>bool.</returns>
-    
-    
-    
-    
-    public bool IsEmpty()
-    {
-        
-        // TODO: Implement IsEmpty
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Len.
-    /// </summary>
-    
-    
-    /// <returns>int.</returns>
-    
-    
-    
-    
-    public int Len()
-    {
-        
-        // TODO: Implement Len
-        throw new NotImplementedException();
-    }
-    
 }
 
-public class SinglyLinkedList<T>
+// --- Node.New.cs ---
+namespace SinglyLinkedList
+{
+    public partial class Node<T>
     where T : Clone
 
-{
-    
-    public Node<T>? Head { get; set; }
-    
-
-    
-    /// <summary>
-    /// New.
-    /// </summary>
-    
-    
-    /// <returns>Self.</returns>
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - head is None
-    
-    /// </remarks>
-    
-    
-    public Self New()
     {
+        /// <summary>
+        /// New.
+        /// </summary>
         
-        // TODO: Implement New
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Prepend.
-    /// </summary>
-    
-    /// <param name="value">T.</param>
-    
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - head.value == value
-    
-    /// - list length increased by 1
-    
-    /// </remarks>
-    
-    
-    public void Prepend(T value)
-    {
         
-        // TODO: Implement Prepend
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Append.
-    /// </summary>
-    
-    /// <param name="value">T.</param>
-    
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - last element == value
-    
-    /// </remarks>
-    
-    
-    public void Append(T value)
-    {
+        /// <returns>Self.</returns>
         
-        // TODO: Implement Append
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Popfront.
-    /// </summary>
-    
-    
-    /// <returns>T?.</returns>
-    
-    
-    /// <remarks>
-    /// Preconditions:
-    
-    /// - !is_empty()
-    
-    /// </remarks>
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - head == old.head.next
-    
-    /// </remarks>
-    
-    
-    public T? PopFront()
-    {
         
-        // TODO: Implement PopFront
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Isempty.
-    /// </summary>
-    
-    
-    /// <returns>bool.</returns>
-    
-    
-    
-    
-    public bool IsEmpty()
-    {
         
-        // TODO: Implement IsEmpty
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Len.
-    /// </summary>
-    
-    
-    /// <returns>int.</returns>
-    
-    
-    
-    
-    public int Len()
-    {
+        /// <remarks>
+        /// Postconditions:
         
-        // TODO: Implement Len
-        throw new NotImplementedException();
+        /// - head is None
+        
+        /// </remarks>
+        
+        
+        public Self New()
+        {
+            
+            throw new NotImplementedException();
+        }
     }
-    
 }
-
-
 
 // ========== Generated xUnit tests ==========
 
-public class prepend_pop_frontTests
+public class Nodeprepend_pop_frontTests
 {
     [Fact]
     public void prepend_pop_front_Test()
     {
-        // Setup
         let mut list = SinglyLinkedList::new();
-        // Actions
         list.prepend(1);list.prepend(2);
-        // Assertions
         Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
     }
 }
 
-public class append_orderTests
+public class Nodeappend_orderTests
 {
     [Fact]
     public void append_order_Test()
     {
-        // Setup
         let mut list = SinglyLinkedList::new();
-        // Actions
         list.append(1);list.append(2);
-        // Assertions
         Assert.AreEqual(list.pop_front(), Some(1));
     }
 }
 
-public class pop_front_emptyTests
+public class Nodepop_front_emptyTests
 {
     [Fact]
     public void pop_front_empty_Test()
     {
-        // Setup
         let list = SinglyLinkedList::<i32>::new();
-        // Actions
         
-        // Assertions
         Assert.AreEqual(list.pop_front(), None);
     }
 }
 
+
+// --- Node.Prepend.cs ---
+namespace SinglyLinkedList
+{
+    public partial class Node<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// Prepend.
+        /// </summary>
+        
+        /// <param name="value">T.</param>
+        
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - head.value == value
+        
+        /// - list length increased by 1
+        
+        /// </remarks>
+        
+        
+        public void Prepend(T value)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
 }
+
+// ========== Generated xUnit tests ==========
+
+public class Nodeprepend_pop_frontTests
+{
+    [Fact]
+    public void prepend_pop_front_Test()
+    {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);list.prepend(2);
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodeappend_orderTests
+{
+    [Fact]
+    public void append_order_Test()
+    {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);list.append(2);
+        Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodepop_front_emptyTests
+{
+    [Fact]
+    public void pop_front_empty_Test()
+    {
+        let list = SinglyLinkedList::<i32>::new();
+        
+        Assert.AreEqual(list.pop_front(), None);
+    }
+}
+
+
+// --- Node.Append.cs ---
+namespace SinglyLinkedList
+{
+    public partial class Node<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// Append.
+        /// </summary>
+        
+        /// <param name="value">T.</param>
+        
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - last element == value
+        
+        /// </remarks>
+        
+        
+        public void Append(T value)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Nodeprepend_pop_frontTests
+{
+    [Fact]
+    public void prepend_pop_front_Test()
+    {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);list.prepend(2);
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodeappend_orderTests
+{
+    [Fact]
+    public void append_order_Test()
+    {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);list.append(2);
+        Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodepop_front_emptyTests
+{
+    [Fact]
+    public void pop_front_empty_Test()
+    {
+        let list = SinglyLinkedList::<i32>::new();
+        
+        Assert.AreEqual(list.pop_front(), None);
+    }
+}
+
+
+// --- Node.PopFront.cs ---
+namespace SinglyLinkedList
+{
+    public partial class Node<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// PopFront.
+        /// </summary>
+        
+        
+        /// <returns>T?.</returns>
+        
+        
+        /// <remarks>
+        /// Preconditions:
+        
+        /// - !is_empty()
+        
+        /// </remarks>
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - head == old.head.next
+        
+        /// </remarks>
+        
+        
+        public T? PopFront()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Nodeprepend_pop_frontTests
+{
+    [Fact]
+    public void prepend_pop_front_Test()
+    {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);list.prepend(2);
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodeappend_orderTests
+{
+    [Fact]
+    public void append_order_Test()
+    {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);list.append(2);
+        Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodepop_front_emptyTests
+{
+    [Fact]
+    public void pop_front_empty_Test()
+    {
+        let list = SinglyLinkedList::<i32>::new();
+        
+        Assert.AreEqual(list.pop_front(), None);
+    }
+}
+
+
+// --- Node.IsEmpty.cs ---
+namespace SinglyLinkedList
+{
+    public partial class Node<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// IsEmpty.
+        /// </summary>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool IsEmpty()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Nodeprepend_pop_frontTests
+{
+    [Fact]
+    public void prepend_pop_front_Test()
+    {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);list.prepend(2);
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodeappend_orderTests
+{
+    [Fact]
+    public void append_order_Test()
+    {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);list.append(2);
+        Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodepop_front_emptyTests
+{
+    [Fact]
+    public void pop_front_empty_Test()
+    {
+        let list = SinglyLinkedList::<i32>::new();
+        
+        Assert.AreEqual(list.pop_front(), None);
+    }
+}
+
+
+// --- Node.Len.cs ---
+namespace SinglyLinkedList
+{
+    public partial class Node<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// Len.
+        /// </summary>
+        
+        
+        /// <returns>int.</returns>
+        
+        
+        
+        
+        public int Len()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Nodeprepend_pop_frontTests
+{
+    [Fact]
+    public void prepend_pop_front_Test()
+    {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);list.prepend(2);
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodeappend_orderTests
+{
+    [Fact]
+    public void append_order_Test()
+    {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);list.append(2);
+        Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodepop_front_emptyTests
+{
+    [Fact]
+    public void pop_front_empty_Test()
+    {
+        let list = SinglyLinkedList::<i32>::new();
+        
+        Assert.AreEqual(list.pop_front(), None);
+    }
+}
+

@@ -1,6 +1,6 @@
-//! Rust code generation backend.
+//! Rust code generation backend with multi-file output.
 
-use crate::ast::Spec;
+use crate::ast::{MethodDef, Spec};
 use crate::backend::Backend;
 use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
@@ -60,103 +60,260 @@ impl RustBackend {
             })
         }
     }
-}
 
-impl Backend for RustBackend {
-    fn generate(&self, spec: &Spec) -> Result<String, BackendError> {
-        let context = build_context(spec);
-        let raw_code = self.engine.render("rust.rs.tera", &context)?;
-        Ok(Self::format_rust(&raw_code).unwrap_or(raw_code))
+    fn file_extension() -> &'static str {
+        "rs"
+    }
+
+    fn class_filename(struct_name: &str) -> String {
+        format!("{}.{}", struct_name, Self::file_extension())
+    }
+
+    fn method_filename(struct_name: &str, method_name: &str) -> String {
+        format!("{}_{}.{}", struct_name, method_name, Self::file_extension())
+    }
+
+    /// Build monolithic Tera context (all structs, all methods, no partial files).
+    fn build_monolithic_context(spec: &Spec) -> Context {
+        let mut context = Context::new();
+
+        context.insert(
+            "metadata",
+            &MetadataContext {
+                name: &spec.metadata.name,
+                complexity: ComplexityContext {
+                    time: spec.metadata.complexity.time.as_deref(),
+                    space: spec.metadata.complexity.space.as_deref(),
+                },
+            },
+        );
+
+        context.insert(
+            "contracts",
+            &ContractsContext {
+                invariants: &spec.contracts.invariants,
+            },
+        );
+
+        let structs: Vec<StructContext> = spec
+            .structs
+            .iter()
+            .map(|s| StructContext {
+                name: &s.name,
+                generics: s
+                    .generics
+                    .iter()
+                    .map(|g| GenericParamContext {
+                        name: &g.name,
+                        bounds: g.constraints.join(" + "),
+                    })
+                    .collect(),
+                fields: s
+                    .fields
+                    .iter()
+                    .map(|f| FieldContext {
+                        name: &f.name,
+                        field_type: &f.field_type,
+                    })
+                    .collect(),
+            })
+            .collect();
+        context.insert("structs", &structs);
+
+        let methods: Vec<MethodContext> = spec
+            .methods
+            .iter()
+            .map(|m| MethodContext {
+                name: &m.name,
+                params: m
+                    .params
+                    .iter()
+                    .map(|p| ParamContext {
+                        name: &p.name,
+                        param_type: &p.param_type,
+                    })
+                    .collect(),
+                returns: m.returns.as_deref(),
+                preconditions: &m.preconditions,
+                postconditions: &m.postconditions,
+                injected_assertions: &m.injected_assertions,
+            })
+            .collect();
+        context.insert("methods", &methods);
+
+        let tests: Vec<TestContext> = spec
+            .verification
+            .test_cases
+            .iter()
+            .map(|t| TestContext {
+                name: &t.name,
+                setup: t.setup.as_deref(),
+                actions: &t.actions,
+                assertions: &t.assertions,
+            })
+            .collect();
+        context.insert("verification", &VerificationContext { test_cases: tests });
+
+        context
+    }
+
+    /// Build context for a class-level partial file (struct definition + constructor).
+    fn build_class_context(spec: &Spec) -> Context {
+        let mut ctx = Context::new();
+
+        ctx.insert(
+            "metadata",
+            &MetadataContext {
+                name: &spec.metadata.name,
+                complexity: ComplexityContext {
+                    time: spec.metadata.complexity.time.as_deref(),
+                    space: spec.metadata.complexity.space.as_deref(),
+                },
+            },
+        );
+
+        ctx.insert(
+            "contracts",
+            &ContractsContext {
+                invariants: &spec.contracts.invariants,
+            },
+        );
+
+        if let Some(s) = spec.structs.first() {
+            ctx.insert(
+                "struct",
+                &ClassStructContext {
+                    name: &s.name,
+                    generics: s
+                        .generics
+                        .iter()
+                        .map(|g| GenericParamContext {
+                            name: &g.name,
+                            bounds: if g.constraints.is_empty() {
+                                String::new()
+                            } else {
+                                g.constraints.join(" + ")
+                            },
+                        })
+                        .collect(),
+                    fields: s
+                        .fields
+                        .iter()
+                        .map(|f| ClassFieldContext {
+                            name: f.name.clone(),
+                            rust_type: f.field_type.to_string(),
+                        })
+                        .collect(),
+                },
+            );
+        }
+
+        ctx
+    }
+
+    /// Build context for a method-level partial file.
+    fn build_method_context(spec: &Spec, method: &MethodDef) -> Context {
+        let mut ctx = Context::new();
+
+        ctx.insert(
+            "metadata",
+            &MetadataContext {
+                name: &spec.metadata.name,
+                complexity: ComplexityContext {
+                    time: spec.metadata.complexity.time.as_deref(),
+                    space: spec.metadata.complexity.space.as_deref(),
+                },
+            },
+        );
+
+        if let Some(s) = spec.structs.first() {
+            ctx.insert(
+                "struct",
+                &ClassStructContext {
+                    name: &s.name,
+                    generics: s
+                        .generics
+                        .iter()
+                        .map(|g| GenericParamContext {
+                            name: &g.name,
+                            bounds: if g.constraints.is_empty() {
+                                String::new()
+                            } else {
+                                g.constraints.join(" + ")
+                            },
+                        })
+                        .collect(),
+                    fields: vec![],
+                },
+            );
+        }
+
+        ctx.insert(
+            "method",
+            &MethodFileContext {
+                name: method.name.clone(),
+                params: method
+                    .params
+                    .iter()
+                    .map(|p| MethodParamContext {
+                        name: p.name.clone(),
+                        rust_type: p.param_type.to_string(),
+                    })
+                    .collect(),
+                returns: method.returns.clone(),
+                preconditions: &method.preconditions,
+                postconditions: &method.postconditions,
+                injected_assertions: &method.injected_assertions,
+            },
+        );
+
+        let tests: Vec<TestContext> = spec
+            .verification
+            .test_cases
+            .iter()
+            .map(|t| TestContext {
+                name: &t.name,
+                setup: t.setup.as_deref(),
+                actions: &t.actions,
+                assertions: &t.assertions,
+            })
+            .collect();
+        ctx.insert("verification", &VerificationContext { test_cases: tests });
+
+        ctx
     }
 }
 
-/// Build the Tera context from a spec AST for the Rust template.
-fn build_context(spec: &Spec) -> Context {
-    let mut context = Context::new();
+impl Backend for RustBackend {
+    fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
+        if spec.structs.is_empty() {
+            let ctx = Self::build_monolithic_context(spec);
+            let raw_code = self.engine.render("rust.rs.tera", &ctx)?;
+            let code = Self::format_rust(&raw_code).unwrap_or(raw_code);
+            return Ok(vec![(format!("{}Methods.rs", spec.metadata.name), code)]);
+        }
 
-    let metadata = &spec.metadata;
-    context.insert(
-        "metadata",
-        &MetadataContext {
-            name: &metadata.name,
-            complexity: ComplexityContext {
-                time: metadata.complexity.time.as_deref(),
-                space: metadata.complexity.space.as_deref(),
-            },
-        },
-    );
+        let mut files = Vec::new();
+        let s = spec.structs.first().unwrap();
 
-    let contracts = &spec.contracts;
-    context.insert(
-        "contracts",
-        &ContractsContext {
-            invariants: &contracts.invariants,
-        },
-    );
+        let class_ctx = Self::build_class_context(spec);
+        let raw = self.engine.render("rust/class.rs.tera", &class_ctx)?;
+        let code = Self::format_rust(&raw).unwrap_or(raw);
+        files.push((Self::class_filename(&s.name), code));
 
-    let structs: Vec<StructContext> = spec
-        .structs
-        .iter()
-        .map(|s| StructContext {
-            name: &s.name,
-            generics: s
-                .generics
-                .iter()
-                .map(|g| GenericParamContext {
-                    name: &g.name,
-                    bounds: g.constraints.join(" + "),
-                })
-                .collect(),
-            fields: s
-                .fields
-                .iter()
-                .map(|f| FieldContext {
-                    name: &f.name,
-                    field_type: &f.field_type,
-                })
-                .collect(),
-        })
-        .collect();
-    context.insert("structs", &structs);
+        for m in &spec.methods {
+            let method_ctx = Self::build_method_context(spec, m);
+            let raw = self.engine.render("rust/method.rs.tera", &method_ctx)?;
+            let code = Self::format_rust(&raw).unwrap_or(raw);
+            files.push((Self::method_filename(&s.name, &m.name), code));
+        }
 
-    let methods: Vec<MethodContext> = spec
-        .methods
-        .iter()
-        .map(|m| MethodContext {
-            name: &m.name,
-            params: m
-                .params
-                .iter()
-                .map(|p| ParamContext {
-                    name: &p.name,
-                    param_type: &p.param_type,
-                })
-                .collect(),
-            returns: m.returns.as_deref(),
-            preconditions: &m.preconditions,
-            postconditions: &m.postconditions,
-            injected_assertions: &m.injected_assertions,
-        })
-        .collect();
-    context.insert("methods", &methods);
-
-    let tests: Vec<TestContext> = spec
-        .verification
-        .test_cases
-        .iter()
-        .map(|t| TestContext {
-            name: &t.name,
-            setup: t.setup.as_deref(),
-            actions: &t.actions,
-            assertions: &t.assertions,
-        })
-        .collect();
-    context.insert("verification", &VerificationContext { test_cases: tests });
-
-    context
+        Ok(files)
+    }
 }
 
-// Tera context structs mirroring the AST for template rendering.
+// === Context structs for monolithic template ===
+
 #[derive(Serialize)]
 struct MetadataContext<'a> {
     name: &'a str,
@@ -175,13 +332,6 @@ struct ContractsContext<'a> {
 }
 
 #[derive(Serialize)]
-struct StructContext<'a> {
-    name: &'a str,
-    generics: Vec<GenericParamContext<'a>>,
-    fields: Vec<FieldContext<'a>>,
-}
-
-#[derive(Serialize)]
 struct GenericParamContext<'a> {
     name: &'a str,
     bounds: String,
@@ -194,6 +344,19 @@ struct FieldContext<'a> {
 }
 
 #[derive(Serialize)]
+struct StructContext<'a> {
+    name: &'a str,
+    generics: Vec<GenericParamContext<'a>>,
+    fields: Vec<FieldContext<'a>>,
+}
+
+#[derive(Serialize)]
+struct ParamContext<'a> {
+    name: &'a str,
+    param_type: &'a crate::ast::Type,
+}
+
+#[derive(Serialize)]
 struct MethodContext<'a> {
     name: &'a str,
     params: Vec<ParamContext<'a>>,
@@ -201,12 +364,6 @@ struct MethodContext<'a> {
     preconditions: &'a [String],
     postconditions: &'a [String],
     injected_assertions: &'a [String],
-}
-
-#[derive(Serialize)]
-struct ParamContext<'a> {
-    name: &'a str,
-    param_type: &'a crate::ast::Type,
 }
 
 #[derive(Serialize)]
@@ -222,6 +379,37 @@ struct TestContext<'a> {
     assertions: &'a [String],
 }
 
+// === Context structs for multi-file (class/method) templates ===
+
+#[derive(Serialize)]
+struct ClassFieldContext {
+    name: String,
+    rust_type: String,
+}
+
+#[derive(Serialize)]
+struct ClassStructContext<'a> {
+    name: &'a str,
+    generics: Vec<GenericParamContext<'a>>,
+    fields: Vec<ClassFieldContext>,
+}
+
+#[derive(Serialize)]
+struct MethodParamContext {
+    name: String,
+    rust_type: String,
+}
+
+#[derive(Serialize)]
+struct MethodFileContext<'a> {
+    name: String,
+    params: Vec<MethodParamContext>,
+    returns: Option<String>,
+    preconditions: &'a [String],
+    postconditions: &'a [String],
+    injected_assertions: &'a [String],
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -232,11 +420,8 @@ mod tests {
 
     #[test]
     fn test_format_rust_fallback_on_missing_rustfmt() {
-        // Call format_rust with invalid Rust — should fail fmt but return Err
         let code = "fn main() { let x = 1; }";
-        // This is valid Rust, so it should pass rustfmt if available, or return Err
         let result = RustBackend::format_rust(code);
-        // Either result is valid: rustfmt may or may not be installed
         if let Err(e) = &result {
             let msg = e.to_string();
             assert!(msg.contains("rustfmt error") || msg.contains("Failed to spawn rustfmt"));
@@ -287,8 +472,7 @@ mod tests {
                 }],
             },
         };
-        let ctx = build_context(&spec);
-        // Verify context values via rendering
+        let ctx = RustBackend::build_monolithic_context(&spec);
         let engine = TemplateEngine::new("templates").unwrap();
         let output = engine.render("rust.rs.tera", &ctx).unwrap();
         assert!(output.contains("struct MyStruct"), "output: {}", output);
@@ -320,10 +504,26 @@ mod tests {
             verification: Verification::default(),
         };
         let backend = RustBackend::new("templates").unwrap();
-        let code = backend.generate(&spec).unwrap();
-        assert!(code.contains("try_get"), "generated code: {}", code);
-        assert!(code.contains("Result"), "generated code: {}", code);
-        assert!(code.contains("todo!()"), "generated code: {}", code);
+        let files = backend.generate(&spec).unwrap();
+        let method_file = files
+            .iter()
+            .find(|(n, _)| n == "Container_try_get.rs")
+            .unwrap();
+        assert!(
+            method_file.1.contains("try_get"),
+            "generated code: {}",
+            method_file.1
+        );
+        assert!(
+            method_file.1.contains("Result"),
+            "generated code: {}",
+            method_file.1
+        );
+        assert!(
+            method_file.1.contains("todo!()"),
+            "generated code: {}",
+            method_file.1
+        );
     }
 
     #[test]
@@ -351,11 +551,12 @@ mod tests {
             verification: Verification::default(),
         };
         let backend = RustBackend::new("templates").unwrap();
-        let code = backend.generate(&spec).unwrap();
-        assert!(code.contains("Capped"));
-        assert!(code.contains("size <= capacity"));
-        assert!(code.contains("O(1)"));
-        assert!(code.contains("O(n)"));
+        let files = backend.generate(&spec).unwrap();
+        let class_file = files.iter().find(|(n, _)| n == "Capped.rs").unwrap();
+        assert!(class_file.1.contains("Capped"));
+        assert!(class_file.1.contains("size <= capacity"));
+        assert!(class_file.1.contains("O(1)"));
+        assert!(class_file.1.contains("O(n)"));
     }
 
     #[test]
@@ -385,10 +586,14 @@ mod tests {
         };
         let injected = crate::contracts::inject_assertions(&spec);
         let backend = RustBackend::new("templates").unwrap();
-        let code = backend.generate(&injected).unwrap();
-        assert!(code.contains("// Contract: precondition: x > 0"));
-        assert!(code.contains("assert!(false, \"precondition: x > 0\");"));
-        assert!(code.contains("// Contract: postcondition: result ok"));
-        assert!(code.contains("// Contract: invariant: size >= 0"));
+        let files = backend.generate(&injected).unwrap();
+        let method_file = files.iter().find(|(n, _)| n == "Foo_bar.rs").unwrap();
+        assert!(method_file.1.contains("// Contract: precondition: x > 0"));
+        assert!(
+            method_file
+                .1
+                .contains("// Contract: postcondition: result ok")
+        );
+        assert!(method_file.1.contains("// Contract: invariant: size >= 0"));
     }
 }

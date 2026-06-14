@@ -1,0 +1,303 @@
+// --- TrieNode.go ---
+// Trie
+ // Time complexity: O(k) insert/search/starts_with (k = key length)
+
+ // Space complexity: O(n * k)
+
+
+// Invariants:
+ // - each node has at most one parent
+ // - root is always empty (no character)
+
+
+package trie
+
+
+type TrieNode struct {
+
+    
+    Children HashMap<char, Box<TrieNode>>
+    
+    IsEnd bool
+    
+}
+
+func NewTrieNode[]() *TrieNode[] {
+    return &TrieNode[]{}
+}
+
+// --- TrieNode_new.go ---
+// Trie.New
+
+ // @returns Self
+
+
+
+// Postconditions:
+ // - is_empty() == true
+
+
+package trie
+
+
+func (s *TrieNode) New() Self {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestTrieNodeNewinsert_and_search(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("hello")trie.insert("world")
+    if !(trie.search("hello")) { t.Errorf("assertion failed: trie.search("hello")") }if !(trie.search("world")) { t.Errorf("assertion failed: trie.search("world")") }if !(!trie.search("hell")) { t.Errorf("assertion failed: !trie.search("hell")") }if !(!trie.search("foo")) { t.Errorf("assertion failed: !trie.search("foo")") }
+}
+
+func TestTrieNodeNewprefix_matching(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("cat")trie.insert("car")trie.insert("dog")
+    if !(trie.starts_with("ca")) { t.Errorf("assertion failed: trie.starts_with("ca")") }if !(trie.starts_with("c")) { t.Errorf("assertion failed: trie.starts_with("c")") }if !(trie.starts_with("do")) { t.Errorf("assertion failed: trie.starts_with("do")") }if !(!trie.starts_with("bat")) { t.Errorf("assertion failed: !trie.starts_with("bat")") }
+}
+
+func TestTrieNodeNewdelete_word(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("test")trie.insert("testing")
+    if !(trie.delete("test")) { t.Errorf("assertion failed: trie.delete("test")") }if !(!trie.search("test")) { t.Errorf("assertion failed: !trie.search("test")") }if !(trie.search("testing")) { t.Errorf("assertion failed: trie.search("testing")") }
+}
+
+func TestTrieNodeNewempty_trie(t *testing.T) {
+    let trie: Trie = Trie::new();
+    
+    if !(trie.is_empty()) { t.Errorf("assertion failed: trie.is_empty()") }if !(!trie.search("anything")) { t.Errorf("assertion failed: !trie.search("anything")") }if !(!trie.starts_with("x")) { t.Errorf("assertion failed: !trie.starts_with("x")") }
+}
+
+
+// --- TrieNode_insert.go ---
+// Trie.Insert
+ // @param word - String
+
+
+
+
+// Postconditions:
+ // - search(word) == true
+
+
+package trie
+
+
+func (s *TrieNode) Insert(word String)  {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestTrieNodeInsertinsert_and_search(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("hello")trie.insert("world")
+    if !(trie.search("hello")) { t.Errorf("assertion failed: trie.search("hello")") }if !(trie.search("world")) { t.Errorf("assertion failed: trie.search("world")") }if !(!trie.search("hell")) { t.Errorf("assertion failed: !trie.search("hell")") }if !(!trie.search("foo")) { t.Errorf("assertion failed: !trie.search("foo")") }
+}
+
+func TestTrieNodeInsertprefix_matching(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("cat")trie.insert("car")trie.insert("dog")
+    if !(trie.starts_with("ca")) { t.Errorf("assertion failed: trie.starts_with("ca")") }if !(trie.starts_with("c")) { t.Errorf("assertion failed: trie.starts_with("c")") }if !(trie.starts_with("do")) { t.Errorf("assertion failed: trie.starts_with("do")") }if !(!trie.starts_with("bat")) { t.Errorf("assertion failed: !trie.starts_with("bat")") }
+}
+
+func TestTrieNodeInsertdelete_word(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("test")trie.insert("testing")
+    if !(trie.delete("test")) { t.Errorf("assertion failed: trie.delete("test")") }if !(!trie.search("test")) { t.Errorf("assertion failed: !trie.search("test")") }if !(trie.search("testing")) { t.Errorf("assertion failed: trie.search("testing")") }
+}
+
+func TestTrieNodeInsertempty_trie(t *testing.T) {
+    let trie: Trie = Trie::new();
+    
+    if !(trie.is_empty()) { t.Errorf("assertion failed: trie.is_empty()") }if !(!trie.search("anything")) { t.Errorf("assertion failed: !trie.search("anything")") }if !(!trie.starts_with("x")) { t.Errorf("assertion failed: !trie.starts_with("x")") }
+}
+
+
+// --- TrieNode_search.go ---
+// Trie.Search
+ // @param word - String
+
+ // @returns bool
+
+
+
+
+package trie
+
+
+func (s *TrieNode) Search(word String) bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestTrieNodeSearchinsert_and_search(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("hello")trie.insert("world")
+    if !(trie.search("hello")) { t.Errorf("assertion failed: trie.search("hello")") }if !(trie.search("world")) { t.Errorf("assertion failed: trie.search("world")") }if !(!trie.search("hell")) { t.Errorf("assertion failed: !trie.search("hell")") }if !(!trie.search("foo")) { t.Errorf("assertion failed: !trie.search("foo")") }
+}
+
+func TestTrieNodeSearchprefix_matching(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("cat")trie.insert("car")trie.insert("dog")
+    if !(trie.starts_with("ca")) { t.Errorf("assertion failed: trie.starts_with("ca")") }if !(trie.starts_with("c")) { t.Errorf("assertion failed: trie.starts_with("c")") }if !(trie.starts_with("do")) { t.Errorf("assertion failed: trie.starts_with("do")") }if !(!trie.starts_with("bat")) { t.Errorf("assertion failed: !trie.starts_with("bat")") }
+}
+
+func TestTrieNodeSearchdelete_word(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("test")trie.insert("testing")
+    if !(trie.delete("test")) { t.Errorf("assertion failed: trie.delete("test")") }if !(!trie.search("test")) { t.Errorf("assertion failed: !trie.search("test")") }if !(trie.search("testing")) { t.Errorf("assertion failed: trie.search("testing")") }
+}
+
+func TestTrieNodeSearchempty_trie(t *testing.T) {
+    let trie: Trie = Trie::new();
+    
+    if !(trie.is_empty()) { t.Errorf("assertion failed: trie.is_empty()") }if !(!trie.search("anything")) { t.Errorf("assertion failed: !trie.search("anything")") }if !(!trie.starts_with("x")) { t.Errorf("assertion failed: !trie.starts_with("x")") }
+}
+
+
+// --- TrieNode_starts_with.go ---
+// Trie.StartsWith
+ // @param prefix - String
+
+ // @returns bool
+
+
+
+
+package trie
+
+
+func (s *TrieNode) StartsWith(prefix String) bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestTrieNodeStartsWithinsert_and_search(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("hello")trie.insert("world")
+    if !(trie.search("hello")) { t.Errorf("assertion failed: trie.search("hello")") }if !(trie.search("world")) { t.Errorf("assertion failed: trie.search("world")") }if !(!trie.search("hell")) { t.Errorf("assertion failed: !trie.search("hell")") }if !(!trie.search("foo")) { t.Errorf("assertion failed: !trie.search("foo")") }
+}
+
+func TestTrieNodeStartsWithprefix_matching(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("cat")trie.insert("car")trie.insert("dog")
+    if !(trie.starts_with("ca")) { t.Errorf("assertion failed: trie.starts_with("ca")") }if !(trie.starts_with("c")) { t.Errorf("assertion failed: trie.starts_with("c")") }if !(trie.starts_with("do")) { t.Errorf("assertion failed: trie.starts_with("do")") }if !(!trie.starts_with("bat")) { t.Errorf("assertion failed: !trie.starts_with("bat")") }
+}
+
+func TestTrieNodeStartsWithdelete_word(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("test")trie.insert("testing")
+    if !(trie.delete("test")) { t.Errorf("assertion failed: trie.delete("test")") }if !(!trie.search("test")) { t.Errorf("assertion failed: !trie.search("test")") }if !(trie.search("testing")) { t.Errorf("assertion failed: trie.search("testing")") }
+}
+
+func TestTrieNodeStartsWithempty_trie(t *testing.T) {
+    let trie: Trie = Trie::new();
+    
+    if !(trie.is_empty()) { t.Errorf("assertion failed: trie.is_empty()") }if !(!trie.search("anything")) { t.Errorf("assertion failed: !trie.search("anything")") }if !(!trie.starts_with("x")) { t.Errorf("assertion failed: !trie.starts_with("x")") }
+}
+
+
+// --- TrieNode_delete.go ---
+// Trie.Delete
+ // @param word - String
+
+ // @returns bool
+
+
+
+// Postconditions:
+ // - search(word) == false
+
+
+package trie
+
+
+func (s *TrieNode) Delete(word String) bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestTrieNodeDeleteinsert_and_search(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("hello")trie.insert("world")
+    if !(trie.search("hello")) { t.Errorf("assertion failed: trie.search("hello")") }if !(trie.search("world")) { t.Errorf("assertion failed: trie.search("world")") }if !(!trie.search("hell")) { t.Errorf("assertion failed: !trie.search("hell")") }if !(!trie.search("foo")) { t.Errorf("assertion failed: !trie.search("foo")") }
+}
+
+func TestTrieNodeDeleteprefix_matching(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("cat")trie.insert("car")trie.insert("dog")
+    if !(trie.starts_with("ca")) { t.Errorf("assertion failed: trie.starts_with("ca")") }if !(trie.starts_with("c")) { t.Errorf("assertion failed: trie.starts_with("c")") }if !(trie.starts_with("do")) { t.Errorf("assertion failed: trie.starts_with("do")") }if !(!trie.starts_with("bat")) { t.Errorf("assertion failed: !trie.starts_with("bat")") }
+}
+
+func TestTrieNodeDeletedelete_word(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("test")trie.insert("testing")
+    if !(trie.delete("test")) { t.Errorf("assertion failed: trie.delete("test")") }if !(!trie.search("test")) { t.Errorf("assertion failed: !trie.search("test")") }if !(trie.search("testing")) { t.Errorf("assertion failed: trie.search("testing")") }
+}
+
+func TestTrieNodeDeleteempty_trie(t *testing.T) {
+    let trie: Trie = Trie::new();
+    
+    if !(trie.is_empty()) { t.Errorf("assertion failed: trie.is_empty()") }if !(!trie.search("anything")) { t.Errorf("assertion failed: !trie.search("anything")") }if !(!trie.starts_with("x")) { t.Errorf("assertion failed: !trie.starts_with("x")") }
+}
+
+
+// --- TrieNode_is_empty.go ---
+// Trie.IsEmpty
+
+ // @returns bool
+
+
+
+
+package trie
+
+
+func (s *TrieNode) IsEmpty() bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestTrieNodeIsEmptyinsert_and_search(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("hello")trie.insert("world")
+    if !(trie.search("hello")) { t.Errorf("assertion failed: trie.search("hello")") }if !(trie.search("world")) { t.Errorf("assertion failed: trie.search("world")") }if !(!trie.search("hell")) { t.Errorf("assertion failed: !trie.search("hell")") }if !(!trie.search("foo")) { t.Errorf("assertion failed: !trie.search("foo")") }
+}
+
+func TestTrieNodeIsEmptyprefix_matching(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("cat")trie.insert("car")trie.insert("dog")
+    if !(trie.starts_with("ca")) { t.Errorf("assertion failed: trie.starts_with("ca")") }if !(trie.starts_with("c")) { t.Errorf("assertion failed: trie.starts_with("c")") }if !(trie.starts_with("do")) { t.Errorf("assertion failed: trie.starts_with("do")") }if !(!trie.starts_with("bat")) { t.Errorf("assertion failed: !trie.starts_with("bat")") }
+}
+
+func TestTrieNodeIsEmptydelete_word(t *testing.T) {
+    let mut trie = Trie::new();
+    trie.insert("test")trie.insert("testing")
+    if !(trie.delete("test")) { t.Errorf("assertion failed: trie.delete("test")") }if !(!trie.search("test")) { t.Errorf("assertion failed: !trie.search("test")") }if !(trie.search("testing")) { t.Errorf("assertion failed: trie.search("testing")") }
+}
+
+func TestTrieNodeIsEmptyempty_trie(t *testing.T) {
+    let trie: Trie = Trie::new();
+    
+    if !(trie.is_empty()) { t.Errorf("assertion failed: trie.is_empty()") }if !(!trie.search("anything")) { t.Errorf("assertion failed: !trie.search("anything")") }if !(!trie.starts_with("x")) { t.Errorf("assertion failed: !trie.starts_with("x")") }
+}
+

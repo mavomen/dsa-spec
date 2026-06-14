@@ -1,79 +1,41 @@
+// --- CircularBuffer.go ---
 // CircularBuffer
-
 // Time complexity: O(1) enqueue/dequeue
-
 
 // Space complexity: O(n)
 
-
 // Invariants:
-
 // - length <= capacity
-
 // - 0 <= head < capacity
-
 // - 0 <= tail < capacity
-
-
 
 package circularbuffer
 
-import "testing"
-
-
-
-
-
-// CircularBufferInterface defines the contract for CircularBuffer
-type CircularBufferInterface[T any] interface {
-
-	
-	New(capacity int) Self
-	
-	Enqueue(item T) ((), error)
-	
-	Dequeue() *T
-	
-	IsFull() bool
-	
-	IsEmpty() bool
-	
-	Len() int
-	
-}
-
-
-// CircularBuffer represents a CircularBuffer
 type CircularBuffer[T any] struct {
-	
 	Buffer []*T
-	
+
 	Head int
-	
+
 	Tail int
-	
+
 	Size int
-	
+
 	Capacity int
-	
 }
 
+func NewCircularBuffer[T any]() *CircularBuffer[T] {
+	return &CircularBuffer[T]{}
+}
 
-// New New.
+// --- CircularBuffer_new.go ---
+// CircularBuffer.New
+ // @param capacity - int
 
-// Parameters:
-
-//   - capacity: int
-
-
-
-// Returns:
-//   - Self
+ // @returns Self
 
 
 // Preconditions:
  // - capacity > 0
-
 
 
 // Postconditions:
@@ -81,137 +43,271 @@ type CircularBuffer[T any] struct {
  // - capacity == capacity
 
 
+package circularbuffer
+
 
 func (s *CircularBuffer[T]) New(capacity int) Self {
-	
-	// TODO: Implement New
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
 
-// Enqueue Enqueue.
+// ========== Generated tests ==========
 
-// Parameters:
+func TestCircularBufferNewenqueue_dequeue_fifo(t *testing.T) {
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)
+    if buf.dequeue() != Some(1) { t.Errorf("got %v, want %v", buf.dequeue(), Some(1)) }if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }
+}
 
-//   - item: T
+func TestCircularBufferNewfull_buffer_prevents_enqueue(t *testing.T) {
+    let mut buf = CircularBuffer::new(1);
+    buf.enqueue(42)
+    if !(buf.is_full()) { t.Errorf("assertion failed: buf.is_full()") }if !(buf.enqueue(43).is_err()) { t.Errorf("assertion failed: buf.enqueue(43).is_err()") }
+}
+
+func TestCircularBufferNewempty_buffer_returns_none(t *testing.T) {
+    let buf = CircularBuffer::<i32>::new(5);
+    
+    if buf.dequeue() != None { t.Errorf("got %v, want %v", buf.dequeue(), None) }
+}
+
+func TestCircularBufferNewwrap_around_works(t *testing.T) {
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
+    if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }if buf.dequeue() != Some(3) { t.Errorf("got %v, want %v", buf.dequeue(), Some(3)) }if buf.dequeue() != Some(4) { t.Errorf("got %v, want %v", buf.dequeue(), Some(4)) }
+}
 
 
+// --- CircularBuffer_enqueue.go ---
+// CircularBuffer.Enqueue
+ // @param item - T
 
-// Returns:
-//   - ((), error)
+ // @returns ((), error)
 
 
 // Preconditions:
  // - size < capacity
 
 
-
 // Postconditions:
  // - size == old.size + 1
 
 
+package circularbuffer
 
-// Returns a (value, error) tuple.
 
 func (s *CircularBuffer[T]) Enqueue(item T) ((), error) {
-	
-	// TODO: Implement Enqueue
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
 
-// Dequeue Dequeue.
+// ========== Generated tests ==========
+
+func TestCircularBufferEnqueueenqueue_dequeue_fifo(t *testing.T) {
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)
+    if buf.dequeue() != Some(1) { t.Errorf("got %v, want %v", buf.dequeue(), Some(1)) }if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }
+}
+
+func TestCircularBufferEnqueuefull_buffer_prevents_enqueue(t *testing.T) {
+    let mut buf = CircularBuffer::new(1);
+    buf.enqueue(42)
+    if !(buf.is_full()) { t.Errorf("assertion failed: buf.is_full()") }if !(buf.enqueue(43).is_err()) { t.Errorf("assertion failed: buf.enqueue(43).is_err()") }
+}
+
+func TestCircularBufferEnqueueempty_buffer_returns_none(t *testing.T) {
+    let buf = CircularBuffer::<i32>::new(5);
+    
+    if buf.dequeue() != None { t.Errorf("got %v, want %v", buf.dequeue(), None) }
+}
+
+func TestCircularBufferEnqueuewrap_around_works(t *testing.T) {
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
+    if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }if buf.dequeue() != Some(3) { t.Errorf("got %v, want %v", buf.dequeue(), Some(3)) }if buf.dequeue() != Some(4) { t.Errorf("got %v, want %v", buf.dequeue(), Some(4)) }
+}
 
 
-// Returns:
-//   - *T
+// --- CircularBuffer_dequeue.go ---
+// CircularBuffer.Dequeue
+
+ // @returns *T
 
 
 // Preconditions:
  // - size > 0
 
 
-
 // Postconditions:
  // - size == old.size - 1
 
 
+package circularbuffer
+
 
 func (s *CircularBuffer[T]) Dequeue() *T {
-	
-	// TODO: Implement Dequeue
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
-
-// IsFull IsFull.
-
-
-// Returns:
-//   - bool
-
-
-
-
-func (s *CircularBuffer[T]) IsFull() bool {
-	
-	// TODO: Implement IsFull
-	panic("not implemented")
-}
-
-// IsEmpty IsEmpty.
-
-
-// Returns:
-//   - bool
-
-
-
-
-func (s *CircularBuffer[T]) IsEmpty() bool {
-	
-	// TODO: Implement IsEmpty
-	panic("not implemented")
-}
-
-// Len Len.
-
-
-// Returns:
-//   - int
-
-
-
-
-func (s *CircularBuffer[T]) Len() int {
-	
-	// TODO: Implement Len
-	panic("not implemented")
-}
-
-
-
 
 // ========== Generated tests ==========
 
-func Testenqueue_dequeue_fifo(t *testing.T) {
-	let mut buf = CircularBuffer::new(3);
-	buf.enqueue(1)buf.enqueue(2)
-	if buf.dequeue() != Some(1) { t.Errorf("got %v, want %v", buf.dequeue(), Some(1)) }if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }
+func TestCircularBufferDequeueenqueue_dequeue_fifo(t *testing.T) {
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)
+    if buf.dequeue() != Some(1) { t.Errorf("got %v, want %v", buf.dequeue(), Some(1)) }if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }
 }
 
-func Testfull_buffer_prevents_enqueue(t *testing.T) {
-	let mut buf = CircularBuffer::new(1);
-	buf.enqueue(42)
-	if !(buf.is_full()) { t.Errorf("assertion failed: buf.is_full()") }if !(buf.enqueue(43).is_err()) { t.Errorf("assertion failed: buf.enqueue(43).is_err()") }
+func TestCircularBufferDequeuefull_buffer_prevents_enqueue(t *testing.T) {
+    let mut buf = CircularBuffer::new(1);
+    buf.enqueue(42)
+    if !(buf.is_full()) { t.Errorf("assertion failed: buf.is_full()") }if !(buf.enqueue(43).is_err()) { t.Errorf("assertion failed: buf.enqueue(43).is_err()") }
 }
 
-func Testempty_buffer_returns_none(t *testing.T) {
-	let buf = CircularBuffer::<i32>::new(5);
-	
-	if buf.dequeue() != None { t.Errorf("got %v, want %v", buf.dequeue(), None) }
+func TestCircularBufferDequeueempty_buffer_returns_none(t *testing.T) {
+    let buf = CircularBuffer::<i32>::new(5);
+    
+    if buf.dequeue() != None { t.Errorf("got %v, want %v", buf.dequeue(), None) }
 }
 
-func Testwrap_around_works(t *testing.T) {
-	let mut buf = CircularBuffer::new(3);
-	buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
-	if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }if buf.dequeue() != Some(3) { t.Errorf("got %v, want %v", buf.dequeue(), Some(3)) }if buf.dequeue() != Some(4) { t.Errorf("got %v, want %v", buf.dequeue(), Some(4)) }
+func TestCircularBufferDequeuewrap_around_works(t *testing.T) {
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
+    if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }if buf.dequeue() != Some(3) { t.Errorf("got %v, want %v", buf.dequeue(), Some(3)) }if buf.dequeue() != Some(4) { t.Errorf("got %v, want %v", buf.dequeue(), Some(4)) }
+}
+
+
+// --- CircularBuffer_is_full.go ---
+// CircularBuffer.IsFull
+
+ // @returns bool
+
+
+
+
+package circularbuffer
+
+
+func (s *CircularBuffer[T]) IsFull() bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestCircularBufferIsFullenqueue_dequeue_fifo(t *testing.T) {
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)
+    if buf.dequeue() != Some(1) { t.Errorf("got %v, want %v", buf.dequeue(), Some(1)) }if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }
+}
+
+func TestCircularBufferIsFullfull_buffer_prevents_enqueue(t *testing.T) {
+    let mut buf = CircularBuffer::new(1);
+    buf.enqueue(42)
+    if !(buf.is_full()) { t.Errorf("assertion failed: buf.is_full()") }if !(buf.enqueue(43).is_err()) { t.Errorf("assertion failed: buf.enqueue(43).is_err()") }
+}
+
+func TestCircularBufferIsFullempty_buffer_returns_none(t *testing.T) {
+    let buf = CircularBuffer::<i32>::new(5);
+    
+    if buf.dequeue() != None { t.Errorf("got %v, want %v", buf.dequeue(), None) }
+}
+
+func TestCircularBufferIsFullwrap_around_works(t *testing.T) {
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
+    if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }if buf.dequeue() != Some(3) { t.Errorf("got %v, want %v", buf.dequeue(), Some(3)) }if buf.dequeue() != Some(4) { t.Errorf("got %v, want %v", buf.dequeue(), Some(4)) }
+}
+
+
+// --- CircularBuffer_is_empty.go ---
+// CircularBuffer.IsEmpty
+
+ // @returns bool
+
+
+
+
+package circularbuffer
+
+
+func (s *CircularBuffer[T]) IsEmpty() bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestCircularBufferIsEmptyenqueue_dequeue_fifo(t *testing.T) {
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)
+    if buf.dequeue() != Some(1) { t.Errorf("got %v, want %v", buf.dequeue(), Some(1)) }if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }
+}
+
+func TestCircularBufferIsEmptyfull_buffer_prevents_enqueue(t *testing.T) {
+    let mut buf = CircularBuffer::new(1);
+    buf.enqueue(42)
+    if !(buf.is_full()) { t.Errorf("assertion failed: buf.is_full()") }if !(buf.enqueue(43).is_err()) { t.Errorf("assertion failed: buf.enqueue(43).is_err()") }
+}
+
+func TestCircularBufferIsEmptyempty_buffer_returns_none(t *testing.T) {
+    let buf = CircularBuffer::<i32>::new(5);
+    
+    if buf.dequeue() != None { t.Errorf("got %v, want %v", buf.dequeue(), None) }
+}
+
+func TestCircularBufferIsEmptywrap_around_works(t *testing.T) {
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
+    if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }if buf.dequeue() != Some(3) { t.Errorf("got %v, want %v", buf.dequeue(), Some(3)) }if buf.dequeue() != Some(4) { t.Errorf("got %v, want %v", buf.dequeue(), Some(4)) }
+}
+
+
+// --- CircularBuffer_len.go ---
+// CircularBuffer.Len
+
+ // @returns int
+
+
+
+
+package circularbuffer
+
+
+func (s *CircularBuffer[T]) Len() int {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestCircularBufferLenenqueue_dequeue_fifo(t *testing.T) {
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)
+    if buf.dequeue() != Some(1) { t.Errorf("got %v, want %v", buf.dequeue(), Some(1)) }if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }
+}
+
+func TestCircularBufferLenfull_buffer_prevents_enqueue(t *testing.T) {
+    let mut buf = CircularBuffer::new(1);
+    buf.enqueue(42)
+    if !(buf.is_full()) { t.Errorf("assertion failed: buf.is_full()") }if !(buf.enqueue(43).is_err()) { t.Errorf("assertion failed: buf.enqueue(43).is_err()") }
+}
+
+func TestCircularBufferLenempty_buffer_returns_none(t *testing.T) {
+    let buf = CircularBuffer::<i32>::new(5);
+    
+    if buf.dequeue() != None { t.Errorf("got %v, want %v", buf.dequeue(), None) }
+}
+
+func TestCircularBufferLenwrap_around_works(t *testing.T) {
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
+    if buf.dequeue() != Some(2) { t.Errorf("got %v, want %v", buf.dequeue(), Some(2)) }if buf.dequeue() != Some(3) { t.Errorf("got %v, want %v", buf.dequeue(), Some(3)) }if buf.dequeue() != Some(4) { t.Errorf("got %v, want %v", buf.dequeue(), Some(4)) }
 }
 

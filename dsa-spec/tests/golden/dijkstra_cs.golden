@@ -1,0 +1,133 @@
+// --- DijkstraMethods.cs ---
+/// <summary>
+/// Dijkstra
+
+/// Time complexity: O((V + E) log V)
+
+
+/// Space complexity: O(V)
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Dijkstra
+{
+
+
+public static class DijkstraMethods
+{
+    
+    /// <summary>
+    /// Dijkstra.
+    /// </summary>
+    
+    /// <param name="graph">HashMap<usize, Vec<(usize, usize)>>.</param>
+    
+    /// <param name="start">int.</param>
+    
+    
+    /// <returns>HashMap<usize, usize>.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - start vertex exists in graph
+    
+    /// - all edge weights >= 0
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - result contains all reachable vertices
+    
+    /// - result[start] == 0
+    
+    /// </remarks>
+    
+    
+    public static HashMap<usize, usize> Dijkstra(HashMap<usize, Vec<(usize, usize)>> graph, int start)
+    {
+        
+        // TODO: Implement Dijkstra
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Shortestpath.
+    /// </summary>
+    
+    /// <param name="graph">HashMap<usize, Vec<(usize, usize)>>.</param>
+    
+    /// <param name="start">int.</param>
+    
+    /// <param name="end">int.</param>
+    
+    
+    /// <returns>List<int>?.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - start and end exist in graph
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - if path exists, first element is start and last is end
+    
+    /// </remarks>
+    
+    
+    public static List<int>? ShortestPath(HashMap<usize, Vec<(usize, usize)>> graph, int start, int end)
+    {
+        
+        // TODO: Implement ShortestPath
+        throw new NotImplementedException();
+    }
+    
+}
+
+
+// ========== Generated xUnit tests ==========
+
+public class simple_pathTests
+{
+    [Fact]
+    public void simple_path_Test()
+    {
+        // Setup
+        let mut graph: HashMap<usize, Vec<(usize, usize)>> = HashMap::new();
+        // Actions
+        graph.insert(0, vec![(1, 4), (2, 1)]);graph.insert(1, vec![(3, 1)]);graph.insert(2, vec![(1, 2), (3, 5)]);graph.insert(3, vec![]);let dist = dijkstra(&graph, 0);
+        // Assertions
+        Assert.AreEqual(dist[&0], 0);Assert.AreEqual(dist[&1], 3);Assert.AreEqual(dist[&2], 1);Assert.AreEqual(dist[&3], 4);
+    }
+}
+
+public class unreachable_vertexTests
+{
+    [Fact]
+    public void unreachable_vertex_Test()
+    {
+        // Setup
+        let mut graph: HashMap<usize, Vec<(usize, usize)>> = HashMap::new();
+        // Actions
+        graph.insert(0, vec![(1, 1)]);graph.insert(1, vec![]);graph.insert(2, vec![]);let dist = dijkstra(&graph, 0);
+        // Assertions
+        Assert.AreEqual(dist[&0], 0);Assert.AreEqual(dist[&1], 1);Assert.IsTrue(!dist.contains_key(&2));
+    }
+}
+
+}

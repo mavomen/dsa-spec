@@ -1,326 +1,314 @@
+// --- Node.ts ---
 /**
  * SinglyLinkedList
-
  * Time complexity: O(1) prepend, O(n) append/search
-
 
  * Space complexity: O(n)
 
 
  * Invariants:
-
  * - no cycles
-
  * - head is None iff tail is None
-
 
  */
 
 
+export class Node<T> {
 
-export interface Node<T extends Clone> {
     
-    value: T;
+    public value: T;
     
-    next: Node<T> | null;
+    public next: Node<T> | null;
     
 }
 
-export class NodeImpl<T extends Clone> implements Node<T> {
-    constructor(
-        
-        public value: T,
-        
-        public next: Node<T> | null
-        
-    ) {}
+// --- Node_new.ts ---
+/**
+ * SinglyLinkedList.new
 
-    
-    /**
-     * New.
-     
-     
-     * @returns Self
-     
-     
-     
-     *
-     * Postconditions:
-      * - head is None
-     
-     
-     */
-    new(): Self {
-        
-        // TODO: Implement new
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Prepend.
-     
-     * @param value - T.
-     
-     
-     
-     
-     *
-     * Postconditions:
-      * - head.value == value
-      * - list length increased by 1
-     
-     
-     */
-    prepend(value: T): void {
-        
-        // TODO: Implement prepend
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Append.
-     
-     * @param value - T.
-     
-     
-     
-     
-     *
-     * Postconditions:
-      * - last element == value
-     
-     
-     */
-    append(value: T): void {
-        
-        // TODO: Implement append
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Popfront.
-     
-     
-     * @returns T | null
-     
-     
-     *
-     * Preconditions:
-      * - !is_empty()
-     
-     
-     *
-     * Postconditions:
-      * - head == old.head.next
-     
-     
-     */
-    popFront(): T | null {
-        
-        // TODO: Implement popFront
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Isempty.
-     
-     
-     * @returns boolean
-     
-     
-     
-     
-     */
-    isEmpty(): boolean {
-        
-        // TODO: Implement isEmpty
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Len.
-     
-     
-     * @returns number
-     
-     
-     
-     
-     */
-    len(): number {
-        
-        // TODO: Implement len
-        throw new Error('Not implemented');
-    }
-    
-}
-
-export interface SinglyLinkedList<T extends Clone> {
-    
-    head: Node<T> | null;
-    
-}
-
-export class SinglyLinkedListImpl<T extends Clone> implements SinglyLinkedList<T> {
-    constructor(
-        
-        public head: Node<T> | null
-        
-    ) {}
-
-    
-    /**
-     * New.
-     
-     
-     * @returns Self
-     
-     
-     
-     *
-     * Postconditions:
-      * - head is None
-     
-     
-     */
-    new(): Self {
-        
-        // TODO: Implement new
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Prepend.
-     
-     * @param value - T.
-     
-     
-     
-     
-     *
-     * Postconditions:
-      * - head.value == value
-      * - list length increased by 1
-     
-     
-     */
-    prepend(value: T): void {
-        
-        // TODO: Implement prepend
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Append.
-     
-     * @param value - T.
-     
-     
-     
-     
-     *
-     * Postconditions:
-      * - last element == value
-     
-     
-     */
-    append(value: T): void {
-        
-        // TODO: Implement append
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Popfront.
-     
-     
-     * @returns T | null
-     
-     
-     *
-     * Preconditions:
-      * - !is_empty()
-     
-     
-     *
-     * Postconditions:
-      * - head == old.head.next
-     
-     
-     */
-    popFront(): T | null {
-        
-        // TODO: Implement popFront
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Isempty.
-     
-     
-     * @returns boolean
-     
-     
-     
-     
-     */
-    isEmpty(): boolean {
-        
-        // TODO: Implement isEmpty
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Len.
-     
-     
-     * @returns number
-     
-     
-     
-     
-     */
-    len(): number {
-        
-        // TODO: Implement len
-        throw new Error('Not implemented');
-    }
-    
-}
+ * @returns Self
 
 
 
-// ========== Generated Jest tests ==========
+ * Postconditions:
+ * - head is None
+
+ */
+
+import { Node } from './node';
+
+
+(Node.prototype as any).new = function <T>(): Self {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
 
 describe('prepend_pop_front', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let mut list = SinglyLinkedList::new();
-        // Actions
         list.prepend(1);list.prepend(2);
-        // Assertions
         expect(list.pop_front()).toBe(Some(2));expect(list.pop_front()).toBe(Some(1));
     });
 });
 
 describe('append_order', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let mut list = SinglyLinkedList::new();
-        // Actions
         list.append(1);list.append(2);
-        // Assertions
         expect(list.pop_front()).toBe(Some(1));
     });
 });
 
 describe('pop_front_empty', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let list = SinglyLinkedList::<i32>::new();
-        // Actions
         
-        // Assertions
+        expect(list.pop_front()).toBe(None);
+    });
+});
+
+
+// --- Node_prepend.ts ---
+/**
+ * SinglyLinkedList.prepend
+ * @param value - T
+
+
+
+
+ * Postconditions:
+ * - head.value == value
+ * - list length increased by 1
+
+ */
+
+import { Node } from './node';
+
+
+(Node.prototype as any).prepend = function <T>(value: T): void {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('prepend_pop_front', () => {
+    it('should pass', () => {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);list.prepend(2);
+        expect(list.pop_front()).toBe(Some(2));expect(list.pop_front()).toBe(Some(1));
+    });
+});
+
+describe('append_order', () => {
+    it('should pass', () => {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);list.append(2);
+        expect(list.pop_front()).toBe(Some(1));
+    });
+});
+
+describe('pop_front_empty', () => {
+    it('should pass', () => {
+        let list = SinglyLinkedList::<i32>::new();
+        
+        expect(list.pop_front()).toBe(None);
+    });
+});
+
+
+// --- Node_append.ts ---
+/**
+ * SinglyLinkedList.append
+ * @param value - T
+
+
+
+
+ * Postconditions:
+ * - last element == value
+
+ */
+
+import { Node } from './node';
+
+
+(Node.prototype as any).append = function <T>(value: T): void {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('prepend_pop_front', () => {
+    it('should pass', () => {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);list.prepend(2);
+        expect(list.pop_front()).toBe(Some(2));expect(list.pop_front()).toBe(Some(1));
+    });
+});
+
+describe('append_order', () => {
+    it('should pass', () => {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);list.append(2);
+        expect(list.pop_front()).toBe(Some(1));
+    });
+});
+
+describe('pop_front_empty', () => {
+    it('should pass', () => {
+        let list = SinglyLinkedList::<i32>::new();
+        
+        expect(list.pop_front()).toBe(None);
+    });
+});
+
+
+// --- Node_popFront.ts ---
+/**
+ * SinglyLinkedList.popFront
+
+ * @returns T | null
+
+
+ * Preconditions:
+ * - !is_empty()
+
+
+ * Postconditions:
+ * - head == old.head.next
+
+ */
+
+import { Node } from './node';
+
+
+(Node.prototype as any).popFront = function <T>(): T | null {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('prepend_pop_front', () => {
+    it('should pass', () => {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);list.prepend(2);
+        expect(list.pop_front()).toBe(Some(2));expect(list.pop_front()).toBe(Some(1));
+    });
+});
+
+describe('append_order', () => {
+    it('should pass', () => {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);list.append(2);
+        expect(list.pop_front()).toBe(Some(1));
+    });
+});
+
+describe('pop_front_empty', () => {
+    it('should pass', () => {
+        let list = SinglyLinkedList::<i32>::new();
+        
+        expect(list.pop_front()).toBe(None);
+    });
+});
+
+
+// --- Node_isEmpty.ts ---
+/**
+ * SinglyLinkedList.isEmpty
+
+ * @returns boolean
+
+
+
+ */
+
+import { Node } from './node';
+
+
+(Node.prototype as any).isEmpty = function <T>(): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('prepend_pop_front', () => {
+    it('should pass', () => {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);list.prepend(2);
+        expect(list.pop_front()).toBe(Some(2));expect(list.pop_front()).toBe(Some(1));
+    });
+});
+
+describe('append_order', () => {
+    it('should pass', () => {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);list.append(2);
+        expect(list.pop_front()).toBe(Some(1));
+    });
+});
+
+describe('pop_front_empty', () => {
+    it('should pass', () => {
+        let list = SinglyLinkedList::<i32>::new();
+        
+        expect(list.pop_front()).toBe(None);
+    });
+});
+
+
+// --- Node_len.ts ---
+/**
+ * SinglyLinkedList.len
+
+ * @returns number
+
+
+
+ */
+
+import { Node } from './node';
+
+
+(Node.prototype as any).len = function <T>(): number {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('prepend_pop_front', () => {
+    it('should pass', () => {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);list.prepend(2);
+        expect(list.pop_front()).toBe(Some(2));expect(list.pop_front()).toBe(Some(1));
+    });
+});
+
+describe('append_order', () => {
+    it('should pass', () => {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);list.append(2);
+        expect(list.pop_front()).toBe(Some(1));
+    });
+});
+
+describe('pop_front_empty', () => {
+    it('should pass', () => {
+        let list = SinglyLinkedList::<i32>::new();
+        
         expect(list.pop_front()).toBe(None);
     });
 });

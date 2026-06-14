@@ -8,7 +8,12 @@ fn parse_spec(yaml: &str) -> Spec {
 
 fn generate(spec: &Spec) -> String {
     let backend = CSharpBackend::new("templates").expect("Failed to create CSharpBackend");
-    backend.generate(spec).expect("Generation failed")
+    let files = backend.generate(spec).expect("Generation failed");
+    files
+        .into_iter()
+        .map(|(_, code)| code)
+        .collect::<Vec<_>>()
+        .join("\n")
 }
 
 #[test]
@@ -37,7 +42,7 @@ verification:
 "#,
     );
     let code = generate(&spec);
-    assert!(code.contains("public class Stack<T>"));
+    assert!(code.contains("public partial class Stack<T>"));
     assert!(code.contains("public List<T> Items { get; set; }"));
     assert!(code.contains("public void Push(T item)"));
     assert!(code.contains("throw new NotImplementedException();"));

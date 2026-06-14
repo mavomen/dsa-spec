@@ -1,0 +1,303 @@
+// --- MaxHeap.py ---
+"""
+MaxHeap
+Time complexity: O(log n) insert/extract, O(1) peek
+Space complexity: O(n)
+
+Invariants:
+    - parent value >= children values
+    - tree is complete (all levels filled left-to-right)
+    - size == data.len()
+
+"""
+
+from dataclasses import dataclass
+from typing import Generic, TypeVar, Optional, List, Dict
+
+T = TypeVar("T")
+
+
+@dataclass
+class MaxHeap(Generic[T]):
+    """MaxHeap"""
+
+    data: List[T]
+
+// --- MaxHeap_new.py ---
+"""
+MaxHeap.new
+
+
+Postconditions:
+    - is_empty() == true
+    - size() == 0
+
+"""
+
+from maxheap import MaxHeap
+
+
+def new(self, ) -> Self:
+    """new."""
+    
+    raise NotImplementedError
+
+
+MaxHeap.new = new
+
+del new
+
+
+# ========== Generated tests ==========
+
+def test_insert_and_extract_max():
+    let mut heap = MaxHeap::new();
+    heap.insert(3)heap.insert(5)heap.insert(1)heap.insert(4)
+    assert heap.extract_max() == Some(5)assert heap.extract_max() == Some(4)assert heap.extract_max() == Some(3)assert heap.extract_max() == Some(1)assert heap.extract_max() == None
+
+def test_peek_returns_largest():
+    let mut heap = MaxHeap::new();
+    heap.insert(10)heap.insert(20)
+    assert *heap.peek().unwrap() == 20
+
+def test_empty_heap_returns_none():
+    let heap: MaxHeap<i32> = MaxHeap::new();
+    
+    assert heap.peek().is_none()assert heap.extract_max().is_none()assert heap.is_empty()
+
+def test_size_tracks_insertions():
+    let mut heap = MaxHeap::new();
+    heap.insert(1)heap.insert(2)heap.insert(3)
+    assert heap.size() == 3heap.extract_max()assert heap.size() == 2
+
+
+// --- MaxHeap_insert.py ---
+"""
+MaxHeap.insert
+
+
+Postconditions:
+    - size() == old.size() + 1
+    - heap invariant maintained
+
+"""
+
+from maxheap import MaxHeap
+
+
+def insert(self, value: T) -> None:
+    """insert."""
+    
+    raise NotImplementedError
+
+
+MaxHeap.insert = insert
+
+del insert
+
+
+# ========== Generated tests ==========
+
+def test_insert_and_extract_max():
+    let mut heap = MaxHeap::new();
+    heap.insert(3)heap.insert(5)heap.insert(1)heap.insert(4)
+    assert heap.extract_max() == Some(5)assert heap.extract_max() == Some(4)assert heap.extract_max() == Some(3)assert heap.extract_max() == Some(1)assert heap.extract_max() == None
+
+def test_peek_returns_largest():
+    let mut heap = MaxHeap::new();
+    heap.insert(10)heap.insert(20)
+    assert *heap.peek().unwrap() == 20
+
+def test_empty_heap_returns_none():
+    let heap: MaxHeap<i32> = MaxHeap::new();
+    
+    assert heap.peek().is_none()assert heap.extract_max().is_none()assert heap.is_empty()
+
+def test_size_tracks_insertions():
+    let mut heap = MaxHeap::new();
+    heap.insert(1)heap.insert(2)heap.insert(3)
+    assert heap.size() == 3heap.extract_max()assert heap.size() == 2
+
+
+// --- MaxHeap_extract_max.py ---
+"""
+MaxHeap.extract_max
+
+Preconditions:
+    - is_empty() == false
+
+
+Postconditions:
+    - size() == old.size() - 1
+    - heap invariant maintained
+
+"""
+
+from maxheap import MaxHeap
+
+
+def extract_max(self, ) -> Optional[T]:
+    """extract_max."""
+    
+    raise NotImplementedError
+
+
+MaxHeap.extract_max = extract_max
+
+del extract_max
+
+
+# ========== Generated tests ==========
+
+def test_insert_and_extract_max():
+    let mut heap = MaxHeap::new();
+    heap.insert(3)heap.insert(5)heap.insert(1)heap.insert(4)
+    assert heap.extract_max() == Some(5)assert heap.extract_max() == Some(4)assert heap.extract_max() == Some(3)assert heap.extract_max() == Some(1)assert heap.extract_max() == None
+
+def test_peek_returns_largest():
+    let mut heap = MaxHeap::new();
+    heap.insert(10)heap.insert(20)
+    assert *heap.peek().unwrap() == 20
+
+def test_empty_heap_returns_none():
+    let heap: MaxHeap<i32> = MaxHeap::new();
+    
+    assert heap.peek().is_none()assert heap.extract_max().is_none()assert heap.is_empty()
+
+def test_size_tracks_insertions():
+    let mut heap = MaxHeap::new();
+    heap.insert(1)heap.insert(2)heap.insert(3)
+    assert heap.size() == 3heap.extract_max()assert heap.size() == 2
+
+
+// --- MaxHeap_peek.py ---
+"""
+MaxHeap.peek
+
+
+"""
+
+from maxheap import MaxHeap
+
+
+def peek(self, ) -> Optional[T]:
+    """peek."""
+    
+    raise NotImplementedError
+
+
+MaxHeap.peek = peek
+
+del peek
+
+
+# ========== Generated tests ==========
+
+def test_insert_and_extract_max():
+    let mut heap = MaxHeap::new();
+    heap.insert(3)heap.insert(5)heap.insert(1)heap.insert(4)
+    assert heap.extract_max() == Some(5)assert heap.extract_max() == Some(4)assert heap.extract_max() == Some(3)assert heap.extract_max() == Some(1)assert heap.extract_max() == None
+
+def test_peek_returns_largest():
+    let mut heap = MaxHeap::new();
+    heap.insert(10)heap.insert(20)
+    assert *heap.peek().unwrap() == 20
+
+def test_empty_heap_returns_none():
+    let heap: MaxHeap<i32> = MaxHeap::new();
+    
+    assert heap.peek().is_none()assert heap.extract_max().is_none()assert heap.is_empty()
+
+def test_size_tracks_insertions():
+    let mut heap = MaxHeap::new();
+    heap.insert(1)heap.insert(2)heap.insert(3)
+    assert heap.size() == 3heap.extract_max()assert heap.size() == 2
+
+
+// --- MaxHeap_size.py ---
+"""
+MaxHeap.size
+
+
+"""
+
+from maxheap import MaxHeap
+
+
+def size(self, ) -> int:
+    """size."""
+    
+    raise NotImplementedError
+
+
+MaxHeap.size = size
+
+del size
+
+
+# ========== Generated tests ==========
+
+def test_insert_and_extract_max():
+    let mut heap = MaxHeap::new();
+    heap.insert(3)heap.insert(5)heap.insert(1)heap.insert(4)
+    assert heap.extract_max() == Some(5)assert heap.extract_max() == Some(4)assert heap.extract_max() == Some(3)assert heap.extract_max() == Some(1)assert heap.extract_max() == None
+
+def test_peek_returns_largest():
+    let mut heap = MaxHeap::new();
+    heap.insert(10)heap.insert(20)
+    assert *heap.peek().unwrap() == 20
+
+def test_empty_heap_returns_none():
+    let heap: MaxHeap<i32> = MaxHeap::new();
+    
+    assert heap.peek().is_none()assert heap.extract_max().is_none()assert heap.is_empty()
+
+def test_size_tracks_insertions():
+    let mut heap = MaxHeap::new();
+    heap.insert(1)heap.insert(2)heap.insert(3)
+    assert heap.size() == 3heap.extract_max()assert heap.size() == 2
+
+
+// --- MaxHeap_is_empty.py ---
+"""
+MaxHeap.is_empty
+
+
+"""
+
+from maxheap import MaxHeap
+
+
+def is_empty(self, ) -> bool:
+    """is_empty."""
+    
+    raise NotImplementedError
+
+
+MaxHeap.is_empty = is_empty
+
+del is_empty
+
+
+# ========== Generated tests ==========
+
+def test_insert_and_extract_max():
+    let mut heap = MaxHeap::new();
+    heap.insert(3)heap.insert(5)heap.insert(1)heap.insert(4)
+    assert heap.extract_max() == Some(5)assert heap.extract_max() == Some(4)assert heap.extract_max() == Some(3)assert heap.extract_max() == Some(1)assert heap.extract_max() == None
+
+def test_peek_returns_largest():
+    let mut heap = MaxHeap::new();
+    heap.insert(10)heap.insert(20)
+    assert *heap.peek().unwrap() == 20
+
+def test_empty_heap_returns_none():
+    let heap: MaxHeap<i32> = MaxHeap::new();
+    
+    assert heap.peek().is_none()assert heap.extract_max().is_none()assert heap.is_empty()
+
+def test_size_tracks_insertions():
+    let mut heap = MaxHeap::new();
+    heap.insert(1)heap.insert(2)heap.insert(3)
+    assert heap.size() == 3heap.extract_max()assert heap.size() == 2
+

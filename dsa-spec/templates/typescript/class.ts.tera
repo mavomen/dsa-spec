@@ -1,0 +1,21 @@
+/**
+ * {{ metadata.name }}
+{% if metadata.complexity.time %} * Time complexity: {{ metadata.complexity.time }}
+{% endif %}
+{% if metadata.complexity.space %} * Space complexity: {{ metadata.complexity.space }}
+{% endif %}
+{% if contracts.invariants %}
+ * Invariants:
+{% for inv in contracts.invariants %} * - {{ inv }}
+{% endfor %}{% endif %}
+ */
+
+{% if struct.generics %}
+export class {{ struct.name }}<{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}> {
+{% else %}
+export class {{ struct.name }} {
+{% endif %}
+    {% for field in struct.fields %}
+    public {{ field.name }}: {{ field.ts_type }};
+    {% endfor %}
+}

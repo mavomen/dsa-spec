@@ -1,3 +1,4 @@
+// --- Graph.cs ---
 /// <summary>
 /// Graph
 
@@ -22,240 +23,541 @@ using System.Linq;
 
 namespace Graph
 {
-
-
-public class Graph<T>
+    public partial class Graph<T>
     where T : Clone, Hash, Eq
 
-{
-    
-    public HashMap<T, Vec<T>> AdjacencyList { get; set; }
-    
-    public bool Directed { get; set; }
-    
-
-    
-    /// <summary>
-    /// New.
-    /// </summary>
-    
-    /// <param name="directed">bool.</param>
-    
-    
-    /// <returns>Self.</returns>
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - vertex_count == 0
-    
-    /// - edge_count == 0
-    
-    /// </remarks>
-    
-    
-    public Self New(bool directed)
     {
         
-        // TODO: Implement New
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Addvertex.
-    /// </summary>
-    
-    /// <param name="vertex">T.</param>
-    
-    
-    /// <returns>bool.</returns>
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - vertex exists in graph
-    
-    /// </remarks>
-    
-    
-    public bool AddVertex(T vertex)
-    {
+        public HashMap<T, Vec<T>> AdjacencyList { get; set; }
         
-        // TODO: Implement AddVertex
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Addedge.
-    /// </summary>
-    
-    /// <param name="from">T.</param>
-    
-    /// <param name="to">T.</param>
-    
-    
-    /// <returns>bool.</returns>
-    
-    
-    /// <remarks>
-    /// Preconditions:
-    
-    /// - from and to exist in graph
-    
-    /// </remarks>
-    
-    
-    
-    public bool AddEdge(T from, T to)
-    {
+        public bool Directed { get; set; }
         
-        // TODO: Implement AddEdge
-        throw new NotImplementedException();
     }
-    
-    /// <summary>
-    /// Neighbors.
-    /// </summary>
-    
-    /// <param name="vertex">T.</param>
-    
-    
-    /// <returns>&Vec<T>?.</returns>
-    
-    
-    
-    
-    public &Vec<T>? Neighbors(T vertex)
-    {
-        
-        // TODO: Implement Neighbors
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Vertexcount.
-    /// </summary>
-    
-    
-    /// <returns>int.</returns>
-    
-    
-    
-    
-    public int VertexCount()
-    {
-        
-        // TODO: Implement VertexCount
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Edgecount.
-    /// </summary>
-    
-    
-    /// <returns>int.</returns>
-    
-    
-    
-    
-    public int EdgeCount()
-    {
-        
-        // TODO: Implement EdgeCount
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Hasvertex.
-    /// </summary>
-    
-    /// <param name="vertex">T.</param>
-    
-    
-    /// <returns>bool.</returns>
-    
-    
-    
-    
-    public bool HasVertex(T vertex)
-    {
-        
-        // TODO: Implement HasVertex
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Hasedge.
-    /// </summary>
-    
-    /// <param name="from">T.</param>
-    
-    /// <param name="to">T.</param>
-    
-    
-    /// <returns>bool.</returns>
-    
-    
-    
-    
-    public bool HasEdge(T from, T to)
-    {
-        
-        // TODO: Implement HasEdge
-        throw new NotImplementedException();
-    }
-    
 }
 
+// --- Graph.New.cs ---
+namespace Graph
+{
+    public partial class Graph<T>
+    where T : Clone, Hash, Eq
 
+    {
+        /// <summary>
+        /// New.
+        /// </summary>
+        
+        /// <param name="directed">bool.</param>
+        
+        
+        /// <returns>Self.</returns>
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - vertex_count == 0
+        
+        /// - edge_count == 0
+        
+        /// </remarks>
+        
+        
+        public Self New(bool directed)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
 
 // ========== Generated xUnit tests ==========
 
-public class add_vertex_and_edgeTests
+public class Graphadd_vertex_and_edgeTests
 {
     [Fact]
     public void add_vertex_and_edge_Test()
     {
-        // Setup
         let mut g = Graph::new(false);
-        // Actions
         g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
-        // Assertions
         Assert.IsTrue(g.has_vertex(1));Assert.IsTrue(g.has_vertex(2));Assert.IsTrue(g.has_edge(1, 2));Assert.AreEqual(g.vertex_count(), 2);Assert.AreEqual(g.edge_count(), 1);
     }
 }
 
-public class undirected_graph_symmetric_edgesTests
+public class Graphundirected_graph_symmetric_edgesTests
 {
     [Fact]
     public void undirected_graph_symmetric_edges_Test()
     {
-        // Setup
         let mut g = Graph::new(false);
-        // Actions
         g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
-        // Assertions
         Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(g.has_edge(2, 1));
     }
 }
 
-public class directed_graph_no_symmetryTests
+public class Graphdirected_graph_no_symmetryTests
 {
     [Fact]
     public void directed_graph_no_symmetry_Test()
     {
-        // Setup
         let mut g = Graph::new(true);
-        // Actions
         g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
-        // Assertions
         Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(!g.has_edge(2, 1));
     }
 }
 
+
+// --- Graph.AddVertex.cs ---
+namespace Graph
+{
+    public partial class Graph<T>
+    where T : Clone, Hash, Eq
+
+    {
+        /// <summary>
+        /// AddVertex.
+        /// </summary>
+        
+        /// <param name="vertex">T.</param>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - vertex exists in graph
+        
+        /// </remarks>
+        
+        
+        public bool AddVertex(T vertex)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
 }
+
+// ========== Generated xUnit tests ==========
+
+public class Graphadd_vertex_and_edgeTests
+{
+    [Fact]
+    public void add_vertex_and_edge_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_vertex(1));Assert.IsTrue(g.has_vertex(2));Assert.IsTrue(g.has_edge(1, 2));Assert.AreEqual(g.vertex_count(), 2);Assert.AreEqual(g.edge_count(), 1);
+    }
+}
+
+public class Graphundirected_graph_symmetric_edgesTests
+{
+    [Fact]
+    public void undirected_graph_symmetric_edges_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(g.has_edge(2, 1));
+    }
+}
+
+public class Graphdirected_graph_no_symmetryTests
+{
+    [Fact]
+    public void directed_graph_no_symmetry_Test()
+    {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(!g.has_edge(2, 1));
+    }
+}
+
+
+// --- Graph.AddEdge.cs ---
+namespace Graph
+{
+    public partial class Graph<T>
+    where T : Clone, Hash, Eq
+
+    {
+        /// <summary>
+        /// AddEdge.
+        /// </summary>
+        
+        /// <param name="from">T.</param>
+        
+        /// <param name="to">T.</param>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        /// <remarks>
+        /// Preconditions:
+        
+        /// - from and to exist in graph
+        
+        /// </remarks>
+        
+        
+        
+        public bool AddEdge(T from, T to)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Graphadd_vertex_and_edgeTests
+{
+    [Fact]
+    public void add_vertex_and_edge_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_vertex(1));Assert.IsTrue(g.has_vertex(2));Assert.IsTrue(g.has_edge(1, 2));Assert.AreEqual(g.vertex_count(), 2);Assert.AreEqual(g.edge_count(), 1);
+    }
+}
+
+public class Graphundirected_graph_symmetric_edgesTests
+{
+    [Fact]
+    public void undirected_graph_symmetric_edges_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(g.has_edge(2, 1));
+    }
+}
+
+public class Graphdirected_graph_no_symmetryTests
+{
+    [Fact]
+    public void directed_graph_no_symmetry_Test()
+    {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(!g.has_edge(2, 1));
+    }
+}
+
+
+// --- Graph.Neighbors.cs ---
+namespace Graph
+{
+    public partial class Graph<T>
+    where T : Clone, Hash, Eq
+
+    {
+        /// <summary>
+        /// Neighbors.
+        /// </summary>
+        
+        /// <param name="vertex">T.</param>
+        
+        
+        /// <returns>&Vec<T>?.</returns>
+        
+        
+        
+        
+        public &Vec<T>? Neighbors(T vertex)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Graphadd_vertex_and_edgeTests
+{
+    [Fact]
+    public void add_vertex_and_edge_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_vertex(1));Assert.IsTrue(g.has_vertex(2));Assert.IsTrue(g.has_edge(1, 2));Assert.AreEqual(g.vertex_count(), 2);Assert.AreEqual(g.edge_count(), 1);
+    }
+}
+
+public class Graphundirected_graph_symmetric_edgesTests
+{
+    [Fact]
+    public void undirected_graph_symmetric_edges_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(g.has_edge(2, 1));
+    }
+}
+
+public class Graphdirected_graph_no_symmetryTests
+{
+    [Fact]
+    public void directed_graph_no_symmetry_Test()
+    {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(!g.has_edge(2, 1));
+    }
+}
+
+
+// --- Graph.VertexCount.cs ---
+namespace Graph
+{
+    public partial class Graph<T>
+    where T : Clone, Hash, Eq
+
+    {
+        /// <summary>
+        /// VertexCount.
+        /// </summary>
+        
+        
+        /// <returns>int.</returns>
+        
+        
+        
+        
+        public int VertexCount()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Graphadd_vertex_and_edgeTests
+{
+    [Fact]
+    public void add_vertex_and_edge_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_vertex(1));Assert.IsTrue(g.has_vertex(2));Assert.IsTrue(g.has_edge(1, 2));Assert.AreEqual(g.vertex_count(), 2);Assert.AreEqual(g.edge_count(), 1);
+    }
+}
+
+public class Graphundirected_graph_symmetric_edgesTests
+{
+    [Fact]
+    public void undirected_graph_symmetric_edges_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(g.has_edge(2, 1));
+    }
+}
+
+public class Graphdirected_graph_no_symmetryTests
+{
+    [Fact]
+    public void directed_graph_no_symmetry_Test()
+    {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(!g.has_edge(2, 1));
+    }
+}
+
+
+// --- Graph.EdgeCount.cs ---
+namespace Graph
+{
+    public partial class Graph<T>
+    where T : Clone, Hash, Eq
+
+    {
+        /// <summary>
+        /// EdgeCount.
+        /// </summary>
+        
+        
+        /// <returns>int.</returns>
+        
+        
+        
+        
+        public int EdgeCount()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Graphadd_vertex_and_edgeTests
+{
+    [Fact]
+    public void add_vertex_and_edge_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_vertex(1));Assert.IsTrue(g.has_vertex(2));Assert.IsTrue(g.has_edge(1, 2));Assert.AreEqual(g.vertex_count(), 2);Assert.AreEqual(g.edge_count(), 1);
+    }
+}
+
+public class Graphundirected_graph_symmetric_edgesTests
+{
+    [Fact]
+    public void undirected_graph_symmetric_edges_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(g.has_edge(2, 1));
+    }
+}
+
+public class Graphdirected_graph_no_symmetryTests
+{
+    [Fact]
+    public void directed_graph_no_symmetry_Test()
+    {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(!g.has_edge(2, 1));
+    }
+}
+
+
+// --- Graph.HasVertex.cs ---
+namespace Graph
+{
+    public partial class Graph<T>
+    where T : Clone, Hash, Eq
+
+    {
+        /// <summary>
+        /// HasVertex.
+        /// </summary>
+        
+        /// <param name="vertex">T.</param>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool HasVertex(T vertex)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Graphadd_vertex_and_edgeTests
+{
+    [Fact]
+    public void add_vertex_and_edge_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_vertex(1));Assert.IsTrue(g.has_vertex(2));Assert.IsTrue(g.has_edge(1, 2));Assert.AreEqual(g.vertex_count(), 2);Assert.AreEqual(g.edge_count(), 1);
+    }
+}
+
+public class Graphundirected_graph_symmetric_edgesTests
+{
+    [Fact]
+    public void undirected_graph_symmetric_edges_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(g.has_edge(2, 1));
+    }
+}
+
+public class Graphdirected_graph_no_symmetryTests
+{
+    [Fact]
+    public void directed_graph_no_symmetry_Test()
+    {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(!g.has_edge(2, 1));
+    }
+}
+
+
+// --- Graph.HasEdge.cs ---
+namespace Graph
+{
+    public partial class Graph<T>
+    where T : Clone, Hash, Eq
+
+    {
+        /// <summary>
+        /// HasEdge.
+        /// </summary>
+        
+        /// <param name="from">T.</param>
+        
+        /// <param name="to">T.</param>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool HasEdge(T from, T to)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Graphadd_vertex_and_edgeTests
+{
+    [Fact]
+    public void add_vertex_and_edge_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_vertex(1));Assert.IsTrue(g.has_vertex(2));Assert.IsTrue(g.has_edge(1, 2));Assert.AreEqual(g.vertex_count(), 2);Assert.AreEqual(g.edge_count(), 1);
+    }
+}
+
+public class Graphundirected_graph_symmetric_edgesTests
+{
+    [Fact]
+    public void undirected_graph_symmetric_edges_Test()
+    {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(g.has_edge(2, 1));
+    }
+}
+
+public class Graphdirected_graph_no_symmetryTests
+{
+    [Fact]
+    public void directed_graph_no_symmetry_Test()
+    {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        Assert.IsTrue(g.has_edge(1, 2));Assert.IsTrue(!g.has_edge(2, 1));
+    }
+}
+

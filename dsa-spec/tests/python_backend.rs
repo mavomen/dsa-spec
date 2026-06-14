@@ -8,7 +8,12 @@ fn parse_spec(yaml: &str) -> Spec {
 
 fn generate(spec: &Spec) -> String {
     let backend = PythonBackend::new("templates").expect("Failed to create PythonBackend");
-    backend.generate(spec).expect("Generation failed")
+    let files = backend.generate(spec).expect("Generation failed");
+    files
+        .into_iter()
+        .map(|(_, code)| code)
+        .collect::<Vec<_>>()
+        .join("\n")
 }
 
 #[test]

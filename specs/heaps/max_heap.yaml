@@ -1,0 +1,97 @@
+spec_version: "1.0"
+metadata:
+  name: "MaxHeap"
+  category: "heaps"
+  complexity:
+    time: "O(log n) insert/extract, O(1) peek"
+    space: "O(n)"
+  tags: ["heap", "priority-queue", "binary-tree"]
+
+contracts:
+  invariants:
+    - "parent value >= children values"
+    - "tree is complete (all levels filled left-to-right)"
+    - "size == data.len()"
+
+structs:
+  - name: "MaxHeap"
+    generics:
+      - name: "T"
+        constraints: ["Ord", "Clone"]
+    fields:
+      - name: "data"
+        type: "Vec<T>"
+
+methods:
+  - name: "new"
+    returns: "Self"
+    postconditions:
+      - "is_empty() == true"
+      - "size() == 0"
+
+  - name: "insert"
+    params:
+      - name: "value"
+        type: "T"
+    postconditions:
+      - "size() == old.size() + 1"
+      - "heap invariant maintained"
+
+  - name: "extract_max"
+    returns: "Option<T>"
+    preconditions:
+      - "is_empty() == false"
+    postconditions:
+      - "size() == old.size() - 1"
+      - "heap invariant maintained"
+
+  - name: "peek"
+    returns: "Option<&T>"
+
+  - name: "size"
+    returns: "usize"
+
+  - name: "is_empty"
+    returns: "bool"
+
+verification:
+  test_cases:
+    - name: "insert_and_extract_max"
+      setup: "let mut heap = MaxHeap::new();"
+      actions:
+        - "heap.insert(3)"
+        - "heap.insert(5)"
+        - "heap.insert(1)"
+        - "heap.insert(4)"
+      assertions:
+        - "assert_eq!(heap.extract_max(), Some(5))"
+        - "assert_eq!(heap.extract_max(), Some(4))"
+        - "assert_eq!(heap.extract_max(), Some(3))"
+        - "assert_eq!(heap.extract_max(), Some(1))"
+        - "assert_eq!(heap.extract_max(), None)"
+
+    - name: "peek_returns_largest"
+      setup: "let mut heap = MaxHeap::new();"
+      actions:
+        - "heap.insert(10)"
+        - "heap.insert(20)"
+      assertions:
+        - "assert_eq!(*heap.peek().unwrap(), 20)"
+
+    - name: "empty_heap_returns_none"
+      setup: "let heap: MaxHeap<i32> = MaxHeap::new();"
+      assertions:
+        - "assert!(heap.peek().is_none())"
+        - "assert!(heap.extract_max().is_none())"
+        - "assert!(heap.is_empty())"
+
+    - name: "size_tracks_insertions"
+      setup: "let mut heap = MaxHeap::new();"
+      actions:
+        - "heap.insert(1)"
+        - "heap.insert(2)"
+        - "heap.insert(3)"
+      assertions:
+        - "assert_eq!(heap.size(), 3)"
+        - "heap.extract_max()"
+        - "assert_eq!(heap.size(), 2)"

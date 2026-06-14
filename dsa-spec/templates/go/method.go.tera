@@ -1,0 +1,35 @@
+// {{ metadata.name }}.{{ method.name }}
+{% for param in method.params %} // @param {{ param.name }} - {{ param.go_type }}
+{% endfor %}
+{% if method.returns %} // @returns {{ method.returns }}
+{% endif %}
+{% if method.preconditions %}
+// Preconditions:
+{% for pre in method.preconditions %} // - {{ pre }}
+{% endfor %}{% endif %}
+{% if method.postconditions %}
+// Postconditions:
+{% for post in method.postconditions %} // - {{ post }}
+{% endfor %}{% endif %}
+
+package {{ metadata.name | lower }}
+
+{% if struct.generics %}
+func (s *{{ struct.name }}[{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}]) {{ method.name }}({% for param in method.params %}{{ param.name }} {{ param.go_type }}{% if not loop.last %}, {% endif %}{% endfor %}) {{ method.returns | default(value="") }} {
+{% else %}
+func (s *{{ struct.name }}) {{ method.name }}({% for param in method.params %}{{ param.name }} {{ param.go_type }}{% if not loop.last %}, {% endif %}{% endfor %}) {{ method.returns | default(value="") }} {
+{% endif %}
+    {% for assertion in method.injected_assertions %}
+    // Contract: {{ assertion }}
+    {% endfor %}
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+{% for test in verification.test_cases %}
+func Test{{ struct.name }}{{ method.name }}{{ test.name }}(t *testing.T) {
+    {% if test.setup %}{{ test.setup }}{% endif %}
+    {% for action in test.actions %}{{ action }}{% endfor %}
+    {% for assertion in test.assertions %}{{ assertion }}{% endfor %}
+}
+{% endfor %}

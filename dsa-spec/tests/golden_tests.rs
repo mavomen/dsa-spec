@@ -7,7 +7,7 @@ use dsa_spec::backend::Backend;
 struct LangBackend {
     label: &'static str,
     ext: &'static str,
-    generate: fn(&dsa_spec::ast::Spec) -> String,
+    generate: fn(&dsa_spec::ast::Spec) -> Vec<(String, String)>,
 }
 
 impl LangBackend {
@@ -143,7 +143,12 @@ fn test_golden_files_rust() {
         let stem = path.file_stem().unwrap().to_str().unwrap();
         let spec = parse_spec(path);
         for bk in &backends {
-            let code = (bk.generate)(&spec);
+            let files = (bk.generate)(&spec);
+            let code = files
+                .into_iter()
+                .map(|(name, content)| format!("// --- {name} ---\n{content}"))
+                .collect::<Vec<_>>()
+                .join("\n");
             let gp = bk.golden_path(stem, &gdir);
             check_or_update_golden(&code, &gp, stem, bk.label);
         }

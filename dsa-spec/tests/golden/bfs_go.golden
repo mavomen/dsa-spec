@@ -1,3 +1,4 @@
+// --- BFSMethods.go ---
 // BFS
 
 // Time complexity: O(V + E)

@@ -1,0 +1,502 @@
+// --- MaxHeap.cs ---
+/// <summary>
+/// MaxHeap
+
+/// Time complexity: O(log n) insert/extract, O(1) peek
+
+
+/// Space complexity: O(n)
+
+
+/// Invariants:
+
+/// - parent value >= children values
+
+/// - tree is complete (all levels filled left-to-right)
+
+/// - size == data.len()
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace MaxHeap
+{
+    public partial class MaxHeap<T>
+    where T : Ord, Clone
+
+    {
+        
+        public List<T> Data { get; set; }
+        
+    }
+}
+
+// --- MaxHeap.New.cs ---
+namespace MaxHeap
+{
+    public partial class MaxHeap<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// New.
+        /// </summary>
+        
+        
+        /// <returns>Self.</returns>
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - is_empty() == true
+        
+        /// - size() == 0
+        
+        /// </remarks>
+        
+        
+        public Self New()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class MaxHeapinsert_and_extract_maxTests
+{
+    [Fact]
+    public void insert_and_extract_max_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(3);heap.insert(5);heap.insert(1);heap.insert(4);
+        Assert.AreEqual(heap.extract_max(), Some(5));Assert.AreEqual(heap.extract_max(), Some(4));Assert.AreEqual(heap.extract_max(), Some(3));Assert.AreEqual(heap.extract_max(), Some(1));Assert.AreEqual(heap.extract_max(), None);
+    }
+}
+
+public class MaxHeappeek_returns_largestTests
+{
+    [Fact]
+    public void peek_returns_largest_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(10);heap.insert(20);
+        Assert.AreEqual(*heap.peek().unwrap(), 20);
+    }
+}
+
+public class MaxHeapempty_heap_returns_noneTests
+{
+    [Fact]
+    public void empty_heap_returns_none_Test()
+    {
+        let heap: MaxHeap<i32> = MaxHeap::new();
+        
+        Assert.IsTrue(heap.peek().is_none());Assert.IsTrue(heap.extract_max().is_none());Assert.IsTrue(heap.is_empty());
+    }
+}
+
+public class MaxHeapsize_tracks_insertionsTests
+{
+    [Fact]
+    public void size_tracks_insertions_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(1);heap.insert(2);heap.insert(3);
+        Assert.AreEqual(heap.size(), 3);heap.extract_max();Assert.AreEqual(heap.size(), 2);
+    }
+}
+
+
+// --- MaxHeap.Insert.cs ---
+namespace MaxHeap
+{
+    public partial class MaxHeap<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// Insert.
+        /// </summary>
+        
+        /// <param name="value">T.</param>
+        
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - size() == old.size() + 1
+        
+        /// - heap invariant maintained
+        
+        /// </remarks>
+        
+        
+        public void Insert(T value)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class MaxHeapinsert_and_extract_maxTests
+{
+    [Fact]
+    public void insert_and_extract_max_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(3);heap.insert(5);heap.insert(1);heap.insert(4);
+        Assert.AreEqual(heap.extract_max(), Some(5));Assert.AreEqual(heap.extract_max(), Some(4));Assert.AreEqual(heap.extract_max(), Some(3));Assert.AreEqual(heap.extract_max(), Some(1));Assert.AreEqual(heap.extract_max(), None);
+    }
+}
+
+public class MaxHeappeek_returns_largestTests
+{
+    [Fact]
+    public void peek_returns_largest_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(10);heap.insert(20);
+        Assert.AreEqual(*heap.peek().unwrap(), 20);
+    }
+}
+
+public class MaxHeapempty_heap_returns_noneTests
+{
+    [Fact]
+    public void empty_heap_returns_none_Test()
+    {
+        let heap: MaxHeap<i32> = MaxHeap::new();
+        
+        Assert.IsTrue(heap.peek().is_none());Assert.IsTrue(heap.extract_max().is_none());Assert.IsTrue(heap.is_empty());
+    }
+}
+
+public class MaxHeapsize_tracks_insertionsTests
+{
+    [Fact]
+    public void size_tracks_insertions_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(1);heap.insert(2);heap.insert(3);
+        Assert.AreEqual(heap.size(), 3);heap.extract_max();Assert.AreEqual(heap.size(), 2);
+    }
+}
+
+
+// --- MaxHeap.ExtractMax.cs ---
+namespace MaxHeap
+{
+    public partial class MaxHeap<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// ExtractMax.
+        /// </summary>
+        
+        
+        /// <returns>T?.</returns>
+        
+        
+        /// <remarks>
+        /// Preconditions:
+        
+        /// - is_empty() == false
+        
+        /// </remarks>
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - size() == old.size() - 1
+        
+        /// - heap invariant maintained
+        
+        /// </remarks>
+        
+        
+        public T? ExtractMax()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class MaxHeapinsert_and_extract_maxTests
+{
+    [Fact]
+    public void insert_and_extract_max_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(3);heap.insert(5);heap.insert(1);heap.insert(4);
+        Assert.AreEqual(heap.extract_max(), Some(5));Assert.AreEqual(heap.extract_max(), Some(4));Assert.AreEqual(heap.extract_max(), Some(3));Assert.AreEqual(heap.extract_max(), Some(1));Assert.AreEqual(heap.extract_max(), None);
+    }
+}
+
+public class MaxHeappeek_returns_largestTests
+{
+    [Fact]
+    public void peek_returns_largest_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(10);heap.insert(20);
+        Assert.AreEqual(*heap.peek().unwrap(), 20);
+    }
+}
+
+public class MaxHeapempty_heap_returns_noneTests
+{
+    [Fact]
+    public void empty_heap_returns_none_Test()
+    {
+        let heap: MaxHeap<i32> = MaxHeap::new();
+        
+        Assert.IsTrue(heap.peek().is_none());Assert.IsTrue(heap.extract_max().is_none());Assert.IsTrue(heap.is_empty());
+    }
+}
+
+public class MaxHeapsize_tracks_insertionsTests
+{
+    [Fact]
+    public void size_tracks_insertions_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(1);heap.insert(2);heap.insert(3);
+        Assert.AreEqual(heap.size(), 3);heap.extract_max();Assert.AreEqual(heap.size(), 2);
+    }
+}
+
+
+// --- MaxHeap.Peek.cs ---
+namespace MaxHeap
+{
+    public partial class MaxHeap<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// Peek.
+        /// </summary>
+        
+        
+        /// <returns>T?.</returns>
+        
+        
+        
+        
+        public T? Peek()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class MaxHeapinsert_and_extract_maxTests
+{
+    [Fact]
+    public void insert_and_extract_max_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(3);heap.insert(5);heap.insert(1);heap.insert(4);
+        Assert.AreEqual(heap.extract_max(), Some(5));Assert.AreEqual(heap.extract_max(), Some(4));Assert.AreEqual(heap.extract_max(), Some(3));Assert.AreEqual(heap.extract_max(), Some(1));Assert.AreEqual(heap.extract_max(), None);
+    }
+}
+
+public class MaxHeappeek_returns_largestTests
+{
+    [Fact]
+    public void peek_returns_largest_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(10);heap.insert(20);
+        Assert.AreEqual(*heap.peek().unwrap(), 20);
+    }
+}
+
+public class MaxHeapempty_heap_returns_noneTests
+{
+    [Fact]
+    public void empty_heap_returns_none_Test()
+    {
+        let heap: MaxHeap<i32> = MaxHeap::new();
+        
+        Assert.IsTrue(heap.peek().is_none());Assert.IsTrue(heap.extract_max().is_none());Assert.IsTrue(heap.is_empty());
+    }
+}
+
+public class MaxHeapsize_tracks_insertionsTests
+{
+    [Fact]
+    public void size_tracks_insertions_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(1);heap.insert(2);heap.insert(3);
+        Assert.AreEqual(heap.size(), 3);heap.extract_max();Assert.AreEqual(heap.size(), 2);
+    }
+}
+
+
+// --- MaxHeap.Size.cs ---
+namespace MaxHeap
+{
+    public partial class MaxHeap<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// Size.
+        /// </summary>
+        
+        
+        /// <returns>int.</returns>
+        
+        
+        
+        
+        public int Size()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class MaxHeapinsert_and_extract_maxTests
+{
+    [Fact]
+    public void insert_and_extract_max_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(3);heap.insert(5);heap.insert(1);heap.insert(4);
+        Assert.AreEqual(heap.extract_max(), Some(5));Assert.AreEqual(heap.extract_max(), Some(4));Assert.AreEqual(heap.extract_max(), Some(3));Assert.AreEqual(heap.extract_max(), Some(1));Assert.AreEqual(heap.extract_max(), None);
+    }
+}
+
+public class MaxHeappeek_returns_largestTests
+{
+    [Fact]
+    public void peek_returns_largest_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(10);heap.insert(20);
+        Assert.AreEqual(*heap.peek().unwrap(), 20);
+    }
+}
+
+public class MaxHeapempty_heap_returns_noneTests
+{
+    [Fact]
+    public void empty_heap_returns_none_Test()
+    {
+        let heap: MaxHeap<i32> = MaxHeap::new();
+        
+        Assert.IsTrue(heap.peek().is_none());Assert.IsTrue(heap.extract_max().is_none());Assert.IsTrue(heap.is_empty());
+    }
+}
+
+public class MaxHeapsize_tracks_insertionsTests
+{
+    [Fact]
+    public void size_tracks_insertions_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(1);heap.insert(2);heap.insert(3);
+        Assert.AreEqual(heap.size(), 3);heap.extract_max();Assert.AreEqual(heap.size(), 2);
+    }
+}
+
+
+// --- MaxHeap.IsEmpty.cs ---
+namespace MaxHeap
+{
+    public partial class MaxHeap<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// IsEmpty.
+        /// </summary>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool IsEmpty()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class MaxHeapinsert_and_extract_maxTests
+{
+    [Fact]
+    public void insert_and_extract_max_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(3);heap.insert(5);heap.insert(1);heap.insert(4);
+        Assert.AreEqual(heap.extract_max(), Some(5));Assert.AreEqual(heap.extract_max(), Some(4));Assert.AreEqual(heap.extract_max(), Some(3));Assert.AreEqual(heap.extract_max(), Some(1));Assert.AreEqual(heap.extract_max(), None);
+    }
+}
+
+public class MaxHeappeek_returns_largestTests
+{
+    [Fact]
+    public void peek_returns_largest_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(10);heap.insert(20);
+        Assert.AreEqual(*heap.peek().unwrap(), 20);
+    }
+}
+
+public class MaxHeapempty_heap_returns_noneTests
+{
+    [Fact]
+    public void empty_heap_returns_none_Test()
+    {
+        let heap: MaxHeap<i32> = MaxHeap::new();
+        
+        Assert.IsTrue(heap.peek().is_none());Assert.IsTrue(heap.extract_max().is_none());Assert.IsTrue(heap.is_empty());
+    }
+}
+
+public class MaxHeapsize_tracks_insertionsTests
+{
+    [Fact]
+    public void size_tracks_insertions_Test()
+    {
+        let mut heap = MaxHeap::new();
+        heap.insert(1);heap.insert(2);heap.insert(3);
+        Assert.AreEqual(heap.size(), 3);heap.extract_max();Assert.AreEqual(heap.size(), 2);
+    }
+}
+

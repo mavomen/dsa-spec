@@ -72,10 +72,10 @@ verification:
 ## 2. Generate the skeleton
 
 ```
-dsa-spec generate dijkstra.yaml --lang rust --output src/dijkstra.rs
+dsa-spec generate dijkstra.yaml --lang rust --output-dir src/
 ```
 
-This creates `src/dijkstra.rs` with the struct and method stubs, documentation, and failing tests.
+This creates `src/WeightedGraph.rs` (struct definition) plus `src/dijkstra.rs` and `src/add_edge.rs` (method stubs with documentation and failing tests).
 
 ## 3. Inspect the generated skeleton
 

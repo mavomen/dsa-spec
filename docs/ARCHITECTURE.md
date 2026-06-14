@@ -9,7 +9,7 @@
 
 DSA-SPEC reads a declarative YAML specification of a data structure or algorithm and emits boilerplate code skeletons (struct/class definitions, method signatures, doc comments, and test suites) in 5 languages: Rust, Python, C#, TypeScript, and Go.
 
-The pipeline: `YAML Spec → Parser → AST → Backend (TemplateEngine) → Formatted Code`
+The pipeline: `YAML Spec → Parser → AST → Backend (TemplateEngine) → Formatted Files`
 
 ---
 
@@ -23,7 +23,7 @@ src/
   parser.rs            # YAML → AST deserialization via serde_yaml
   spec_schema.rs       # JSON Schema for spec validation (Draft 7)
   validator.rs         # Runs JSON Schema validation against parsed Spec
-  backend.rs           # Backend trait: generate(&self, spec: &Spec) -> Result<String, BackendError>
+  backend.rs           # Backend trait: generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError>
   template_engine.rs   # Tera-based template rendering
   contracts.rs         # Contract assertion injection into AST methods (pre/post/invariant)
   error.rs             # Hand-rolled error enums: SpecError, BackendError
@@ -34,22 +34,26 @@ src/
   go_backend.rs        # Go backend — panic("contract violation: ..."), gofmt
   doc_gen.rs           # Markdown documentation generator from spec metadata
 templates/
-  rust.rs.tera
-  python.py.tera
-  csharp.cs.tera
-  typescript.ts.tera
-  go.go.tera
+  {lang}/                # Per-language template directories
+    class.{ext}.tera     # Struct/class definition (fields, constructor)
+    method.{ext}.tera    # One method + inline tests
+  {lang}.{ext}.tera      # Monolithic fallback for no-struct specs
 specs/                 # YAML DSA specifications organized by category
   arrays/
     dynamic_array.yaml, circular_buffer.yaml, stack.yaml
   linked-lists/
     singly_linked_list.yaml, doubly_linked_list.yaml
   trees/
-    bst.yaml, avl.yaml
+    bst.yaml, avl.yaml, trie.yaml
+  heaps/
+    max_heap.yaml
   graphs/
-    graph_adjacency_list.yaml, bfs.yaml, dfs.yaml
+    graph_adjacency_list.yaml, bfs.yaml, dfs.yaml,
+    dijkstra.yaml, kruskal.yaml, floyd_warshall.yaml
   sorting/
     mergesort.yaml, quicksort.yaml
+  searching/
+    binary_search.yaml
 tests/
   cli.rs               # CLI integration tests
   rust_backend.rs
@@ -76,7 +80,7 @@ docs/
 | `validator` | Schema validation against parsed Spec | Uses `jsonschema` crate (Draft 7); returns `Result<(), Vec<SpecError>>` |
 | `contracts` | Pre/post/invariant assertion injection | Pure AST → AST transformation; no side effects |
 | `error` | Hand-rolled error enums | `SpecError` (parser/validation), `BackendError` (template/formatter) |
-| `backends/*` | AST → formatted code string | Pure functions + template rendering; no file I/O |
+| `backends/*` | AST → Vec<(filename, code_string)> | Pure functions + template rendering; no file I/O |
 | `template_engine` | Tera template rendering | Thin wrapper over `tera::Tera` |
 | `doc_gen` | Markdown doc generation | Produces human-readable spec docs from AST |
 | `emitter` (embedded in main.rs) | File I/O + formatter invocation | Writes generated code to disk; calls external formatters |
@@ -149,7 +153,7 @@ This schema is frozen. Breaking changes bump the major version; additive changes
 ## Backend Architecture
 
 Each backend:
-1. Implements the `Backend` trait: `fn generate(&self, spec: &Spec) -> Result<String, BackendError>`
+1. Implements the `Backend` trait: `fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError>`
 2. Constructs a Tera `Context` from the spec (via a per-backend `build_context` function)
 3. Renders a language-specific template
 4. Attempts to format via an external formatter; falls back to raw output on failure
@@ -279,7 +283,7 @@ Used by all backend modules and template engine:
 ### Error flow
 - `parser::parse()` → `Result<Spec, SpecError>`
 - `validator::validate()` → `Result<(), Vec<SpecError>>`
-- `Backend::generate()` → `Result<String, BackendError>`
+- `Backend::generate()` → `Result<Vec<(String, String)>, BackendError>`
 - `TemplateEngine::new()` / `render()` → `Result<..., BackendError>`
 - `main.rs` returns `Box<dyn std::error::Error>` (all error types satisfy the trait)
 

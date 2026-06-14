@@ -1,7 +1,7 @@
-//! Python code generation backend.
+//! Python code generation backend with multi-file output.
 
 use crate::assertion;
-use crate::ast::{Spec, Type};
+use crate::ast::{MethodDef, Spec, Type};
 use crate::backend::Backend;
 use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
@@ -19,6 +19,18 @@ impl PythonBackend {
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(PythonBackend { engine })
+    }
+
+    fn file_extension() -> &'static str {
+        "py"
+    }
+
+    fn class_filename(class_name: &str) -> String {
+        format!("{}.py", class_name)
+    }
+
+    fn method_filename(class_name: &str, method_name: &str) -> String {
+        format!("{}_{}.py", class_name, method_name)
     }
 
     fn format_python(code: &str) -> Result<String, BackendError> {
@@ -59,13 +71,270 @@ impl PythonBackend {
             })
         }
     }
+
+    fn build_monolithic_context(spec: &Spec) -> Context {
+        let mut context = Context::new();
+
+        context.insert(
+            "metadata",
+            &MetadataContext {
+                name: &spec.metadata.name,
+                complexity: ComplexityContext {
+                    time: spec.metadata.complexity.time.as_deref(),
+                    space: spec.metadata.complexity.space.as_deref(),
+                },
+            },
+        );
+
+        context.insert(
+            "contracts",
+            &ContractsContext {
+                invariants: &spec.contracts.invariants,
+            },
+        );
+
+        let structs: Vec<ClassStructContext> = spec
+            .structs
+            .iter()
+            .map(|s| ClassStructContext {
+                name: &s.name,
+                generics: s
+                    .generics
+                    .iter()
+                    .map(|g| GenericParamContext {
+                        name: &g.name,
+                        bounds: g.constraints.join(", "),
+                    })
+                    .collect(),
+                fields: s
+                    .fields
+                    .iter()
+                    .map(|f| FieldContext {
+                        name: f.name.clone(),
+                        python_type: to_python_type(&f.field_type),
+                    })
+                    .collect(),
+            })
+            .collect();
+        context.insert("structs", &structs);
+
+        let methods: Vec<MethodContext> = spec
+            .methods
+            .iter()
+            .map(|m| {
+                let return_type = m.returns.as_deref().map(|r| Type::Simple(r.to_string()));
+                MethodContext {
+                    name: &m.name,
+                    params: m
+                        .params
+                        .iter()
+                        .map(|p| ParamContext {
+                            name: p.name.clone(),
+                            python_type: to_python_type(&p.param_type),
+                        })
+                        .collect(),
+                    returns: return_type.as_ref().map(to_python_type),
+                    raises_exception: return_type.as_ref().map(is_result_type).unwrap_or(false),
+                    preconditions: &m.preconditions,
+                    postconditions: &m.postconditions,
+                    injected_assertions: &m.injected_assertions,
+                }
+            })
+            .collect();
+        context.insert("methods", &methods);
+
+        let translated_assertions: Vec<Vec<String>> = spec
+            .verification
+            .test_cases
+            .iter()
+            .map(|t| {
+                t.assertions
+                    .iter()
+                    .map(|a| translate_assertion(a))
+                    .collect()
+            })
+            .collect();
+
+        let tests: Vec<TestContext> = spec
+            .verification
+            .test_cases
+            .iter()
+            .enumerate()
+            .map(|(i, t)| TestContext {
+                name: &t.name,
+                setup: t.setup.as_deref(),
+                actions: &t.actions,
+                assertions: &translated_assertions[i],
+            })
+            .collect();
+        context.insert("verification", &VerificationContext { test_cases: tests });
+
+        context
+    }
+
+    fn build_class_context(spec: &Spec) -> Context {
+        let mut ctx = Context::new();
+
+        ctx.insert(
+            "metadata",
+            &MetadataContext {
+                name: &spec.metadata.name,
+                complexity: ComplexityContext {
+                    time: spec.metadata.complexity.time.as_deref(),
+                    space: spec.metadata.complexity.space.as_deref(),
+                },
+            },
+        );
+
+        ctx.insert(
+            "contracts",
+            &ContractsContext {
+                invariants: &spec.contracts.invariants,
+            },
+        );
+
+        if let Some(s) = spec.structs.first() {
+            ctx.insert(
+                "struct",
+                &ClassStructContext {
+                    name: &s.name,
+                    generics: s
+                        .generics
+                        .iter()
+                        .map(|g| GenericParamContext {
+                            name: &g.name,
+                            bounds: g.constraints.join(", "),
+                        })
+                        .collect(),
+                    fields: s
+                        .fields
+                        .iter()
+                        .map(|f| FieldContext {
+                            name: f.name.clone(),
+                            python_type: to_python_type(&f.field_type),
+                        })
+                        .collect(),
+                },
+            );
+        }
+
+        ctx
+    }
+
+    fn build_method_context(spec: &Spec, method: &MethodDef) -> Context {
+        let mut ctx = Context::new();
+
+        ctx.insert(
+            "metadata",
+            &MetadataContext {
+                name: &spec.metadata.name,
+                complexity: ComplexityContext {
+                    time: spec.metadata.complexity.time.as_deref(),
+                    space: spec.metadata.complexity.space.as_deref(),
+                },
+            },
+        );
+
+        if let Some(s) = spec.structs.first() {
+            ctx.insert(
+                "struct",
+                &ClassStructContext {
+                    name: &s.name,
+                    generics: s
+                        .generics
+                        .iter()
+                        .map(|g| GenericParamContext {
+                            name: &g.name,
+                            bounds: g.constraints.join(", "),
+                        })
+                        .collect(),
+                    fields: vec![],
+                },
+            );
+        }
+
+        let return_type = method
+            .returns
+            .as_deref()
+            .map(|r| Type::Simple(r.to_string()));
+        ctx.insert(
+            "method",
+            &MethodContext {
+                name: &method.name,
+                params: method
+                    .params
+                    .iter()
+                    .map(|p| ParamContext {
+                        name: p.name.clone(),
+                        python_type: to_python_type(&p.param_type),
+                    })
+                    .collect(),
+                returns: return_type.as_ref().map(to_python_type),
+                raises_exception: return_type.as_ref().map(is_result_type).unwrap_or(false),
+                preconditions: &method.preconditions,
+                postconditions: &method.postconditions,
+                injected_assertions: &method.injected_assertions,
+            },
+        );
+
+        let translated_assertions: Vec<Vec<String>> = spec
+            .verification
+            .test_cases
+            .iter()
+            .map(|t| {
+                t.assertions
+                    .iter()
+                    .map(|a| translate_assertion(a))
+                    .collect()
+            })
+            .collect();
+
+        let tests: Vec<TestContext> = spec
+            .verification
+            .test_cases
+            .iter()
+            .enumerate()
+            .map(|(i, t)| TestContext {
+                name: &t.name,
+                setup: t.setup.as_deref(),
+                actions: &t.actions,
+                assertions: &translated_assertions[i],
+            })
+            .collect();
+        ctx.insert("verification", &VerificationContext { test_cases: tests });
+
+        ctx
+    }
 }
 
 impl Backend for PythonBackend {
-    fn generate(&self, spec: &Spec) -> Result<String, BackendError> {
-        let context = build_context(spec);
-        let raw_code = self.engine.render("python.py.tera", &context)?;
-        Ok(Self::format_python(&raw_code).unwrap_or(raw_code))
+    fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
+        if spec.structs.is_empty() {
+            let ctx = Self::build_monolithic_context(spec);
+            let raw = self.engine.render("python.py.tera", &ctx)?;
+            let code = Self::format_python(&raw).unwrap_or(raw);
+            return Ok(vec![(
+                format!("{}Methods.{}", spec.metadata.name, Self::file_extension()),
+                code,
+            )]);
+        }
+
+        let mut files = Vec::new();
+        let s = spec.structs.first().unwrap();
+
+        let class_ctx = Self::build_class_context(spec);
+        let raw = self.engine.render("python/class.py.tera", &class_ctx)?;
+        let code = Self::format_python(&raw).unwrap_or(raw);
+        files.push((Self::class_filename(&s.name), code));
+
+        for m in &spec.methods {
+            let method_ctx = Self::build_method_context(spec, m);
+            let raw = self.engine.render("python/method.py.tera", &method_ctx)?;
+            let code = Self::format_python(&raw).unwrap_or(raw);
+            files.push((Self::method_filename(&s.name, &m.name), code));
+        }
+
+        Ok(files)
     }
 }
 
@@ -149,108 +418,6 @@ fn translate_assertion(a: &str) -> String {
     }
 }
 
-fn build_context(spec: &Spec) -> Context {
-    let mut context = Context::new();
-
-    let metadata = &spec.metadata;
-    context.insert(
-        "metadata",
-        &MetadataContext {
-            name: &metadata.name,
-            complexity: ComplexityContext {
-                time: metadata.complexity.time.as_deref(),
-                space: metadata.complexity.space.as_deref(),
-            },
-        },
-    );
-
-    let contracts = &spec.contracts;
-    context.insert(
-        "contracts",
-        &ContractsContext {
-            invariants: &contracts.invariants,
-        },
-    );
-
-    let structs: Vec<StructContext> = spec
-        .structs
-        .iter()
-        .map(|s| StructContext {
-            name: &s.name,
-            generics: s
-                .generics
-                .iter()
-                .map(|g| GenericParamContext {
-                    name: &g.name,
-                    bounds: g.constraints.join(", "),
-                })
-                .collect(),
-            fields: s
-                .fields
-                .iter()
-                .map(|f| FieldContext {
-                    name: &f.name,
-                    python_type: to_python_type(&f.field_type),
-                })
-                .collect(),
-        })
-        .collect();
-    context.insert("structs", &structs);
-
-    let methods: Vec<MethodContext> = spec
-        .methods
-        .iter()
-        .map(|m| {
-            let return_type = m.returns.as_deref().map(|r| Type::Simple(r.to_string()));
-            MethodContext {
-                name: &m.name,
-                params: m
-                    .params
-                    .iter()
-                    .map(|p| ParamContext {
-                        name: &p.name,
-                        python_type: to_python_type(&p.param_type),
-                    })
-                    .collect(),
-                returns: return_type.as_ref().map(to_python_type),
-                raises_exception: return_type.as_ref().map(is_result_type).unwrap_or(false),
-                preconditions: &m.preconditions,
-                postconditions: &m.postconditions,
-                injected_assertions: &m.injected_assertions,
-            }
-        })
-        .collect();
-    context.insert("methods", &methods);
-
-    let translated_assertions: Vec<Vec<String>> = spec
-        .verification
-        .test_cases
-        .iter()
-        .map(|t| {
-            t.assertions
-                .iter()
-                .map(|a| translate_assertion(a))
-                .collect()
-        })
-        .collect();
-
-    let tests: Vec<TestContext> = spec
-        .verification
-        .test_cases
-        .iter()
-        .enumerate()
-        .map(|(i, t)| TestContext {
-            name: &t.name,
-            setup: t.setup.as_deref(),
-            actions: &t.actions,
-            assertions: &translated_assertions[i],
-        })
-        .collect();
-    context.insert("verification", &VerificationContext { test_cases: tests });
-
-    context
-}
-
 #[derive(Serialize)]
 struct MetadataContext<'a> {
     name: &'a str,
@@ -269,10 +436,10 @@ struct ContractsContext<'a> {
 }
 
 #[derive(Serialize)]
-struct StructContext<'a> {
+struct ClassStructContext<'a> {
     name: &'a str,
     generics: Vec<GenericParamContext<'a>>,
-    fields: Vec<FieldContext<'a>>,
+    fields: Vec<FieldContext>,
 }
 
 #[derive(Serialize)]
@@ -282,15 +449,15 @@ struct GenericParamContext<'a> {
 }
 
 #[derive(Serialize)]
-struct FieldContext<'a> {
-    name: &'a str,
+struct FieldContext {
+    name: String,
     python_type: String,
 }
 
 #[derive(Serialize)]
 struct MethodContext<'a> {
     name: &'a str,
-    params: Vec<ParamContext<'a>>,
+    params: Vec<ParamContext>,
     returns: Option<String>,
     raises_exception: bool,
     preconditions: &'a [String],
@@ -299,8 +466,8 @@ struct MethodContext<'a> {
 }
 
 #[derive(Serialize)]
-struct ParamContext<'a> {
-    name: &'a str,
+struct ParamContext {
+    name: String,
     python_type: String,
 }
 
@@ -412,7 +579,7 @@ mod python_type_tests {
             verification: crate::ast::Verification::default(),
         };
         let injected = crate::contracts::inject_assertions(&spec);
-        let code = super::build_context(&injected);
+        let code = PythonBackend::build_monolithic_context(&injected);
         // Verify template renders assertions
         let engine = crate::template_engine::TemplateEngine::new("templates").unwrap();
         let output = engine.render("python.py.tera", &code).unwrap();

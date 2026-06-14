@@ -1,0 +1,108 @@
+// --- FloydWarshallMethods.cs ---
+/// <summary>
+/// FloydWarshall
+
+/// Time complexity: O(V^3)
+
+
+/// Space complexity: O(V^2)
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace FloydWarshall
+{
+
+
+public static class FloydWarshallMethods
+{
+    
+    /// <summary>
+    /// Floydwarshall.
+    /// </summary>
+    
+    /// <param name="graph">List<List<int?>>.</param>
+    
+    
+    /// <returns>List<List<int?>>.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - graph is square (n x n)
+    
+    /// - graph[i][i] == Some(0) for all i
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - result is square (n x n)
+    
+    /// - result[i][i] == Some(0) for all i
+    
+    /// </remarks>
+    
+    
+    public static List<List<int?>> FloydWarshall(List<List<int?>> graph)
+    {
+        
+        // TODO: Implement FloydWarshall
+        throw new NotImplementedException();
+    }
+    
+}
+
+
+// ========== Generated xUnit tests ==========
+
+public class three_vertex_graphTests
+{
+    [Fact]
+    public void three_vertex_graph_Test()
+    {
+        // Setup
+        let n = 3;
+        // Actions
+        let mut graph = vec![vec![None; n]; n];graph[0][0] = Some(0); graph[0][1] = Some(3); graph[0][2] = Some(8);graph[1][0] = Some(3); graph[1][1] = Some(0); graph[1][2] = Some(1);graph[2][0] = Some(8); graph[2][1] = Some(1); graph[2][2] = Some(0);let dist = floyd_warshall(&graph);
+        // Assertions
+        Assert.AreEqual(dist[0][1], Some(3));Assert.AreEqual(dist[0][2], Some(4));Assert.AreEqual(dist[1][2], Some(1));Assert.AreEqual(dist[2][0], Some(4));Assert.AreEqual(dist[0][0], Some(0));
+    }
+}
+
+public class single_vertexTests
+{
+    [Fact]
+    public void single_vertex_Test()
+    {
+        // Setup
+        let n = 1;
+        // Actions
+        let graph = vec![vec![Some(0)]];let dist = floyd_warshall(&graph);
+        // Assertions
+        Assert.AreEqual(dist[0][0], Some(0));
+    }
+}
+
+public class disconnected_verticesTests
+{
+    [Fact]
+    public void disconnected_vertices_Test()
+    {
+        // Setup
+        let n = 4;
+        // Actions
+        let mut graph = vec![vec![None; n]; n];graph[0][0] = Some(0); graph[0][1] = Some(2);graph[1][0] = Some(2); graph[1][1] = Some(0);graph[2][2] = Some(0);graph[3][3] = Some(0);let dist = floyd_warshall(&graph);
+        // Assertions
+        Assert.AreEqual(dist[0][1], Some(2));Assert.IsTrue(dist[0][2].is_none());Assert.IsTrue(dist[2][3].is_none());
+    }
+}
+
+}

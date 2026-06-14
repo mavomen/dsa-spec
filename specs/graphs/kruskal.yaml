@@ -1,0 +1,63 @@
+spec_version: "1.0"
+metadata:
+  name: "Kruskal"
+  category: "graphs"
+  complexity:
+    time: "O(E log E)"
+    space: "O(V + E)"
+  tags: ["graph", "mst", "minimum-spanning-tree", "greedy", "union-find"]
+
+contracts:
+  preconditions:
+    - "graph is undirected"
+  postconditions:
+    - "MST contains V - 1 edges for connected graph"
+    - "total weight of MST is minimal"
+
+methods:
+  - name: "kruskal"
+    params:
+      - name: "vertices"
+        type: "usize"
+      - name: "edges"
+        type: "Vec<(usize, usize, usize)>"
+    returns: "Vec<(usize, usize, usize)>"
+    preconditions:
+      - "vertices > 0"
+    postconditions:
+      - "result contains vertices - 1 edges when graph is connected"
+
+  - name: "total_weight"
+    params:
+      - name: "mst"
+        type: "Vec<(usize, usize, usize)>"
+    returns: "usize"
+    postconditions:
+      - "sum of edge weights in MST"
+
+verification:
+  test_cases:
+    - name: "simple_graph_mst"
+      setup: "let vertices = 4;"
+      actions:
+        - "let edges = vec![(0, 1, 10), (0, 2, 6), (0, 3, 5), (1, 3, 15), (2, 3, 4)]"
+        - "let mst = kruskal(vertices, edges)"
+      assertions:
+        - "assert_eq!(mst.len(), 3)"
+        - "assert_eq!(total_weight(&mst), 19)"
+
+    - name: "single_vertex"
+      setup: "let vertices = 1;"
+      actions:
+        - "let edges: Vec<(usize, usize, usize)> = vec![]"
+        - "let mst = kruskal(vertices, edges)"
+      assertions:
+        - "assert_eq!(mst.len(), 0)"
+
+    - name: "disconnected_graph"
+      setup: "let vertices = 3;"
+      actions:
+        - "let edges = vec![(0, 1, 5)]"
+        - "let mst = kruskal(vertices, edges)"
+      assertions:
+        - "assert_eq!(mst.len(), 1)"

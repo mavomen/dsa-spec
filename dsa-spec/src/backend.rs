@@ -6,14 +6,16 @@ use crate::error::BackendError;
 /// Interface for a language code generator.
 ///
 /// Each backend reads a language-agnostic AST and produces idiomatic
-/// source code for its target language, including method stubs, doc
-/// comments, and test suites.
+/// source code for its target language. The output consists of one or
+/// more `(filename, source_code)` pairs to support method-by-file
+/// partitioning and partial classes.
 pub trait Backend {
     /// Generate code from a spec.
     ///
-    /// Returns formatted source code for the target language, or a
-    /// `BackendError` if rendering or formatting fails.
-    fn generate(&self, spec: &Spec) -> Result<String, BackendError>;
+    /// Returns a list of `(filename, source_code)` pairs. Each pair
+    /// represents a separate output file (e.g. one per method for
+    /// partial class backends).
+    fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError>;
 }
 
 #[cfg(test)]
@@ -63,8 +65,20 @@ mod tests {
                 name,
                 result.unwrap_err()
             );
-            let code = result.unwrap();
-            assert!(!code.is_empty(), "Backend {} produced empty code", name);
+            let files = result.unwrap();
+            assert!(
+                !files.is_empty(),
+                "Backend {} produced empty file list",
+                name
+            );
+            for (filename, code) in &files {
+                assert!(
+                    !code.is_empty(),
+                    "Backend {} produced empty code for {}",
+                    name,
+                    filename
+                );
+            }
         }
     }
 }

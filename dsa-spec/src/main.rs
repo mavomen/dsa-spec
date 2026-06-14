@@ -185,7 +185,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
-    let lang_ext = |name: &str| -> &str {
+    let _lang_ext = |name: &str| -> &str {
         match name {
             "rust" => "rs",
             "python" => "py",
@@ -221,9 +221,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             let lang_lower = lang.to_lowercase();
             let backends = make_backends(&lang_lower)?;
-            let spec_stem = spec.file_stem().unwrap().to_string_lossy().to_string();
+            let _spec_stem = spec.file_stem().unwrap().to_string_lossy().to_string();
 
-            let mut results: Vec<(&str, String)> = Vec::new();
+            let mut results: Vec<(&str, Vec<(String, String)>)> = Vec::new();
             for (lang_name, backend) in &backends {
                 tracing::info!(lang = %lang_name, "generating code");
                 let code = backend.generate(&active_spec)?;
@@ -238,26 +238,36 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             });
 
-            for (lang_name, code) in &results {
+            for (lang_name, files) in &results {
                 match &output {
                     Some(path) if lang_lower != "all" => {
-                        fs::write(path, code)?;
+                        let combined: String = files
+                            .iter()
+                            .map(|(_, code)| code.as_str())
+                            .collect::<Vec<_>>()
+                            .join("\n");
+                        fs::write(path, combined)?;
                         tracing::info!(out = %path.display(), "wrote output");
                     }
                     _ if lang_lower == "all" || !out_dir.as_os_str().is_empty() => {
-                        let file_name = format!("{}.{}", spec_stem, lang_ext(lang_name));
-                        let out_path = out_dir.join(&file_name);
                         fs::create_dir_all(&out_dir)?;
-                        fs::write(&out_path, code)?;
-                        tracing::info!(out = %out_path.display(), "wrote output");
+                        for (file_name, file_code) in files {
+                            let out_path = out_dir.join(file_name);
+                            fs::write(&out_path, file_code)?;
+                            tracing::info!(out = %out_path.display(), "wrote output");
+                        }
                     }
                     _ => {
+                        let combined: String = files
+                            .iter()
+                            .map(|(_, code)| code.as_str())
+                            .collect::<Vec<_>>()
+                            .join("\n");
                         if use_json {
-                            let entry = serde_json::json!({"lang": lang_name, "code": code});
+                            let entry = serde_json::json!({"lang": lang_name, "code": combined});
                             println!("{}", json_str(&entry));
                         } else {
-                            println!("--- {lang_name} ---");
-                            println!("{code}");
+                            println!("--- {lang_name} ---\n{combined}");
                         }
                     }
                 }
@@ -386,12 +396,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let backends = make_backends(&lang_lower)?;
 
             for (lang_name, backend) in &backends {
-                let code = backend.generate(&spec)?;
+                let files = backend.generate(&spec)?;
+                let combined: String = files
+                    .iter()
+                    .map(|(_, code)| code.as_str())
+                    .collect::<Vec<_>>()
+                    .join("\n");
                 if use_json {
-                    let entry = serde_json::json!({"lang": lang_name, "code": code});
+                    let entry = serde_json::json!({"lang": lang_name, "code": combined});
                     println!("{}", json_str(&entry));
                 } else {
-                    println!("--- {lang_name} ---\n{code}");
+                    println!("--- {lang_name} ---\n{combined}");
                 }
             }
         }

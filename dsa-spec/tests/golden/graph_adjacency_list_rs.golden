@@ -1,159 +1,51 @@
+// --- Graph.rs ---
 /// Graph
-
 /// Time complexity: O(V+E) for traversal
 
 /// Space complexity: O(V+E)
 
-///
-/// # Invariants
 
+/// Invariants:
 /// - all edges reference valid vertices
-
 /// - vertex count >= 0
 
-pub struct Graph<T: Clone + Hash + Eq> {
-    adjacency_list: HashMap<T, Vec<T>>,
 
-    directed: bool,
+
+#[derive(Debug, Clone)]
+pub struct Graph<T>
+where T: Clone + Hash + Eq 
+
+    
+    pub adjacency_list: HashMap<T, Vec<T>>,
+    
+    pub directed: bool,
+    
 }
 
-impl<T: Clone + Hash + Eq> Graph<T> {
-    /// New.
-
-    ///
-    /// # Parameters
-
-    /// - `directed`: `bool`
-
-    ///
-    /// # Returns
-    /// `Self`
-
-    ///
-    /// # Contracts
-
-    /// - **Postcondition:** vertex_count == 0
-
-    /// - **Postcondition:** edge_count == 0
-
-    pub fn new(&self, directed: bool) -> Self {
-        // TODO: Implement new
-        todo!()
+impl<T> Graph<T> {
+    pub fn new() -> Self {
+        Self {
+            
+            adjacency_list: Default::default(),
+            
+            directed: Default::default(),
+            
+        }
     }
+}
 
-    /// Add vertex.
+// --- Graph_new.rs ---
+/// Graph.new
+/// * `directed` - bool
 
-    ///
-    /// # Parameters
+/// Returns: Self
 
-    /// - `vertex`: `T`
+/// Postconditions:
+/// - vertex_count == 0
+/// - edge_count == 0
 
-    ///
-    /// # Returns
-    /// `bool`
-
-    ///
-    /// # Contracts
-
-    /// - **Postcondition:** vertex exists in graph
-
-    pub fn add_vertex(&self, vertex: T) -> bool {
-        // TODO: Implement add_vertex
-        todo!()
-    }
-
-    /// Add edge.
-
-    ///
-    /// # Parameters
-
-    /// - `from`: `T`
-
-    /// - `to`: `T`
-
-    ///
-    /// # Returns
-    /// `bool`
-
-    ///
-    /// # Contracts
-
-    /// - **Precondition:** from and to exist in graph
-
-    pub fn add_edge(&self, from: T, to: T) -> bool {
-        // TODO: Implement add_edge
-        todo!()
-    }
-
-    /// Neighbors.
-
-    ///
-    /// # Parameters
-
-    /// - `vertex`: `T`
-
-    ///
-    /// # Returns
-    /// `Option<&Vec<T>>`
-
-    pub fn neighbors(&self, vertex: T) -> Option<&Vec<T>> {
-        // TODO: Implement neighbors
-        todo!()
-    }
-
-    /// Vertex count.
-
-    ///
-    /// # Returns
-    /// `usize`
-
-    pub fn vertex_count(&self) -> usize {
-        // TODO: Implement vertex_count
-        todo!()
-    }
-
-    /// Edge count.
-
-    ///
-    /// # Returns
-    /// `usize`
-
-    pub fn edge_count(&self) -> usize {
-        // TODO: Implement edge_count
-        todo!()
-    }
-
-    /// Has vertex.
-
-    ///
-    /// # Parameters
-
-    /// - `vertex`: `T`
-
-    ///
-    /// # Returns
-    /// `bool`
-
-    pub fn has_vertex(&self, vertex: T) -> bool {
-        // TODO: Implement has_vertex
-        todo!()
-    }
-
-    /// Has edge.
-
-    ///
-    /// # Parameters
-
-    /// - `from`: `T`
-
-    /// - `to`: `T`
-
-    ///
-    /// # Returns
-    /// `bool`
-
-    pub fn has_edge(&self, from: T, to: T) -> bool {
-        // TODO: Implement has_edge
+impl<T> Graph<T> {
+    pub fn new(&mut self, directed: bool) -> Self {
         todo!()
     }
 }
@@ -163,7 +55,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_add_vertex_and_edge() {
+    fn add_vertex_and_edge() {
         let mut g = Graph::new(false);
         g.add_vertex(1);
         g.add_vertex(2);
@@ -174,20 +66,40 @@ mod tests {
         assert_eq!(g.vertex_count(), 2);
         assert_eq!(g.edge_count(), 1);
     }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
 
     #[test]
-    fn test_undirected_graph_symmetric_edges() {
+    fn undirected_graph_symmetric_edges() {
         let mut g = Graph::new(false);
         g.add_vertex(1);
         g.add_vertex(2);
         g.add_edge(1, 2);
         assert!(g.has_edge(1, 2));
         assert!(g.has_edge(2, 1));
+    }
+
+    #[test]
+    fn directed_graph_no_symmetry() {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(!g.has_edge(2, 1));
+    }
+}
+
+// --- Graph_add_vertex.rs ---
+/// Graph.add_vertex
+/// * `vertex` - T
+
+/// Returns: bool
+
+/// Postconditions:
+/// - vertex exists in graph
+
+impl<T> Graph<T> {
+    pub fn add_vertex(&mut self, vertex: T) -> bool {
+        todo!()
     }
 }
 
@@ -196,7 +108,333 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_directed_graph_no_symmetry() {
+    fn add_vertex_and_edge() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_vertex(1));
+        assert!(g.has_vertex(2));
+        assert!(g.has_edge(1, 2));
+        assert_eq!(g.vertex_count(), 2);
+        assert_eq!(g.edge_count(), 1);
+    }
+
+    #[test]
+    fn undirected_graph_symmetric_edges() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(g.has_edge(2, 1));
+    }
+
+    #[test]
+    fn directed_graph_no_symmetry() {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(!g.has_edge(2, 1));
+    }
+}
+
+// --- Graph_add_edge.rs ---
+/// Graph.add_edge
+/// * `from` - T
+/// * `to` - T
+
+/// Returns: bool
+
+/// Preconditions:
+/// - from and to exist in graph
+
+impl<T> Graph<T> {
+    pub fn add_edge(&mut self, from: T, to: T) -> bool {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn add_vertex_and_edge() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_vertex(1));
+        assert!(g.has_vertex(2));
+        assert!(g.has_edge(1, 2));
+        assert_eq!(g.vertex_count(), 2);
+        assert_eq!(g.edge_count(), 1);
+    }
+
+    #[test]
+    fn undirected_graph_symmetric_edges() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(g.has_edge(2, 1));
+    }
+
+    #[test]
+    fn directed_graph_no_symmetry() {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(!g.has_edge(2, 1));
+    }
+}
+
+// --- Graph_neighbors.rs ---
+/// Graph.neighbors
+/// * `vertex` - T
+
+/// Returns: Option<&Vec<T>>
+
+impl<T> Graph<T> {
+    pub fn neighbors(&mut self, vertex: T) -> Option<&Vec<T>> {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn add_vertex_and_edge() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_vertex(1));
+        assert!(g.has_vertex(2));
+        assert!(g.has_edge(1, 2));
+        assert_eq!(g.vertex_count(), 2);
+        assert_eq!(g.edge_count(), 1);
+    }
+
+    #[test]
+    fn undirected_graph_symmetric_edges() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(g.has_edge(2, 1));
+    }
+
+    #[test]
+    fn directed_graph_no_symmetry() {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(!g.has_edge(2, 1));
+    }
+}
+
+// --- Graph_vertex_count.rs ---
+/// Graph.vertex_count
+
+/// Returns: usize
+
+impl<T> Graph<T> {
+    pub fn vertex_count(&mut self) -> usize {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn add_vertex_and_edge() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_vertex(1));
+        assert!(g.has_vertex(2));
+        assert!(g.has_edge(1, 2));
+        assert_eq!(g.vertex_count(), 2);
+        assert_eq!(g.edge_count(), 1);
+    }
+
+    #[test]
+    fn undirected_graph_symmetric_edges() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(g.has_edge(2, 1));
+    }
+
+    #[test]
+    fn directed_graph_no_symmetry() {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(!g.has_edge(2, 1));
+    }
+}
+
+// --- Graph_edge_count.rs ---
+/// Graph.edge_count
+
+/// Returns: usize
+
+impl<T> Graph<T> {
+    pub fn edge_count(&mut self) -> usize {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn add_vertex_and_edge() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_vertex(1));
+        assert!(g.has_vertex(2));
+        assert!(g.has_edge(1, 2));
+        assert_eq!(g.vertex_count(), 2);
+        assert_eq!(g.edge_count(), 1);
+    }
+
+    #[test]
+    fn undirected_graph_symmetric_edges() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(g.has_edge(2, 1));
+    }
+
+    #[test]
+    fn directed_graph_no_symmetry() {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(!g.has_edge(2, 1));
+    }
+}
+
+// --- Graph_has_vertex.rs ---
+/// Graph.has_vertex
+/// * `vertex` - T
+
+/// Returns: bool
+
+impl<T> Graph<T> {
+    pub fn has_vertex(&mut self, vertex: T) -> bool {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn add_vertex_and_edge() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_vertex(1));
+        assert!(g.has_vertex(2));
+        assert!(g.has_edge(1, 2));
+        assert_eq!(g.vertex_count(), 2);
+        assert_eq!(g.edge_count(), 1);
+    }
+
+    #[test]
+    fn undirected_graph_symmetric_edges() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(g.has_edge(2, 1));
+    }
+
+    #[test]
+    fn directed_graph_no_symmetry() {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(!g.has_edge(2, 1));
+    }
+}
+
+// --- Graph_has_edge.rs ---
+/// Graph.has_edge
+/// * `from` - T
+/// * `to` - T
+
+/// Returns: bool
+
+impl<T> Graph<T> {
+    pub fn has_edge(&mut self, from: T, to: T) -> bool {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn add_vertex_and_edge() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_vertex(1));
+        assert!(g.has_vertex(2));
+        assert!(g.has_edge(1, 2));
+        assert_eq!(g.vertex_count(), 2);
+        assert_eq!(g.edge_count(), 1);
+    }
+
+    #[test]
+    fn undirected_graph_symmetric_edges() {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);
+        g.add_vertex(2);
+        g.add_edge(1, 2);
+        assert!(g.has_edge(1, 2));
+        assert!(g.has_edge(2, 1));
+    }
+
+    #[test]
+    fn directed_graph_no_symmetry() {
         let mut g = Graph::new(true);
         g.add_vertex(1);
         g.add_vertex(2);

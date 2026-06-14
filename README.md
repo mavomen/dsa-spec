@@ -9,7 +9,7 @@ The user supplies the algorithm implementation.
 
 ## Pipeline
 
-YAML spec -> Parser -> AST -> Language Backend -> Formatted output
+YAML spec -> Parser -> AST -> Language Backend -> Formatted files
 
 AST is language-agnostic. Each backend maps generic types to language
 idioms (Option -> Optional, Vec -> List, HashMap -> Dict, etc.) and applies
@@ -28,7 +28,7 @@ the appropriate stub pattern and formatter.
 
 ```bash
 # Generate a Rust skeleton from a BST spec:
-dsa-spec generate specs/bst.yaml --lang rust --output src/bst.rs
+dsa-spec generate specs/bst.yaml --lang rust --output-dir src/
 
 # Generate all five languages at once:
 dsa-spec generate specs/avl.yaml --lang all --output-dir generated/
