@@ -3,7 +3,7 @@ use dsa_spec::backend::Backend;
 
 fn bench_generate_all_backends(c: &mut Criterion) {
     let yaml = std::fs::read_to_string(
-        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../specs/bst.yaml"),
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../specs/trees/bst.yaml"),
     )
     .unwrap();
     let spec = dsa_spec::parser::parse(&yaml).unwrap();

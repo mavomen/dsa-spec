@@ -44,9 +44,9 @@ type NodeInterface[T any] interface {
 // Node represents a SinglyLinkedList
 type Node[T any] struct {
 	
-	value T
+	Value T
 	
-	next *Node<T>
+	Next *Node<T>
 	
 }
 
@@ -191,7 +191,7 @@ type SinglyLinkedListInterface[T any] interface {
 // SinglyLinkedList represents a SinglyLinkedList
 type SinglyLinkedList[T any] struct {
 	
-	head *Node<T>
+	Head *Node<T>
 	
 }
 

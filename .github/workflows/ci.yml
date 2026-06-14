@@ -51,3 +51,15 @@ jobs:
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
       #     publish_dir: ./docs
+
+  cross-lang:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dsa-spec
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - run: bash ../ci/run-cross-lang-tests.sh

@@ -411,7 +411,7 @@ fn test_verify_unsupported_backend_fails() {
 #[test]
 fn test_visualize_dot_format() {
     let output = Command::new("cargo")
-        .args(["run", "--", "visualize", "../specs/bst.yaml"])
+        .args(["run", "--", "visualize", "../specs/trees/bst.yaml"])
         .output()
         .expect("failed to run cli");
     assert!(
@@ -433,7 +433,7 @@ fn test_visualize_mermaid_format() {
             "run",
             "--",
             "visualize",
-            "../specs/singly_linked_list.yaml",
+            "../specs/linked-lists/singly_linked_list.yaml",
             "--format",
             "mermaid",
         ])
@@ -453,7 +453,7 @@ fn test_visualize_mermaid_format() {
 #[test]
 fn test_visualize_method_only_spec() {
     let output = Command::new("cargo")
-        .args(["run", "--", "visualize", "../specs/quicksort.yaml"])
+        .args(["run", "--", "visualize", "../specs/sorting/quicksort.yaml"])
         .output()
         .expect("failed to run cli");
     assert!(
@@ -475,7 +475,7 @@ fn test_visualize_graphviz_format_alias() {
             "run",
             "--",
             "visualize",
-            "../specs/bst.yaml",
+            "../specs/trees/bst.yaml",
             "--format",
             "graphviz",
         ])

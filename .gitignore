@@ -25,3 +25,6 @@ generated/
 
 # Migration backups
 *.bak
+
+# Stale golden test artifacts
+*.diff

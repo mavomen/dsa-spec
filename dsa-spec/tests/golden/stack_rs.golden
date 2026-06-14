@@ -1,0 +1,159 @@
+/// Stack
+
+/// Time complexity: O(1) push/pop, O(n) search
+
+/// Space complexity: O(n)
+
+///
+/// # Invariants
+
+/// - length >= 0
+
+pub struct Stack<T: Clone> {
+    items: Vec<T>,
+}
+
+impl<T: Clone> Stack<T> {
+    /// New.
+
+    ///
+    /// # Returns
+    /// `Self`
+
+    ///
+    /// # Contracts
+
+    /// - **Postcondition:** length == 0
+
+    pub fn new(&self) -> Self {
+        // TODO: Implement new
+        todo!()
+    }
+
+    /// Push.
+
+    ///
+    /// # Parameters
+
+    /// - `item`: `T`
+
+    ///
+    /// # Contracts
+
+    /// - **Postcondition:** length == old.length + 1
+
+    /// - **Postcondition:** top == item
+
+    pub fn push(&self, item: T) {
+        // TODO: Implement push
+        todo!()
+    }
+
+    /// Pop.
+
+    ///
+    /// # Returns
+    /// `Option<T>`
+
+    ///
+    /// # Contracts
+
+    /// - **Precondition:** length > 0
+
+    /// - **Postcondition:** length == old.length - 1
+
+    pub fn pop(&self) -> Option<T> {
+        // TODO: Implement pop
+        todo!()
+    }
+
+    /// Peek.
+
+    ///
+    /// # Returns
+    /// `Option<&T>`
+
+    ///
+    /// # Contracts
+
+    /// - **Precondition:** length > 0
+
+    pub fn peek(&self) -> Option<&T> {
+        // TODO: Implement peek
+        todo!()
+    }
+
+    /// Is empty.
+
+    ///
+    /// # Returns
+    /// `bool`
+
+    pub fn is_empty(&self) -> bool {
+        // TODO: Implement is_empty
+        todo!()
+    }
+
+    /// Len.
+
+    ///
+    /// # Returns
+    /// `usize`
+
+    pub fn len(&self) -> usize {
+        // TODO: Implement len
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_push_and_pop() {
+        let mut s = Stack::new();
+        s.push(1);
+        s.push(2);
+        assert_eq!(s.pop(), Some(2));
+        assert_eq!(s.pop(), Some(1));
+        assert!(s.is_empty());
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_peek_returns_top() {
+        let mut s = Stack::new();
+        s.push(42);
+        assert_eq!(s.peek(), Some(&42));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_pop_empty_returns_none() {
+        let mut s = Stack::<i32>::new();
+
+        assert_eq!(s.pop(), None);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_len_tracks_elements() {
+        let mut s = Stack::new();
+        s.push(10);
+        s.push(20);
+        assert_eq!(s.len(), 2);
+    }
+}

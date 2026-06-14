@@ -42,11 +42,11 @@ type BSTNodeInterface[T constraints.Ordered] interface {
 // BSTNode represents a BinarySearchTree
 type BSTNode[T constraints.Ordered] struct {
 	
-	value T
+	Value T
 	
-	left *BSTNode<T>
+	Left *BSTNode<T>
 	
-	right *BSTNode<T>
+	Right *BSTNode<T>
 	
 }
 
@@ -172,7 +172,7 @@ type BinarySearchTreeInterface[T constraints.Ordered] interface {
 // BinarySearchTree represents a BinarySearchTree
 type BinarySearchTree[T constraints.Ordered] struct {
 	
-	root *BSTNode<T>
+	Root *BSTNode<T>
 	
 }
 

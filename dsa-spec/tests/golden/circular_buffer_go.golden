@@ -46,15 +46,15 @@ type CircularBufferInterface[T any] interface {
 // CircularBuffer represents a CircularBuffer
 type CircularBuffer[T any] struct {
 	
-	buffer []*T
+	Buffer []*T
 	
-	head int
+	Head int
 	
-	tail int
+	Tail int
 	
-	size int
+	Size int
 	
-	capacity int
+	Capacity int
 	
 }
 

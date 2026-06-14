@@ -1,0 +1,177 @@
+/// <summary>
+/// BinarySearch
+
+/// Time complexity: O(log n)
+
+
+/// Space complexity: O(1)
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace BinarySearch
+{
+
+
+public static class BinarySearchMethods
+{
+    
+    /// <summary>
+    /// Binarysearch.
+    /// </summary>
+    
+    /// <param name="arr">&[T].</param>
+    
+    /// <param name="target">T.</param>
+    
+    
+    /// <returns>int?.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - arr is sorted ascending
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - if target in arr, arr[result] == target
+    
+    /// - if target not in arr, result == None
+    
+    /// </remarks>
+    
+    
+    public static int? BinarySearch(&[T] arr, T target)
+    {
+        
+        // TODO: Implement BinarySearch
+        throw new NotImplementedException();
+    }
+    
+}
+
+
+// ========== Generated xUnit tests ==========
+
+public class find_element_in_middleTests
+{
+    [Fact]
+    public void find_element_in_middle_Test()
+    {
+        // Setup
+        let arr = vec![1, 3, 5, 7, 9];
+        // Actions
+        let result = binary_search(&arr, &5);
+        // Assertions
+        Assert.AreEqual(result, Some(2));
+    }
+}
+
+public class find_first_elementTests
+{
+    [Fact]
+    public void find_first_element_Test()
+    {
+        // Setup
+        let arr = vec![1, 3, 5, 7, 9];
+        // Actions
+        let result = binary_search(&arr, &1);
+        // Assertions
+        Assert.AreEqual(result, Some(0));
+    }
+}
+
+public class find_last_elementTests
+{
+    [Fact]
+    public void find_last_element_Test()
+    {
+        // Setup
+        let arr = vec![1, 3, 5, 7, 9];
+        // Actions
+        let result = binary_search(&arr, &9);
+        // Assertions
+        Assert.AreEqual(result, Some(4));
+    }
+}
+
+public class element_not_foundTests
+{
+    [Fact]
+    public void element_not_found_Test()
+    {
+        // Setup
+        let arr = vec![1, 3, 5, 7, 9];
+        // Actions
+        let result = binary_search(&arr, &4);
+        // Assertions
+        Assert.AreEqual(result, None);
+    }
+}
+
+public class empty_arrayTests
+{
+    [Fact]
+    public void empty_array_Test()
+    {
+        // Setup
+        let arr: Vec<i32> = vec![];
+        // Actions
+        let result = binary_search(&arr, &1);
+        // Assertions
+        Assert.AreEqual(result, None);
+    }
+}
+
+public class single_element_foundTests
+{
+    [Fact]
+    public void single_element_found_Test()
+    {
+        // Setup
+        let arr = vec![42];
+        // Actions
+        let result = binary_search(&arr, &42);
+        // Assertions
+        Assert.AreEqual(result, Some(0));
+    }
+}
+
+public class single_element_not_foundTests
+{
+    [Fact]
+    public void single_element_not_found_Test()
+    {
+        // Setup
+        let arr = vec![42];
+        // Actions
+        let result = binary_search(&arr, &1);
+        // Assertions
+        Assert.AreEqual(result, None);
+    }
+}
+
+public class duplicate_elementsTests
+{
+    [Fact]
+    public void duplicate_elements_Test()
+    {
+        // Setup
+        let arr = vec![1, 2, 2, 2, 3];
+        // Actions
+        let result = binary_search(&arr, &2);
+        // Assertions
+        Assert.IsTrue(result.is_some());let idx = result.unwrap();;Assert.IsTrue(idx >= 1 && idx <= 3);
+    }
+}
+
+}

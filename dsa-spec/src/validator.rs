@@ -4,6 +4,7 @@ use crate::ast::Spec;
 use crate::error::SpecError;
 use crate::spec_schema::SPEC_JSON_SCHEMA;
 use jsonschema::{Draft, JSONSchema, ValidationError};
+use std::path::Path;
 
 /// Validate a parsed spec against the JSON Schema.
 ///
@@ -48,6 +49,25 @@ pub fn validate(spec: &Spec) -> Result<(), Vec<SpecError>> {
         .collect();
 
     Err(messages)
+}
+
+/// Check that a spec's `metadata.category` matches its parent directory name.
+///
+/// Returns a warning `SpecError` if the category does not match the
+/// directory the spec file lives in. This is a soft warning only —
+/// it does not fail validation.
+pub fn validate_category_dir(spec: &Spec, spec_path: &Path) -> Option<SpecError> {
+    let parent_dir = spec_path.parent()?.file_name()?.to_str()?;
+    if spec.metadata.category != parent_dir {
+        return Some(SpecError::ValidationError {
+            message: format!(
+                "category mismatch: metadata.category is '{}' but spec lives in '{}' directory",
+                spec.metadata.category, parent_dir
+            ),
+            path: format!("{}", spec_path.display()),
+        });
+    }
+    None
 }
 
 #[cfg(test)]
@@ -245,6 +265,30 @@ verification:
 "#;
         // YAML type mismatch: tags is expected to be an array
         assert!(serde_yaml::from_str::<crate::ast::Spec>(yaml).is_err());
+    }
+
+    #[test]
+    fn test_validate_category_dir_matches() {
+        let spec = make_valid_spec();
+        let path = Path::new("specs/arrays/stack.yaml");
+        let result = validate_category_dir(&spec, path);
+        assert!(result.is_some(), "category 'linear' != dir 'arrays'");
+        assert!(result.unwrap().to_string().contains("category mismatch"));
+    }
+
+    #[test]
+    fn test_validate_category_dir_ok() {
+        let mut spec = make_valid_spec();
+        spec.metadata.category = "arrays".into();
+        let path = Path::new("specs/arrays/stack.yaml");
+        assert!(validate_category_dir(&spec, path).is_none());
+    }
+
+    #[test]
+    fn test_validate_category_dir_no_parent() {
+        let spec = make_valid_spec();
+        let path = Path::new("stack.yaml");
+        assert!(validate_category_dir(&spec, path).is_none());
     }
 
     #[test]

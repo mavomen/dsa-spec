@@ -1,0 +1,191 @@
+// Stack
+
+// Time complexity: O(1) push/pop, O(n) search
+
+
+// Space complexity: O(n)
+
+
+// Invariants:
+
+// - length >= 0
+
+
+
+package stack
+
+import "testing"
+
+
+
+
+
+// StackInterface defines the contract for Stack
+type StackInterface[T any] interface {
+
+	
+	New() Self
+	
+	Push(item T) 
+	
+	Pop() *T
+	
+	Peek() *T
+	
+	IsEmpty() bool
+	
+	Len() int
+	
+}
+
+
+// Stack represents a Stack
+type Stack[T any] struct {
+	
+	Items []T
+	
+}
+
+
+// New New.
+
+
+// Returns:
+//   - Self
+
+
+
+// Postconditions:
+ // - length == 0
+
+
+
+func (s *Stack[T]) New() Self {
+	
+	// TODO: Implement New
+	panic("not implemented")
+}
+
+// Push Push.
+
+// Parameters:
+
+//   - item: T
+
+
+
+
+
+// Postconditions:
+ // - length == old.length + 1
+ // - top == item
+
+
+
+func (s *Stack[T]) Push(item T)  {
+	
+	// TODO: Implement Push
+	panic("not implemented")
+}
+
+// Pop Pop.
+
+
+// Returns:
+//   - *T
+
+
+// Preconditions:
+ // - length > 0
+
+
+
+// Postconditions:
+ // - length == old.length - 1
+
+
+
+func (s *Stack[T]) Pop() *T {
+	
+	// TODO: Implement Pop
+	panic("not implemented")
+}
+
+// Peek Peek.
+
+
+// Returns:
+//   - *T
+
+
+// Preconditions:
+ // - length > 0
+
+
+
+
+func (s *Stack[T]) Peek() *T {
+	
+	// TODO: Implement Peek
+	panic("not implemented")
+}
+
+// IsEmpty IsEmpty.
+
+
+// Returns:
+//   - bool
+
+
+
+
+func (s *Stack[T]) IsEmpty() bool {
+	
+	// TODO: Implement IsEmpty
+	panic("not implemented")
+}
+
+// Len Len.
+
+
+// Returns:
+//   - int
+
+
+
+
+func (s *Stack[T]) Len() int {
+	
+	// TODO: Implement Len
+	panic("not implemented")
+}
+
+
+
+
+// ========== Generated tests ==========
+
+func Testpush_and_pop(t *testing.T) {
+	let mut s = Stack::new();
+	s.push(1)s.push(2)
+	if s.pop() != Some(2) { t.Errorf("got %v, want %v", s.pop(), Some(2)) }if s.pop() != Some(1) { t.Errorf("got %v, want %v", s.pop(), Some(1)) }if !(s.is_empty()) { t.Errorf("assertion failed: s.is_empty()") }
+}
+
+func Testpeek_returns_top(t *testing.T) {
+	let mut s = Stack::new();
+	s.push(42)
+	if s.peek() != Some(&42) { t.Errorf("got %v, want %v", s.peek(), Some(&42)) }
+}
+
+func Testpop_empty_returns_none(t *testing.T) {
+	let mut s = Stack::<i32>::new();
+	
+	if s.pop() != None { t.Errorf("got %v, want %v", s.pop(), None) }
+}
+
+func Testlen_tracks_elements(t *testing.T) {
+	let mut s = Stack::new();
+	s.push(10)s.push(20)
+	if s.len() != 2 { t.Errorf("got %v, want %v", s.len(), 2) }
+}
+

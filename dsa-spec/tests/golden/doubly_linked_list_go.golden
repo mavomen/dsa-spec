@@ -46,11 +46,11 @@ type NodeInterface[T any] interface {
 // Node represents a DoublyLinkedList
 type Node[T any] struct {
 	
-	value T
+	Value T
 	
-	prev *Node<T>
+	Prev *Node<T>
 	
-	next *Node<T>
+	Next *Node<T>
 	
 }
 
@@ -212,9 +212,9 @@ type DoublyLinkedListInterface[T any] interface {
 // DoublyLinkedList represents a DoublyLinkedList
 type DoublyLinkedList[T any] struct {
 	
-	head *Node<T>
+	Head *Node<T>
 	
-	tail *Node<T>
+	Tail *Node<T>
 	
 }
 
