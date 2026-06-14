@@ -189,7 +189,7 @@ fn build_context(spec: &Spec) -> Context {
                 .fields
                 .iter()
                 .map(|f| FieldContext {
-                    name: f.name.clone(),
+                    name: casing::to_pascal_case(&f.name),
                     go_type: GoBackend::to_go_type(&f.field_type),
                 })
                 .collect(),
@@ -208,7 +208,7 @@ fn build_context(spec: &Spec) -> Context {
                     .params
                     .iter()
                     .map(|p| ParamContext {
-                        name: p.name.clone(),
+                        name: casing::to_camel_case(&p.name),
                         go_type: GoBackend::to_go_type(&p.param_type),
                     })
                     .collect(),
@@ -324,7 +324,8 @@ struct TestContext {
 mod tests {
     use super::*;
     use crate::ast::{
-        Complexity, Contracts, GenericParam, Metadata, MethodDef, Spec, StructDef, Verification,
+        Complexity, Contracts, FieldDef, GenericParam, Metadata, MethodDef, ParamDef, Spec,
+        StructDef, Type, Verification,
     };
 
     #[test]
@@ -550,6 +551,128 @@ mod tests {
     fn test_translate_unknown_type_passthrough() {
         assert_eq!(GoBackend::translate_simple_type("MyType"), "MyType");
         assert_eq!(GoBackend::translate_simple_type(""), "");
+    }
+
+    #[test]
+    fn test_go_field_names_are_pascal_case() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            contracts: Contracts::default(),
+            structs: vec![StructDef {
+                name: "MyStruct".into(),
+                generics: vec![],
+                fields: vec![
+                    FieldDef {
+                        name: "first_name".into(),
+                        field_type: Type::Simple("string".into()),
+                    },
+                    FieldDef {
+                        name: "item_count".into(),
+                        field_type: Type::Simple("int".into()),
+                    },
+                ],
+            }],
+            methods: vec![],
+            verification: Verification::default(),
+        };
+        let backend = GoBackend::new("templates").unwrap();
+        let code = backend.generate(&spec).unwrap();
+        assert!(
+            code.contains("FirstName string"),
+            "expected PascalCase field, got: {code}"
+        );
+        assert!(
+            code.contains("ItemCount int"),
+            "expected PascalCase field, got: {code}"
+        );
+    }
+
+    #[test]
+    fn test_go_param_names_are_camel_case() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            contracts: Contracts::default(),
+            structs: vec![StructDef {
+                name: "MyStruct".into(),
+                generics: vec![],
+                fields: vec![],
+            }],
+            methods: vec![MethodDef {
+                name: "DoWork".into(),
+                params: vec![
+                    ParamDef {
+                        name: "first_name".into(),
+                        param_type: Type::Simple("string".into()),
+                    },
+                    ParamDef {
+                        name: "item_count".into(),
+                        param_type: Type::Simple("int".into()),
+                    },
+                ],
+                returns: Some("void".into()),
+                ..Default::default()
+            }],
+            verification: Verification::default(),
+        };
+        let backend = GoBackend::new("templates").unwrap();
+        let code = backend.generate(&spec).unwrap();
+        assert!(
+            code.contains("firstName string"),
+            "expected camelCase param, got: {code}"
+        );
+        assert!(
+            code.contains("itemCount int"),
+            "expected camelCase param, got: {code}"
+        );
+    }
+
+    #[test]
+    fn test_go_casing_with_contract_assertions() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            contracts: Contracts::default(),
+            structs: vec![StructDef {
+                name: "MyStruct".into(),
+                generics: vec![],
+                fields: vec![FieldDef {
+                    name: "my_field".into(),
+                    field_type: Type::Simple("int".into()),
+                }],
+            }],
+            methods: vec![MethodDef {
+                name: "DoStuff".into(),
+                params: vec![ParamDef {
+                    name: "my_param".into(),
+                    param_type: Type::Simple("string".into()),
+                }],
+                returns: Some("bool".into()),
+                preconditions: vec!["my_param != \"\"".into()],
+                postconditions: vec!["result ok".into()],
+                injected_assertions: vec!["precondition: my_param != \"\"".into()],
+            }],
+            verification: Verification::default(),
+        };
+        let injected = crate::contracts::inject_assertions(&spec);
+        let backend = GoBackend::new("templates").unwrap();
+        let code = backend.generate(&injected).unwrap();
+        assert!(code.contains("MyField int"), "field should be PascalCase");
+        assert!(code.contains("myParam string"), "param should be camelCase");
+        assert!(code.contains("DoStuff"), "method should be PascalCase");
     }
 
     #[test]

@@ -48,9 +48,9 @@ type GraphInterface[T any] interface {
 // Graph represents a Graph
 type Graph[T any] struct {
 	
-	adjacency_list HashMap<T, Vec<T>>
+	AdjacencyList HashMap<T, Vec<T>>
 	
-	directed bool
+	Directed bool
 	
 }
 

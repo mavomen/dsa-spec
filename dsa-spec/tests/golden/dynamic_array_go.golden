@@ -44,9 +44,9 @@ type DynamicArrayInterface[T any] interface {
 // DynamicArray represents a DynamicArray
 type DynamicArray[T any] struct {
 	
-	data []T
+	Data []T
 	
-	len int
+	Len int
 	
 }
 

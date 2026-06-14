@@ -39,7 +39,7 @@ verification:
     let code = generate(&spec);
     assert!(code.contains("package stack"));
     assert!(code.contains("type Stack[T any] struct {"));
-    assert!(code.contains("items []T"));
+    assert!(code.contains("Items []T"));
     assert!(code.contains("func (s *Stack[T]) Push(item T) {"));
     assert!(code.contains("panic(\"not implemented\")"));
 }

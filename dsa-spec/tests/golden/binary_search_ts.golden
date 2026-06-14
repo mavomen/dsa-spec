@@ -1,0 +1,135 @@
+/**
+ * BinarySearch
+
+ * Time complexity: O(log n)
+
+
+ * Space complexity: O(1)
+
+
+ */
+
+
+
+
+/**
+ * Binarysearch.
+ 
+ * @param arr - &[T].
+ 
+ * @param target - T.
+ 
+ 
+ * @returns number | null
+ 
+ 
+ *
+ * Preconditions:
+  * - arr is sorted ascending
+ 
+ 
+ *
+ * Postconditions:
+  * - if target in arr, arr[result] == target
+  * - if target not in arr, result == None
+ 
+ 
+ */
+export function binarySearch(arr: &[T], target: T): number | null {
+    
+    // TODO: Implement binarySearch
+    throw new Error('Not implemented');
+}
+
+
+
+// ========== Generated Jest tests ==========
+
+describe('find_element_in_middle', () => {
+    it('should work', () => {
+        // Setup
+        let arr = vec![1, 3, 5, 7, 9];
+        // Actions
+        let result = binary_search(&arr, &5);
+        // Assertions
+        expect(result).toBe(Some(2));
+    });
+});
+
+describe('find_first_element', () => {
+    it('should work', () => {
+        // Setup
+        let arr = vec![1, 3, 5, 7, 9];
+        // Actions
+        let result = binary_search(&arr, &1);
+        // Assertions
+        expect(result).toBe(Some(0));
+    });
+});
+
+describe('find_last_element', () => {
+    it('should work', () => {
+        // Setup
+        let arr = vec![1, 3, 5, 7, 9];
+        // Actions
+        let result = binary_search(&arr, &9);
+        // Assertions
+        expect(result).toBe(Some(4));
+    });
+});
+
+describe('element_not_found', () => {
+    it('should work', () => {
+        // Setup
+        let arr = vec![1, 3, 5, 7, 9];
+        // Actions
+        let result = binary_search(&arr, &4);
+        // Assertions
+        expect(result).toBe(None);
+    });
+});
+
+describe('empty_array', () => {
+    it('should work', () => {
+        // Setup
+        let arr: Vec<i32> = vec![];
+        // Actions
+        let result = binary_search(&arr, &1);
+        // Assertions
+        expect(result).toBe(None);
+    });
+});
+
+describe('single_element_found', () => {
+    it('should work', () => {
+        // Setup
+        let arr = vec![42];
+        // Actions
+        let result = binary_search(&arr, &42);
+        // Assertions
+        expect(result).toBe(Some(0));
+    });
+});
+
+describe('single_element_not_found', () => {
+    it('should work', () => {
+        // Setup
+        let arr = vec![42];
+        // Actions
+        let result = binary_search(&arr, &1);
+        // Assertions
+        expect(result).toBe(None);
+    });
+});
+
+describe('duplicate_elements', () => {
+    it('should work', () => {
+        // Setup
+        let arr = vec![1, 2, 2, 2, 3];
+        // Actions
+        let result = binary_search(&arr, &2);
+        // Assertions
+        expect(result.is_some()).toBe(true);let idx = result.unwrap();;expect(idx >= 1 && idx <= 3).toBe(true);
+    });
+});
+

@@ -16,15 +16,15 @@ skeleton generator. We're thrilled you want to help.
 - All changes must pass CI (build + test + lint)
 
 ## Adding a new language backend
-1. Create `src/<lang>_backend.rs` implementing the `Backend` trait
-2. Add a Tera template in `templates/<lang>.<ext>.tera`
-3. Register the module in `src/lib.rs`
-4. Add an integration test in `tests/<lang>_backend.rs`
+1. Create `dsa-spec/src/<lang>_backend.rs` implementing the `Backend` trait
+2. Add a Tera template in `dsa-spec/templates/<lang>.<ext>.tera`
+3. Register the module in `dsa-spec/src/lib.rs`
+4. Add an integration test in `dsa-spec/tests/<lang>_backend.rs`
 5. Update `.github/workflows/ci.yml` to include the new language
 
 ## Adding a new DSA specification
-- Place the YAML file in the `specs/` directory
-- Follow the schema defined in `src/spec_schema.rs`
+- Place the YAML file in the `specs/<category>/` directory (e.g. `specs/trees/bst.yaml`)
+- Follow the schema defined in `dsa-spec/src/spec_schema.rs`
 - Include contracts (invariants, pre/postconditions) and test cases
 - Generated tests will initially **fail** — that's intentional!
 
@@ -36,7 +36,7 @@ skeleton generator. We're thrilled you want to help.
 ## Running the test suite
 ```bash
 cargo test                              # unit tests
-cargo run -- generate specs/stack.yaml  # manual smoke test
+cargo run -- generate specs/arrays/stack.yaml  # manual smoke test
 bash ci/run-cross-tests.sh              # cross‑language tests (optional tooling)
 ```
 

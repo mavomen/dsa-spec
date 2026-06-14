@@ -267,10 +267,23 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let yaml = fs::read_to_string(&spec)?;
             tracing::info!(path = %spec.display(), "validating spec");
             let parsed = parser::parse(&yaml)?;
+
+            let mut warnings: Vec<String> = Vec::new();
+            if let Some(warn) = validator::validate_category_dir(&parsed, &spec) {
+                warnings.push(warn.to_string());
+            }
+
             match validator::validate(&parsed) {
                 Ok(()) => {
+                    for w in &warnings {
+                        tracing::warn!(warning = %w, "category/directory mismatch");
+                        eprintln!("Warning: {w}");
+                    }
                     if use_json {
-                        println!(r#"{{"valid":true}}"#);
+                        println!(
+                            r#"{{"valid":true,"warnings":{}}}"#,
+                            serde_json::to_string(&warnings).unwrap_or_default()
+                        );
                     } else {
                         println!("Spec is valid.");
                     }

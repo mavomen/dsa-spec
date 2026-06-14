@@ -46,13 +46,13 @@ type AVLNodeInterface[T constraints.Ordered] interface {
 // AVLNode represents a AVLTree
 type AVLNode[T constraints.Ordered] struct {
 	
-	value T
+	Value T
 	
-	left *AVLNode<T>
+	Left *AVLNode<T>
 	
-	right *AVLNode<T>
+	Right *AVLNode<T>
 	
-	height int32
+	Height int32
 	
 }
 
@@ -195,7 +195,7 @@ type AVLTreeInterface[T constraints.Ordered] interface {
 // AVLTree represents a AVLTree
 type AVLTree[T constraints.Ordered] struct {
 	
-	root *AVLNode<T>
+	Root *AVLNode<T>
 	
 }
 

@@ -63,13 +63,26 @@ fn make_backends() -> Vec<LangBackend> {
 
 fn spec_files() -> Vec<PathBuf> {
     let spec_dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("../specs");
-    let mut files: Vec<PathBuf> = fs::read_dir(&spec_dir)
-        .expect("specs directory not found")
-        .filter_map(|e| e.ok())
-        .map(|e| e.path())
-        .filter(|p| p.extension().and_then(|s| s.to_str()) == Some("yaml"))
-        .collect();
+    let mut files: Vec<PathBuf> = Vec::new();
+    for entry in walkdir_specs(&spec_dir) {
+        files.push(entry);
+    }
     files.sort();
+    files
+}
+
+fn walkdir_specs(dir: &Path) -> Vec<PathBuf> {
+    let mut files = Vec::new();
+    if let Ok(entries) = fs::read_dir(dir) {
+        for entry in entries.filter_map(|e| e.ok()) {
+            let path = entry.path();
+            if path.is_dir() {
+                files.extend(walkdir_specs(&path));
+            } else if path.extension().and_then(|s| s.to_str()) == Some("yaml") {
+                files.push(path);
+            }
+        }
+    }
     files
 }
 

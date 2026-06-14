@@ -85,4 +85,89 @@ mod tests {
     fn test_to_camel_case_trailing_underscore() {
         assert_eq!(to_camel_case("foo_"), "foo");
     }
+
+    // --- Edge cases: acronyms ---
+
+    #[test]
+    fn test_to_pascal_case_with_acronym() {
+        assert_eq!(to_pascal_case("parse_xml"), "ParseXml");
+        assert_eq!(to_pascal_case("http_request"), "HttpRequest");
+        assert_eq!(to_pascal_case("to_html"), "ToHtml");
+    }
+
+    #[test]
+    fn test_to_camel_case_with_acronym() {
+        assert_eq!(to_camel_case("parse_xml"), "parseXml");
+        assert_eq!(to_camel_case("from_url"), "fromUrl");
+        assert_eq!(to_camel_case("set_xml_parser"), "setXmlParser");
+    }
+
+    // --- Edge cases: leading underscores ---
+
+    #[test]
+    fn test_to_pascal_case_leading_underscore() {
+        assert_eq!(to_pascal_case("_private"), "Private");
+        assert_eq!(to_pascal_case("__double"), "Double");
+    }
+
+    #[test]
+    fn test_to_camel_case_leading_underscore() {
+        assert_eq!(to_camel_case("_private"), "Private");
+    }
+
+    // --- Edge cases: multiple consecutive underscores ---
+
+    #[test]
+    fn test_to_pascal_case_double_underscore() {
+        assert_eq!(to_pascal_case("foo__bar"), "FooBar");
+    }
+
+    #[test]
+    fn test_to_camel_case_double_underscore() {
+        assert_eq!(to_camel_case("foo__bar"), "fooBar");
+    }
+
+    // --- Edge cases: numbers ---
+
+    #[test]
+    fn test_to_pascal_case_with_numbers() {
+        assert_eq!(to_pascal_case("item_2_value"), "Item2Value");
+    }
+
+    #[test]
+    fn test_to_camel_case_with_numbers() {
+        assert_eq!(to_camel_case("item_2_value"), "item2Value");
+    }
+
+    // --- Edge cases: already camelCase / mixed case ---
+
+    #[test]
+    fn test_to_camel_case_already_camel() {
+        assert_eq!(to_camel_case("alreadyCamel"), "alreadyCamel");
+        assert_eq!(to_camel_case("getURL"), "getURL");
+    }
+
+    #[test]
+    fn test_to_pascal_case_mixed_case_snake() {
+        assert_eq!(to_pascal_case("get_URL"), "GetURL");
+        assert_eq!(to_pascal_case("set_XML_parser"), "SetXMLParser");
+    }
+
+    #[test]
+    fn test_to_camel_case_mixed_case_snake() {
+        assert_eq!(to_camel_case("get_URL"), "getURL");
+        assert_eq!(to_camel_case("set_XML_parser"), "setXMLParser");
+    }
+
+    // --- Edge case: Unicode ---
+
+    #[test]
+    fn test_to_pascal_case_with_accented_chars() {
+        assert_eq!(to_pascal_case("café_olé"), "CaféOlé");
+    }
+
+    #[test]
+    fn test_to_camel_case_with_accented_chars() {
+        assert_eq!(to_camel_case("café_olé"), "caféOlé");
+    }
 }

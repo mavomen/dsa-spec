@@ -39,8 +39,17 @@ templates/
   csharp.cs.tera
   typescript.ts.tera
   go.go.tera
-specs/                 # YAML DSA specifications (11 core DSAs)
-  bst.yaml, avl.yaml, dynamic_array.yaml, singly_linked_list.yaml, ...
+specs/                 # YAML DSA specifications organized by category
+  arrays/
+    dynamic_array.yaml, circular_buffer.yaml, stack.yaml
+  linked-lists/
+    singly_linked_list.yaml, doubly_linked_list.yaml
+  trees/
+    bst.yaml, avl.yaml
+  graphs/
+    graph_adjacency_list.yaml, bfs.yaml, dfs.yaml
+  sorting/
+    mergesort.yaml, quicksort.yaml
 tests/
   cli.rs               # CLI integration tests
   rust_backend.rs
@@ -202,12 +211,18 @@ Assertions are rendered as comments (`// Contract: ...`) followed by the failing
 
 ## Naming Conventions
 
-Currently, spec field and method names pass through directly without transformation. Backends do not yet convert between casing conventions.
+Spec authors write field and method names in `snake_case` (e.g. `is_empty`, `first_name`). Backends convert to each language's idiomatic casing:
 
-**Desired convention** (not yet implemented):
-- Spec authors write `snake_case` (e.g. `is_empty`, `inorder`)
-- Rust: `is_empty` (pass-through) — Python: `is_empty` — C#: `IsEmpty` — TypeScript: `isEmpty` — Go: `IsEmpty`
-- Struct names (already PascalCase in specs) pass through unchanged
+| Language | Methods | Fields | Parameters |
+|----------|---------|--------|------------|
+| Rust | snake_case (pass-through) | snake_case (pass-through) | snake_case (pass-through) |
+| Python | snake_case (pass-through) | snake_case (pass-through) | snake_case (pass-through) |
+| C# | PascalCase | PascalCase | camelCase |
+| TypeScript | camelCase | camelCase | camelCase |
+| Go | PascalCase (exported) | PascalCase (exported) | camelCase |
+
+Struct/type names (already PascalCase in specs) pass through unchanged.
+Casing logic lives in `src/casing.rs` and is shared by all backends.
 
 ---
 

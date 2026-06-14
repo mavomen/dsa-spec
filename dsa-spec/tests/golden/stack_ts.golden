@@ -1,0 +1,199 @@
+/**
+ * Stack
+
+ * Time complexity: O(1) push/pop, O(n) search
+
+
+ * Space complexity: O(n)
+
+
+ * Invariants:
+
+ * - length >= 0
+
+
+ */
+
+
+
+export interface Stack<T extends Clone> {
+    
+    items: T[];
+    
+}
+
+export class StackImpl<T extends Clone> implements Stack<T> {
+    constructor(
+        
+        public items: T[]
+        
+    ) {}
+
+    
+    /**
+     * New.
+     
+     
+     * @returns Self
+     
+     
+     
+     *
+     * Postconditions:
+      * - length == 0
+     
+     
+     */
+    new(): Self {
+        
+        // TODO: Implement new
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * Push.
+     
+     * @param item - T.
+     
+     
+     
+     
+     *
+     * Postconditions:
+      * - length == old.length + 1
+      * - top == item
+     
+     
+     */
+    push(item: T): void {
+        
+        // TODO: Implement push
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * Pop.
+     
+     
+     * @returns T | null
+     
+     
+     *
+     * Preconditions:
+      * - length > 0
+     
+     
+     *
+     * Postconditions:
+      * - length == old.length - 1
+     
+     
+     */
+    pop(): T | null {
+        
+        // TODO: Implement pop
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * Peek.
+     
+     
+     * @returns T | null
+     
+     
+     *
+     * Preconditions:
+      * - length > 0
+     
+     
+     
+     */
+    peek(): T | null {
+        
+        // TODO: Implement peek
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * Isempty.
+     
+     
+     * @returns boolean
+     
+     
+     
+     
+     */
+    isEmpty(): boolean {
+        
+        // TODO: Implement isEmpty
+        throw new Error('Not implemented');
+    }
+    
+    /**
+     * Len.
+     
+     
+     * @returns number
+     
+     
+     
+     
+     */
+    len(): number {
+        
+        // TODO: Implement len
+        throw new Error('Not implemented');
+    }
+    
+}
+
+
+
+// ========== Generated Jest tests ==========
+
+describe('push_and_pop', () => {
+    it('should work', () => {
+        // Setup
+        let mut s = Stack::new();
+        // Actions
+        s.push(1);s.push(2);
+        // Assertions
+        expect(s.pop()).toBe(Some(2));expect(s.pop()).toBe(Some(1));expect(s.is_empty()).toBe(true);
+    });
+});
+
+describe('peek_returns_top', () => {
+    it('should work', () => {
+        // Setup
+        let mut s = Stack::new();
+        // Actions
+        s.push(42);
+        // Assertions
+        expect(s.peek()).toBe(Some(&42));
+    });
+});
+
+describe('pop_empty_returns_none', () => {
+    it('should work', () => {
+        // Setup
+        let mut s = Stack::<i32>::new();
+        // Actions
+        
+        // Assertions
+        expect(s.pop()).toBe(None);
+    });
+});
+
+describe('len_tracks_elements', () => {
+    it('should work', () => {
+        // Setup
+        let mut s = Stack::new();
+        // Actions
+        s.push(10);s.push(20);
+        // Assertions
+        expect(s.len()).toBe(2);
+    });
+});
+

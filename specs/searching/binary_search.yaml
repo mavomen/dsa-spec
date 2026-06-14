@@ -1,0 +1,89 @@
+spec_version: "1.0"
+metadata:
+  name: "BinarySearch"
+  category: "searching"
+  complexity:
+    time: "O(log n)"
+    space: "O(1)"
+  tags: ["searching", "binary-search", "divide-and-conquer"]
+
+contracts:
+  preconditions:
+    - "array is sorted in ascending order"
+  postconditions:
+    - "if element exists, returns its index"
+    - "if element does not exist, returns None"
+
+methods:
+  - name: "binary_search"
+    params:
+      - name: "arr"
+        type: "&[T]"
+      - name: "target"
+        type: "&T"
+    returns: "Option<usize>"
+    preconditions:
+      - "arr is sorted ascending"
+    postconditions:
+      - "if target in arr, arr[result] == target"
+      - "if target not in arr, result == None"
+
+verification:
+  test_cases:
+    - name: "find_element_in_middle"
+      setup: "let arr = vec![1, 3, 5, 7, 9];"
+      actions:
+        - "let result = binary_search(&arr, &5)"
+      assertions:
+        - "assert_eq!(result, Some(2))"
+
+    - name: "find_first_element"
+      setup: "let arr = vec![1, 3, 5, 7, 9];"
+      actions:
+        - "let result = binary_search(&arr, &1)"
+      assertions:
+        - "assert_eq!(result, Some(0))"
+
+    - name: "find_last_element"
+      setup: "let arr = vec![1, 3, 5, 7, 9];"
+      actions:
+        - "let result = binary_search(&arr, &9)"
+      assertions:
+        - "assert_eq!(result, Some(4))"
+
+    - name: "element_not_found"
+      setup: "let arr = vec![1, 3, 5, 7, 9];"
+      actions:
+        - "let result = binary_search(&arr, &4)"
+      assertions:
+        - "assert_eq!(result, None)"
+
+    - name: "empty_array"
+      setup: "let arr: Vec<i32> = vec![];"
+      actions:
+        - "let result = binary_search(&arr, &1)"
+      assertions:
+        - "assert_eq!(result, None)"
+
+    - name: "single_element_found"
+      setup: "let arr = vec![42];"
+      actions:
+        - "let result = binary_search(&arr, &42)"
+      assertions:
+        - "assert_eq!(result, Some(0))"
+
+    - name: "single_element_not_found"
+      setup: "let arr = vec![42];"
+      actions:
+        - "let result = binary_search(&arr, &1)"
+      assertions:
+        - "assert_eq!(result, None)"
+
+    - name: "duplicate_elements"
+      setup: "let arr = vec![1, 2, 2, 2, 3];"
+      actions:
+        - "let result = binary_search(&arr, &2)"
+      assertions:
+        - "assert!(result.is_some())"
+        - "let idx = result.unwrap();"
+        - "assert!(idx >= 1 && idx <= 3)"
