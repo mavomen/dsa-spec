@@ -1,296 +1,311 @@
+// --- Node.go ---
 // DoublyLinkedList
+ // Time complexity: O(1) insert/remove at head/tail, O(n) search
 
-// Time complexity: O(1) insert/remove at head/tail, O(n) search
-
-
-// Space complexity: O(n)
+ // Space complexity: O(n)
 
 
 // Invariants:
+ // - no cycles
+ // - for each node, node.next.prev == node
 
-// - no cycles
 
-// - for each node, node.next.prev == node
+package doublylinkedlist
+
+
+type Node[T any] struct {
+
+    
+    Value T
+    
+    Prev *Node<T>
+    
+    Next *Node<T>
+    
+}
+
+func NewNode[T any]() *Node[T] {
+    return &Node[T]{}
+}
+
+// --- Node_new.go ---
+// DoublyLinkedList.New
+
+ // @returns Self
+
+
+
+// Postconditions:
+ // - head is None
+ // - tail is None
+
+
+package doublylinkedlist
+
+
+func (s *Node[T]) New() Self {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestNodeNewpush_front_pop_front(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    if list.pop_front() != Some(2) { t.Errorf("got %v, want %v", list.pop_front(), Some(2)) }if list.pop_front() != Some(1) { t.Errorf("got %v, want %v", list.pop_front(), Some(1)) }
+}
+
+func TestNodeNewpush_back_pop_back(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    if list.pop_back() != Some(2) { t.Errorf("got %v, want %v", list.pop_back(), Some(2)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+}
+
+func TestNodeNewmixed_operations(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    if list.pop_front() != Some(0) { t.Errorf("got %v, want %v", list.pop_front(), Some(0)) }if list.pop_back() != Some(3) { t.Errorf("got %v, want %v", list.pop_back(), Some(3)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+}
+
+
+// --- Node_push_front.go ---
+// DoublyLinkedList.PushFront
+ // @param value - T
+
+
+
+
+// Postconditions:
+ // - head.value == value
+
+
+package doublylinkedlist
+
+
+func (s *Node[T]) PushFront(value T)  {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestNodePushFrontpush_front_pop_front(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    if list.pop_front() != Some(2) { t.Errorf("got %v, want %v", list.pop_front(), Some(2)) }if list.pop_front() != Some(1) { t.Errorf("got %v, want %v", list.pop_front(), Some(1)) }
+}
+
+func TestNodePushFrontpush_back_pop_back(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    if list.pop_back() != Some(2) { t.Errorf("got %v, want %v", list.pop_back(), Some(2)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+}
+
+func TestNodePushFrontmixed_operations(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    if list.pop_front() != Some(0) { t.Errorf("got %v, want %v", list.pop_front(), Some(0)) }if list.pop_back() != Some(3) { t.Errorf("got %v, want %v", list.pop_back(), Some(3)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+}
+
+
+// --- Node_push_back.go ---
+// DoublyLinkedList.PushBack
+ // @param value - T
+
+
+
+
+// Postconditions:
+ // - tail.value == value
+
+
+package doublylinkedlist
+
+
+func (s *Node[T]) PushBack(value T)  {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestNodePushBackpush_front_pop_front(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    if list.pop_front() != Some(2) { t.Errorf("got %v, want %v", list.pop_front(), Some(2)) }if list.pop_front() != Some(1) { t.Errorf("got %v, want %v", list.pop_front(), Some(1)) }
+}
+
+func TestNodePushBackpush_back_pop_back(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    if list.pop_back() != Some(2) { t.Errorf("got %v, want %v", list.pop_back(), Some(2)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+}
+
+func TestNodePushBackmixed_operations(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    if list.pop_front() != Some(0) { t.Errorf("got %v, want %v", list.pop_front(), Some(0)) }if list.pop_back() != Some(3) { t.Errorf("got %v, want %v", list.pop_back(), Some(3)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+}
+
+
+// --- Node_pop_front.go ---
+// DoublyLinkedList.PopFront
+
+ // @returns *T
+
+
+// Preconditions:
+ // - !is_empty()
 
 
 
 package doublylinkedlist
 
-import "testing"
-
-
-
-
-
-// NodeInterface defines the contract for Node
-type NodeInterface[T any] interface {
-
-	
-	New() Self
-	
-	PushFront(value T) 
-	
-	PushBack(value T) 
-	
-	PopFront() *T
-	
-	PopBack() *T
-	
-	IsEmpty() bool
-	
-	Len() int
-	
-}
-
-
-// Node represents a DoublyLinkedList
-type Node[T any] struct {
-	
-	value T
-	
-	prev *Node<T>
-	
-	next *Node<T>
-	
-}
-
-
-// New
-
-
-// Postconditions:
- // - head is None
- // - tail is None
-
-
-
-func (s *Node[T]) New() Self {
-	
-	// TODO: Implement New
-	panic("not implemented")
-}
-
-// PushFront
-
-
-// Postconditions:
- // - head.value == value
-
-
-
-func (s *Node[T]) PushFront(value T)  {
-	
-	// TODO: Implement PushFront
-	panic("not implemented")
-}
-
-// PushBack
-
-
-// Postconditions:
- // - tail.value == value
-
-
-
-func (s *Node[T]) PushBack(value T)  {
-	
-	// TODO: Implement PushBack
-	panic("not implemented")
-}
-
-// PopFront
-
-// Preconditions:
- // - !is_empty()
-
-
-
 
 func (s *Node[T]) PopFront() *T {
-	
-	// TODO: Implement PopFront
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
-
-// PopBack
-
-// Preconditions:
- // - !is_empty()
-
-
-
-
-func (s *Node[T]) PopBack() *T {
-	
-	// TODO: Implement PopBack
-	panic("not implemented")
-}
-
-// IsEmpty
-
-
-
-func (s *Node[T]) IsEmpty() bool {
-	
-	// TODO: Implement IsEmpty
-	panic("not implemented")
-}
-
-// Len
-
-
-
-func (s *Node[T]) Len() int {
-	
-	// TODO: Implement Len
-	panic("not implemented")
-}
-
-
-
-
-// DoublyLinkedListInterface defines the contract for DoublyLinkedList
-type DoublyLinkedListInterface[T any] interface {
-
-	
-	New() Self
-	
-	PushFront(value T) 
-	
-	PushBack(value T) 
-	
-	PopFront() *T
-	
-	PopBack() *T
-	
-	IsEmpty() bool
-	
-	Len() int
-	
-}
-
-
-// DoublyLinkedList represents a DoublyLinkedList
-type DoublyLinkedList[T any] struct {
-	
-	head *Node<T>
-	
-	tail *Node<T>
-	
-}
-
-
-// New
-
-
-// Postconditions:
- // - head is None
- // - tail is None
-
-
-
-func (s *DoublyLinkedList[T]) New() Self {
-	
-	// TODO: Implement New
-	panic("not implemented")
-}
-
-// PushFront
-
-
-// Postconditions:
- // - head.value == value
-
-
-
-func (s *DoublyLinkedList[T]) PushFront(value T)  {
-	
-	// TODO: Implement PushFront
-	panic("not implemented")
-}
-
-// PushBack
-
-
-// Postconditions:
- // - tail.value == value
-
-
-
-func (s *DoublyLinkedList[T]) PushBack(value T)  {
-	
-	// TODO: Implement PushBack
-	panic("not implemented")
-}
-
-// PopFront
-
-// Preconditions:
- // - !is_empty()
-
-
-
-
-func (s *DoublyLinkedList[T]) PopFront() *T {
-	
-	// TODO: Implement PopFront
-	panic("not implemented")
-}
-
-// PopBack
-
-// Preconditions:
- // - !is_empty()
-
-
-
-
-func (s *DoublyLinkedList[T]) PopBack() *T {
-	
-	// TODO: Implement PopBack
-	panic("not implemented")
-}
-
-// IsEmpty
-
-
-
-func (s *DoublyLinkedList[T]) IsEmpty() bool {
-	
-	// TODO: Implement IsEmpty
-	panic("not implemented")
-}
-
-// Len
-
-
-
-func (s *DoublyLinkedList[T]) Len() int {
-	
-	// TODO: Implement Len
-	panic("not implemented")
-}
-
-
-
 
 // ========== Generated tests ==========
 
-func Testpush_front_pop_front(t *testing.T) {
-	let mut list = DoublyLinkedList::new();
-	list.push_front(1)list.push_front(2)
-	if list.pop_front() != Some(2) { t.Errorf("got %v, want %v", list.pop_front(), Some(2)) }if list.pop_front() != Some(1) { t.Errorf("got %v, want %v", list.pop_front(), Some(1)) }
+func TestNodePopFrontpush_front_pop_front(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    if list.pop_front() != Some(2) { t.Errorf("got %v, want %v", list.pop_front(), Some(2)) }if list.pop_front() != Some(1) { t.Errorf("got %v, want %v", list.pop_front(), Some(1)) }
 }
 
-func Testpush_back_pop_back(t *testing.T) {
-	let mut list = DoublyLinkedList::new();
-	list.push_back(1)list.push_back(2)
-	if list.pop_back() != Some(2) { t.Errorf("got %v, want %v", list.pop_back(), Some(2)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+func TestNodePopFrontpush_back_pop_back(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    if list.pop_back() != Some(2) { t.Errorf("got %v, want %v", list.pop_back(), Some(2)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
 }
 
-func Testmixed_operations(t *testing.T) {
-	let mut list = DoublyLinkedList::new();
-	list.push_front(1)list.push_back(3)list.push_front(0)
-	if list.pop_front() != Some(0) { t.Errorf("got %v, want %v", list.pop_front(), Some(0)) }if list.pop_back() != Some(3) { t.Errorf("got %v, want %v", list.pop_back(), Some(3)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+func TestNodePopFrontmixed_operations(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    if list.pop_front() != Some(0) { t.Errorf("got %v, want %v", list.pop_front(), Some(0)) }if list.pop_back() != Some(3) { t.Errorf("got %v, want %v", list.pop_back(), Some(3)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+}
+
+
+// --- Node_pop_back.go ---
+// DoublyLinkedList.PopBack
+
+ // @returns *T
+
+
+// Preconditions:
+ // - !is_empty()
+
+
+
+package doublylinkedlist
+
+
+func (s *Node[T]) PopBack() *T {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestNodePopBackpush_front_pop_front(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    if list.pop_front() != Some(2) { t.Errorf("got %v, want %v", list.pop_front(), Some(2)) }if list.pop_front() != Some(1) { t.Errorf("got %v, want %v", list.pop_front(), Some(1)) }
+}
+
+func TestNodePopBackpush_back_pop_back(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    if list.pop_back() != Some(2) { t.Errorf("got %v, want %v", list.pop_back(), Some(2)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+}
+
+func TestNodePopBackmixed_operations(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    if list.pop_front() != Some(0) { t.Errorf("got %v, want %v", list.pop_front(), Some(0)) }if list.pop_back() != Some(3) { t.Errorf("got %v, want %v", list.pop_back(), Some(3)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+}
+
+
+// --- Node_is_empty.go ---
+// DoublyLinkedList.IsEmpty
+
+ // @returns bool
+
+
+
+
+package doublylinkedlist
+
+
+func (s *Node[T]) IsEmpty() bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestNodeIsEmptypush_front_pop_front(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    if list.pop_front() != Some(2) { t.Errorf("got %v, want %v", list.pop_front(), Some(2)) }if list.pop_front() != Some(1) { t.Errorf("got %v, want %v", list.pop_front(), Some(1)) }
+}
+
+func TestNodeIsEmptypush_back_pop_back(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    if list.pop_back() != Some(2) { t.Errorf("got %v, want %v", list.pop_back(), Some(2)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+}
+
+func TestNodeIsEmptymixed_operations(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    if list.pop_front() != Some(0) { t.Errorf("got %v, want %v", list.pop_front(), Some(0)) }if list.pop_back() != Some(3) { t.Errorf("got %v, want %v", list.pop_back(), Some(3)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+}
+
+
+// --- Node_len.go ---
+// DoublyLinkedList.Len
+
+ // @returns int
+
+
+
+
+package doublylinkedlist
+
+
+func (s *Node[T]) Len() int {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestNodeLenpush_front_pop_front(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    if list.pop_front() != Some(2) { t.Errorf("got %v, want %v", list.pop_front(), Some(2)) }if list.pop_front() != Some(1) { t.Errorf("got %v, want %v", list.pop_front(), Some(1)) }
+}
+
+func TestNodeLenpush_back_pop_back(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    if list.pop_back() != Some(2) { t.Errorf("got %v, want %v", list.pop_back(), Some(2)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
+}
+
+func TestNodeLenmixed_operations(t *testing.T) {
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    if list.pop_front() != Some(0) { t.Errorf("got %v, want %v", list.pop_front(), Some(0)) }if list.pop_back() != Some(3) { t.Errorf("got %v, want %v", list.pop_back(), Some(3)) }if list.pop_back() != Some(1) { t.Errorf("got %v, want %v", list.pop_back(), Some(1)) }
 }
 

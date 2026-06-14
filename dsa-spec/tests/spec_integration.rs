@@ -1,16 +1,25 @@
 use std::fs;
+use std::path::Path;
 
 fn get_spec_files() -> Vec<std::path::PathBuf> {
     let spec_dir = "../specs";
     let mut files = Vec::new();
-    for entry in fs::read_dir(spec_dir).expect("specs directory not found") {
-        let path = entry.expect("failed to read entry").path();
-        if path.extension().and_then(|s| s.to_str()) == Some("yaml") {
-            files.push(path);
-        }
-    }
+    walkdir_specs(Path::new(spec_dir), &mut files);
     files.sort();
     files
+}
+
+fn walkdir_specs(dir: &Path, files: &mut Vec<std::path::PathBuf>) {
+    if let Ok(entries) = fs::read_dir(dir) {
+        for entry in entries.filter_map(|e| e.ok()) {
+            let path = entry.path();
+            if path.is_dir() {
+                walkdir_specs(&path, files);
+            } else if path.extension().and_then(|s| s.to_str()) == Some("yaml") {
+                files.push(path);
+            }
+        }
+    }
 }
 
 fn parse_spec(path: &std::path::Path) -> dsa_spec::ast::Spec {

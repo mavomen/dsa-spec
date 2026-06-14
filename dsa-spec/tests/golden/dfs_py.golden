@@ -1,3 +1,4 @@
+// --- DFSMethods.py ---
 """
 DFS
 
@@ -24,16 +25,35 @@ import pytest
 
 
 def dfs(graph: &Graph<T>, start: T) -> List[T]:
-    """
+    """dfs.
     
+
+    Args:
+    
+        graph: &Graph<T>
+    
+        start: T
+    
+    
+
+    Returns:
+        List[T]
+    
+    
+
     Preconditions:
-    - start vertex exists in graph
+    
+        - start vertex exists in graph
     
     
+
     Postconditions:
-    - result contains all reachable vertices from start
-    - result has no duplicates
-    - order follows depth-first traversal
+    
+        - result contains all reachable vertices from start
+    
+        - result has no duplicates
+    
+        - order follows depth-first traversal
     
     
     """
@@ -42,7 +62,20 @@ def dfs(graph: &Graph<T>, start: T) -> List[T]:
     raise NotImplementedError
 
 def dfs_recursive_helper(graph: &Graph<T>, vertex: T, visited: &mut HashSet<T>, result: &mut Vec<T>) -> None:
-    """
+    """dfs_recursive_helper.
+    
+
+    Args:
+    
+        graph: &Graph<T>
+    
+        vertex: T
+    
+        visited: &mut HashSet<T>
+    
+        result: &mut Vec<T>
+    
+    
     
     
     

@@ -1,0 +1,302 @@
+// --- Stack.py ---
+"""
+Stack
+Time complexity: O(1) push/pop, O(n) search
+Space complexity: O(n)
+
+Invariants:
+    - length >= 0
+
+"""
+
+from dataclasses import dataclass
+from typing import Generic, TypeVar, Optional, List, Dict
+
+T = TypeVar("T")
+
+
+@dataclass
+class Stack(Generic[T]):
+    """Stack"""
+
+    items: List[T]
+
+// --- Stack_new.py ---
+"""
+Stack.new
+
+
+Postconditions:
+    - length == 0
+
+"""
+
+from stack import Stack
+
+
+def new(self, ) -> Self:
+    """new."""
+    
+    raise NotImplementedError
+
+
+Stack.new = new
+
+del new
+
+
+# ========== Generated tests ==========
+
+def test_push_and_pop():
+    let mut s = Stack::new();
+    s.push(1)s.push(2)
+    assert s.pop() == Some(2)assert s.pop() == Some(1)assert s.is_empty()
+
+def test_peek_returns_top():
+    let mut s = Stack::new();
+    s.push(42)
+    assert s.peek() == Some(&42)
+
+def test_pop_empty_returns_none():
+    let mut s = Stack::<i32>::new();
+    
+    assert s.pop() == None
+
+def test_len_tracks_elements():
+    let mut s = Stack::new();
+    s.push(10)s.push(20)
+    assert s.len() == 2
+
+
+// --- Stack_push.py ---
+"""
+Stack.push
+
+
+Postconditions:
+    - length == old.length + 1
+    - top == item
+
+"""
+
+from stack import Stack
+
+
+def push(self, item: T) -> None:
+    """push."""
+    
+    raise NotImplementedError
+
+
+Stack.push = push
+
+del push
+
+
+# ========== Generated tests ==========
+
+def test_push_and_pop():
+    let mut s = Stack::new();
+    s.push(1)s.push(2)
+    assert s.pop() == Some(2)assert s.pop() == Some(1)assert s.is_empty()
+
+def test_peek_returns_top():
+    let mut s = Stack::new();
+    s.push(42)
+    assert s.peek() == Some(&42)
+
+def test_pop_empty_returns_none():
+    let mut s = Stack::<i32>::new();
+    
+    assert s.pop() == None
+
+def test_len_tracks_elements():
+    let mut s = Stack::new();
+    s.push(10)s.push(20)
+    assert s.len() == 2
+
+
+// --- Stack_pop.py ---
+"""
+Stack.pop
+
+Preconditions:
+    - length > 0
+
+
+Postconditions:
+    - length == old.length - 1
+
+"""
+
+from stack import Stack
+
+
+def pop(self, ) -> Optional[T]:
+    """pop."""
+    
+    raise NotImplementedError
+
+
+Stack.pop = pop
+
+del pop
+
+
+# ========== Generated tests ==========
+
+def test_push_and_pop():
+    let mut s = Stack::new();
+    s.push(1)s.push(2)
+    assert s.pop() == Some(2)assert s.pop() == Some(1)assert s.is_empty()
+
+def test_peek_returns_top():
+    let mut s = Stack::new();
+    s.push(42)
+    assert s.peek() == Some(&42)
+
+def test_pop_empty_returns_none():
+    let mut s = Stack::<i32>::new();
+    
+    assert s.pop() == None
+
+def test_len_tracks_elements():
+    let mut s = Stack::new();
+    s.push(10)s.push(20)
+    assert s.len() == 2
+
+
+// --- Stack_peek.py ---
+"""
+Stack.peek
+
+Preconditions:
+    - length > 0
+
+
+"""
+
+from stack import Stack
+
+
+def peek(self, ) -> Optional[T]:
+    """peek."""
+    
+    raise NotImplementedError
+
+
+Stack.peek = peek
+
+del peek
+
+
+# ========== Generated tests ==========
+
+def test_push_and_pop():
+    let mut s = Stack::new();
+    s.push(1)s.push(2)
+    assert s.pop() == Some(2)assert s.pop() == Some(1)assert s.is_empty()
+
+def test_peek_returns_top():
+    let mut s = Stack::new();
+    s.push(42)
+    assert s.peek() == Some(&42)
+
+def test_pop_empty_returns_none():
+    let mut s = Stack::<i32>::new();
+    
+    assert s.pop() == None
+
+def test_len_tracks_elements():
+    let mut s = Stack::new();
+    s.push(10)s.push(20)
+    assert s.len() == 2
+
+
+// --- Stack_is_empty.py ---
+"""
+Stack.is_empty
+
+
+"""
+
+from stack import Stack
+
+
+def is_empty(self, ) -> bool:
+    """is_empty."""
+    
+    raise NotImplementedError
+
+
+Stack.is_empty = is_empty
+
+del is_empty
+
+
+# ========== Generated tests ==========
+
+def test_push_and_pop():
+    let mut s = Stack::new();
+    s.push(1)s.push(2)
+    assert s.pop() == Some(2)assert s.pop() == Some(1)assert s.is_empty()
+
+def test_peek_returns_top():
+    let mut s = Stack::new();
+    s.push(42)
+    assert s.peek() == Some(&42)
+
+def test_pop_empty_returns_none():
+    let mut s = Stack::<i32>::new();
+    
+    assert s.pop() == None
+
+def test_len_tracks_elements():
+    let mut s = Stack::new();
+    s.push(10)s.push(20)
+    assert s.len() == 2
+
+
+// --- Stack_len.py ---
+"""
+Stack.len
+
+
+"""
+
+from stack import Stack
+
+
+def len(self, ) -> int:
+    """len."""
+    
+    raise NotImplementedError
+
+
+Stack.len = len
+
+del len
+
+
+# ========== Generated tests ==========
+
+def test_push_and_pop():
+    let mut s = Stack::new();
+    s.push(1)s.push(2)
+    assert s.pop() == Some(2)assert s.pop() == Some(1)assert s.is_empty()
+
+def test_peek_returns_top():
+    let mut s = Stack::new();
+    s.push(42)
+    assert s.peek() == Some(&42)
+
+def test_pop_empty_returns_none():
+    let mut s = Stack::<i32>::new();
+    
+    assert s.pop() == None
+
+def test_len_tracks_elements():
+    let mut s = Stack::new();
+    s.push(10)s.push(20)
+    assert s.len() == 2
+

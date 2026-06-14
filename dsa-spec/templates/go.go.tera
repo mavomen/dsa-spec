@@ -40,7 +40,17 @@ type {{ struct.name }}[{% for generic in struct.generics %}{{ generic.name }} {{
 }
 
 {% for method in methods %}
-// {{ method.name }}
+// {{ method.name }} {{ method.name | replace(from="_", to=" ") }}.
+{% if method.params %}
+// Parameters:
+{% for param in method.params %}
+//   - {{ param.name }}: {{ param.go_type }}
+{% endfor %}
+{% endif %}
+{% if method.returns %}
+// Returns:
+//   - {{ method.returns }}
+{% endif %}
 {% if method.preconditions %}
 // Preconditions:
 {% for pre in method.preconditions %} // - {{ pre }}
@@ -67,7 +77,17 @@ func (s *{{ struct.name }}[{% for generic in struct.generics %}{{ generic.name }
 {% else %}
 // No structs – standalone functions
 {% for method in methods %}
-// {{ method.name }}
+// {{ method.name }} {{ method.name | replace(from="_", to=" ") }}.
+{% if method.params %}
+// Parameters:
+{% for param in method.params %}
+//   - {{ param.name }}: {{ param.go_type }}
+{% endfor %}
+{% endif %}
+{% if method.returns %}
+// Returns:
+//   - {{ method.returns }}
+{% endif %}
 {% if method.preconditions %}
 // Preconditions:
 {% for pre in method.preconditions %} // - {{ pre }}

@@ -1,30 +1,22 @@
+// --- AVLNode.py ---
 """
 AVLTree
-
 Time complexity: O(log n) search/insert/delete
-
-
 Space complexity: O(n)
 
-
-# Invariants
-
-# - left.value < node.value < right.value
-
-# - |left.height - right.height| <= 1
-
-# - height = 1 + max(left.height, right.height)
-
+Invariants:
+    - left.value < node.value < right.value
+    - |left.height - right.height| <= 1
+    - height = 1 + max(left.height, right.height)
 
 """
 
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Optional, List, Dict
-import pytest
-
+from typing import Generic, TypeVar, Optional, List, Dict
 
 
 T = TypeVar('T')
+
 
 
 @dataclass
@@ -40,182 +32,246 @@ class AVLNode(Generic[T]):
     height: int
     
 
-    
-    def new(self) -> Self:
-        """
-        
-        
-        Postconditions:
-        - root is None
-        
-        
-        """
-        
-        # TODO: Implement new
-        raise NotImplementedError
-    
-    def insert(self, value: T) -> bool:
-        """
-        
-        
-        Postconditions:
-        - tree contains value
-        - AVL invariant maintained
-        
-        
-        """
-        
-        # TODO: Implement insert
-        raise NotImplementedError
-    
-    def contains(self, value: T) -> bool:
-        """
-        
-        
-        
-        """
-        
-        # TODO: Implement contains
-        raise NotImplementedError
-    
-    def inorder(self) -> List[T]:
-        """
-        
-        
-        Postconditions:
-        - result is sorted ascending
-        
-        
-        """
-        
-        # TODO: Implement inorder
-        raise NotImplementedError
-    
-    def height(self) -> int:
-        """
-        
-        
-        
-        """
-        
-        # TODO: Implement height
-        raise NotImplementedError
-    
-    def is_empty(self) -> bool:
-        """
-        
-        
-        
-        """
-        
-        # TODO: Implement is_empty
-        raise NotImplementedError
-    
-
-T = TypeVar('T')
+// --- AVLNode_new.py ---
+"""
+AVLTree.new
 
 
-@dataclass
-class AVLTree(Generic[T]):
-    """AVLTree"""
-    
-    root: Optional[AVLNode<T>]
-    
+Postconditions:
+    - root is None
 
-    
-    def new(self) -> Self:
-        """
-        
-        
-        Postconditions:
-        - root is None
-        
-        
-        """
-        
-        # TODO: Implement new
-        raise NotImplementedError
-    
-    def insert(self, value: T) -> bool:
-        """
-        
-        
-        Postconditions:
-        - tree contains value
-        - AVL invariant maintained
-        
-        
-        """
-        
-        # TODO: Implement insert
-        raise NotImplementedError
-    
-    def contains(self, value: T) -> bool:
-        """
-        
-        
-        
-        """
-        
-        # TODO: Implement contains
-        raise NotImplementedError
-    
-    def inorder(self) -> List[T]:
-        """
-        
-        
-        Postconditions:
-        - result is sorted ascending
-        
-        
-        """
-        
-        # TODO: Implement inorder
-        raise NotImplementedError
-    
-    def height(self) -> int:
-        """
-        
-        
-        
-        """
-        
-        # TODO: Implement height
-        raise NotImplementedError
-    
-    def is_empty(self) -> bool:
-        """
-        
-        
-        
-        """
-        
-        # TODO: Implement is_empty
-        raise NotImplementedError
-    
+"""
+
+from avlnode import AVLNode
 
 
+def new(self, ) -> Self:
+    """new."""
+    
+    raise NotImplementedError
 
-# ========== Generated pytest tests ==========
+
+AVLNode.new = new
+
+del new
+
+
+# ========== Generated tests ==========
 
 def test_insert_maintains_balance():
-    """Test: insert_maintains_balance"""
     let mut avl = AVLTree::new();
     avl.insert(1)avl.insert(2)avl.insert(3)
     assert avl.contains(2)assert avl.height() == 2assert avl.inorder() == vec![1, 2, 3]
 
 def test_left_heavy_rebalance():
-    """Test: left_heavy_rebalance"""
     let mut avl = AVLTree::new();
     avl.insert(3)avl.insert(2)avl.insert(1)
     assert avl.height() == 2assert avl.inorder() == vec![1, 2, 3]
 
 def test_multiple_inserts_stay_balanced():
-    """Test: multiple_inserts_stay_balanced"""
     let mut avl = AVLTree::new();
     avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
     assert avl.height() <= 3
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
+// --- AVLNode_insert.py ---
+"""
+AVLTree.insert
+
+
+Postconditions:
+    - tree contains value
+    - AVL invariant maintained
+
+"""
+
+from avlnode import AVLNode
+
+
+def insert(self, value: T) -> bool:
+    """insert."""
+    
+    raise NotImplementedError
+
+
+AVLNode.insert = insert
+
+del insert
+
+
+# ========== Generated tests ==========
+
+def test_insert_maintains_balance():
+    let mut avl = AVLTree::new();
+    avl.insert(1)avl.insert(2)avl.insert(3)
+    assert avl.contains(2)assert avl.height() == 2assert avl.inorder() == vec![1, 2, 3]
+
+def test_left_heavy_rebalance():
+    let mut avl = AVLTree::new();
+    avl.insert(3)avl.insert(2)avl.insert(1)
+    assert avl.height() == 2assert avl.inorder() == vec![1, 2, 3]
+
+def test_multiple_inserts_stay_balanced():
+    let mut avl = AVLTree::new();
+    avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
+    assert avl.height() <= 3
+
+
+// --- AVLNode_contains.py ---
+"""
+AVLTree.contains
+
+
+"""
+
+from avlnode import AVLNode
+
+
+def contains(self, value: T) -> bool:
+    """contains."""
+    
+    raise NotImplementedError
+
+
+AVLNode.contains = contains
+
+del contains
+
+
+# ========== Generated tests ==========
+
+def test_insert_maintains_balance():
+    let mut avl = AVLTree::new();
+    avl.insert(1)avl.insert(2)avl.insert(3)
+    assert avl.contains(2)assert avl.height() == 2assert avl.inorder() == vec![1, 2, 3]
+
+def test_left_heavy_rebalance():
+    let mut avl = AVLTree::new();
+    avl.insert(3)avl.insert(2)avl.insert(1)
+    assert avl.height() == 2assert avl.inorder() == vec![1, 2, 3]
+
+def test_multiple_inserts_stay_balanced():
+    let mut avl = AVLTree::new();
+    avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
+    assert avl.height() <= 3
+
+
+// --- AVLNode_inorder.py ---
+"""
+AVLTree.inorder
+
+
+Postconditions:
+    - result is sorted ascending
+
+"""
+
+from avlnode import AVLNode
+
+
+def inorder(self, ) -> List[T]:
+    """inorder."""
+    
+    raise NotImplementedError
+
+
+AVLNode.inorder = inorder
+
+del inorder
+
+
+# ========== Generated tests ==========
+
+def test_insert_maintains_balance():
+    let mut avl = AVLTree::new();
+    avl.insert(1)avl.insert(2)avl.insert(3)
+    assert avl.contains(2)assert avl.height() == 2assert avl.inorder() == vec![1, 2, 3]
+
+def test_left_heavy_rebalance():
+    let mut avl = AVLTree::new();
+    avl.insert(3)avl.insert(2)avl.insert(1)
+    assert avl.height() == 2assert avl.inorder() == vec![1, 2, 3]
+
+def test_multiple_inserts_stay_balanced():
+    let mut avl = AVLTree::new();
+    avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
+    assert avl.height() <= 3
+
+
+// --- AVLNode_height.py ---
+"""
+AVLTree.height
+
+
+"""
+
+from avlnode import AVLNode
+
+
+def height(self, ) -> int:
+    """height."""
+    
+    raise NotImplementedError
+
+
+AVLNode.height = height
+
+del height
+
+
+# ========== Generated tests ==========
+
+def test_insert_maintains_balance():
+    let mut avl = AVLTree::new();
+    avl.insert(1)avl.insert(2)avl.insert(3)
+    assert avl.contains(2)assert avl.height() == 2assert avl.inorder() == vec![1, 2, 3]
+
+def test_left_heavy_rebalance():
+    let mut avl = AVLTree::new();
+    avl.insert(3)avl.insert(2)avl.insert(1)
+    assert avl.height() == 2assert avl.inorder() == vec![1, 2, 3]
+
+def test_multiple_inserts_stay_balanced():
+    let mut avl = AVLTree::new();
+    avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
+    assert avl.height() <= 3
+
+
+// --- AVLNode_is_empty.py ---
+"""
+AVLTree.is_empty
+
+
+"""
+
+from avlnode import AVLNode
+
+
+def is_empty(self, ) -> bool:
+    """is_empty."""
+    
+    raise NotImplementedError
+
+
+AVLNode.is_empty = is_empty
+
+del is_empty
+
+
+# ========== Generated tests ==========
+
+def test_insert_maintains_balance():
+    let mut avl = AVLTree::new();
+    avl.insert(1)avl.insert(2)avl.insert(3)
+    assert avl.contains(2)assert avl.height() == 2assert avl.inorder() == vec![1, 2, 3]
+
+def test_left_heavy_rebalance():
+    let mut avl = AVLTree::new();
+    avl.insert(3)avl.insert(2)avl.insert(1)
+    assert avl.height() == 2assert avl.inorder() == vec![1, 2, 3]
+
+def test_multiple_inserts_stay_balanced():
+    let mut avl = AVLTree::new();
+    avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
+    assert avl.height() <= 3
+

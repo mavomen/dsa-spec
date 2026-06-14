@@ -32,20 +32,33 @@ public class {{ struct.name }}<{% for generic in struct.generics %}{{ generic.na
 
     {% for method in methods %}
     /// <summary>
-    /// {{ method.name }}
-    /// {% if method.preconditions %}
-    /// Preconditions:
-    /// {% for pre in method.preconditions %}- {{ pre }}
-    /// {% endfor %}{% endif %}
-    /// {% if method.postconditions %}
-    /// Postconditions:
-    /// {% for post in method.postconditions %}- {{ post }}
-    /// {% endfor %}{% endif %}
-    /// {% if method.throws_exception %}
-    /// Throws: Exception (from Result type)
-    /// {% endif %}
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// {{ method.name | replace(from="_", to=" ") | capitalize }}.
     /// </summary>
+    {% for param in method.params %}
+    /// <param name="{{ param.name }}">{{ param.csharp_type }}.</param>
+    {% endfor %}
+    {% if method.returns and method.returns != "void" %}
+    /// <returns>{{ method.returns }}.</returns>
+    {% endif %}
+    {% if method.preconditions %}
+    /// <remarks>
+    /// Preconditions:
+    {% for pre in method.preconditions %}
+    /// - {{ pre }}
+    {% endfor %}
+    /// </remarks>
+    {% endif %}
+    {% if method.postconditions %}
+    /// <remarks>
+    /// Postconditions:
+    {% for post in method.postconditions %}
+    /// - {{ post }}
+    {% endfor %}
+    /// </remarks>
+    {% endif %}
+    {% if method.throws_exception %}
+    /// <exception cref="Exception">Thrown when an error occurs (from Result type).</exception>
+    {% endif %}
     public {{ method.returns | default(value="void") }} {{ method.name }}({% for param in method.params %}{{ param.csharp_type }} {{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %})
     {
         {% for assertion in method.injected_assertions %}
@@ -64,20 +77,33 @@ public static class {{ metadata.name | replace(from=" ", to="") }}Methods
 {
     {% for method in methods %}
     /// <summary>
-    /// {{ method.name }}
-    /// {% if method.preconditions %}
-    /// Preconditions:
-    /// {% for pre in method.preconditions %}- {{ pre }}
-    /// {% endfor %}{% endif %}
-    /// {% if method.postconditions %}
-    /// Postconditions:
-    /// {% for post in method.postconditions %}- {{ post }}
-    /// {% endfor %}{% endif %}
-    /// {% if method.throws_exception %}
-    /// Throws: Exception (from Result type)
-    /// {% endif %}
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// {{ method.name | replace(from="_", to=" ") | capitalize }}.
     /// </summary>
+    {% for param in method.params %}
+    /// <param name="{{ param.name }}">{{ param.csharp_type }}.</param>
+    {% endfor %}
+    {% if method.returns and method.returns != "void" %}
+    /// <returns>{{ method.returns }}.</returns>
+    {% endif %}
+    {% if method.preconditions %}
+    /// <remarks>
+    /// Preconditions:
+    {% for pre in method.preconditions %}
+    /// - {{ pre }}
+    {% endfor %}
+    /// </remarks>
+    {% endif %}
+    {% if method.postconditions %}
+    /// <remarks>
+    /// Postconditions:
+    {% for post in method.postconditions %}
+    /// - {{ post }}
+    {% endfor %}
+    /// </remarks>
+    {% endif %}
+    {% if method.throws_exception %}
+    /// <exception cref="Exception">Thrown when an error occurs (from Result type).</exception>
+    {% endif %}
     public static {{ method.returns | default(value="void") }} {{ method.name }}({% for param in method.params %}{{ param.csharp_type }} {{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %})
     {
         {% for assertion in method.injected_assertions %}

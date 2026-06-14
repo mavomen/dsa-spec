@@ -1,194 +1,374 @@
+// --- CircularBuffer.ts ---
 /**
  * CircularBuffer
-
  * Time complexity: O(1) enqueue/dequeue
-
 
  * Space complexity: O(n)
 
 
  * Invariants:
-
  * - length <= capacity
-
  * - 0 <= head < capacity
-
  * - 0 <= tail < capacity
-
 
  */
 
 
+export class CircularBuffer<T> {
 
-export interface CircularBuffer<T extends Clone & Default> {
     
-    buffer: (T | null)[];
+    public buffer: (T | null)[];
     
-    head: number;
+    public head: number;
     
-    tail: number;
+    public tail: number;
     
-    size: number;
+    public size: number;
     
-    capacity: number;
+    public capacity: number;
     
 }
 
-export class CircularBufferImpl<T extends Clone & Default> implements CircularBuffer<T> {
-    constructor(
-        
-        public buffer: (T | null)[],
-        
-        public head: number,
-        
-        public tail: number,
-        
-        public size: number,
-        
-        public capacity: number
-        
-    ) {}
+// --- CircularBuffer_new.ts ---
+/**
+ * CircularBuffer.new
+ * @param capacity - number
 
-    
-    /**
-     * new
-     
-     * Preconditions:
-      * - capacity > 0
-     
-     
-     * Postconditions:
-      * - is_empty() == true
-      * - capacity == capacity
-     
-     
-     */
-    new(capacity: number): Self {
-        
-        // TODO: Implement new
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * enqueue
-     
-     * Preconditions:
-      * - size < capacity
-     
-     
-     * Postconditions:
-      * - size == old.size + 1
-     
-     
-     * @throws Error (from Result type)
-     
-     */
-    enqueue(item: T): () {
-        
-        // TODO: Implement enqueue
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * dequeue
-     
-     * Preconditions:
-      * - size > 0
-     
-     
-     * Postconditions:
-      * - size == old.size - 1
-     
-     
-     */
-    dequeue(): T | null {
-        
-        // TODO: Implement dequeue
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * isFull
-     
-     
-     
-     */
-    isFull(): boolean {
-        
-        // TODO: Implement isFull
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * isEmpty
-     
-     
-     
-     */
-    isEmpty(): boolean {
-        
-        // TODO: Implement isEmpty
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * len
-     
-     
-     
-     */
-    len(): number {
-        
-        // TODO: Implement len
-        throw new Error('Not implemented');
-    }
-    
-}
+ * @returns Self
 
 
+ * Preconditions:
+ * - capacity > 0
 
-// ========== Generated Jest tests ==========
+
+ * Postconditions:
+ * - is_empty() == true
+ * - capacity == capacity
+
+ */
+
+import { CircularBuffer } from './circularbuffer';
+
+
+(CircularBuffer.prototype as any).new = function <T>(capacity: number): Self {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
 
 describe('enqueue_dequeue_fifo', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let mut buf = CircularBuffer::new(3);
-        // Actions
         buf.enqueue(1);buf.enqueue(2);
-        // Assertions
         expect(buf.dequeue()).toBe(Some(1));expect(buf.dequeue()).toBe(Some(2));
     });
 });
 
 describe('full_buffer_prevents_enqueue', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let mut buf = CircularBuffer::new(1);
-        // Actions
         buf.enqueue(42);
-        // Assertions
         expect(buf.is_full()).toBe(true);expect(buf.enqueue(43).is_err()).toBe(true);
     });
 });
 
 describe('empty_buffer_returns_none', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let buf = CircularBuffer::<i32>::new(5);
-        // Actions
         
-        // Assertions
         expect(buf.dequeue()).toBe(None);
     });
 });
 
 describe('wrap_around_works', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let mut buf = CircularBuffer::new(3);
-        // Actions
         buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
-        // Assertions
+        expect(buf.dequeue()).toBe(Some(2));expect(buf.dequeue()).toBe(Some(3));expect(buf.dequeue()).toBe(Some(4));
+    });
+});
+
+
+// --- CircularBuffer_enqueue.ts ---
+/**
+ * CircularBuffer.enqueue
+ * @param item - T
+
+ * @returns ()
+
+
+ * Preconditions:
+ * - size < capacity
+
+
+ * Postconditions:
+ * - size == old.size + 1
+
+ */
+
+import { CircularBuffer } from './circularbuffer';
+
+
+(CircularBuffer.prototype as any).enqueue = function <T>(item: T): () {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('enqueue_dequeue_fifo', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);
+        expect(buf.dequeue()).toBe(Some(1));expect(buf.dequeue()).toBe(Some(2));
+    });
+});
+
+describe('full_buffer_prevents_enqueue', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(1);
+        buf.enqueue(42);
+        expect(buf.is_full()).toBe(true);expect(buf.enqueue(43).is_err()).toBe(true);
+    });
+});
+
+describe('empty_buffer_returns_none', () => {
+    it('should pass', () => {
+        let buf = CircularBuffer::<i32>::new(5);
+        
+        expect(buf.dequeue()).toBe(None);
+    });
+});
+
+describe('wrap_around_works', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
+        expect(buf.dequeue()).toBe(Some(2));expect(buf.dequeue()).toBe(Some(3));expect(buf.dequeue()).toBe(Some(4));
+    });
+});
+
+
+// --- CircularBuffer_dequeue.ts ---
+/**
+ * CircularBuffer.dequeue
+
+ * @returns T | null
+
+
+ * Preconditions:
+ * - size > 0
+
+
+ * Postconditions:
+ * - size == old.size - 1
+
+ */
+
+import { CircularBuffer } from './circularbuffer';
+
+
+(CircularBuffer.prototype as any).dequeue = function <T>(): T | null {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('enqueue_dequeue_fifo', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);
+        expect(buf.dequeue()).toBe(Some(1));expect(buf.dequeue()).toBe(Some(2));
+    });
+});
+
+describe('full_buffer_prevents_enqueue', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(1);
+        buf.enqueue(42);
+        expect(buf.is_full()).toBe(true);expect(buf.enqueue(43).is_err()).toBe(true);
+    });
+});
+
+describe('empty_buffer_returns_none', () => {
+    it('should pass', () => {
+        let buf = CircularBuffer::<i32>::new(5);
+        
+        expect(buf.dequeue()).toBe(None);
+    });
+});
+
+describe('wrap_around_works', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
+        expect(buf.dequeue()).toBe(Some(2));expect(buf.dequeue()).toBe(Some(3));expect(buf.dequeue()).toBe(Some(4));
+    });
+});
+
+
+// --- CircularBuffer_isFull.ts ---
+/**
+ * CircularBuffer.isFull
+
+ * @returns boolean
+
+
+
+ */
+
+import { CircularBuffer } from './circularbuffer';
+
+
+(CircularBuffer.prototype as any).isFull = function <T>(): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('enqueue_dequeue_fifo', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);
+        expect(buf.dequeue()).toBe(Some(1));expect(buf.dequeue()).toBe(Some(2));
+    });
+});
+
+describe('full_buffer_prevents_enqueue', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(1);
+        buf.enqueue(42);
+        expect(buf.is_full()).toBe(true);expect(buf.enqueue(43).is_err()).toBe(true);
+    });
+});
+
+describe('empty_buffer_returns_none', () => {
+    it('should pass', () => {
+        let buf = CircularBuffer::<i32>::new(5);
+        
+        expect(buf.dequeue()).toBe(None);
+    });
+});
+
+describe('wrap_around_works', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
+        expect(buf.dequeue()).toBe(Some(2));expect(buf.dequeue()).toBe(Some(3));expect(buf.dequeue()).toBe(Some(4));
+    });
+});
+
+
+// --- CircularBuffer_isEmpty.ts ---
+/**
+ * CircularBuffer.isEmpty
+
+ * @returns boolean
+
+
+
+ */
+
+import { CircularBuffer } from './circularbuffer';
+
+
+(CircularBuffer.prototype as any).isEmpty = function <T>(): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('enqueue_dequeue_fifo', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);
+        expect(buf.dequeue()).toBe(Some(1));expect(buf.dequeue()).toBe(Some(2));
+    });
+});
+
+describe('full_buffer_prevents_enqueue', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(1);
+        buf.enqueue(42);
+        expect(buf.is_full()).toBe(true);expect(buf.enqueue(43).is_err()).toBe(true);
+    });
+});
+
+describe('empty_buffer_returns_none', () => {
+    it('should pass', () => {
+        let buf = CircularBuffer::<i32>::new(5);
+        
+        expect(buf.dequeue()).toBe(None);
+    });
+});
+
+describe('wrap_around_works', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
+        expect(buf.dequeue()).toBe(Some(2));expect(buf.dequeue()).toBe(Some(3));expect(buf.dequeue()).toBe(Some(4));
+    });
+});
+
+
+// --- CircularBuffer_len.ts ---
+/**
+ * CircularBuffer.len
+
+ * @returns number
+
+
+
+ */
+
+import { CircularBuffer } from './circularbuffer';
+
+
+(CircularBuffer.prototype as any).len = function <T>(): number {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('enqueue_dequeue_fifo', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);
+        expect(buf.dequeue()).toBe(Some(1));expect(buf.dequeue()).toBe(Some(2));
+    });
+});
+
+describe('full_buffer_prevents_enqueue', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(1);
+        buf.enqueue(42);
+        expect(buf.is_full()).toBe(true);expect(buf.enqueue(43).is_err()).toBe(true);
+    });
+});
+
+describe('empty_buffer_returns_none', () => {
+    it('should pass', () => {
+        let buf = CircularBuffer::<i32>::new(5);
+        
+        expect(buf.dequeue()).toBe(None);
+    });
+});
+
+describe('wrap_around_works', () => {
+    it('should pass', () => {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
         expect(buf.dequeue()).toBe(Some(2));expect(buf.dequeue()).toBe(Some(3));expect(buf.dequeue()).toBe(Some(4));
     });
 });

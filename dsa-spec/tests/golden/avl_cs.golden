@@ -1,3 +1,4 @@
+// --- AVLNode.cs ---
 /// <summary>
 /// AVLTree
 
@@ -24,268 +25,411 @@ using System.Linq;
 
 namespace AVLTree
 {
-
-
-public class AVLNode<T>
+    public partial class AVLNode<T>
     where T : Ord, Clone
 
-{
-    
-    public T Value { get; set; }
-    
-    public AVLNode<T>? Left { get; set; }
-    
-    public AVLNode<T>? Right { get; set; }
-    
-    public int Height { get; set; }
-    
-
-    
-    /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - root is None
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public Self New()
     {
         
-        // TODO: Implement New
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Insert
-    /// 
-    /// 
-    /// Postconditions:
-    /// - tree contains value
-    /// - AVL invariant maintained
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool Insert(T value)
-    {
+        public T Value { get; set; }
         
-        // TODO: Implement Insert
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Contains
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool Contains(T value)
-    {
+        public AVLNode<T>? Left { get; set; }
         
-        // TODO: Implement Contains
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Inorder
-    /// 
-    /// 
-    /// Postconditions:
-    /// - result is sorted ascending
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public List<T> Inorder()
-    {
+        public AVLNode<T>? Right { get; set; }
         
-        // TODO: Implement Inorder
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Height
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public int Height()
-    {
+        public int Height { get; set; }
         
-        // TODO: Implement Height
-        throw new NotImplementedException();
     }
-    
-    /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool IsEmpty()
-    {
-        
-        // TODO: Implement IsEmpty
-        throw new NotImplementedException();
-    }
-    
 }
 
-public class AVLTree<T>
+// --- AVLNode.New.cs ---
+namespace AVLTree
+{
+    public partial class AVLNode<T>
     where T : Ord, Clone
 
-{
-    
-    public AVLNode<T>? Root { get; set; }
-    
-
-    
-    /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - root is None
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public Self New()
     {
+        /// <summary>
+        /// New.
+        /// </summary>
         
-        // TODO: Implement New
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Insert
-    /// 
-    /// 
-    /// Postconditions:
-    /// - tree contains value
-    /// - AVL invariant maintained
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool Insert(T value)
-    {
         
-        // TODO: Implement Insert
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Contains
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool Contains(T value)
-    {
+        /// <returns>Self.</returns>
         
-        // TODO: Implement Contains
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Inorder
-    /// 
-    /// 
-    /// Postconditions:
-    /// - result is sorted ascending
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public List<T> Inorder()
-    {
         
-        // TODO: Implement Inorder
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Height
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public int Height()
-    {
         
-        // TODO: Implement Height
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool IsEmpty()
-    {
+        /// <remarks>
+        /// Postconditions:
         
-        // TODO: Implement IsEmpty
-        throw new NotImplementedException();
+        /// - root is None
+        
+        /// </remarks>
+        
+        
+        public Self New()
+        {
+            
+            throw new NotImplementedException();
+        }
     }
-    
 }
-
-
 
 // ========== Generated xUnit tests ==========
 
-public class insert_maintains_balanceTests
+public class AVLNodeinsert_maintains_balanceTests
 {
     [Fact]
     public void insert_maintains_balance_Test()
     {
-        // Setup
         let mut avl = AVLTree::new();
-        // Actions
         avl.insert(1);avl.insert(2);avl.insert(3);
-        // Assertions
         Assert.IsTrue(avl.contains(2));Assert.AreEqual(avl.height(), 2);Assert.AreEqual(avl.inorder(), vec![1, 2, 3]);
     }
 }
 
-public class left_heavy_rebalanceTests
+public class AVLNodeleft_heavy_rebalanceTests
 {
     [Fact]
     public void left_heavy_rebalance_Test()
     {
-        // Setup
         let mut avl = AVLTree::new();
-        // Actions
         avl.insert(3);avl.insert(2);avl.insert(1);
-        // Assertions
         Assert.AreEqual(avl.height(), 2);Assert.AreEqual(avl.inorder(), vec![1, 2, 3]);
     }
 }
 
-public class multiple_inserts_stay_balancedTests
+public class AVLNodemultiple_inserts_stay_balancedTests
 {
     [Fact]
     public void multiple_inserts_stay_balanced_Test()
     {
-        // Setup
         let mut avl = AVLTree::new();
-        // Actions
         avl.insert(10);avl.insert(20);avl.insert(30);avl.insert(40);avl.insert(50);avl.insert(25);
-        // Assertions
         Assert.IsTrue(avl.height() <= 3);
     }
 }
 
+
+// --- AVLNode.Insert.cs ---
+namespace AVLTree
+{
+    public partial class AVLNode<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// Insert.
+        /// </summary>
+        
+        /// <param name="value">T.</param>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - tree contains value
+        
+        /// - AVL invariant maintained
+        
+        /// </remarks>
+        
+        
+        public bool Insert(T value)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
 }
+
+// ========== Generated xUnit tests ==========
+
+public class AVLNodeinsert_maintains_balanceTests
+{
+    [Fact]
+    public void insert_maintains_balance_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(1);avl.insert(2);avl.insert(3);
+        Assert.IsTrue(avl.contains(2));Assert.AreEqual(avl.height(), 2);Assert.AreEqual(avl.inorder(), vec![1, 2, 3]);
+    }
+}
+
+public class AVLNodeleft_heavy_rebalanceTests
+{
+    [Fact]
+    public void left_heavy_rebalance_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(3);avl.insert(2);avl.insert(1);
+        Assert.AreEqual(avl.height(), 2);Assert.AreEqual(avl.inorder(), vec![1, 2, 3]);
+    }
+}
+
+public class AVLNodemultiple_inserts_stay_balancedTests
+{
+    [Fact]
+    public void multiple_inserts_stay_balanced_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(10);avl.insert(20);avl.insert(30);avl.insert(40);avl.insert(50);avl.insert(25);
+        Assert.IsTrue(avl.height() <= 3);
+    }
+}
+
+
+// --- AVLNode.Contains.cs ---
+namespace AVLTree
+{
+    public partial class AVLNode<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// Contains.
+        /// </summary>
+        
+        /// <param name="value">T.</param>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool Contains(T value)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class AVLNodeinsert_maintains_balanceTests
+{
+    [Fact]
+    public void insert_maintains_balance_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(1);avl.insert(2);avl.insert(3);
+        Assert.IsTrue(avl.contains(2));Assert.AreEqual(avl.height(), 2);Assert.AreEqual(avl.inorder(), vec![1, 2, 3]);
+    }
+}
+
+public class AVLNodeleft_heavy_rebalanceTests
+{
+    [Fact]
+    public void left_heavy_rebalance_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(3);avl.insert(2);avl.insert(1);
+        Assert.AreEqual(avl.height(), 2);Assert.AreEqual(avl.inorder(), vec![1, 2, 3]);
+    }
+}
+
+public class AVLNodemultiple_inserts_stay_balancedTests
+{
+    [Fact]
+    public void multiple_inserts_stay_balanced_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(10);avl.insert(20);avl.insert(30);avl.insert(40);avl.insert(50);avl.insert(25);
+        Assert.IsTrue(avl.height() <= 3);
+    }
+}
+
+
+// --- AVLNode.Inorder.cs ---
+namespace AVLTree
+{
+    public partial class AVLNode<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// Inorder.
+        /// </summary>
+        
+        
+        /// <returns>List<T>.</returns>
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - result is sorted ascending
+        
+        /// </remarks>
+        
+        
+        public List<T> Inorder()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class AVLNodeinsert_maintains_balanceTests
+{
+    [Fact]
+    public void insert_maintains_balance_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(1);avl.insert(2);avl.insert(3);
+        Assert.IsTrue(avl.contains(2));Assert.AreEqual(avl.height(), 2);Assert.AreEqual(avl.inorder(), vec![1, 2, 3]);
+    }
+}
+
+public class AVLNodeleft_heavy_rebalanceTests
+{
+    [Fact]
+    public void left_heavy_rebalance_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(3);avl.insert(2);avl.insert(1);
+        Assert.AreEqual(avl.height(), 2);Assert.AreEqual(avl.inorder(), vec![1, 2, 3]);
+    }
+}
+
+public class AVLNodemultiple_inserts_stay_balancedTests
+{
+    [Fact]
+    public void multiple_inserts_stay_balanced_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(10);avl.insert(20);avl.insert(30);avl.insert(40);avl.insert(50);avl.insert(25);
+        Assert.IsTrue(avl.height() <= 3);
+    }
+}
+
+
+// --- AVLNode.Height.cs ---
+namespace AVLTree
+{
+    public partial class AVLNode<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// Height.
+        /// </summary>
+        
+        
+        /// <returns>int.</returns>
+        
+        
+        
+        
+        public int Height()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class AVLNodeinsert_maintains_balanceTests
+{
+    [Fact]
+    public void insert_maintains_balance_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(1);avl.insert(2);avl.insert(3);
+        Assert.IsTrue(avl.contains(2));Assert.AreEqual(avl.height(), 2);Assert.AreEqual(avl.inorder(), vec![1, 2, 3]);
+    }
+}
+
+public class AVLNodeleft_heavy_rebalanceTests
+{
+    [Fact]
+    public void left_heavy_rebalance_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(3);avl.insert(2);avl.insert(1);
+        Assert.AreEqual(avl.height(), 2);Assert.AreEqual(avl.inorder(), vec![1, 2, 3]);
+    }
+}
+
+public class AVLNodemultiple_inserts_stay_balancedTests
+{
+    [Fact]
+    public void multiple_inserts_stay_balanced_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(10);avl.insert(20);avl.insert(30);avl.insert(40);avl.insert(50);avl.insert(25);
+        Assert.IsTrue(avl.height() <= 3);
+    }
+}
+
+
+// --- AVLNode.IsEmpty.cs ---
+namespace AVLTree
+{
+    public partial class AVLNode<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// IsEmpty.
+        /// </summary>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool IsEmpty()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class AVLNodeinsert_maintains_balanceTests
+{
+    [Fact]
+    public void insert_maintains_balance_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(1);avl.insert(2);avl.insert(3);
+        Assert.IsTrue(avl.contains(2));Assert.AreEqual(avl.height(), 2);Assert.AreEqual(avl.inorder(), vec![1, 2, 3]);
+    }
+}
+
+public class AVLNodeleft_heavy_rebalanceTests
+{
+    [Fact]
+    public void left_heavy_rebalance_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(3);avl.insert(2);avl.insert(1);
+        Assert.AreEqual(avl.height(), 2);Assert.AreEqual(avl.inorder(), vec![1, 2, 3]);
+    }
+}
+
+public class AVLNodemultiple_inserts_stay_balancedTests
+{
+    [Fact]
+    public void multiple_inserts_stay_balanced_Test()
+    {
+        let mut avl = AVLTree::new();
+        avl.insert(10);avl.insert(20);avl.insert(30);avl.insert(40);avl.insert(50);avl.insert(25);
+        Assert.IsTrue(avl.height() <= 3);
+    }
+}
+

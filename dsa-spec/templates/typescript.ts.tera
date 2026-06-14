@@ -31,12 +31,20 @@ export class {{ struct.name }}Impl<{% for generic in struct.generics %}{{ generi
 
     {% for method in methods %}
     /**
-     * {{ method.name }}
+     * {{ method.name | replace(from="_", to=" ") | capitalize }}.
+     {% for param in method.params %}
+     * @param {{ param.name }} - {{ param.ts_type }}.
+     {% endfor %}
+     {% if method.returns and method.returns != "void" %}
+     * @returns {{ method.returns }}
+     {% endif %}
      {% if method.preconditions %}
+     *
      * Preconditions:
      {% for pre in method.preconditions %} * - {{ pre }}
      {% endfor %}{% endif %}
      {% if method.postconditions %}
+     *
      * Postconditions:
      {% for post in method.postconditions %} * - {{ post }}
      {% endfor %}{% endif %}
@@ -59,12 +67,20 @@ export class {{ struct.name }}Impl<{% for generic in struct.generics %}{{ generi
 {# No structs – generate standalone exported functions #}
 {% for method in methods %}
 /**
- * {{ method.name }}
+ * {{ method.name | replace(from="_", to=" ") | capitalize }}.
+ {% for param in method.params %}
+ * @param {{ param.name }} - {{ param.ts_type }}.
+ {% endfor %}
+ {% if method.returns and method.returns != "void" %}
+ * @returns {{ method.returns }}
+ {% endif %}
  {% if method.preconditions %}
+ *
  * Preconditions:
  {% for pre in method.preconditions %} * - {{ pre }}
  {% endfor %}{% endif %}
  {% if method.postconditions %}
+ *
  * Postconditions:
  {% for post in method.postconditions %} * - {{ post }}
  {% endfor %}{% endif %}

@@ -1,120 +1,58 @@
+// --- AVLNode.rs ---
 /// AVLTree
-
 /// Time complexity: O(log n) search/insert/delete
 
 /// Space complexity: O(n)
 
-///
-/// # Invariants
 
+/// Invariants:
 /// - left.value < node.value < right.value
-
 /// - |left.height - right.height| <= 1
-
 /// - height = 1 + max(left.height, right.height)
 
-pub struct AVLNode<T: Ord + Clone> {
-    value: T,
 
-    left: Option<Box<AVLNode<T>>>,
 
-    right: Option<Box<AVLNode<T>>>,
+#[derive(Debug, Clone)]
+pub struct AVLNode<T>
+where T: Ord + Clone 
 
-    height: i32,
+    
+    pub value: T,
+    
+    pub left: Option<Box<AVLNode<T>>>,
+    
+    pub right: Option<Box<AVLNode<T>>>,
+    
+    pub height: i32,
+    
 }
 
-impl<T: Ord + Clone> AVLNode<T> {
-    /// # Contracts
-
-    /// - **Postcondition:** root is None
-
-    pub fn new(&self) -> Self {
-        // TODO: Implement new
-        todo!()
-    }
-
-    /// # Contracts
-
-    /// - **Postcondition:** tree contains value
-
-    /// - **Postcondition:** AVL invariant maintained
-
-    pub fn insert(&self, value: T) -> bool {
-        // TODO: Implement insert
-        todo!()
-    }
-
-    pub fn contains(&self, value: T) -> bool {
-        // TODO: Implement contains
-        todo!()
-    }
-
-    /// # Contracts
-
-    /// - **Postcondition:** result is sorted ascending
-
-    pub fn inorder(&self) -> Vec<T> {
-        // TODO: Implement inorder
-        todo!()
-    }
-
-    pub fn height(&self) -> i32 {
-        // TODO: Implement height
-        todo!()
-    }
-
-    pub fn is_empty(&self) -> bool {
-        // TODO: Implement is_empty
-        todo!()
+impl<T> AVLNode<T> {
+    pub fn new() -> Self {
+        Self {
+            
+            value: Default::default(),
+            
+            left: Default::default(),
+            
+            right: Default::default(),
+            
+            height: Default::default(),
+            
+        }
     }
 }
 
-pub struct AVLTree<T: Ord + Clone> {
-    root: Option<Box<AVLNode<T>>>,
-}
+// --- AVLNode_new.rs ---
+/// AVLTree.new
 
-impl<T: Ord + Clone> AVLTree<T> {
-    /// # Contracts
+/// Returns: Self
 
-    /// - **Postcondition:** root is None
+/// Postconditions:
+/// - root is None
 
-    pub fn new(&self) -> Self {
-        // TODO: Implement new
-        todo!()
-    }
-
-    /// # Contracts
-
-    /// - **Postcondition:** tree contains value
-
-    /// - **Postcondition:** AVL invariant maintained
-
-    pub fn insert(&self, value: T) -> bool {
-        // TODO: Implement insert
-        todo!()
-    }
-
-    pub fn contains(&self, value: T) -> bool {
-        // TODO: Implement contains
-        todo!()
-    }
-
-    /// # Contracts
-
-    /// - **Postcondition:** result is sorted ascending
-
-    pub fn inorder(&self) -> Vec<T> {
-        // TODO: Implement inorder
-        todo!()
-    }
-
-    pub fn height(&self) -> i32 {
-        // TODO: Implement height
-        todo!()
-    }
-
-    pub fn is_empty(&self) -> bool {
-        // TODO: Implement is_empty
+impl<T> AVLNode<T> {
+    pub fn new(&mut self) -> Self {
         todo!()
     }
 }
@@ -124,7 +62,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_insert_maintains_balance() {
+    fn insert_maintains_balance() {
         let mut avl = AVLTree::new();
         avl.insert(1);
         avl.insert(2);
@@ -133,20 +71,43 @@ mod tests {
         assert_eq!(avl.height(), 2);
         assert_eq!(avl.inorder(), vec![1, 2, 3]);
     }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
 
     #[test]
-    fn test_left_heavy_rebalance() {
+    fn left_heavy_rebalance() {
         let mut avl = AVLTree::new();
         avl.insert(3);
         avl.insert(2);
         avl.insert(1);
         assert_eq!(avl.height(), 2);
         assert_eq!(avl.inorder(), vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn multiple_inserts_stay_balanced() {
+        let mut avl = AVLTree::new();
+        avl.insert(10);
+        avl.insert(20);
+        avl.insert(30);
+        avl.insert(40);
+        avl.insert(50);
+        avl.insert(25);
+        assert!(avl.height() <= 3);
+    }
+}
+
+// --- AVLNode_insert.rs ---
+/// AVLTree.insert
+/// * `value` - T
+
+/// Returns: bool
+
+/// Postconditions:
+/// - tree contains value
+/// - AVL invariant maintained
+
+impl<T> AVLNode<T> {
+    pub fn insert(&mut self, value: T) -> bool {
+        todo!()
     }
 }
 
@@ -155,7 +116,228 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_multiple_inserts_stay_balanced() {
+    fn insert_maintains_balance() {
+        let mut avl = AVLTree::new();
+        avl.insert(1);
+        avl.insert(2);
+        avl.insert(3);
+        assert!(avl.contains(2));
+        assert_eq!(avl.height(), 2);
+        assert_eq!(avl.inorder(), vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn left_heavy_rebalance() {
+        let mut avl = AVLTree::new();
+        avl.insert(3);
+        avl.insert(2);
+        avl.insert(1);
+        assert_eq!(avl.height(), 2);
+        assert_eq!(avl.inorder(), vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn multiple_inserts_stay_balanced() {
+        let mut avl = AVLTree::new();
+        avl.insert(10);
+        avl.insert(20);
+        avl.insert(30);
+        avl.insert(40);
+        avl.insert(50);
+        avl.insert(25);
+        assert!(avl.height() <= 3);
+    }
+}
+
+// --- AVLNode_contains.rs ---
+/// AVLTree.contains
+/// * `value` - T
+
+/// Returns: bool
+
+impl<T> AVLNode<T> {
+    pub fn contains(&mut self, value: T) -> bool {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn insert_maintains_balance() {
+        let mut avl = AVLTree::new();
+        avl.insert(1);
+        avl.insert(2);
+        avl.insert(3);
+        assert!(avl.contains(2));
+        assert_eq!(avl.height(), 2);
+        assert_eq!(avl.inorder(), vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn left_heavy_rebalance() {
+        let mut avl = AVLTree::new();
+        avl.insert(3);
+        avl.insert(2);
+        avl.insert(1);
+        assert_eq!(avl.height(), 2);
+        assert_eq!(avl.inorder(), vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn multiple_inserts_stay_balanced() {
+        let mut avl = AVLTree::new();
+        avl.insert(10);
+        avl.insert(20);
+        avl.insert(30);
+        avl.insert(40);
+        avl.insert(50);
+        avl.insert(25);
+        assert!(avl.height() <= 3);
+    }
+}
+
+// --- AVLNode_inorder.rs ---
+/// AVLTree.inorder
+
+/// Returns: Vec<T>
+
+/// Postconditions:
+/// - result is sorted ascending
+
+impl<T> AVLNode<T> {
+    pub fn inorder(&mut self) -> Vec<T> {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn insert_maintains_balance() {
+        let mut avl = AVLTree::new();
+        avl.insert(1);
+        avl.insert(2);
+        avl.insert(3);
+        assert!(avl.contains(2));
+        assert_eq!(avl.height(), 2);
+        assert_eq!(avl.inorder(), vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn left_heavy_rebalance() {
+        let mut avl = AVLTree::new();
+        avl.insert(3);
+        avl.insert(2);
+        avl.insert(1);
+        assert_eq!(avl.height(), 2);
+        assert_eq!(avl.inorder(), vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn multiple_inserts_stay_balanced() {
+        let mut avl = AVLTree::new();
+        avl.insert(10);
+        avl.insert(20);
+        avl.insert(30);
+        avl.insert(40);
+        avl.insert(50);
+        avl.insert(25);
+        assert!(avl.height() <= 3);
+    }
+}
+
+// --- AVLNode_height.rs ---
+/// AVLTree.height
+
+/// Returns: i32
+
+impl<T> AVLNode<T> {
+    pub fn height(&mut self) -> i32 {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn insert_maintains_balance() {
+        let mut avl = AVLTree::new();
+        avl.insert(1);
+        avl.insert(2);
+        avl.insert(3);
+        assert!(avl.contains(2));
+        assert_eq!(avl.height(), 2);
+        assert_eq!(avl.inorder(), vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn left_heavy_rebalance() {
+        let mut avl = AVLTree::new();
+        avl.insert(3);
+        avl.insert(2);
+        avl.insert(1);
+        assert_eq!(avl.height(), 2);
+        assert_eq!(avl.inorder(), vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn multiple_inserts_stay_balanced() {
+        let mut avl = AVLTree::new();
+        avl.insert(10);
+        avl.insert(20);
+        avl.insert(30);
+        avl.insert(40);
+        avl.insert(50);
+        avl.insert(25);
+        assert!(avl.height() <= 3);
+    }
+}
+
+// --- AVLNode_is_empty.rs ---
+/// AVLTree.is_empty
+
+/// Returns: bool
+
+impl<T> AVLNode<T> {
+    pub fn is_empty(&mut self) -> bool {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn insert_maintains_balance() {
+        let mut avl = AVLTree::new();
+        avl.insert(1);
+        avl.insert(2);
+        avl.insert(3);
+        assert!(avl.contains(2));
+        assert_eq!(avl.height(), 2);
+        assert_eq!(avl.inorder(), vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn left_heavy_rebalance() {
+        let mut avl = AVLTree::new();
+        avl.insert(3);
+        avl.insert(2);
+        avl.insert(1);
+        assert_eq!(avl.height(), 2);
+        assert_eq!(avl.inorder(), vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn multiple_inserts_stay_balanced() {
         let mut avl = AVLTree::new();
         avl.insert(10);
         avl.insert(20);

@@ -1,258 +1,272 @@
+// --- AVLNode.go ---
 // AVLTree
+ // Time complexity: O(log n) search/insert/delete
 
-// Time complexity: O(log n) search/insert/delete
-
-
-// Space complexity: O(n)
+ // Space complexity: O(n)
 
 
 // Invariants:
+ // - left.value < node.value < right.value
+ // - |left.height - right.height| <= 1
+ // - height = 1 + max(left.height, right.height)
 
-// - left.value < node.value < right.value
 
-// - |left.height - right.height| <= 1
+package avltree
 
-// - height = 1 + max(left.height, right.height)
+
+type AVLNode[T constraints.Ordered] struct {
+
+    
+    Value T
+    
+    Left *AVLNode<T>
+    
+    Right *AVLNode<T>
+    
+    Height int32
+    
+}
+
+func NewAVLNode[T constraints.Ordered]() *AVLNode[T] {
+    return &AVLNode[T]{}
+}
+
+// --- AVLNode_new.go ---
+// AVLTree.New
+
+ // @returns Self
+
+
+
+// Postconditions:
+ // - root is None
+
+
+package avltree
+
+
+func (s *AVLNode[T]) New() Self {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestAVLNodeNewinsert_maintains_balance(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(1)avl.insert(2)avl.insert(3)
+    if !(avl.contains(2)) { t.Errorf("assertion failed: avl.contains(2)") }if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
+}
+
+func TestAVLNodeNewleft_heavy_rebalance(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(3)avl.insert(2)avl.insert(1)
+    if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
+}
+
+func TestAVLNodeNewmultiple_inserts_stay_balanced(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
+    if !(avl.height() <= 3) { t.Errorf("assertion failed: avl.height() <= 3") }
+}
+
+
+// --- AVLNode_insert.go ---
+// AVLTree.Insert
+ // @param value - T
+
+ // @returns bool
+
+
+
+// Postconditions:
+ // - tree contains value
+ // - AVL invariant maintained
+
+
+package avltree
+
+
+func (s *AVLNode[T]) Insert(value T) bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestAVLNodeInsertinsert_maintains_balance(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(1)avl.insert(2)avl.insert(3)
+    if !(avl.contains(2)) { t.Errorf("assertion failed: avl.contains(2)") }if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
+}
+
+func TestAVLNodeInsertleft_heavy_rebalance(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(3)avl.insert(2)avl.insert(1)
+    if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
+}
+
+func TestAVLNodeInsertmultiple_inserts_stay_balanced(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
+    if !(avl.height() <= 3) { t.Errorf("assertion failed: avl.height() <= 3") }
+}
+
+
+// --- AVLNode_contains.go ---
+// AVLTree.Contains
+ // @param value - T
+
+ // @returns bool
+
 
 
 
 package avltree
 
-import "testing"
-
-
-
-
-
-// AVLNodeInterface defines the contract for AVLNode
-type AVLNodeInterface[T constraints.Ordered] interface {
-
-	
-	New() Self
-	
-	Insert(value T) bool
-	
-	Contains(value T) bool
-	
-	Inorder() []T
-	
-	Height() int32
-	
-	IsEmpty() bool
-	
-}
-
-
-// AVLNode represents a AVLTree
-type AVLNode[T constraints.Ordered] struct {
-	
-	value T
-	
-	left *AVLNode<T>
-	
-	right *AVLNode<T>
-	
-	height int32
-	
-}
-
-
-// New
-
-
-// Postconditions:
- // - root is None
-
-
-
-func (s *AVLNode[T]) New() Self {
-	
-	// TODO: Implement New
-	panic("not implemented")
-}
-
-// Insert
-
-
-// Postconditions:
- // - tree contains value
- // - AVL invariant maintained
-
-
-
-func (s *AVLNode[T]) Insert(value T) bool {
-	
-	// TODO: Implement Insert
-	panic("not implemented")
-}
-
-// Contains
-
-
 
 func (s *AVLNode[T]) Contains(value T) bool {
-	
-	// TODO: Implement Contains
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
-
-// Inorder
-
-
-// Postconditions:
- // - result is sorted ascending
-
-
-
-func (s *AVLNode[T]) Inorder() []T {
-	
-	// TODO: Implement Inorder
-	panic("not implemented")
-}
-
-// Height
-
-
-
-func (s *AVLNode[T]) Height() int32 {
-	
-	// TODO: Implement Height
-	panic("not implemented")
-}
-
-// IsEmpty
-
-
-
-func (s *AVLNode[T]) IsEmpty() bool {
-	
-	// TODO: Implement IsEmpty
-	panic("not implemented")
-}
-
-
-
-
-// AVLTreeInterface defines the contract for AVLTree
-type AVLTreeInterface[T constraints.Ordered] interface {
-
-	
-	New() Self
-	
-	Insert(value T) bool
-	
-	Contains(value T) bool
-	
-	Inorder() []T
-	
-	Height() int32
-	
-	IsEmpty() bool
-	
-}
-
-
-// AVLTree represents a AVLTree
-type AVLTree[T constraints.Ordered] struct {
-	
-	root *AVLNode<T>
-	
-}
-
-
-// New
-
-
-// Postconditions:
- // - root is None
-
-
-
-func (s *AVLTree[T]) New() Self {
-	
-	// TODO: Implement New
-	panic("not implemented")
-}
-
-// Insert
-
-
-// Postconditions:
- // - tree contains value
- // - AVL invariant maintained
-
-
-
-func (s *AVLTree[T]) Insert(value T) bool {
-	
-	// TODO: Implement Insert
-	panic("not implemented")
-}
-
-// Contains
-
-
-
-func (s *AVLTree[T]) Contains(value T) bool {
-	
-	// TODO: Implement Contains
-	panic("not implemented")
-}
-
-// Inorder
-
-
-// Postconditions:
- // - result is sorted ascending
-
-
-
-func (s *AVLTree[T]) Inorder() []T {
-	
-	// TODO: Implement Inorder
-	panic("not implemented")
-}
-
-// Height
-
-
-
-func (s *AVLTree[T]) Height() int32 {
-	
-	// TODO: Implement Height
-	panic("not implemented")
-}
-
-// IsEmpty
-
-
-
-func (s *AVLTree[T]) IsEmpty() bool {
-	
-	// TODO: Implement IsEmpty
-	panic("not implemented")
-}
-
-
-
 
 // ========== Generated tests ==========
 
-func Testinsert_maintains_balance(t *testing.T) {
-	let mut avl = AVLTree::new();
-	avl.insert(1)avl.insert(2)avl.insert(3)
-	if !(avl.contains(2)) { t.Errorf("assertion failed: avl.contains(2)") }if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
+func TestAVLNodeContainsinsert_maintains_balance(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(1)avl.insert(2)avl.insert(3)
+    if !(avl.contains(2)) { t.Errorf("assertion failed: avl.contains(2)") }if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
 }
 
-func Testleft_heavy_rebalance(t *testing.T) {
-	let mut avl = AVLTree::new();
-	avl.insert(3)avl.insert(2)avl.insert(1)
-	if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
+func TestAVLNodeContainsleft_heavy_rebalance(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(3)avl.insert(2)avl.insert(1)
+    if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
 }
 
-func Testmultiple_inserts_stay_balanced(t *testing.T) {
-	let mut avl = AVLTree::new();
-	avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
-	if !(avl.height() <= 3) { t.Errorf("assertion failed: avl.height() <= 3") }
+func TestAVLNodeContainsmultiple_inserts_stay_balanced(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
+    if !(avl.height() <= 3) { t.Errorf("assertion failed: avl.height() <= 3") }
+}
+
+
+// --- AVLNode_inorder.go ---
+// AVLTree.Inorder
+
+ // @returns []T
+
+
+
+// Postconditions:
+ // - result is sorted ascending
+
+
+package avltree
+
+
+func (s *AVLNode[T]) Inorder() []T {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestAVLNodeInorderinsert_maintains_balance(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(1)avl.insert(2)avl.insert(3)
+    if !(avl.contains(2)) { t.Errorf("assertion failed: avl.contains(2)") }if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
+}
+
+func TestAVLNodeInorderleft_heavy_rebalance(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(3)avl.insert(2)avl.insert(1)
+    if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
+}
+
+func TestAVLNodeInordermultiple_inserts_stay_balanced(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
+    if !(avl.height() <= 3) { t.Errorf("assertion failed: avl.height() <= 3") }
+}
+
+
+// --- AVLNode_height.go ---
+// AVLTree.Height
+
+ // @returns int32
+
+
+
+
+package avltree
+
+
+func (s *AVLNode[T]) Height() int32 {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestAVLNodeHeightinsert_maintains_balance(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(1)avl.insert(2)avl.insert(3)
+    if !(avl.contains(2)) { t.Errorf("assertion failed: avl.contains(2)") }if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
+}
+
+func TestAVLNodeHeightleft_heavy_rebalance(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(3)avl.insert(2)avl.insert(1)
+    if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
+}
+
+func TestAVLNodeHeightmultiple_inserts_stay_balanced(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
+    if !(avl.height() <= 3) { t.Errorf("assertion failed: avl.height() <= 3") }
+}
+
+
+// --- AVLNode_is_empty.go ---
+// AVLTree.IsEmpty
+
+ // @returns bool
+
+
+
+
+package avltree
+
+
+func (s *AVLNode[T]) IsEmpty() bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestAVLNodeIsEmptyinsert_maintains_balance(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(1)avl.insert(2)avl.insert(3)
+    if !(avl.contains(2)) { t.Errorf("assertion failed: avl.contains(2)") }if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
+}
+
+func TestAVLNodeIsEmptyleft_heavy_rebalance(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(3)avl.insert(2)avl.insert(1)
+    if avl.height() != 2 { t.Errorf("got %v, want %v", avl.height(), 2) }if avl.inorder() != vec![1, 2, 3] { t.Errorf("got %v, want %v", avl.inorder(), vec![1, 2, 3]) }
+}
+
+func TestAVLNodeIsEmptymultiple_inserts_stay_balanced(t *testing.T) {
+    let mut avl = AVLTree::new();
+    avl.insert(10)avl.insert(20)avl.insert(30)avl.insert(40)avl.insert(50)avl.insert(25)
+    if !(avl.height() <= 3) { t.Errorf("assertion failed: avl.height() <= 3") }
 }
 

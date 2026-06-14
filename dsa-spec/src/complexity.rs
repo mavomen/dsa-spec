@@ -114,38 +114,15 @@ pub fn generate_tradeoff_chart(specs: &[Spec]) -> String {
 }
 
 /// Load all spec YAML files from a directory.
-pub fn load_specs_from_dir(dir: &str) -> Result<Vec<Spec>, Vec<SpecError>> {
-    let dir_path = Path::new(dir);
-    let mut specs = Vec::new();
-    let mut errors = Vec::new();
-
-    if !dir_path.is_dir() {
-        return Err(vec![SpecError::IoError {
-            message: format!("not a directory: {dir}"),
-        }]);
-    }
-
-    let entries = match fs::read_dir(dir_path) {
-        Ok(e) => e,
-        Err(e) => {
-            return Err(vec![SpecError::IoError {
-                message: format!("failed to read directory {dir}: {e}"),
-            }]);
-        }
+fn collect_specs(dir: &Path, specs: &mut Vec<Spec>, errors: &mut Vec<SpecError>) {
+    let Ok(entries) = fs::read_dir(dir) else {
+        return;
     };
-
-    for entry in entries {
-        let entry = match entry {
-            Ok(e) => e,
-            Err(e) => {
-                errors.push(SpecError::IoError {
-                    message: format!("failed to read entry: {e}"),
-                });
-                continue;
-            }
-        };
+    for entry in entries.flatten() {
         let path = entry.path();
-        if path.extension().is_some_and(|ext| ext == "yaml") {
+        if path.is_dir() {
+            collect_specs(&path, specs, errors);
+        } else if path.extension().is_some_and(|ext| ext == "yaml") {
             match fs::read_to_string(&path) {
                 Ok(yaml) => match crate::parser::parse(&yaml) {
                     Ok(spec) => specs.push(spec),
@@ -159,6 +136,20 @@ pub fn load_specs_from_dir(dir: &str) -> Result<Vec<Spec>, Vec<SpecError>> {
             }
         }
     }
+}
+
+pub fn load_specs_from_dir(dir: &str) -> Result<Vec<Spec>, Vec<SpecError>> {
+    let dir_path = Path::new(dir);
+
+    if !dir_path.is_dir() {
+        return Err(vec![SpecError::IoError {
+            message: format!("not a directory: {dir}"),
+        }]);
+    }
+
+    let mut specs = Vec::new();
+    let mut errors = Vec::new();
+    collect_specs(dir_path, &mut specs, &mut errors);
 
     if specs.is_empty() && !errors.is_empty() {
         return Err(errors);

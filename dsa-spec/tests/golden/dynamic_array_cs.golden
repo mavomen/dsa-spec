@@ -1,3 +1,4 @@
+// --- DynamicArray.cs ---
 /// <summary>
 /// DynamicArray
 
@@ -22,197 +23,560 @@ using System.Linq;
 
 namespace DynamicArray
 {
-
-
-public class DynamicArray<T>
+    public partial class DynamicArray<T>
     where T : Clone
 
-{
-    
-    public List<T> Data { get; set; }
-    
-    public int Len { get; set; }
-    
-
-    
-    /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - length == 0
-    /// - capacity >= 0
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public Self New()
     {
         
-        // TODO: Implement New
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Push
-    /// 
-    /// 
-    /// Postconditions:
-    /// - length == old.length + 1
-    /// - last element == item
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public void Push(T item)
-    {
+        public List<T> Data { get; set; }
         
-        // TODO: Implement Push
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Pop
-    /// 
-    /// Preconditions:
-    /// - length > 0
-    /// 
-    /// 
-    /// Postconditions:
-    /// - length == old.length - 1
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public T? Pop()
-    {
+        public int Len { get; set; }
         
-        // TODO: Implement Pop
-        throw new NotImplementedException();
     }
-    
-    /// <summary>
-    /// Get
-    /// 
-    /// Preconditions:
-    /// - index < length
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public T? Get(int index)
-    {
-        
-        // TODO: Implement Get
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Len
-    /// 
-    /// 
-    /// Postconditions:
-    /// - result >= 0
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public int Len()
-    {
-        
-        // TODO: Implement Len
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool IsEmpty()
-    {
-        
-        // TODO: Implement IsEmpty
-        throw new NotImplementedException();
-    }
-    
 }
 
+// --- DynamicArray.New.cs ---
+namespace DynamicArray
+{
+    public partial class DynamicArray<T>
+    where T : Clone
 
+    {
+        /// <summary>
+        /// New.
+        /// </summary>
+        
+        
+        /// <returns>Self.</returns>
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - length == 0
+        
+        /// - capacity >= 0
+        
+        /// </remarks>
+        
+        
+        public Self New()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
 
 // ========== Generated xUnit tests ==========
 
-public class push_increases_lengthTests
+public class DynamicArraypush_increases_lengthTests
 {
     [Fact]
     public void push_increases_length_Test()
     {
-        // Setup
         let mut arr = DynamicArray::new();
-        // Actions
         arr.push(1);arr.push(2);
-        // Assertions
         Assert.AreEqual(arr.len(), 2);Assert.IsTrue(!arr.is_empty());
     }
 }
 
-public class pop_returns_last_elementTests
+public class DynamicArraypop_returns_last_elementTests
 {
     [Fact]
     public void pop_returns_last_element_Test()
     {
-        // Setup
         let mut arr = DynamicArray::new();
-        // Actions
         arr.push(10);arr.push(20);
-        // Assertions
         Assert.AreEqual(arr.pop(), Some(20));Assert.AreEqual(arr.len(), 1);
     }
 }
 
-public class pop_empty_returns_noneTests
+public class DynamicArraypop_empty_returns_noneTests
 {
     [Fact]
     public void pop_empty_returns_none_Test()
     {
-        // Setup
         let arr = DynamicArray::<i32>::new();
-        // Actions
         
-        // Assertions
         Assert.AreEqual(arr.pop(), None);
     }
 }
 
-public class get_valid_indexTests
+public class DynamicArrayget_valid_indexTests
 {
     [Fact]
     public void get_valid_index_Test()
     {
-        // Setup
         let mut arr = DynamicArray::new(); arr.push(5);
-        // Actions
         
-        // Assertions
         Assert.AreEqual(arr.get(0), Some(&5));
     }
 }
 
-public class get_out_of_boundsTests
+public class DynamicArrayget_out_of_boundsTests
 {
     [Fact]
     public void get_out_of_bounds_Test()
     {
-        // Setup
         let mut arr = DynamicArray::new(); arr.push(5);
-        // Actions
         
-        // Assertions
         Assert.AreEqual(arr.get(1), None);
     }
 }
 
+
+// --- DynamicArray.Push.cs ---
+namespace DynamicArray
+{
+    public partial class DynamicArray<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// Push.
+        /// </summary>
+        
+        /// <param name="item">T.</param>
+        
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - length == old.length + 1
+        
+        /// - last element == item
+        
+        /// </remarks>
+        
+        
+        public void Push(T item)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
 }
+
+// ========== Generated xUnit tests ==========
+
+public class DynamicArraypush_increases_lengthTests
+{
+    [Fact]
+    public void push_increases_length_Test()
+    {
+        let mut arr = DynamicArray::new();
+        arr.push(1);arr.push(2);
+        Assert.AreEqual(arr.len(), 2);Assert.IsTrue(!arr.is_empty());
+    }
+}
+
+public class DynamicArraypop_returns_last_elementTests
+{
+    [Fact]
+    public void pop_returns_last_element_Test()
+    {
+        let mut arr = DynamicArray::new();
+        arr.push(10);arr.push(20);
+        Assert.AreEqual(arr.pop(), Some(20));Assert.AreEqual(arr.len(), 1);
+    }
+}
+
+public class DynamicArraypop_empty_returns_noneTests
+{
+    [Fact]
+    public void pop_empty_returns_none_Test()
+    {
+        let arr = DynamicArray::<i32>::new();
+        
+        Assert.AreEqual(arr.pop(), None);
+    }
+}
+
+public class DynamicArrayget_valid_indexTests
+{
+    [Fact]
+    public void get_valid_index_Test()
+    {
+        let mut arr = DynamicArray::new(); arr.push(5);
+        
+        Assert.AreEqual(arr.get(0), Some(&5));
+    }
+}
+
+public class DynamicArrayget_out_of_boundsTests
+{
+    [Fact]
+    public void get_out_of_bounds_Test()
+    {
+        let mut arr = DynamicArray::new(); arr.push(5);
+        
+        Assert.AreEqual(arr.get(1), None);
+    }
+}
+
+
+// --- DynamicArray.Pop.cs ---
+namespace DynamicArray
+{
+    public partial class DynamicArray<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// Pop.
+        /// </summary>
+        
+        
+        /// <returns>T?.</returns>
+        
+        
+        /// <remarks>
+        /// Preconditions:
+        
+        /// - length > 0
+        
+        /// </remarks>
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - length == old.length - 1
+        
+        /// </remarks>
+        
+        
+        public T? Pop()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class DynamicArraypush_increases_lengthTests
+{
+    [Fact]
+    public void push_increases_length_Test()
+    {
+        let mut arr = DynamicArray::new();
+        arr.push(1);arr.push(2);
+        Assert.AreEqual(arr.len(), 2);Assert.IsTrue(!arr.is_empty());
+    }
+}
+
+public class DynamicArraypop_returns_last_elementTests
+{
+    [Fact]
+    public void pop_returns_last_element_Test()
+    {
+        let mut arr = DynamicArray::new();
+        arr.push(10);arr.push(20);
+        Assert.AreEqual(arr.pop(), Some(20));Assert.AreEqual(arr.len(), 1);
+    }
+}
+
+public class DynamicArraypop_empty_returns_noneTests
+{
+    [Fact]
+    public void pop_empty_returns_none_Test()
+    {
+        let arr = DynamicArray::<i32>::new();
+        
+        Assert.AreEqual(arr.pop(), None);
+    }
+}
+
+public class DynamicArrayget_valid_indexTests
+{
+    [Fact]
+    public void get_valid_index_Test()
+    {
+        let mut arr = DynamicArray::new(); arr.push(5);
+        
+        Assert.AreEqual(arr.get(0), Some(&5));
+    }
+}
+
+public class DynamicArrayget_out_of_boundsTests
+{
+    [Fact]
+    public void get_out_of_bounds_Test()
+    {
+        let mut arr = DynamicArray::new(); arr.push(5);
+        
+        Assert.AreEqual(arr.get(1), None);
+    }
+}
+
+
+// --- DynamicArray.Get.cs ---
+namespace DynamicArray
+{
+    public partial class DynamicArray<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// Get.
+        /// </summary>
+        
+        /// <param name="index">int.</param>
+        
+        
+        /// <returns>T?.</returns>
+        
+        
+        /// <remarks>
+        /// Preconditions:
+        
+        /// - index < length
+        
+        /// </remarks>
+        
+        
+        
+        public T? Get(int index)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class DynamicArraypush_increases_lengthTests
+{
+    [Fact]
+    public void push_increases_length_Test()
+    {
+        let mut arr = DynamicArray::new();
+        arr.push(1);arr.push(2);
+        Assert.AreEqual(arr.len(), 2);Assert.IsTrue(!arr.is_empty());
+    }
+}
+
+public class DynamicArraypop_returns_last_elementTests
+{
+    [Fact]
+    public void pop_returns_last_element_Test()
+    {
+        let mut arr = DynamicArray::new();
+        arr.push(10);arr.push(20);
+        Assert.AreEqual(arr.pop(), Some(20));Assert.AreEqual(arr.len(), 1);
+    }
+}
+
+public class DynamicArraypop_empty_returns_noneTests
+{
+    [Fact]
+    public void pop_empty_returns_none_Test()
+    {
+        let arr = DynamicArray::<i32>::new();
+        
+        Assert.AreEqual(arr.pop(), None);
+    }
+}
+
+public class DynamicArrayget_valid_indexTests
+{
+    [Fact]
+    public void get_valid_index_Test()
+    {
+        let mut arr = DynamicArray::new(); arr.push(5);
+        
+        Assert.AreEqual(arr.get(0), Some(&5));
+    }
+}
+
+public class DynamicArrayget_out_of_boundsTests
+{
+    [Fact]
+    public void get_out_of_bounds_Test()
+    {
+        let mut arr = DynamicArray::new(); arr.push(5);
+        
+        Assert.AreEqual(arr.get(1), None);
+    }
+}
+
+
+// --- DynamicArray.Len.cs ---
+namespace DynamicArray
+{
+    public partial class DynamicArray<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// Len.
+        /// </summary>
+        
+        
+        /// <returns>int.</returns>
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - result >= 0
+        
+        /// </remarks>
+        
+        
+        public int Len()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class DynamicArraypush_increases_lengthTests
+{
+    [Fact]
+    public void push_increases_length_Test()
+    {
+        let mut arr = DynamicArray::new();
+        arr.push(1);arr.push(2);
+        Assert.AreEqual(arr.len(), 2);Assert.IsTrue(!arr.is_empty());
+    }
+}
+
+public class DynamicArraypop_returns_last_elementTests
+{
+    [Fact]
+    public void pop_returns_last_element_Test()
+    {
+        let mut arr = DynamicArray::new();
+        arr.push(10);arr.push(20);
+        Assert.AreEqual(arr.pop(), Some(20));Assert.AreEqual(arr.len(), 1);
+    }
+}
+
+public class DynamicArraypop_empty_returns_noneTests
+{
+    [Fact]
+    public void pop_empty_returns_none_Test()
+    {
+        let arr = DynamicArray::<i32>::new();
+        
+        Assert.AreEqual(arr.pop(), None);
+    }
+}
+
+public class DynamicArrayget_valid_indexTests
+{
+    [Fact]
+    public void get_valid_index_Test()
+    {
+        let mut arr = DynamicArray::new(); arr.push(5);
+        
+        Assert.AreEqual(arr.get(0), Some(&5));
+    }
+}
+
+public class DynamicArrayget_out_of_boundsTests
+{
+    [Fact]
+    public void get_out_of_bounds_Test()
+    {
+        let mut arr = DynamicArray::new(); arr.push(5);
+        
+        Assert.AreEqual(arr.get(1), None);
+    }
+}
+
+
+// --- DynamicArray.IsEmpty.cs ---
+namespace DynamicArray
+{
+    public partial class DynamicArray<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// IsEmpty.
+        /// </summary>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool IsEmpty()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class DynamicArraypush_increases_lengthTests
+{
+    [Fact]
+    public void push_increases_length_Test()
+    {
+        let mut arr = DynamicArray::new();
+        arr.push(1);arr.push(2);
+        Assert.AreEqual(arr.len(), 2);Assert.IsTrue(!arr.is_empty());
+    }
+}
+
+public class DynamicArraypop_returns_last_elementTests
+{
+    [Fact]
+    public void pop_returns_last_element_Test()
+    {
+        let mut arr = DynamicArray::new();
+        arr.push(10);arr.push(20);
+        Assert.AreEqual(arr.pop(), Some(20));Assert.AreEqual(arr.len(), 1);
+    }
+}
+
+public class DynamicArraypop_empty_returns_noneTests
+{
+    [Fact]
+    public void pop_empty_returns_none_Test()
+    {
+        let arr = DynamicArray::<i32>::new();
+        
+        Assert.AreEqual(arr.pop(), None);
+    }
+}
+
+public class DynamicArrayget_valid_indexTests
+{
+    [Fact]
+    public void get_valid_index_Test()
+    {
+        let mut arr = DynamicArray::new(); arr.push(5);
+        
+        Assert.AreEqual(arr.get(0), Some(&5));
+    }
+}
+
+public class DynamicArrayget_out_of_boundsTests
+{
+    [Fact]
+    public void get_out_of_bounds_Test()
+    {
+        let mut arr = DynamicArray::new(); arr.push(5);
+        
+        Assert.AreEqual(arr.get(1), None);
+    }
+}
+

@@ -1,3 +1,4 @@
+// --- QuicksortMethods.ts ---
 /**
  * Quicksort
 
@@ -13,12 +14,18 @@
 
 
 /**
- * quicksort
+ * Quicksort.
  
+ * @param arr - T[].
+ 
+ 
+ 
+ *
  * Preconditions:
   * - arr is valid slice
  
  
+ *
  * Postconditions:
   * - arr is sorted ascending
  
@@ -31,9 +38,20 @@ export function quicksort(arr: T[]): void {
 }
 
 /**
- * partition
+ * Partition.
+ 
+ * @param arr - T[].
+ 
+ * @param low - number.
+ 
+ * @param high - number.
  
  
+ * @returns number
+ 
+ 
+ 
+ *
  * Postconditions:
   * - pivot is in final sorted position
   * - elements left of pivot <= pivot

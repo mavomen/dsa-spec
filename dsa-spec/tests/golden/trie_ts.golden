@@ -1,0 +1,359 @@
+// --- TrieNode.ts ---
+/**
+ * Trie
+ * Time complexity: O(k) insert/search/starts_with (k = key length)
+
+ * Space complexity: O(n * k)
+
+
+ * Invariants:
+ * - each node has at most one parent
+ * - root is always empty (no character)
+
+ */
+
+
+export class TrieNode {
+
+    
+    public children: HashMap<char, Box<TrieNode>>;
+    
+    public isEnd: boolean;
+    
+}
+
+// --- TrieNode_new.ts ---
+/**
+ * Trie.new
+
+ * @returns Self
+
+
+
+ * Postconditions:
+ * - is_empty() == true
+
+ */
+
+import { TrieNode } from './trienode';
+
+
+(TrieNode.prototype as any).new = function(): Self {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_search', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("hello");trie.insert("world");
+        expect(trie.search("hello")).toBe(true);expect(trie.search("world")).toBe(true);expect(!trie.search("hell")).toBe(true);expect(!trie.search("foo")).toBe(true);
+    });
+});
+
+describe('prefix_matching', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("cat");trie.insert("car");trie.insert("dog");
+        expect(trie.starts_with("ca")).toBe(true);expect(trie.starts_with("c")).toBe(true);expect(trie.starts_with("do")).toBe(true);expect(!trie.starts_with("bat")).toBe(true);
+    });
+});
+
+describe('delete_word', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("test");trie.insert("testing");
+        expect(trie.delete("test")).toBe(true);expect(!trie.search("test")).toBe(true);expect(trie.search("testing")).toBe(true);
+    });
+});
+
+describe('empty_trie', () => {
+    it('should pass', () => {
+        let trie: Trie = Trie::new();
+        
+        expect(trie.is_empty()).toBe(true);expect(!trie.search("anything")).toBe(true);expect(!trie.starts_with("x")).toBe(true);
+    });
+});
+
+
+// --- TrieNode_insert.ts ---
+/**
+ * Trie.insert
+ * @param word - String
+
+
+
+
+ * Postconditions:
+ * - search(word) == true
+
+ */
+
+import { TrieNode } from './trienode';
+
+
+(TrieNode.prototype as any).insert = function(word: String): void {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_search', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("hello");trie.insert("world");
+        expect(trie.search("hello")).toBe(true);expect(trie.search("world")).toBe(true);expect(!trie.search("hell")).toBe(true);expect(!trie.search("foo")).toBe(true);
+    });
+});
+
+describe('prefix_matching', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("cat");trie.insert("car");trie.insert("dog");
+        expect(trie.starts_with("ca")).toBe(true);expect(trie.starts_with("c")).toBe(true);expect(trie.starts_with("do")).toBe(true);expect(!trie.starts_with("bat")).toBe(true);
+    });
+});
+
+describe('delete_word', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("test");trie.insert("testing");
+        expect(trie.delete("test")).toBe(true);expect(!trie.search("test")).toBe(true);expect(trie.search("testing")).toBe(true);
+    });
+});
+
+describe('empty_trie', () => {
+    it('should pass', () => {
+        let trie: Trie = Trie::new();
+        
+        expect(trie.is_empty()).toBe(true);expect(!trie.search("anything")).toBe(true);expect(!trie.starts_with("x")).toBe(true);
+    });
+});
+
+
+// --- TrieNode_search.ts ---
+/**
+ * Trie.search
+ * @param word - String
+
+ * @returns boolean
+
+
+
+ */
+
+import { TrieNode } from './trienode';
+
+
+(TrieNode.prototype as any).search = function(word: String): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_search', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("hello");trie.insert("world");
+        expect(trie.search("hello")).toBe(true);expect(trie.search("world")).toBe(true);expect(!trie.search("hell")).toBe(true);expect(!trie.search("foo")).toBe(true);
+    });
+});
+
+describe('prefix_matching', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("cat");trie.insert("car");trie.insert("dog");
+        expect(trie.starts_with("ca")).toBe(true);expect(trie.starts_with("c")).toBe(true);expect(trie.starts_with("do")).toBe(true);expect(!trie.starts_with("bat")).toBe(true);
+    });
+});
+
+describe('delete_word', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("test");trie.insert("testing");
+        expect(trie.delete("test")).toBe(true);expect(!trie.search("test")).toBe(true);expect(trie.search("testing")).toBe(true);
+    });
+});
+
+describe('empty_trie', () => {
+    it('should pass', () => {
+        let trie: Trie = Trie::new();
+        
+        expect(trie.is_empty()).toBe(true);expect(!trie.search("anything")).toBe(true);expect(!trie.starts_with("x")).toBe(true);
+    });
+});
+
+
+// --- TrieNode_startsWith.ts ---
+/**
+ * Trie.startsWith
+ * @param prefix - String
+
+ * @returns boolean
+
+
+
+ */
+
+import { TrieNode } from './trienode';
+
+
+(TrieNode.prototype as any).startsWith = function(prefix: String): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_search', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("hello");trie.insert("world");
+        expect(trie.search("hello")).toBe(true);expect(trie.search("world")).toBe(true);expect(!trie.search("hell")).toBe(true);expect(!trie.search("foo")).toBe(true);
+    });
+});
+
+describe('prefix_matching', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("cat");trie.insert("car");trie.insert("dog");
+        expect(trie.starts_with("ca")).toBe(true);expect(trie.starts_with("c")).toBe(true);expect(trie.starts_with("do")).toBe(true);expect(!trie.starts_with("bat")).toBe(true);
+    });
+});
+
+describe('delete_word', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("test");trie.insert("testing");
+        expect(trie.delete("test")).toBe(true);expect(!trie.search("test")).toBe(true);expect(trie.search("testing")).toBe(true);
+    });
+});
+
+describe('empty_trie', () => {
+    it('should pass', () => {
+        let trie: Trie = Trie::new();
+        
+        expect(trie.is_empty()).toBe(true);expect(!trie.search("anything")).toBe(true);expect(!trie.starts_with("x")).toBe(true);
+    });
+});
+
+
+// --- TrieNode_delete.ts ---
+/**
+ * Trie.delete
+ * @param word - String
+
+ * @returns boolean
+
+
+
+ * Postconditions:
+ * - search(word) == false
+
+ */
+
+import { TrieNode } from './trienode';
+
+
+(TrieNode.prototype as any).delete = function(word: String): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_search', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("hello");trie.insert("world");
+        expect(trie.search("hello")).toBe(true);expect(trie.search("world")).toBe(true);expect(!trie.search("hell")).toBe(true);expect(!trie.search("foo")).toBe(true);
+    });
+});
+
+describe('prefix_matching', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("cat");trie.insert("car");trie.insert("dog");
+        expect(trie.starts_with("ca")).toBe(true);expect(trie.starts_with("c")).toBe(true);expect(trie.starts_with("do")).toBe(true);expect(!trie.starts_with("bat")).toBe(true);
+    });
+});
+
+describe('delete_word', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("test");trie.insert("testing");
+        expect(trie.delete("test")).toBe(true);expect(!trie.search("test")).toBe(true);expect(trie.search("testing")).toBe(true);
+    });
+});
+
+describe('empty_trie', () => {
+    it('should pass', () => {
+        let trie: Trie = Trie::new();
+        
+        expect(trie.is_empty()).toBe(true);expect(!trie.search("anything")).toBe(true);expect(!trie.starts_with("x")).toBe(true);
+    });
+});
+
+
+// --- TrieNode_isEmpty.ts ---
+/**
+ * Trie.isEmpty
+
+ * @returns boolean
+
+
+
+ */
+
+import { TrieNode } from './trienode';
+
+
+(TrieNode.prototype as any).isEmpty = function(): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_search', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("hello");trie.insert("world");
+        expect(trie.search("hello")).toBe(true);expect(trie.search("world")).toBe(true);expect(!trie.search("hell")).toBe(true);expect(!trie.search("foo")).toBe(true);
+    });
+});
+
+describe('prefix_matching', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("cat");trie.insert("car");trie.insert("dog");
+        expect(trie.starts_with("ca")).toBe(true);expect(trie.starts_with("c")).toBe(true);expect(trie.starts_with("do")).toBe(true);expect(!trie.starts_with("bat")).toBe(true);
+    });
+});
+
+describe('delete_word', () => {
+    it('should pass', () => {
+        let mut trie = Trie::new();
+        trie.insert("test");trie.insert("testing");
+        expect(trie.delete("test")).toBe(true);expect(!trie.search("test")).toBe(true);expect(trie.search("testing")).toBe(true);
+    });
+});
+
+describe('empty_trie', () => {
+    it('should pass', () => {
+        let trie: Trie = Trie::new();
+        
+        expect(trie.is_empty()).toBe(true);expect(!trie.search("anything")).toBe(true);expect(!trie.starts_with("x")).toBe(true);
+    });
+});
+

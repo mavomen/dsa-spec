@@ -7,7 +7,7 @@ use dsa_spec::backend::Backend;
 struct LangBackend {
     label: &'static str,
     ext: &'static str,
-    generate: fn(&dsa_spec::ast::Spec) -> String,
+    generate: fn(&dsa_spec::ast::Spec) -> Vec<(String, String)>,
 }
 
 impl LangBackend {
@@ -63,13 +63,26 @@ fn make_backends() -> Vec<LangBackend> {
 
 fn spec_files() -> Vec<PathBuf> {
     let spec_dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("../specs");
-    let mut files: Vec<PathBuf> = fs::read_dir(&spec_dir)
-        .expect("specs directory not found")
-        .filter_map(|e| e.ok())
-        .map(|e| e.path())
-        .filter(|p| p.extension().and_then(|s| s.to_str()) == Some("yaml"))
-        .collect();
+    let mut files: Vec<PathBuf> = Vec::new();
+    for entry in walkdir_specs(&spec_dir) {
+        files.push(entry);
+    }
     files.sort();
+    files
+}
+
+fn walkdir_specs(dir: &Path) -> Vec<PathBuf> {
+    let mut files = Vec::new();
+    if let Ok(entries) = fs::read_dir(dir) {
+        for entry in entries.filter_map(|e| e.ok()) {
+            let path = entry.path();
+            if path.is_dir() {
+                files.extend(walkdir_specs(&path));
+            } else if path.extension().and_then(|s| s.to_str()) == Some("yaml") {
+                files.push(path);
+            }
+        }
+    }
     files
 }
 
@@ -130,7 +143,12 @@ fn test_golden_files_rust() {
         let stem = path.file_stem().unwrap().to_str().unwrap();
         let spec = parse_spec(path);
         for bk in &backends {
-            let code = (bk.generate)(&spec);
+            let files = (bk.generate)(&spec);
+            let code = files
+                .into_iter()
+                .map(|(name, content)| format!("// --- {name} ---\n{content}"))
+                .collect::<Vec<_>>()
+                .join("\n");
             let gp = bk.golden_path(stem, &gdir);
             check_or_update_golden(&code, &gp, stem, bk.label);
         }

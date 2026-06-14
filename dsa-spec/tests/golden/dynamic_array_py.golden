@@ -1,155 +1,339 @@
+// --- DynamicArray.py ---
 """
 DynamicArray
-
 Time complexity: O(1) amortized push, O(n) insert/remove
-
-
 Space complexity: O(n)
 
-
-# Invariants
-
-# - length >= 0
-
-# - capacity >= length
-
+Invariants:
+    - length >= 0
+    - capacity >= length
 
 """
 
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Optional, List, Dict
-import pytest
+from typing import Generic, TypeVar, Optional, List, Dict
 
-
-
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 @dataclass
 class DynamicArray(Generic[T]):
     """DynamicArray"""
-    
+
     data: List[T]
-    
+
     len: int
-    
 
-    
-    def new(self) -> Self:
-        """
-        
-        
-        Postconditions:
-        - length == 0
-        - capacity >= 0
-        
-        
-        """
-        
-        # TODO: Implement new
-        raise NotImplementedError
-    
-    def push(self, item: T) -> None:
-        """
-        
-        
-        Postconditions:
-        - length == old.length + 1
-        - last element == item
-        
-        
-        """
-        
-        # TODO: Implement push
-        raise NotImplementedError
-    
-    def pop(self) -> Optional[T]:
-        """
-        
-        Preconditions:
-        - length > 0
-        
-        
-        Postconditions:
-        - length == old.length - 1
-        
-        
-        """
-        
-        # TODO: Implement pop
-        raise NotImplementedError
-    
-    def get(self, index: int) -> Optional[T]:
-        """
-        
-        Preconditions:
-        - index < length
-        
-        
-        
-        """
-        
-        # TODO: Implement get
-        raise NotImplementedError
-    
-    def len(self) -> int:
-        """
-        
-        
-        Postconditions:
-        - result >= 0
-        
-        
-        """
-        
-        # TODO: Implement len
-        raise NotImplementedError
-    
-    def is_empty(self) -> bool:
-        """
-        
-        
-        
-        """
-        
-        # TODO: Implement is_empty
-        raise NotImplementedError
-    
+// --- DynamicArray_new.py ---
+"""
+DynamicArray.new
 
 
+Postconditions:
+    - length == 0
+    - capacity >= 0
 
-# ========== Generated pytest tests ==========
+"""
+
+from dynamicarray import DynamicArray
+
+
+def new(self, ) -> Self:
+    """new."""
+    
+    raise NotImplementedError
+
+
+DynamicArray.new = new
+
+del new
+
+
+# ========== Generated tests ==========
 
 def test_push_increases_length():
-    """Test: push_increases_length"""
     let mut arr = DynamicArray::new();
     arr.push(1)arr.push(2)
     assert arr.len() == 2assert !arr.is_empty()
 
 def test_pop_returns_last_element():
-    """Test: pop_returns_last_element"""
     let mut arr = DynamicArray::new();
     arr.push(10)arr.push(20)
     assert arr.pop() == Some(20)assert arr.len() == 1
 
 def test_pop_empty_returns_none():
-    """Test: pop_empty_returns_none"""
     let arr = DynamicArray::<i32>::new();
     
     assert arr.pop() == None
 
 def test_get_valid_index():
-    """Test: get_valid_index"""
     let mut arr = DynamicArray::new(); arr.push(5);
     
     assert arr.get(0) == Some(&5)
 
 def test_get_out_of_bounds():
-    """Test: get_out_of_bounds"""
     let mut arr = DynamicArray::new(); arr.push(5);
     
     assert arr.get(1) == None
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
+// --- DynamicArray_push.py ---
+"""
+DynamicArray.push
+
+
+Postconditions:
+    - length == old.length + 1
+    - last element == item
+
+"""
+
+from dynamicarray import DynamicArray
+
+
+def push(self, item: T) -> None:
+    """push."""
+    
+    raise NotImplementedError
+
+
+DynamicArray.push = push
+
+del push
+
+
+# ========== Generated tests ==========
+
+def test_push_increases_length():
+    let mut arr = DynamicArray::new();
+    arr.push(1)arr.push(2)
+    assert arr.len() == 2assert !arr.is_empty()
+
+def test_pop_returns_last_element():
+    let mut arr = DynamicArray::new();
+    arr.push(10)arr.push(20)
+    assert arr.pop() == Some(20)assert arr.len() == 1
+
+def test_pop_empty_returns_none():
+    let arr = DynamicArray::<i32>::new();
+    
+    assert arr.pop() == None
+
+def test_get_valid_index():
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    assert arr.get(0) == Some(&5)
+
+def test_get_out_of_bounds():
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    assert arr.get(1) == None
+
+
+// --- DynamicArray_pop.py ---
+"""
+DynamicArray.pop
+
+Preconditions:
+    - length > 0
+
+
+Postconditions:
+    - length == old.length - 1
+
+"""
+
+from dynamicarray import DynamicArray
+
+
+def pop(self, ) -> Optional[T]:
+    """pop."""
+    
+    raise NotImplementedError
+
+
+DynamicArray.pop = pop
+
+del pop
+
+
+# ========== Generated tests ==========
+
+def test_push_increases_length():
+    let mut arr = DynamicArray::new();
+    arr.push(1)arr.push(2)
+    assert arr.len() == 2assert !arr.is_empty()
+
+def test_pop_returns_last_element():
+    let mut arr = DynamicArray::new();
+    arr.push(10)arr.push(20)
+    assert arr.pop() == Some(20)assert arr.len() == 1
+
+def test_pop_empty_returns_none():
+    let arr = DynamicArray::<i32>::new();
+    
+    assert arr.pop() == None
+
+def test_get_valid_index():
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    assert arr.get(0) == Some(&5)
+
+def test_get_out_of_bounds():
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    assert arr.get(1) == None
+
+
+// --- DynamicArray_get.py ---
+"""
+DynamicArray.get
+
+Preconditions:
+    - index < length
+
+
+"""
+
+from dynamicarray import DynamicArray
+
+
+def get(self, index: int) -> Optional[T]:
+    """get."""
+    
+    raise NotImplementedError
+
+
+DynamicArray.get = get
+
+del get
+
+
+# ========== Generated tests ==========
+
+def test_push_increases_length():
+    let mut arr = DynamicArray::new();
+    arr.push(1)arr.push(2)
+    assert arr.len() == 2assert !arr.is_empty()
+
+def test_pop_returns_last_element():
+    let mut arr = DynamicArray::new();
+    arr.push(10)arr.push(20)
+    assert arr.pop() == Some(20)assert arr.len() == 1
+
+def test_pop_empty_returns_none():
+    let arr = DynamicArray::<i32>::new();
+    
+    assert arr.pop() == None
+
+def test_get_valid_index():
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    assert arr.get(0) == Some(&5)
+
+def test_get_out_of_bounds():
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    assert arr.get(1) == None
+
+
+// --- DynamicArray_len.py ---
+"""
+DynamicArray.len
+
+
+Postconditions:
+    - result >= 0
+
+"""
+
+from dynamicarray import DynamicArray
+
+
+def len(self, ) -> int:
+    """len."""
+    
+    raise NotImplementedError
+
+
+DynamicArray.len = len
+
+del len
+
+
+# ========== Generated tests ==========
+
+def test_push_increases_length():
+    let mut arr = DynamicArray::new();
+    arr.push(1)arr.push(2)
+    assert arr.len() == 2assert !arr.is_empty()
+
+def test_pop_returns_last_element():
+    let mut arr = DynamicArray::new();
+    arr.push(10)arr.push(20)
+    assert arr.pop() == Some(20)assert arr.len() == 1
+
+def test_pop_empty_returns_none():
+    let arr = DynamicArray::<i32>::new();
+    
+    assert arr.pop() == None
+
+def test_get_valid_index():
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    assert arr.get(0) == Some(&5)
+
+def test_get_out_of_bounds():
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    assert arr.get(1) == None
+
+
+// --- DynamicArray_is_empty.py ---
+"""
+DynamicArray.is_empty
+
+
+"""
+
+from dynamicarray import DynamicArray
+
+
+def is_empty(self, ) -> bool:
+    """is_empty."""
+    
+    raise NotImplementedError
+
+
+DynamicArray.is_empty = is_empty
+
+del is_empty
+
+
+# ========== Generated tests ==========
+
+def test_push_increases_length():
+    let mut arr = DynamicArray::new();
+    arr.push(1)arr.push(2)
+    assert arr.len() == 2assert !arr.is_empty()
+
+def test_pop_returns_last_element():
+    let mut arr = DynamicArray::new();
+    arr.push(10)arr.push(20)
+    assert arr.pop() == Some(20)assert arr.len() == 1
+
+def test_pop_empty_returns_none():
+    let arr = DynamicArray::<i32>::new();
+    
+    assert arr.pop() == None
+
+def test_get_valid_index():
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    assert arr.get(0) == Some(&5)
+
+def test_get_out_of_bounds():
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    assert arr.get(1) == None
+

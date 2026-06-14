@@ -1,0 +1,58 @@
+namespace {{ metadata.name | replace(from=" ", to="") }}
+{
+    public partial class {{ struct.name }}<{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}>
+{% for generic in struct.generics %}{% if generic.bounds != "" %}    {{ generic.bounds }}
+{% endif %}{% endfor %}
+    {
+        /// <summary>
+        /// {{ method.name }}.
+        /// </summary>
+        {% for param in method.params %}
+        /// <param name="{{ param.name }}">{{ param.csharp_type }}.</param>
+        {% endfor %}
+        {% if method.returns and method.returns != "void" %}
+        /// <returns>{{ method.returns }}.</returns>
+        {% endif %}
+        {% if method.preconditions %}
+        /// <remarks>
+        /// Preconditions:
+        {% for pre in method.preconditions %}
+        /// - {{ pre }}
+        {% endfor %}
+        /// </remarks>
+        {% endif %}
+        {% if method.postconditions %}
+        /// <remarks>
+        /// Postconditions:
+        {% for post in method.postconditions %}
+        /// - {{ post }}
+        {% endfor %}
+        /// </remarks>
+        {% endif %}
+        {% if method.throws_exception %}
+        /// <exception cref="Exception">Thrown when an error occurs (from Result type).</exception>
+        {% endif %}
+        public {{ method.returns | default(value="void") }} {{ method.name }}({% for param in method.params %}{{ param.csharp_type }} {{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %})
+        {
+            {% for assertion in method.injected_assertions %}
+            // Contract: {{ assertion }}
+            System.Diagnostics.Debug.Assert(false, "{{ assertion }}");
+            {% endfor %}
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+{% for test in verification.test_cases %}
+public class {{ struct.name }}{{ test.name }}Tests
+{
+    [Fact]
+    public void {{ test.name }}_Test()
+    {
+        {% if test.setup %}{{ test.setup }}{% endif %}
+        {% for action in test.actions %}{{ action }};{% endfor %}
+        {% for assertion in test.assertions %}{{ assertion }};{% endfor %}
+    }
+}
+{% endfor %}

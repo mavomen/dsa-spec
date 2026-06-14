@@ -1,3 +1,4 @@
+// --- BFSMethods.py ---
 """
 BFS
 
@@ -24,16 +25,35 @@ import pytest
 
 
 def bfs(graph: &Graph<T>, start: T) -> List[T]:
-    """
+    """bfs.
     
+
+    Args:
+    
+        graph: &Graph<T>
+    
+        start: T
+    
+    
+
+    Returns:
+        List[T]
+    
+    
+
     Preconditions:
-    - start vertex exists in graph
+    
+        - start vertex exists in graph
     
     
+
     Postconditions:
-    - result contains all reachable vertices from start
-    - result has no duplicates
-    - order follows breadth-first traversal
+    
+        - result contains all reachable vertices from start
+    
+        - result has no duplicates
+    
+        - order follows breadth-first traversal
     
     
     """

@@ -1,126 +1,49 @@
+// --- Node.rs ---
 /// SinglyLinkedList
-
 /// Time complexity: O(1) prepend, O(n) append/search
 
 /// Space complexity: O(n)
 
-///
-/// # Invariants
 
+/// Invariants:
 /// - no cycles
-
 /// - head is None iff tail is None
 
-pub struct Node<T: Clone> {
-    value: T,
 
-    next: Option<Box<Node<T>>>,
+
+#[derive(Debug, Clone)]
+pub struct Node<T>
+where T: Clone 
+
+    
+    pub value: T,
+    
+    pub next: Option<Box<Node<T>>>,
+    
 }
 
-impl<T: Clone> Node<T> {
-    /// # Contracts
-
-    /// - **Postcondition:** head is None
-
-    pub fn new(&self) -> Self {
-        // TODO: Implement new
-        todo!()
-    }
-
-    /// # Contracts
-
-    /// - **Postcondition:** head.value == value
-
-    /// - **Postcondition:** list length increased by 1
-
-    pub fn prepend(&self, value: T) {
-        // TODO: Implement prepend
-        todo!()
-    }
-
-    /// # Contracts
-
-    /// - **Postcondition:** last element == value
-
-    pub fn append(&self, value: T) {
-        // TODO: Implement append
-        todo!()
-    }
-
-    /// # Contracts
-
-    /// - **Precondition:** !is_empty()
-
-    /// - **Postcondition:** head == old.head.next
-
-    pub fn pop_front(&self) -> Option<T> {
-        // TODO: Implement pop_front
-        todo!()
-    }
-
-    pub fn is_empty(&self) -> bool {
-        // TODO: Implement is_empty
-        todo!()
-    }
-
-    pub fn len(&self) -> usize {
-        // TODO: Implement len
-        todo!()
+impl<T> Node<T> {
+    pub fn new() -> Self {
+        Self {
+            
+            value: Default::default(),
+            
+            next: Default::default(),
+            
+        }
     }
 }
 
-pub struct SinglyLinkedList<T: Clone> {
-    head: Option<Box<Node<T>>>,
-}
+// --- Node_new.rs ---
+/// SinglyLinkedList.new
 
-impl<T: Clone> SinglyLinkedList<T> {
-    /// # Contracts
+/// Returns: Self
 
-    /// - **Postcondition:** head is None
+/// Postconditions:
+/// - head is None
 
-    pub fn new(&self) -> Self {
-        // TODO: Implement new
-        todo!()
-    }
-
-    /// # Contracts
-
-    /// - **Postcondition:** head.value == value
-
-    /// - **Postcondition:** list length increased by 1
-
-    pub fn prepend(&self, value: T) {
-        // TODO: Implement prepend
-        todo!()
-    }
-
-    /// # Contracts
-
-    /// - **Postcondition:** last element == value
-
-    pub fn append(&self, value: T) {
-        // TODO: Implement append
-        todo!()
-    }
-
-    /// # Contracts
-
-    /// - **Precondition:** !is_empty()
-
-    /// - **Postcondition:** head == old.head.next
-
-    pub fn pop_front(&self) -> Option<T> {
-        // TODO: Implement pop_front
-        todo!()
-    }
-
-    pub fn is_empty(&self) -> bool {
-        // TODO: Implement is_empty
-        todo!()
-    }
-
-    pub fn len(&self) -> usize {
-        // TODO: Implement len
+impl<T> Node<T> {
+    pub fn new(&mut self) -> Self {
         todo!()
     }
 }
@@ -130,25 +53,41 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_prepend_pop_front() {
+    fn prepend_pop_front() {
         let mut list = SinglyLinkedList::new();
         list.prepend(1);
         list.prepend(2);
         assert_eq!(list.pop_front(), Some(2));
         assert_eq!(list.pop_front(), Some(1));
     }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
 
     #[test]
-    fn test_append_order() {
+    fn append_order() {
         let mut list = SinglyLinkedList::new();
         list.append(1);
         list.append(2);
         assert_eq!(list.pop_front(), Some(1));
+    }
+
+    #[test]
+    fn pop_front_empty() {
+        let list = SinglyLinkedList::<i32>::new();
+
+        assert_eq!(list.pop_front(), None);
+    }
+}
+
+// --- Node_prepend.rs ---
+/// SinglyLinkedList.prepend
+/// * `value` - T
+
+/// Postconditions:
+/// - head.value == value
+/// - list length increased by 1
+
+impl<T> Node<T> {
+    pub fn prepend(&mut self, value: T) -> () {
+        todo!()
     }
 }
 
@@ -157,7 +96,192 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_pop_front_empty() {
+    fn prepend_pop_front() {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);
+        list.prepend(2);
+        assert_eq!(list.pop_front(), Some(2));
+        assert_eq!(list.pop_front(), Some(1));
+    }
+
+    #[test]
+    fn append_order() {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);
+        list.append(2);
+        assert_eq!(list.pop_front(), Some(1));
+    }
+
+    #[test]
+    fn pop_front_empty() {
+        let list = SinglyLinkedList::<i32>::new();
+
+        assert_eq!(list.pop_front(), None);
+    }
+}
+
+// --- Node_append.rs ---
+/// SinglyLinkedList.append
+/// * `value` - T
+
+/// Postconditions:
+/// - last element == value
+
+impl<T> Node<T> {
+    pub fn append(&mut self, value: T) -> () {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn prepend_pop_front() {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);
+        list.prepend(2);
+        assert_eq!(list.pop_front(), Some(2));
+        assert_eq!(list.pop_front(), Some(1));
+    }
+
+    #[test]
+    fn append_order() {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);
+        list.append(2);
+        assert_eq!(list.pop_front(), Some(1));
+    }
+
+    #[test]
+    fn pop_front_empty() {
+        let list = SinglyLinkedList::<i32>::new();
+
+        assert_eq!(list.pop_front(), None);
+    }
+}
+
+// --- Node_pop_front.rs ---
+/// SinglyLinkedList.pop_front
+
+/// Returns: Option<T>
+
+/// Preconditions:
+/// - !is_empty()
+
+/// Postconditions:
+/// - head == old.head.next
+
+impl<T> Node<T> {
+    pub fn pop_front(&mut self) -> Option<T> {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn prepend_pop_front() {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);
+        list.prepend(2);
+        assert_eq!(list.pop_front(), Some(2));
+        assert_eq!(list.pop_front(), Some(1));
+    }
+
+    #[test]
+    fn append_order() {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);
+        list.append(2);
+        assert_eq!(list.pop_front(), Some(1));
+    }
+
+    #[test]
+    fn pop_front_empty() {
+        let list = SinglyLinkedList::<i32>::new();
+
+        assert_eq!(list.pop_front(), None);
+    }
+}
+
+// --- Node_is_empty.rs ---
+/// SinglyLinkedList.is_empty
+
+/// Returns: bool
+
+impl<T> Node<T> {
+    pub fn is_empty(&mut self) -> bool {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn prepend_pop_front() {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);
+        list.prepend(2);
+        assert_eq!(list.pop_front(), Some(2));
+        assert_eq!(list.pop_front(), Some(1));
+    }
+
+    #[test]
+    fn append_order() {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);
+        list.append(2);
+        assert_eq!(list.pop_front(), Some(1));
+    }
+
+    #[test]
+    fn pop_front_empty() {
+        let list = SinglyLinkedList::<i32>::new();
+
+        assert_eq!(list.pop_front(), None);
+    }
+}
+
+// --- Node_len.rs ---
+/// SinglyLinkedList.len
+
+/// Returns: usize
+
+impl<T> Node<T> {
+    pub fn len(&mut self) -> usize {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn prepend_pop_front() {
+        let mut list = SinglyLinkedList::new();
+        list.prepend(1);
+        list.prepend(2);
+        assert_eq!(list.pop_front(), Some(2));
+        assert_eq!(list.pop_front(), Some(1));
+    }
+
+    #[test]
+    fn append_order() {
+        let mut list = SinglyLinkedList::new();
+        list.append(1);
+        list.append(2);
+        assert_eq!(list.pop_front(), Some(1));
+    }
+
+    #[test]
+    fn pop_front_empty() {
         let list = SinglyLinkedList::<i32>::new();
 
         assert_eq!(list.pop_front(), None);

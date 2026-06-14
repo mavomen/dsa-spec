@@ -1,28 +1,21 @@
+// --- Node.py ---
 """
 DoublyLinkedList
-
 Time complexity: O(1) insert/remove at head/tail, O(n) search
-
-
 Space complexity: O(n)
 
-
-# Invariants
-
-# - no cycles
-
-# - for each node, node.next.prev == node
-
+Invariants:
+    - no cycles
+    - for each node, node.next.prev == node
 
 """
 
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Optional, List, Dict
-import pytest
-
+from typing import Generic, TypeVar, Optional, List, Dict
 
 
 T = TypeVar('T')
+
 
 
 @dataclass
@@ -36,216 +29,291 @@ class Node(Generic[T]):
     next: Optional[Node<T>]
     
 
-    
-    def new(self) -> Self:
-        """
-        
-        
-        Postconditions:
-        - head is None
-        - tail is None
-        
-        
-        """
-        
-        # TODO: Implement new
-        raise NotImplementedError
-    
-    def push_front(self, value: T) -> None:
-        """
-        
-        
-        Postconditions:
-        - head.value == value
-        
-        
-        """
-        
-        # TODO: Implement push_front
-        raise NotImplementedError
-    
-    def push_back(self, value: T) -> None:
-        """
-        
-        
-        Postconditions:
-        - tail.value == value
-        
-        
-        """
-        
-        # TODO: Implement push_back
-        raise NotImplementedError
-    
-    def pop_front(self) -> Optional[T]:
-        """
-        
-        Preconditions:
-        - !is_empty()
-        
-        
-        
-        """
-        
-        # TODO: Implement pop_front
-        raise NotImplementedError
-    
-    def pop_back(self) -> Optional[T]:
-        """
-        
-        Preconditions:
-        - !is_empty()
-        
-        
-        
-        """
-        
-        # TODO: Implement pop_back
-        raise NotImplementedError
-    
-    def is_empty(self) -> bool:
-        """
-        
-        
-        
-        """
-        
-        # TODO: Implement is_empty
-        raise NotImplementedError
-    
-    def len(self) -> int:
-        """
-        
-        
-        
-        """
-        
-        # TODO: Implement len
-        raise NotImplementedError
-    
-
-T = TypeVar('T')
+// --- Node_new.py ---
+"""
+DoublyLinkedList.new
 
 
-@dataclass
-class DoublyLinkedList(Generic[T]):
-    """DoublyLinkedList"""
-    
-    head: Optional[Node<T>]
-    
-    tail: Optional[Node<T>]
-    
+Postconditions:
+    - head is None
+    - tail is None
 
-    
-    def new(self) -> Self:
-        """
-        
-        
-        Postconditions:
-        - head is None
-        - tail is None
-        
-        
-        """
-        
-        # TODO: Implement new
-        raise NotImplementedError
-    
-    def push_front(self, value: T) -> None:
-        """
-        
-        
-        Postconditions:
-        - head.value == value
-        
-        
-        """
-        
-        # TODO: Implement push_front
-        raise NotImplementedError
-    
-    def push_back(self, value: T) -> None:
-        """
-        
-        
-        Postconditions:
-        - tail.value == value
-        
-        
-        """
-        
-        # TODO: Implement push_back
-        raise NotImplementedError
-    
-    def pop_front(self) -> Optional[T]:
-        """
-        
-        Preconditions:
-        - !is_empty()
-        
-        
-        
-        """
-        
-        # TODO: Implement pop_front
-        raise NotImplementedError
-    
-    def pop_back(self) -> Optional[T]:
-        """
-        
-        Preconditions:
-        - !is_empty()
-        
-        
-        
-        """
-        
-        # TODO: Implement pop_back
-        raise NotImplementedError
-    
-    def is_empty(self) -> bool:
-        """
-        
-        
-        
-        """
-        
-        # TODO: Implement is_empty
-        raise NotImplementedError
-    
-    def len(self) -> int:
-        """
-        
-        
-        
-        """
-        
-        # TODO: Implement len
-        raise NotImplementedError
-    
+"""
+
+from node import Node
 
 
+def new(self, ) -> Self:
+    """new."""
+    
+    raise NotImplementedError
 
-# ========== Generated pytest tests ==========
+
+Node.new = new
+
+del new
+
+
+# ========== Generated tests ==========
 
 def test_push_front_pop_front():
-    """Test: push_front_pop_front"""
     let mut list = DoublyLinkedList::new();
     list.push_front(1)list.push_front(2)
     assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
 
 def test_push_back_pop_back():
-    """Test: push_back_pop_back"""
     let mut list = DoublyLinkedList::new();
     list.push_back(1)list.push_back(2)
     assert list.pop_back() == Some(2)assert list.pop_back() == Some(1)
 
 def test_mixed_operations():
-    """Test: mixed_operations"""
     let mut list = DoublyLinkedList::new();
     list.push_front(1)list.push_back(3)list.push_front(0)
     assert list.pop_front() == Some(0)assert list.pop_back() == Some(3)assert list.pop_back() == Some(1)
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
+// --- Node_push_front.py ---
+"""
+DoublyLinkedList.push_front
+
+
+Postconditions:
+    - head.value == value
+
+"""
+
+from node import Node
+
+
+def push_front(self, value: T) -> None:
+    """push_front."""
+    
+    raise NotImplementedError
+
+
+Node.push_front = push_front
+
+del push_front
+
+
+# ========== Generated tests ==========
+
+def test_push_front_pop_front():
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
+
+def test_push_back_pop_back():
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    assert list.pop_back() == Some(2)assert list.pop_back() == Some(1)
+
+def test_mixed_operations():
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    assert list.pop_front() == Some(0)assert list.pop_back() == Some(3)assert list.pop_back() == Some(1)
+
+
+// --- Node_push_back.py ---
+"""
+DoublyLinkedList.push_back
+
+
+Postconditions:
+    - tail.value == value
+
+"""
+
+from node import Node
+
+
+def push_back(self, value: T) -> None:
+    """push_back."""
+    
+    raise NotImplementedError
+
+
+Node.push_back = push_back
+
+del push_back
+
+
+# ========== Generated tests ==========
+
+def test_push_front_pop_front():
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
+
+def test_push_back_pop_back():
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    assert list.pop_back() == Some(2)assert list.pop_back() == Some(1)
+
+def test_mixed_operations():
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    assert list.pop_front() == Some(0)assert list.pop_back() == Some(3)assert list.pop_back() == Some(1)
+
+
+// --- Node_pop_front.py ---
+"""
+DoublyLinkedList.pop_front
+
+Preconditions:
+    - !is_empty()
+
+
+"""
+
+from node import Node
+
+
+def pop_front(self, ) -> Optional[T]:
+    """pop_front."""
+    
+    raise NotImplementedError
+
+
+Node.pop_front = pop_front
+
+del pop_front
+
+
+# ========== Generated tests ==========
+
+def test_push_front_pop_front():
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
+
+def test_push_back_pop_back():
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    assert list.pop_back() == Some(2)assert list.pop_back() == Some(1)
+
+def test_mixed_operations():
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    assert list.pop_front() == Some(0)assert list.pop_back() == Some(3)assert list.pop_back() == Some(1)
+
+
+// --- Node_pop_back.py ---
+"""
+DoublyLinkedList.pop_back
+
+Preconditions:
+    - !is_empty()
+
+
+"""
+
+from node import Node
+
+
+def pop_back(self, ) -> Optional[T]:
+    """pop_back."""
+    
+    raise NotImplementedError
+
+
+Node.pop_back = pop_back
+
+del pop_back
+
+
+# ========== Generated tests ==========
+
+def test_push_front_pop_front():
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
+
+def test_push_back_pop_back():
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    assert list.pop_back() == Some(2)assert list.pop_back() == Some(1)
+
+def test_mixed_operations():
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    assert list.pop_front() == Some(0)assert list.pop_back() == Some(3)assert list.pop_back() == Some(1)
+
+
+// --- Node_is_empty.py ---
+"""
+DoublyLinkedList.is_empty
+
+
+"""
+
+from node import Node
+
+
+def is_empty(self, ) -> bool:
+    """is_empty."""
+    
+    raise NotImplementedError
+
+
+Node.is_empty = is_empty
+
+del is_empty
+
+
+# ========== Generated tests ==========
+
+def test_push_front_pop_front():
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
+
+def test_push_back_pop_back():
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    assert list.pop_back() == Some(2)assert list.pop_back() == Some(1)
+
+def test_mixed_operations():
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    assert list.pop_front() == Some(0)assert list.pop_back() == Some(3)assert list.pop_back() == Some(1)
+
+
+// --- Node_len.py ---
+"""
+DoublyLinkedList.len
+
+
+"""
+
+from node import Node
+
+
+def len(self, ) -> int:
+    """len."""
+    
+    raise NotImplementedError
+
+
+Node.len = len
+
+del len
+
+
+# ========== Generated tests ==========
+
+def test_push_front_pop_front():
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_front(2)
+    assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
+
+def test_push_back_pop_back():
+    let mut list = DoublyLinkedList::new();
+    list.push_back(1)list.push_back(2)
+    assert list.pop_back() == Some(2)assert list.pop_back() == Some(1)
+
+def test_mixed_operations():
+    let mut list = DoublyLinkedList::new();
+    list.push_front(1)list.push_back(3)list.push_front(0)
+    assert list.pop_front() == Some(0)assert list.pop_back() == Some(3)assert list.pop_back() == Some(1)
+

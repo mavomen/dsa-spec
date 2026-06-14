@@ -1,3 +1,4 @@
+// --- CircularBuffer.cs ---
 /// <summary>
 /// CircularBuffer
 
@@ -24,190 +25,502 @@ using System.Linq;
 
 namespace CircularBuffer
 {
-
-
-public class CircularBuffer<T>
+    public partial class CircularBuffer<T>
     where T : Clone, Default
 
-{
-    
-    public List<T?> Buffer { get; set; }
-    
-    public int Head { get; set; }
-    
-    public int Tail { get; set; }
-    
-    public int Size { get; set; }
-    
-    public int Capacity { get; set; }
-    
-
-    
-    /// <summary>
-    /// New
-    /// 
-    /// Preconditions:
-    /// - capacity > 0
-    /// 
-    /// 
-    /// Postconditions:
-    /// - is_empty() == true
-    /// - capacity == capacity
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public Self New(int capacity)
     {
         
-        // TODO: Implement New
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Enqueue
-    /// 
-    /// Preconditions:
-    /// - size < capacity
-    /// 
-    /// 
-    /// Postconditions:
-    /// - size == old.size + 1
-    /// 
-    /// 
-    /// Throws: Exception (from Result type)
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public () Enqueue(T item)
-    {
+        public List<T?> Buffer { get; set; }
         
-        // TODO: Implement Enqueue
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Dequeue
-    /// 
-    /// Preconditions:
-    /// - size > 0
-    /// 
-    /// 
-    /// Postconditions:
-    /// - size == old.size - 1
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public T? Dequeue()
-    {
+        public int Head { get; set; }
         
-        // TODO: Implement Dequeue
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// IsFull
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool IsFull()
-    {
+        public int Tail { get; set; }
         
-        // TODO: Implement IsFull
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool IsEmpty()
-    {
+        public int Size { get; set; }
         
-        // TODO: Implement IsEmpty
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Len
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public int Len()
-    {
+        public int Capacity { get; set; }
         
-        // TODO: Implement Len
-        throw new NotImplementedException();
     }
-    
 }
 
+// --- CircularBuffer.New.cs ---
+namespace CircularBuffer
+{
+    public partial class CircularBuffer<T>
+    where T : Clone, Default
 
+    {
+        /// <summary>
+        /// New.
+        /// </summary>
+        
+        /// <param name="capacity">int.</param>
+        
+        
+        /// <returns>Self.</returns>
+        
+        
+        /// <remarks>
+        /// Preconditions:
+        
+        /// - capacity > 0
+        
+        /// </remarks>
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - is_empty() == true
+        
+        /// - capacity == capacity
+        
+        /// </remarks>
+        
+        
+        public Self New(int capacity)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
 
 // ========== Generated xUnit tests ==========
 
-public class enqueue_dequeue_fifoTests
+public class CircularBufferenqueue_dequeue_fifoTests
 {
     [Fact]
     public void enqueue_dequeue_fifo_Test()
     {
-        // Setup
         let mut buf = CircularBuffer::new(3);
-        // Actions
         buf.enqueue(1);buf.enqueue(2);
-        // Assertions
         Assert.AreEqual(buf.dequeue(), Some(1));Assert.AreEqual(buf.dequeue(), Some(2));
     }
 }
 
-public class full_buffer_prevents_enqueueTests
+public class CircularBufferfull_buffer_prevents_enqueueTests
 {
     [Fact]
     public void full_buffer_prevents_enqueue_Test()
     {
-        // Setup
         let mut buf = CircularBuffer::new(1);
-        // Actions
         buf.enqueue(42);
-        // Assertions
         Assert.IsTrue(buf.is_full());Assert.IsTrue(buf.enqueue(43).is_err());
     }
 }
 
-public class empty_buffer_returns_noneTests
+public class CircularBufferempty_buffer_returns_noneTests
 {
     [Fact]
     public void empty_buffer_returns_none_Test()
     {
-        // Setup
         let buf = CircularBuffer::<i32>::new(5);
-        // Actions
         
-        // Assertions
         Assert.AreEqual(buf.dequeue(), None);
     }
 }
 
-public class wrap_around_worksTests
+public class CircularBufferwrap_around_worksTests
 {
     [Fact]
     public void wrap_around_works_Test()
     {
-        // Setup
         let mut buf = CircularBuffer::new(3);
-        // Actions
         buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
-        // Assertions
         Assert.AreEqual(buf.dequeue(), Some(2));Assert.AreEqual(buf.dequeue(), Some(3));Assert.AreEqual(buf.dequeue(), Some(4));
     }
 }
 
+
+// --- CircularBuffer.Enqueue.cs ---
+namespace CircularBuffer
+{
+    public partial class CircularBuffer<T>
+    where T : Clone, Default
+
+    {
+        /// <summary>
+        /// Enqueue.
+        /// </summary>
+        
+        /// <param name="item">T.</param>
+        
+        
+        /// <returns>().</returns>
+        
+        
+        /// <remarks>
+        /// Preconditions:
+        
+        /// - size < capacity
+        
+        /// </remarks>
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - size == old.size + 1
+        
+        /// </remarks>
+        
+        
+        /// <exception cref="Exception">Thrown when an error occurs (from Result type).</exception>
+        
+        public () Enqueue(T item)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
 }
+
+// ========== Generated xUnit tests ==========
+
+public class CircularBufferenqueue_dequeue_fifoTests
+{
+    [Fact]
+    public void enqueue_dequeue_fifo_Test()
+    {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);
+        Assert.AreEqual(buf.dequeue(), Some(1));Assert.AreEqual(buf.dequeue(), Some(2));
+    }
+}
+
+public class CircularBufferfull_buffer_prevents_enqueueTests
+{
+    [Fact]
+    public void full_buffer_prevents_enqueue_Test()
+    {
+        let mut buf = CircularBuffer::new(1);
+        buf.enqueue(42);
+        Assert.IsTrue(buf.is_full());Assert.IsTrue(buf.enqueue(43).is_err());
+    }
+}
+
+public class CircularBufferempty_buffer_returns_noneTests
+{
+    [Fact]
+    public void empty_buffer_returns_none_Test()
+    {
+        let buf = CircularBuffer::<i32>::new(5);
+        
+        Assert.AreEqual(buf.dequeue(), None);
+    }
+}
+
+public class CircularBufferwrap_around_worksTests
+{
+    [Fact]
+    public void wrap_around_works_Test()
+    {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
+        Assert.AreEqual(buf.dequeue(), Some(2));Assert.AreEqual(buf.dequeue(), Some(3));Assert.AreEqual(buf.dequeue(), Some(4));
+    }
+}
+
+
+// --- CircularBuffer.Dequeue.cs ---
+namespace CircularBuffer
+{
+    public partial class CircularBuffer<T>
+    where T : Clone, Default
+
+    {
+        /// <summary>
+        /// Dequeue.
+        /// </summary>
+        
+        
+        /// <returns>T?.</returns>
+        
+        
+        /// <remarks>
+        /// Preconditions:
+        
+        /// - size > 0
+        
+        /// </remarks>
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - size == old.size - 1
+        
+        /// </remarks>
+        
+        
+        public T? Dequeue()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class CircularBufferenqueue_dequeue_fifoTests
+{
+    [Fact]
+    public void enqueue_dequeue_fifo_Test()
+    {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);
+        Assert.AreEqual(buf.dequeue(), Some(1));Assert.AreEqual(buf.dequeue(), Some(2));
+    }
+}
+
+public class CircularBufferfull_buffer_prevents_enqueueTests
+{
+    [Fact]
+    public void full_buffer_prevents_enqueue_Test()
+    {
+        let mut buf = CircularBuffer::new(1);
+        buf.enqueue(42);
+        Assert.IsTrue(buf.is_full());Assert.IsTrue(buf.enqueue(43).is_err());
+    }
+}
+
+public class CircularBufferempty_buffer_returns_noneTests
+{
+    [Fact]
+    public void empty_buffer_returns_none_Test()
+    {
+        let buf = CircularBuffer::<i32>::new(5);
+        
+        Assert.AreEqual(buf.dequeue(), None);
+    }
+}
+
+public class CircularBufferwrap_around_worksTests
+{
+    [Fact]
+    public void wrap_around_works_Test()
+    {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
+        Assert.AreEqual(buf.dequeue(), Some(2));Assert.AreEqual(buf.dequeue(), Some(3));Assert.AreEqual(buf.dequeue(), Some(4));
+    }
+}
+
+
+// --- CircularBuffer.IsFull.cs ---
+namespace CircularBuffer
+{
+    public partial class CircularBuffer<T>
+    where T : Clone, Default
+
+    {
+        /// <summary>
+        /// IsFull.
+        /// </summary>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool IsFull()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class CircularBufferenqueue_dequeue_fifoTests
+{
+    [Fact]
+    public void enqueue_dequeue_fifo_Test()
+    {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);
+        Assert.AreEqual(buf.dequeue(), Some(1));Assert.AreEqual(buf.dequeue(), Some(2));
+    }
+}
+
+public class CircularBufferfull_buffer_prevents_enqueueTests
+{
+    [Fact]
+    public void full_buffer_prevents_enqueue_Test()
+    {
+        let mut buf = CircularBuffer::new(1);
+        buf.enqueue(42);
+        Assert.IsTrue(buf.is_full());Assert.IsTrue(buf.enqueue(43).is_err());
+    }
+}
+
+public class CircularBufferempty_buffer_returns_noneTests
+{
+    [Fact]
+    public void empty_buffer_returns_none_Test()
+    {
+        let buf = CircularBuffer::<i32>::new(5);
+        
+        Assert.AreEqual(buf.dequeue(), None);
+    }
+}
+
+public class CircularBufferwrap_around_worksTests
+{
+    [Fact]
+    public void wrap_around_works_Test()
+    {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
+        Assert.AreEqual(buf.dequeue(), Some(2));Assert.AreEqual(buf.dequeue(), Some(3));Assert.AreEqual(buf.dequeue(), Some(4));
+    }
+}
+
+
+// --- CircularBuffer.IsEmpty.cs ---
+namespace CircularBuffer
+{
+    public partial class CircularBuffer<T>
+    where T : Clone, Default
+
+    {
+        /// <summary>
+        /// IsEmpty.
+        /// </summary>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool IsEmpty()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class CircularBufferenqueue_dequeue_fifoTests
+{
+    [Fact]
+    public void enqueue_dequeue_fifo_Test()
+    {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);
+        Assert.AreEqual(buf.dequeue(), Some(1));Assert.AreEqual(buf.dequeue(), Some(2));
+    }
+}
+
+public class CircularBufferfull_buffer_prevents_enqueueTests
+{
+    [Fact]
+    public void full_buffer_prevents_enqueue_Test()
+    {
+        let mut buf = CircularBuffer::new(1);
+        buf.enqueue(42);
+        Assert.IsTrue(buf.is_full());Assert.IsTrue(buf.enqueue(43).is_err());
+    }
+}
+
+public class CircularBufferempty_buffer_returns_noneTests
+{
+    [Fact]
+    public void empty_buffer_returns_none_Test()
+    {
+        let buf = CircularBuffer::<i32>::new(5);
+        
+        Assert.AreEqual(buf.dequeue(), None);
+    }
+}
+
+public class CircularBufferwrap_around_worksTests
+{
+    [Fact]
+    public void wrap_around_works_Test()
+    {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
+        Assert.AreEqual(buf.dequeue(), Some(2));Assert.AreEqual(buf.dequeue(), Some(3));Assert.AreEqual(buf.dequeue(), Some(4));
+    }
+}
+
+
+// --- CircularBuffer.Len.cs ---
+namespace CircularBuffer
+{
+    public partial class CircularBuffer<T>
+    where T : Clone, Default
+
+    {
+        /// <summary>
+        /// Len.
+        /// </summary>
+        
+        
+        /// <returns>int.</returns>
+        
+        
+        
+        
+        public int Len()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class CircularBufferenqueue_dequeue_fifoTests
+{
+    [Fact]
+    public void enqueue_dequeue_fifo_Test()
+    {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);
+        Assert.AreEqual(buf.dequeue(), Some(1));Assert.AreEqual(buf.dequeue(), Some(2));
+    }
+}
+
+public class CircularBufferfull_buffer_prevents_enqueueTests
+{
+    [Fact]
+    public void full_buffer_prevents_enqueue_Test()
+    {
+        let mut buf = CircularBuffer::new(1);
+        buf.enqueue(42);
+        Assert.IsTrue(buf.is_full());Assert.IsTrue(buf.enqueue(43).is_err());
+    }
+}
+
+public class CircularBufferempty_buffer_returns_noneTests
+{
+    [Fact]
+    public void empty_buffer_returns_none_Test()
+    {
+        let buf = CircularBuffer::<i32>::new(5);
+        
+        Assert.AreEqual(buf.dequeue(), None);
+    }
+}
+
+public class CircularBufferwrap_around_worksTests
+{
+    [Fact]
+    public void wrap_around_works_Test()
+    {
+        let mut buf = CircularBuffer::new(3);
+        buf.enqueue(1);buf.enqueue(2);buf.dequeue();buf.enqueue(3);buf.enqueue(4);
+        Assert.AreEqual(buf.dequeue(), Some(2));Assert.AreEqual(buf.dequeue(), Some(3));Assert.AreEqual(buf.dequeue(), Some(4));
+    }
+}
+

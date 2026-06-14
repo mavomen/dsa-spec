@@ -1,3 +1,4 @@
+// --- BFSMethods.cs ---
 /// <summary>
 /// BFS
 
@@ -28,20 +29,37 @@ public static class BFSMethods
 {
     
     /// <summary>
-    /// Bfs
-    /// 
-    /// Preconditions:
-    /// - start vertex exists in graph
-    /// 
-    /// 
-    /// Postconditions:
-    /// - result contains all reachable vertices from start
-    /// - result has no duplicates
-    /// - order follows breadth-first traversal
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Bfs.
     /// </summary>
+    
+    /// <param name="graph">&Graph<T>.</param>
+    
+    /// <param name="start">T.</param>
+    
+    
+    /// <returns>List<T>.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - start vertex exists in graph
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - result contains all reachable vertices from start
+    
+    /// - result has no duplicates
+    
+    /// - order follows breadth-first traversal
+    
+    /// </remarks>
+    
+    
     public static List<T> Bfs(&Graph<T> graph, T start)
     {
         

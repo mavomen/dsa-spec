@@ -27,17 +27,23 @@ use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
 
 impl Backend for MyBackend {
-    fn generate(&self, spec: &Spec) -> Result<String, BackendError> {
+    fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
         // 1. Build a Tera context from the AST
-        // 2. Render the template
-        // 3. Optionally pipe through a code formatter
+        // 2. Render the class template (struct/class definition)
+        // 3. Render one method template per method (with inline tests)
+        // 4. Optionally pipe through a code formatter
+        // Returns Vec<(filename, source_code)> pairs
     }
 }
 ```
 
 ### 2. Create a Tera template
 
-Place it in `templates/<language>.<ext>.tera`. The template receives the context built by your backend. Use the existing templates (`rust.rs.tera`, `python.py.tera`, etc.) as reference.
+Place templates in `templates/<language>/` — you need two templates:
+- `class.<ext>.tera` — generates the struct/class definition (fields, constructor)
+- `method.<ext>.tera` — generates one method with inline test assertions
+
+For specs without structs (function-only like quicksort), place a monolithic fallback at `templates/<language>.<ext>.tera`. Use the existing templates as reference.
 
 ### 3. Register the module
 

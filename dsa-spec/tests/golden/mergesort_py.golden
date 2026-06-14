@@ -1,3 +1,4 @@
+// --- MergesortMethods.py ---
 """
 Mergesort
 
@@ -17,14 +18,25 @@ import pytest
 
 
 def mergesort(arr: List[T]) -> None:
-    """
+    """mergesort.
     
+
+    Args:
+    
+        arr: List[T]
+    
+    
+    
+
     Preconditions:
-    - arr is valid slice
+    
+        - arr is valid slice
     
     
+
     Postconditions:
-    - arr is sorted ascending
+    
+        - arr is sorted ascending
     
     
     """
@@ -33,16 +45,35 @@ def mergesort(arr: List[T]) -> None:
     raise NotImplementedError
 
 def merge(arr: List[T], left: int, mid: int, right: int) -> None:
-    """
+    """merge.
     
+
+    Args:
+    
+        arr: List[T]
+    
+        left: int
+    
+        mid: int
+    
+        right: int
+    
+    
+    
+
     Preconditions:
-    - left <= mid <= right
-    - arr[left..mid] is sorted
-    - arr[mid..right] is sorted
+    
+        - left <= mid <= right
+    
+        - arr[left..mid] is sorted
+    
+        - arr[mid..right] is sorted
     
     
+
     Postconditions:
-    - arr[left..right] is sorted
+    
+        - arr[left..right] is sorted
     
     
     """

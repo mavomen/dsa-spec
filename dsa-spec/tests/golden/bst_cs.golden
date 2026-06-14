@@ -1,3 +1,4 @@
+// --- BSTNode.cs ---
 /// <summary>
 /// BinarySearchTree
 
@@ -22,238 +23,348 @@ using System.Linq;
 
 namespace BinarySearchTree
 {
-
-
-public class BSTNode<T>
+    public partial class BSTNode<T>
     where T : Ord, Clone
 
-{
-    
-    public T Value { get; set; }
-    
-    public BSTNode<T>? Left { get; set; }
-    
-    public BSTNode<T>? Right { get; set; }
-    
-
-    
-    /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - root is None
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public Self New()
     {
         
-        // TODO: Implement New
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Insert
-    /// 
-    /// 
-    /// Postconditions:
-    /// - tree contains value
-    /// - BST invariant maintained
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool Insert(T value)
-    {
+        public T Value { get; set; }
         
-        // TODO: Implement Insert
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Contains
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool Contains(T value)
-    {
+        public BSTNode<T>? Left { get; set; }
         
-        // TODO: Implement Contains
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Inorder
-    /// 
-    /// 
-    /// Postconditions:
-    /// - result is sorted ascending
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public List<T> Inorder()
-    {
+        public BSTNode<T>? Right { get; set; }
         
-        // TODO: Implement Inorder
-        throw new NotImplementedException();
     }
-    
-    /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool IsEmpty()
-    {
-        
-        // TODO: Implement IsEmpty
-        throw new NotImplementedException();
-    }
-    
 }
 
-public class BinarySearchTree<T>
+// --- BSTNode.New.cs ---
+namespace BinarySearchTree
+{
+    public partial class BSTNode<T>
     where T : Ord, Clone
 
-{
-    
-    public BSTNode<T>? Root { get; set; }
-    
-
-    
-    /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - root is None
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public Self New()
     {
+        /// <summary>
+        /// New.
+        /// </summary>
         
-        // TODO: Implement New
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Insert
-    /// 
-    /// 
-    /// Postconditions:
-    /// - tree contains value
-    /// - BST invariant maintained
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool Insert(T value)
-    {
         
-        // TODO: Implement Insert
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Contains
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool Contains(T value)
-    {
+        /// <returns>Self.</returns>
         
-        // TODO: Implement Contains
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Inorder
-    /// 
-    /// 
-    /// Postconditions:
-    /// - result is sorted ascending
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public List<T> Inorder()
-    {
         
-        // TODO: Implement Inorder
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
-    /// </summary>
-    public bool IsEmpty()
-    {
         
-        // TODO: Implement IsEmpty
-        throw new NotImplementedException();
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - root is None
+        
+        /// </remarks>
+        
+        
+        public Self New()
+        {
+            
+            throw new NotImplementedException();
+        }
     }
-    
 }
-
-
 
 // ========== Generated xUnit tests ==========
 
-public class insert_and_containsTests
+public class BSTNodeinsert_and_containsTests
 {
     [Fact]
     public void insert_and_contains_Test()
     {
-        // Setup
         let mut bst = BinarySearchTree::new();
-        // Actions
         bst.insert(5);bst.insert(3);bst.insert(7);
-        // Assertions
         Assert.IsTrue(bst.contains(5));Assert.IsTrue(bst.contains(3));Assert.IsTrue(bst.contains(7));Assert.IsTrue(!bst.contains(10));
     }
 }
 
-public class inorder_returns_sortedTests
+public class BSTNodeinorder_returns_sortedTests
 {
     [Fact]
     public void inorder_returns_sorted_Test()
     {
-        // Setup
         let mut bst = BinarySearchTree::new();
-        // Actions
         bst.insert(5);bst.insert(3);bst.insert(7);bst.insert(1);bst.insert(9);
-        // Assertions
         Assert.AreEqual(bst.inorder(), vec![1, 3, 5, 7, 9]);
     }
 }
 
-public class duplicate_insert_returns_falseTests
+public class BSTNodeduplicate_insert_returns_falseTests
 {
     [Fact]
     public void duplicate_insert_returns_false_Test()
     {
-        // Setup
         let mut bst = BinarySearchTree::new();
-        // Actions
         bst.insert(10);
-        // Assertions
         Assert.AreEqual(bst.insert(10), false);
     }
 }
 
+
+// --- BSTNode.Insert.cs ---
+namespace BinarySearchTree
+{
+    public partial class BSTNode<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// Insert.
+        /// </summary>
+        
+        /// <param name="value">T.</param>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - tree contains value
+        
+        /// - BST invariant maintained
+        
+        /// </remarks>
+        
+        
+        public bool Insert(T value)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
 }
+
+// ========== Generated xUnit tests ==========
+
+public class BSTNodeinsert_and_containsTests
+{
+    [Fact]
+    public void insert_and_contains_Test()
+    {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);
+        Assert.IsTrue(bst.contains(5));Assert.IsTrue(bst.contains(3));Assert.IsTrue(bst.contains(7));Assert.IsTrue(!bst.contains(10));
+    }
+}
+
+public class BSTNodeinorder_returns_sortedTests
+{
+    [Fact]
+    public void inorder_returns_sorted_Test()
+    {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);bst.insert(1);bst.insert(9);
+        Assert.AreEqual(bst.inorder(), vec![1, 3, 5, 7, 9]);
+    }
+}
+
+public class BSTNodeduplicate_insert_returns_falseTests
+{
+    [Fact]
+    public void duplicate_insert_returns_false_Test()
+    {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(10);
+        Assert.AreEqual(bst.insert(10), false);
+    }
+}
+
+
+// --- BSTNode.Contains.cs ---
+namespace BinarySearchTree
+{
+    public partial class BSTNode<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// Contains.
+        /// </summary>
+        
+        /// <param name="value">T.</param>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool Contains(T value)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class BSTNodeinsert_and_containsTests
+{
+    [Fact]
+    public void insert_and_contains_Test()
+    {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);
+        Assert.IsTrue(bst.contains(5));Assert.IsTrue(bst.contains(3));Assert.IsTrue(bst.contains(7));Assert.IsTrue(!bst.contains(10));
+    }
+}
+
+public class BSTNodeinorder_returns_sortedTests
+{
+    [Fact]
+    public void inorder_returns_sorted_Test()
+    {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);bst.insert(1);bst.insert(9);
+        Assert.AreEqual(bst.inorder(), vec![1, 3, 5, 7, 9]);
+    }
+}
+
+public class BSTNodeduplicate_insert_returns_falseTests
+{
+    [Fact]
+    public void duplicate_insert_returns_false_Test()
+    {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(10);
+        Assert.AreEqual(bst.insert(10), false);
+    }
+}
+
+
+// --- BSTNode.Inorder.cs ---
+namespace BinarySearchTree
+{
+    public partial class BSTNode<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// Inorder.
+        /// </summary>
+        
+        
+        /// <returns>List<T>.</returns>
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - result is sorted ascending
+        
+        /// </remarks>
+        
+        
+        public List<T> Inorder()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class BSTNodeinsert_and_containsTests
+{
+    [Fact]
+    public void insert_and_contains_Test()
+    {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);
+        Assert.IsTrue(bst.contains(5));Assert.IsTrue(bst.contains(3));Assert.IsTrue(bst.contains(7));Assert.IsTrue(!bst.contains(10));
+    }
+}
+
+public class BSTNodeinorder_returns_sortedTests
+{
+    [Fact]
+    public void inorder_returns_sorted_Test()
+    {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);bst.insert(1);bst.insert(9);
+        Assert.AreEqual(bst.inorder(), vec![1, 3, 5, 7, 9]);
+    }
+}
+
+public class BSTNodeduplicate_insert_returns_falseTests
+{
+    [Fact]
+    public void duplicate_insert_returns_false_Test()
+    {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(10);
+        Assert.AreEqual(bst.insert(10), false);
+    }
+}
+
+
+// --- BSTNode.IsEmpty.cs ---
+namespace BinarySearchTree
+{
+    public partial class BSTNode<T>
+    where T : Ord, Clone
+
+    {
+        /// <summary>
+        /// IsEmpty.
+        /// </summary>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool IsEmpty()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class BSTNodeinsert_and_containsTests
+{
+    [Fact]
+    public void insert_and_contains_Test()
+    {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);
+        Assert.IsTrue(bst.contains(5));Assert.IsTrue(bst.contains(3));Assert.IsTrue(bst.contains(7));Assert.IsTrue(!bst.contains(10));
+    }
+}
+
+public class BSTNodeinorder_returns_sortedTests
+{
+    [Fact]
+    public void inorder_returns_sorted_Test()
+    {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);bst.insert(1);bst.insert(9);
+        Assert.AreEqual(bst.inorder(), vec![1, 3, 5, 7, 9]);
+    }
+}
+
+public class BSTNodeduplicate_insert_returns_falseTests
+{
+    [Fact]
+    public void duplicate_insert_returns_false_Test()
+    {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(10);
+        Assert.AreEqual(bst.insert(10), false);
+    }
+}
+

@@ -1,0 +1,79 @@
+// --- FloydWarshallMethods.py ---
+"""
+FloydWarshall
+
+Time complexity: O(V^3)
+
+
+Space complexity: O(V^2)
+
+
+"""
+
+from dataclasses import dataclass
+from typing import TypeVar, Generic, Optional, List, Dict
+import pytest
+
+
+
+
+def floyd_warshall(graph: List[List[Optional[int]]]) -> List[List[Optional[int]]]:
+    """floyd_warshall.
+    
+
+    Args:
+    
+        graph: List[List[Optional[int]]]
+    
+    
+
+    Returns:
+        List[List[Optional[int]]]
+    
+    
+
+    Preconditions:
+    
+        - graph is square (n x n)
+    
+        - graph[i][i] == Some(0) for all i
+    
+    
+
+    Postconditions:
+    
+        - result is square (n x n)
+    
+        - result[i][i] == Some(0) for all i
+    
+    
+    """
+    
+    # TODO: Implement floyd_warshall
+    raise NotImplementedError
+
+
+
+# ========== Generated pytest tests ==========
+
+def test_three_vertex_graph():
+    """Test: three_vertex_graph"""
+    let n = 3;
+    let mut graph = vec![vec![None; n]; n]graph[0][0] = Some(0); graph[0][1] = Some(3); graph[0][2] = Some(8)graph[1][0] = Some(3); graph[1][1] = Some(0); graph[1][2] = Some(1)graph[2][0] = Some(8); graph[2][1] = Some(1); graph[2][2] = Some(0)let dist = floyd_warshall(&graph)
+    assert dist[0][1] == Some(3)assert dist[0][2] == Some(4)assert dist[1][2] == Some(1)assert dist[2][0] == Some(4)assert dist[0][0] == Some(0)
+
+def test_single_vertex():
+    """Test: single_vertex"""
+    let n = 1;
+    let graph = vec![vec![Some(0)]]let dist = floyd_warshall(&graph)
+    assert dist[0][0] == Some(0)
+
+def test_disconnected_vertices():
+    """Test: disconnected_vertices"""
+    let n = 4;
+    let mut graph = vec![vec![None; n]; n]graph[0][0] = Some(0); graph[0][1] = Some(2)graph[1][0] = Some(2); graph[1][1] = Some(0)graph[2][2] = Some(0)graph[3][3] = Some(0)let dist = floyd_warshall(&graph)
+    assert dist[0][1] == Some(2)assert dist[0][2].is_none()assert dist[2][3].is_none()
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

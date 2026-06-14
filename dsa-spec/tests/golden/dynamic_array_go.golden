@@ -1,57 +1,30 @@
+// --- DynamicArray.go ---
 // DynamicArray
-
 // Time complexity: O(1) amortized push, O(n) insert/remove
-
 
 // Space complexity: O(n)
 
-
 // Invariants:
-
 // - length >= 0
-
 // - capacity >= length
-
-
 
 package dynamicarray
 
-import "testing"
-
-
-
-
-
-// DynamicArrayInterface defines the contract for DynamicArray
-type DynamicArrayInterface[T any] interface {
-
-	
-	New() Self
-	
-	Push(item T) 
-	
-	Pop() *T
-	
-	Get(index int) *T
-	
-	Len() int
-	
-	IsEmpty() bool
-	
-}
-
-
-// DynamicArray represents a DynamicArray
 type DynamicArray[T any] struct {
-	
-	data []T
-	
-	len int
-	
+	Data []T
+
+	Len int
 }
 
+func NewDynamicArray[T any]() *DynamicArray[T] {
+	return &DynamicArray[T]{}
+}
 
-// New
+// --- DynamicArray_new.go ---
+// DynamicArray.New
+
+ // @returns Self
+
 
 
 // Postconditions:
@@ -59,14 +32,53 @@ type DynamicArray[T any] struct {
  // - capacity >= 0
 
 
+package dynamicarray
+
 
 func (s *DynamicArray[T]) New() Self {
-	
-	// TODO: Implement New
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
 
-// Push
+// ========== Generated tests ==========
+
+func TestDynamicArrayNewpush_increases_length(t *testing.T) {
+    let mut arr = DynamicArray::new();
+    arr.push(1)arr.push(2)
+    if arr.len() != 2 { t.Errorf("got %v, want %v", arr.len(), 2) }if !(!arr.is_empty()) { t.Errorf("assertion failed: !arr.is_empty()") }
+}
+
+func TestDynamicArrayNewpop_returns_last_element(t *testing.T) {
+    let mut arr = DynamicArray::new();
+    arr.push(10)arr.push(20)
+    if arr.pop() != Some(20) { t.Errorf("got %v, want %v", arr.pop(), Some(20)) }if arr.len() != 1 { t.Errorf("got %v, want %v", arr.len(), 1) }
+}
+
+func TestDynamicArrayNewpop_empty_returns_none(t *testing.T) {
+    let arr = DynamicArray::<i32>::new();
+    
+    if arr.pop() != None { t.Errorf("got %v, want %v", arr.pop(), None) }
+}
+
+func TestDynamicArrayNewget_valid_index(t *testing.T) {
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    if arr.get(0) != Some(&5) { t.Errorf("got %v, want %v", arr.get(0), Some(&5)) }
+}
+
+func TestDynamicArrayNewget_out_of_bounds(t *testing.T) {
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    if arr.get(1) != None { t.Errorf("got %v, want %v", arr.get(1), None) }
+}
+
+
+// --- DynamicArray_push.go ---
+// DynamicArray.Push
+ // @param item - T
+
+
 
 
 // Postconditions:
@@ -74,101 +86,257 @@ func (s *DynamicArray[T]) New() Self {
  // - last element == item
 
 
+package dynamicarray
+
 
 func (s *DynamicArray[T]) Push(item T)  {
-	
-	// TODO: Implement Push
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
 
-// Pop
+// ========== Generated tests ==========
+
+func TestDynamicArrayPushpush_increases_length(t *testing.T) {
+    let mut arr = DynamicArray::new();
+    arr.push(1)arr.push(2)
+    if arr.len() != 2 { t.Errorf("got %v, want %v", arr.len(), 2) }if !(!arr.is_empty()) { t.Errorf("assertion failed: !arr.is_empty()") }
+}
+
+func TestDynamicArrayPushpop_returns_last_element(t *testing.T) {
+    let mut arr = DynamicArray::new();
+    arr.push(10)arr.push(20)
+    if arr.pop() != Some(20) { t.Errorf("got %v, want %v", arr.pop(), Some(20)) }if arr.len() != 1 { t.Errorf("got %v, want %v", arr.len(), 1) }
+}
+
+func TestDynamicArrayPushpop_empty_returns_none(t *testing.T) {
+    let arr = DynamicArray::<i32>::new();
+    
+    if arr.pop() != None { t.Errorf("got %v, want %v", arr.pop(), None) }
+}
+
+func TestDynamicArrayPushget_valid_index(t *testing.T) {
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    if arr.get(0) != Some(&5) { t.Errorf("got %v, want %v", arr.get(0), Some(&5)) }
+}
+
+func TestDynamicArrayPushget_out_of_bounds(t *testing.T) {
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    if arr.get(1) != None { t.Errorf("got %v, want %v", arr.get(1), None) }
+}
+
+
+// --- DynamicArray_pop.go ---
+// DynamicArray.Pop
+
+ // @returns *T
+
 
 // Preconditions:
  // - length > 0
-
 
 
 // Postconditions:
  // - length == old.length - 1
 
 
+package dynamicarray
+
 
 func (s *DynamicArray[T]) Pop() *T {
-	
-	// TODO: Implement Pop
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
 
-// Get
+// ========== Generated tests ==========
+
+func TestDynamicArrayPoppush_increases_length(t *testing.T) {
+    let mut arr = DynamicArray::new();
+    arr.push(1)arr.push(2)
+    if arr.len() != 2 { t.Errorf("got %v, want %v", arr.len(), 2) }if !(!arr.is_empty()) { t.Errorf("assertion failed: !arr.is_empty()") }
+}
+
+func TestDynamicArrayPoppop_returns_last_element(t *testing.T) {
+    let mut arr = DynamicArray::new();
+    arr.push(10)arr.push(20)
+    if arr.pop() != Some(20) { t.Errorf("got %v, want %v", arr.pop(), Some(20)) }if arr.len() != 1 { t.Errorf("got %v, want %v", arr.len(), 1) }
+}
+
+func TestDynamicArrayPoppop_empty_returns_none(t *testing.T) {
+    let arr = DynamicArray::<i32>::new();
+    
+    if arr.pop() != None { t.Errorf("got %v, want %v", arr.pop(), None) }
+}
+
+func TestDynamicArrayPopget_valid_index(t *testing.T) {
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    if arr.get(0) != Some(&5) { t.Errorf("got %v, want %v", arr.get(0), Some(&5)) }
+}
+
+func TestDynamicArrayPopget_out_of_bounds(t *testing.T) {
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    if arr.get(1) != None { t.Errorf("got %v, want %v", arr.get(1), None) }
+}
+
+
+// --- DynamicArray_get.go ---
+// DynamicArray.Get
+ // @param index - int
+
+ // @returns *T
+
 
 // Preconditions:
  // - index < length
 
 
 
+package dynamicarray
+
 
 func (s *DynamicArray[T]) Get(index int) *T {
-	
-	// TODO: Implement Get
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
 
-// Len
+// ========== Generated tests ==========
+
+func TestDynamicArrayGetpush_increases_length(t *testing.T) {
+    let mut arr = DynamicArray::new();
+    arr.push(1)arr.push(2)
+    if arr.len() != 2 { t.Errorf("got %v, want %v", arr.len(), 2) }if !(!arr.is_empty()) { t.Errorf("assertion failed: !arr.is_empty()") }
+}
+
+func TestDynamicArrayGetpop_returns_last_element(t *testing.T) {
+    let mut arr = DynamicArray::new();
+    arr.push(10)arr.push(20)
+    if arr.pop() != Some(20) { t.Errorf("got %v, want %v", arr.pop(), Some(20)) }if arr.len() != 1 { t.Errorf("got %v, want %v", arr.len(), 1) }
+}
+
+func TestDynamicArrayGetpop_empty_returns_none(t *testing.T) {
+    let arr = DynamicArray::<i32>::new();
+    
+    if arr.pop() != None { t.Errorf("got %v, want %v", arr.pop(), None) }
+}
+
+func TestDynamicArrayGetget_valid_index(t *testing.T) {
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    if arr.get(0) != Some(&5) { t.Errorf("got %v, want %v", arr.get(0), Some(&5)) }
+}
+
+func TestDynamicArrayGetget_out_of_bounds(t *testing.T) {
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    if arr.get(1) != None { t.Errorf("got %v, want %v", arr.get(1), None) }
+}
+
+
+// --- DynamicArray_len.go ---
+// DynamicArray.Len
+
+ // @returns int
+
 
 
 // Postconditions:
  // - result >= 0
 
 
+package dynamicarray
+
 
 func (s *DynamicArray[T]) Len() int {
-	
-	// TODO: Implement Len
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
-
-// IsEmpty
-
-
-
-func (s *DynamicArray[T]) IsEmpty() bool {
-	
-	// TODO: Implement IsEmpty
-	panic("not implemented")
-}
-
-
-
 
 // ========== Generated tests ==========
 
-func Testpush_increases_length(t *testing.T) {
-	let mut arr = DynamicArray::new();
-	arr.push(1)arr.push(2)
-	if arr.len() != 2 { t.Errorf("got %v, want %v", arr.len(), 2) }if !(!arr.is_empty()) { t.Errorf("assertion failed: !arr.is_empty()") }
+func TestDynamicArrayLenpush_increases_length(t *testing.T) {
+    let mut arr = DynamicArray::new();
+    arr.push(1)arr.push(2)
+    if arr.len() != 2 { t.Errorf("got %v, want %v", arr.len(), 2) }if !(!arr.is_empty()) { t.Errorf("assertion failed: !arr.is_empty()") }
 }
 
-func Testpop_returns_last_element(t *testing.T) {
-	let mut arr = DynamicArray::new();
-	arr.push(10)arr.push(20)
-	if arr.pop() != Some(20) { t.Errorf("got %v, want %v", arr.pop(), Some(20)) }if arr.len() != 1 { t.Errorf("got %v, want %v", arr.len(), 1) }
+func TestDynamicArrayLenpop_returns_last_element(t *testing.T) {
+    let mut arr = DynamicArray::new();
+    arr.push(10)arr.push(20)
+    if arr.pop() != Some(20) { t.Errorf("got %v, want %v", arr.pop(), Some(20)) }if arr.len() != 1 { t.Errorf("got %v, want %v", arr.len(), 1) }
 }
 
-func Testpop_empty_returns_none(t *testing.T) {
-	let arr = DynamicArray::<i32>::new();
-	
-	if arr.pop() != None { t.Errorf("got %v, want %v", arr.pop(), None) }
+func TestDynamicArrayLenpop_empty_returns_none(t *testing.T) {
+    let arr = DynamicArray::<i32>::new();
+    
+    if arr.pop() != None { t.Errorf("got %v, want %v", arr.pop(), None) }
 }
 
-func Testget_valid_index(t *testing.T) {
-	let mut arr = DynamicArray::new(); arr.push(5);
-	
-	if arr.get(0) != Some(&5) { t.Errorf("got %v, want %v", arr.get(0), Some(&5)) }
+func TestDynamicArrayLenget_valid_index(t *testing.T) {
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    if arr.get(0) != Some(&5) { t.Errorf("got %v, want %v", arr.get(0), Some(&5)) }
 }
 
-func Testget_out_of_bounds(t *testing.T) {
-	let mut arr = DynamicArray::new(); arr.push(5);
-	
-	if arr.get(1) != None { t.Errorf("got %v, want %v", arr.get(1), None) }
+func TestDynamicArrayLenget_out_of_bounds(t *testing.T) {
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    if arr.get(1) != None { t.Errorf("got %v, want %v", arr.get(1), None) }
+}
+
+
+// --- DynamicArray_is_empty.go ---
+// DynamicArray.IsEmpty
+
+ // @returns bool
+
+
+
+
+package dynamicarray
+
+
+func (s *DynamicArray[T]) IsEmpty() bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestDynamicArrayIsEmptypush_increases_length(t *testing.T) {
+    let mut arr = DynamicArray::new();
+    arr.push(1)arr.push(2)
+    if arr.len() != 2 { t.Errorf("got %v, want %v", arr.len(), 2) }if !(!arr.is_empty()) { t.Errorf("assertion failed: !arr.is_empty()") }
+}
+
+func TestDynamicArrayIsEmptypop_returns_last_element(t *testing.T) {
+    let mut arr = DynamicArray::new();
+    arr.push(10)arr.push(20)
+    if arr.pop() != Some(20) { t.Errorf("got %v, want %v", arr.pop(), Some(20)) }if arr.len() != 1 { t.Errorf("got %v, want %v", arr.len(), 1) }
+}
+
+func TestDynamicArrayIsEmptypop_empty_returns_none(t *testing.T) {
+    let arr = DynamicArray::<i32>::new();
+    
+    if arr.pop() != None { t.Errorf("got %v, want %v", arr.pop(), None) }
+}
+
+func TestDynamicArrayIsEmptyget_valid_index(t *testing.T) {
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    if arr.get(0) != Some(&5) { t.Errorf("got %v, want %v", arr.get(0), Some(&5)) }
+}
+
+func TestDynamicArrayIsEmptyget_out_of_bounds(t *testing.T) {
+    let mut arr = DynamicArray::new(); arr.push(5);
+    
+    if arr.get(1) != None { t.Errorf("got %v, want %v", arr.get(1), None) }
 }
 

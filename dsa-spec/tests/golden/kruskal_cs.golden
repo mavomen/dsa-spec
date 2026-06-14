@@ -1,0 +1,132 @@
+// --- KruskalMethods.cs ---
+/// <summary>
+/// Kruskal
+
+/// Time complexity: O(E log E)
+
+
+/// Space complexity: O(V + E)
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Kruskal
+{
+
+
+public static class KruskalMethods
+{
+    
+    /// <summary>
+    /// Kruskal.
+    /// </summary>
+    
+    /// <param name="vertices">int.</param>
+    
+    /// <param name="edges">List<(usize, usize, usize)>.</param>
+    
+    
+    /// <returns>List<(usize, usize, usize)>.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - vertices > 0
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - result contains vertices - 1 edges when graph is connected
+    
+    /// </remarks>
+    
+    
+    public static List<(usize, usize, usize)> Kruskal(int vertices, List<(usize, usize, usize)> edges)
+    {
+        
+        // TODO: Implement Kruskal
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Totalweight.
+    /// </summary>
+    
+    /// <param name="mst">List<(usize, usize, usize)>.</param>
+    
+    
+    /// <returns>int.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - sum of edge weights in MST
+    
+    /// </remarks>
+    
+    
+    public static int TotalWeight(List<(usize, usize, usize)> mst)
+    {
+        
+        // TODO: Implement TotalWeight
+        throw new NotImplementedException();
+    }
+    
+}
+
+
+// ========== Generated xUnit tests ==========
+
+public class simple_graph_mstTests
+{
+    [Fact]
+    public void simple_graph_mst_Test()
+    {
+        // Setup
+        let vertices = 4;
+        // Actions
+        let edges = vec![(0, 1, 10), (0, 2, 6), (0, 3, 5), (1, 3, 15), (2, 3, 4)];let mst = kruskal(vertices, edges);
+        // Assertions
+        Assert.AreEqual(mst.len(), 3);Assert.AreEqual(total_weight(&mst), 19);
+    }
+}
+
+public class single_vertexTests
+{
+    [Fact]
+    public void single_vertex_Test()
+    {
+        // Setup
+        let vertices = 1;
+        // Actions
+        let edges: Vec<(usize, usize, usize)> = vec![];let mst = kruskal(vertices, edges);
+        // Assertions
+        Assert.AreEqual(mst.len(), 0);
+    }
+}
+
+public class disconnected_graphTests
+{
+    [Fact]
+    public void disconnected_graph_Test()
+    {
+        // Setup
+        let vertices = 3;
+        // Actions
+        let edges = vec![(0, 1, 5)];let mst = kruskal(vertices, edges);
+        // Assertions
+        Assert.AreEqual(mst.len(), 1);
+    }
+}
+
+}
