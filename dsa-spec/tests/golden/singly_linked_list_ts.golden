@@ -37,9 +37,14 @@ export class NodeImpl<T extends Clone> implements Node<T> {
 
     
     /**
-     * new
+     * New.
      
      
+     * @returns Self
+     
+     
+     
+     *
      * Postconditions:
       * - head is None
      
@@ -52,9 +57,14 @@ export class NodeImpl<T extends Clone> implements Node<T> {
     }
     
     /**
-     * prepend
+     * Prepend.
+     
+     * @param value - T.
      
      
+     
+     
+     *
      * Postconditions:
       * - head.value == value
       * - list length increased by 1
@@ -68,9 +78,14 @@ export class NodeImpl<T extends Clone> implements Node<T> {
     }
     
     /**
-     * append
+     * Append.
+     
+     * @param value - T.
      
      
+     
+     
+     *
      * Postconditions:
       * - last element == value
      
@@ -83,12 +98,18 @@ export class NodeImpl<T extends Clone> implements Node<T> {
     }
     
     /**
-     * popFront
+     * Popfront.
      
+     
+     * @returns T | null
+     
+     
+     *
      * Preconditions:
       * - !is_empty()
      
      
+     *
      * Postconditions:
       * - head == old.head.next
      
@@ -101,7 +122,11 @@ export class NodeImpl<T extends Clone> implements Node<T> {
     }
     
     /**
-     * isEmpty
+     * Isempty.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -113,7 +138,11 @@ export class NodeImpl<T extends Clone> implements Node<T> {
     }
     
     /**
-     * len
+     * Len.
+     
+     
+     * @returns number
+     
      
      
      
@@ -141,9 +170,14 @@ export class SinglyLinkedListImpl<T extends Clone> implements SinglyLinkedList<T
 
     
     /**
-     * new
+     * New.
      
      
+     * @returns Self
+     
+     
+     
+     *
      * Postconditions:
       * - head is None
      
@@ -156,9 +190,14 @@ export class SinglyLinkedListImpl<T extends Clone> implements SinglyLinkedList<T
     }
     
     /**
-     * prepend
+     * Prepend.
+     
+     * @param value - T.
      
      
+     
+     
+     *
      * Postconditions:
       * - head.value == value
       * - list length increased by 1
@@ -172,9 +211,14 @@ export class SinglyLinkedListImpl<T extends Clone> implements SinglyLinkedList<T
     }
     
     /**
-     * append
+     * Append.
+     
+     * @param value - T.
      
      
+     
+     
+     *
      * Postconditions:
       * - last element == value
      
@@ -187,12 +231,18 @@ export class SinglyLinkedListImpl<T extends Clone> implements SinglyLinkedList<T
     }
     
     /**
-     * popFront
+     * Popfront.
      
+     
+     * @returns T | null
+     
+     
+     *
      * Preconditions:
       * - !is_empty()
      
      
+     *
      * Postconditions:
       * - head == old.head.next
      
@@ -205,7 +255,11 @@ export class SinglyLinkedListImpl<T extends Clone> implements SinglyLinkedList<T
     }
     
     /**
-     * isEmpty
+     * Isempty.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -217,7 +271,11 @@ export class SinglyLinkedListImpl<T extends Clone> implements SinglyLinkedList<T
     }
     
     /**
-     * len
+     * Len.
+     
+     
+     * @returns number
+     
      
      
      

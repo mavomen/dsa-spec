@@ -38,15 +38,22 @@ public class BSTNode<T>
 
     
     /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - root is None
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// New.
     /// </summary>
+    
+    
+    /// <returns>Self.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - root is None
+    
+    /// </remarks>
+    
+    
     public Self New()
     {
         
@@ -55,16 +62,26 @@ public class BSTNode<T>
     }
     
     /// <summary>
-    /// Insert
-    /// 
-    /// 
-    /// Postconditions:
-    /// - tree contains value
-    /// - BST invariant maintained
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Insert.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - tree contains value
+    
+    /// - BST invariant maintained
+    
+    /// </remarks>
+    
+    
     public bool Insert(T value)
     {
         
@@ -73,12 +90,17 @@ public class BSTNode<T>
     }
     
     /// <summary>
-    /// Contains
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Contains.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool Contains(T value)
     {
         
@@ -87,15 +109,22 @@ public class BSTNode<T>
     }
     
     /// <summary>
-    /// Inorder
-    /// 
-    /// 
-    /// Postconditions:
-    /// - result is sorted ascending
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Inorder.
     /// </summary>
+    
+    
+    /// <returns>List<T>.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - result is sorted ascending
+    
+    /// </remarks>
+    
+    
     public List<T> Inorder()
     {
         
@@ -104,12 +133,15 @@ public class BSTNode<T>
     }
     
     /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Isempty.
     /// </summary>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool IsEmpty()
     {
         
@@ -129,15 +161,22 @@ public class BinarySearchTree<T>
 
     
     /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - root is None
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// New.
     /// </summary>
+    
+    
+    /// <returns>Self.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - root is None
+    
+    /// </remarks>
+    
+    
     public Self New()
     {
         
@@ -146,16 +185,26 @@ public class BinarySearchTree<T>
     }
     
     /// <summary>
-    /// Insert
-    /// 
-    /// 
-    /// Postconditions:
-    /// - tree contains value
-    /// - BST invariant maintained
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Insert.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - tree contains value
+    
+    /// - BST invariant maintained
+    
+    /// </remarks>
+    
+    
     public bool Insert(T value)
     {
         
@@ -164,12 +213,17 @@ public class BinarySearchTree<T>
     }
     
     /// <summary>
-    /// Contains
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Contains.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool Contains(T value)
     {
         
@@ -178,15 +232,22 @@ public class BinarySearchTree<T>
     }
     
     /// <summary>
-    /// Inorder
-    /// 
-    /// 
-    /// Postconditions:
-    /// - result is sorted ascending
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Inorder.
     /// </summary>
+    
+    
+    /// <returns>List<T>.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - result is sorted ascending
+    
+    /// </remarks>
+    
+    
     public List<T> Inorder()
     {
         
@@ -195,12 +256,15 @@ public class BinarySearchTree<T>
     }
     
     /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Isempty.
     /// </summary>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool IsEmpty()
     {
         

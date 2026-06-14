@@ -32,16 +32,32 @@ class {{ struct.name }}(Generic[{% for generic in struct.generics %}{{ generic.n
 
     {% for method in methods %}
     def {{ method.name }}(self{% for param in method.params %}, {{ param.name }}: {{ param.python_type }}{% endfor %}){% if method.returns %} -> {{ method.returns }}{% else %} -> None{% endif %}:
-        """
+        """{{ method.name }}.
+        {% if method.params %}
+
+        Args:
+        {% for param in method.params %}
+            {{ param.name }}: {{ param.python_type }}
+        {% endfor %}{% endif %}
+        {% if method.returns %}
+
+        Returns:
+            {{ method.returns }}
+        {% endif %}
         {% if method.preconditions %}
+
         Preconditions:
-        {% for pre in method.preconditions %}- {{ pre }}
+        {% for pre in method.preconditions %}
+            - {{ pre }}
         {% endfor %}{% endif %}
         {% if method.postconditions %}
+
         Postconditions:
-        {% for post in method.postconditions %}- {{ post }}
+        {% for post in method.postconditions %}
+            - {{ post }}
         {% endfor %}{% endif %}
         {% if method.raises_exception %}
+
         Raises:
             Exception: on error (from Result type)
         {% endif %}
@@ -58,16 +74,32 @@ class {{ struct.name }}(Generic[{% for generic in struct.generics %}{{ generic.n
 {# No structs – generate standalone functions #}
 {% for method in methods %}
 def {{ method.name }}({% for param in method.params %}{{ param.name }}: {{ param.python_type }}{% if not loop.last %}, {% endif %}{% endfor %}){% if method.returns %} -> {{ method.returns }}{% else %} -> None{% endif %}:
-    """
+    """{{ method.name }}.
+    {% if method.params %}
+
+    Args:
+    {% for param in method.params %}
+        {{ param.name }}: {{ param.python_type }}
+    {% endfor %}{% endif %}
+    {% if method.returns %}
+
+    Returns:
+        {{ method.returns }}
+    {% endif %}
     {% if method.preconditions %}
+
     Preconditions:
-    {% for pre in method.preconditions %}- {{ pre }}
+    {% for pre in method.preconditions %}
+        - {{ pre }}
     {% endfor %}{% endif %}
     {% if method.postconditions %}
+
     Postconditions:
-    {% for post in method.postconditions %}- {{ post }}
+    {% for post in method.postconditions %}
+        - {{ post }}
     {% endfor %}{% endif %}
     {% if method.raises_exception %}
+
     Raises:
         Exception: on error (from Result type)
     {% endif %}

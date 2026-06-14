@@ -36,16 +36,24 @@ public class DynamicArray<T>
 
     
     /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - length == 0
-    /// - capacity >= 0
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// New.
     /// </summary>
+    
+    
+    /// <returns>Self.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - length == 0
+    
+    /// - capacity >= 0
+    
+    /// </remarks>
+    
+    
     public Self New()
     {
         
@@ -54,16 +62,24 @@ public class DynamicArray<T>
     }
     
     /// <summary>
-    /// Push
-    /// 
-    /// 
-    /// Postconditions:
-    /// - length == old.length + 1
-    /// - last element == item
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Push.
     /// </summary>
+    
+    /// <param name="item">T.</param>
+    
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - length == old.length + 1
+    
+    /// - last element == item
+    
+    /// </remarks>
+    
+    
     public void Push(T item)
     {
         
@@ -72,18 +88,29 @@ public class DynamicArray<T>
     }
     
     /// <summary>
-    /// Pop
-    /// 
-    /// Preconditions:
-    /// - length > 0
-    /// 
-    /// 
-    /// Postconditions:
-    /// - length == old.length - 1
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Pop.
     /// </summary>
+    
+    
+    /// <returns>T?.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - length > 0
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - length == old.length - 1
+    
+    /// </remarks>
+    
+    
     public T? Pop()
     {
         
@@ -92,15 +119,24 @@ public class DynamicArray<T>
     }
     
     /// <summary>
-    /// Get
-    /// 
-    /// Preconditions:
-    /// - index < length
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Get.
     /// </summary>
+    
+    /// <param name="index">int.</param>
+    
+    
+    /// <returns>T?.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - index < length
+    
+    /// </remarks>
+    
+    
+    
     public T? Get(int index)
     {
         
@@ -109,15 +145,22 @@ public class DynamicArray<T>
     }
     
     /// <summary>
-    /// Len
-    /// 
-    /// 
-    /// Postconditions:
-    /// - result >= 0
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Len.
     /// </summary>
+    
+    
+    /// <returns>int.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - result >= 0
+    
+    /// </remarks>
+    
+    
     public int Len()
     {
         
@@ -126,12 +169,15 @@ public class DynamicArray<T>
     }
     
     /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Isempty.
     /// </summary>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool IsEmpty()
     {
         

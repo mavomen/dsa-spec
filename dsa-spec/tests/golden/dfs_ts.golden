@@ -20,12 +20,22 @@
 
 
 /**
- * dfs
+ * Dfs.
  
+ * @param graph - &Graph<T>.
+ 
+ * @param start - T.
+ 
+ 
+ * @returns T[]
+ 
+ 
+ *
  * Preconditions:
   * - start vertex exists in graph
  
  
+ *
  * Postconditions:
   * - result contains all reachable vertices from start
   * - result has no duplicates
@@ -40,7 +50,17 @@ export function dfs(graph: &Graph<T>, start: T): T[] {
 }
 
 /**
- * dfsRecursiveHelper
+ * Dfsrecursivehelper.
+ 
+ * @param graph - &Graph<T>.
+ 
+ * @param vertex - T.
+ 
+ * @param visited - &mut HashSet<T>.
+ 
+ * @param result - &mut Vec<T>.
+ 
+ 
  
  
  

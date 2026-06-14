@@ -51,12 +51,20 @@ export class CircularBufferImpl<T extends Clone & Default> implements CircularBu
 
     
     /**
-     * new
+     * New.
      
+     * @param capacity - number.
+     
+     
+     * @returns Self
+     
+     
+     *
      * Preconditions:
       * - capacity > 0
      
      
+     *
      * Postconditions:
       * - is_empty() == true
       * - capacity == capacity
@@ -70,12 +78,20 @@ export class CircularBufferImpl<T extends Clone & Default> implements CircularBu
     }
     
     /**
-     * enqueue
+     * Enqueue.
      
+     * @param item - T.
+     
+     
+     * @returns ()
+     
+     
+     *
      * Preconditions:
       * - size < capacity
      
      
+     *
      * Postconditions:
       * - size == old.size + 1
      
@@ -90,12 +106,18 @@ export class CircularBufferImpl<T extends Clone & Default> implements CircularBu
     }
     
     /**
-     * dequeue
+     * Dequeue.
      
+     
+     * @returns T | null
+     
+     
+     *
      * Preconditions:
       * - size > 0
      
      
+     *
      * Postconditions:
       * - size == old.size - 1
      
@@ -108,7 +130,11 @@ export class CircularBufferImpl<T extends Clone & Default> implements CircularBu
     }
     
     /**
-     * isFull
+     * Isfull.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -120,7 +146,11 @@ export class CircularBufferImpl<T extends Clone & Default> implements CircularBu
     }
     
     /**
-     * isEmpty
+     * Isempty.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -132,7 +162,11 @@ export class CircularBufferImpl<T extends Clone & Default> implements CircularBu
     }
     
     /**
-     * len
+     * Len.
+     
+     
+     * @returns number
+     
      
      
      

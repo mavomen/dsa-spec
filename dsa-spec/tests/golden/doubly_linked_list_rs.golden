@@ -20,6 +20,13 @@ pub struct Node<T: Clone> {
 }
 
 impl<T: Clone> Node<T> {
+    /// New.
+
+    ///
+    /// # Returns
+    /// `Self`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** head is None
@@ -31,6 +38,14 @@ impl<T: Clone> Node<T> {
         todo!()
     }
 
+    /// Push front.
+
+    ///
+    /// # Parameters
+
+    /// - `value`: `T`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** head.value == value
@@ -40,6 +55,14 @@ impl<T: Clone> Node<T> {
         todo!()
     }
 
+    /// Push back.
+
+    ///
+    /// # Parameters
+
+    /// - `value`: `T`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** tail.value == value
@@ -49,6 +72,13 @@ impl<T: Clone> Node<T> {
         todo!()
     }
 
+    /// Pop front.
+
+    ///
+    /// # Returns
+    /// `Option<T>`
+
+    ///
     /// # Contracts
 
     /// - **Precondition:** !is_empty()
@@ -58,6 +88,13 @@ impl<T: Clone> Node<T> {
         todo!()
     }
 
+    /// Pop back.
+
+    ///
+    /// # Returns
+    /// `Option<T>`
+
+    ///
     /// # Contracts
 
     /// - **Precondition:** !is_empty()
@@ -67,10 +104,22 @@ impl<T: Clone> Node<T> {
         todo!()
     }
 
+    /// Is empty.
+
+    ///
+    /// # Returns
+    /// `bool`
+
     pub fn is_empty(&self) -> bool {
         // TODO: Implement is_empty
         todo!()
     }
+
+    /// Len.
+
+    ///
+    /// # Returns
+    /// `usize`
 
     pub fn len(&self) -> usize {
         // TODO: Implement len
@@ -85,6 +134,13 @@ pub struct DoublyLinkedList<T: Clone> {
 }
 
 impl<T: Clone> DoublyLinkedList<T> {
+    /// New.
+
+    ///
+    /// # Returns
+    /// `Self`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** head is None
@@ -96,6 +152,14 @@ impl<T: Clone> DoublyLinkedList<T> {
         todo!()
     }
 
+    /// Push front.
+
+    ///
+    /// # Parameters
+
+    /// - `value`: `T`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** head.value == value
@@ -105,6 +169,14 @@ impl<T: Clone> DoublyLinkedList<T> {
         todo!()
     }
 
+    /// Push back.
+
+    ///
+    /// # Parameters
+
+    /// - `value`: `T`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** tail.value == value
@@ -114,6 +186,13 @@ impl<T: Clone> DoublyLinkedList<T> {
         todo!()
     }
 
+    /// Pop front.
+
+    ///
+    /// # Returns
+    /// `Option<T>`
+
+    ///
     /// # Contracts
 
     /// - **Precondition:** !is_empty()
@@ -123,6 +202,13 @@ impl<T: Clone> DoublyLinkedList<T> {
         todo!()
     }
 
+    /// Pop back.
+
+    ///
+    /// # Returns
+    /// `Option<T>`
+
+    ///
     /// # Contracts
 
     /// - **Precondition:** !is_empty()
@@ -132,10 +218,22 @@ impl<T: Clone> DoublyLinkedList<T> {
         todo!()
     }
 
+    /// Is empty.
+
+    ///
+    /// # Returns
+    /// `bool`
+
     pub fn is_empty(&self) -> bool {
         // TODO: Implement is_empty
         todo!()
     }
+
+    /// Len.
+
+    ///
+    /// # Returns
+    /// `usize`
 
     pub fn len(&self) -> usize {
         // TODO: Implement len

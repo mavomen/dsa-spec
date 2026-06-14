@@ -14,7 +14,14 @@ import "testing"
 
 // No structs – standalone functions
 
-// Mergesort
+// Mergesort Mergesort.
+
+// Parameters:
+
+//   - arr: []T
+
+
+
 
 // Preconditions:
  // - arr is valid slice
@@ -32,7 +39,20 @@ func Mergesort(arr []T)  {
 	panic("not implemented")
 }
 
-// Merge
+// Merge Merge.
+
+// Parameters:
+
+//   - arr: []T
+
+//   - left: int
+
+//   - mid: int
+
+//   - right: int
+
+
+
 
 // Preconditions:
  // - left <= mid <= right

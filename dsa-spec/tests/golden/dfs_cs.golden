@@ -28,20 +28,37 @@ public static class DFSMethods
 {
     
     /// <summary>
-    /// Dfs
-    /// 
-    /// Preconditions:
-    /// - start vertex exists in graph
-    /// 
-    /// 
-    /// Postconditions:
-    /// - result contains all reachable vertices from start
-    /// - result has no duplicates
-    /// - order follows depth-first traversal
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Dfs.
     /// </summary>
+    
+    /// <param name="graph">&Graph<T>.</param>
+    
+    /// <param name="start">T.</param>
+    
+    
+    /// <returns>List<T>.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - start vertex exists in graph
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - result contains all reachable vertices from start
+    
+    /// - result has no duplicates
+    
+    /// - order follows depth-first traversal
+    
+    /// </remarks>
+    
+    
     public static List<T> Dfs(&Graph<T> graph, T start)
     {
         
@@ -50,12 +67,21 @@ public static class DFSMethods
     }
     
     /// <summary>
-    /// DfsRecursiveHelper
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Dfsrecursivehelper.
     /// </summary>
+    
+    /// <param name="graph">&Graph<T>.</param>
+    
+    /// <param name="vertex">T.</param>
+    
+    /// <param name="visited">&mut HashSet<T>.</param>
+    
+    /// <param name="result">&mut Vec<T>.</param>
+    
+    
+    
+    
+    
     public static void DfsRecursiveHelper(&Graph<T> graph, T vertex, &mut HashSet<T> visited, &mut Vec<T> result)
     {
         

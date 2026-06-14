@@ -55,7 +55,17 @@ type Graph[T any] struct {
 }
 
 
-// New
+// New New.
+
+// Parameters:
+
+//   - directed: bool
+
+
+
+// Returns:
+//   - Self
+
 
 
 // Postconditions:
@@ -70,7 +80,17 @@ func (s *Graph[T]) New(directed bool) Self {
 	panic("not implemented")
 }
 
-// AddVertex
+// AddVertex AddVertex.
+
+// Parameters:
+
+//   - vertex: T
+
+
+
+// Returns:
+//   - bool
+
 
 
 // Postconditions:
@@ -84,7 +104,19 @@ func (s *Graph[T]) AddVertex(vertex T) bool {
 	panic("not implemented")
 }
 
-// AddEdge
+// AddEdge AddEdge.
+
+// Parameters:
+
+//   - from: T
+
+//   - to: T
+
+
+
+// Returns:
+//   - bool
+
 
 // Preconditions:
  // - from and to exist in graph
@@ -98,7 +130,17 @@ func (s *Graph[T]) AddEdge(from T, to T) bool {
 	panic("not implemented")
 }
 
-// Neighbors
+// Neighbors Neighbors.
+
+// Parameters:
+
+//   - vertex: T
+
+
+
+// Returns:
+//   - *&Vec<T>
+
 
 
 
@@ -108,7 +150,12 @@ func (s *Graph[T]) Neighbors(vertex T) *&Vec<T> {
 	panic("not implemented")
 }
 
-// VertexCount
+// VertexCount VertexCount.
+
+
+// Returns:
+//   - int
+
 
 
 
@@ -118,7 +165,12 @@ func (s *Graph[T]) VertexCount() int {
 	panic("not implemented")
 }
 
-// EdgeCount
+// EdgeCount EdgeCount.
+
+
+// Returns:
+//   - int
+
 
 
 
@@ -128,7 +180,17 @@ func (s *Graph[T]) EdgeCount() int {
 	panic("not implemented")
 }
 
-// HasVertex
+// HasVertex HasVertex.
+
+// Parameters:
+
+//   - vertex: T
+
+
+
+// Returns:
+//   - bool
+
 
 
 
@@ -138,7 +200,19 @@ func (s *Graph[T]) HasVertex(vertex T) bool {
 	panic("not implemented")
 }
 
-// HasEdge
+// HasEdge HasEdge.
+
+// Parameters:
+
+//   - from: T
+
+//   - to: T
+
+
+
+// Returns:
+//   - bool
+
 
 
 

@@ -55,7 +55,12 @@ type Node[T any] struct {
 }
 
 
-// New
+// New New.
+
+
+// Returns:
+//   - Self
+
 
 
 // Postconditions:
@@ -70,7 +75,14 @@ func (s *Node[T]) New() Self {
 	panic("not implemented")
 }
 
-// PushFront
+// PushFront PushFront.
+
+// Parameters:
+
+//   - value: T
+
+
+
 
 
 // Postconditions:
@@ -84,7 +96,14 @@ func (s *Node[T]) PushFront(value T)  {
 	panic("not implemented")
 }
 
-// PushBack
+// PushBack PushBack.
+
+// Parameters:
+
+//   - value: T
+
+
+
 
 
 // Postconditions:
@@ -98,7 +117,12 @@ func (s *Node[T]) PushBack(value T)  {
 	panic("not implemented")
 }
 
-// PopFront
+// PopFront PopFront.
+
+
+// Returns:
+//   - *T
+
 
 // Preconditions:
  // - !is_empty()
@@ -112,7 +136,12 @@ func (s *Node[T]) PopFront() *T {
 	panic("not implemented")
 }
 
-// PopBack
+// PopBack PopBack.
+
+
+// Returns:
+//   - *T
+
 
 // Preconditions:
  // - !is_empty()
@@ -126,7 +155,12 @@ func (s *Node[T]) PopBack() *T {
 	panic("not implemented")
 }
 
-// IsEmpty
+// IsEmpty IsEmpty.
+
+
+// Returns:
+//   - bool
+
 
 
 
@@ -136,7 +170,12 @@ func (s *Node[T]) IsEmpty() bool {
 	panic("not implemented")
 }
 
-// Len
+// Len Len.
+
+
+// Returns:
+//   - int
+
 
 
 
@@ -180,7 +219,12 @@ type DoublyLinkedList[T any] struct {
 }
 
 
-// New
+// New New.
+
+
+// Returns:
+//   - Self
+
 
 
 // Postconditions:
@@ -195,7 +239,14 @@ func (s *DoublyLinkedList[T]) New() Self {
 	panic("not implemented")
 }
 
-// PushFront
+// PushFront PushFront.
+
+// Parameters:
+
+//   - value: T
+
+
+
 
 
 // Postconditions:
@@ -209,7 +260,14 @@ func (s *DoublyLinkedList[T]) PushFront(value T)  {
 	panic("not implemented")
 }
 
-// PushBack
+// PushBack PushBack.
+
+// Parameters:
+
+//   - value: T
+
+
+
 
 
 // Postconditions:
@@ -223,7 +281,12 @@ func (s *DoublyLinkedList[T]) PushBack(value T)  {
 	panic("not implemented")
 }
 
-// PopFront
+// PopFront PopFront.
+
+
+// Returns:
+//   - *T
+
 
 // Preconditions:
  // - !is_empty()
@@ -237,7 +300,12 @@ func (s *DoublyLinkedList[T]) PopFront() *T {
 	panic("not implemented")
 }
 
-// PopBack
+// PopBack PopBack.
+
+
+// Returns:
+//   - *T
+
 
 // Preconditions:
  // - !is_empty()
@@ -251,7 +319,12 @@ func (s *DoublyLinkedList[T]) PopBack() *T {
 	panic("not implemented")
 }
 
-// IsEmpty
+// IsEmpty IsEmpty.
+
+
+// Returns:
+//   - bool
+
 
 
 
@@ -261,7 +334,12 @@ func (s *DoublyLinkedList[T]) IsEmpty() bool {
 	panic("not implemented")
 }
 
-// Len
+// Len Len.
+
+
+// Returns:
+//   - int
+
 
 
 

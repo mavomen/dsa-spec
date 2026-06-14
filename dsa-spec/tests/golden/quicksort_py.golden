@@ -17,14 +17,25 @@ import pytest
 
 
 def quicksort(arr: List[T]) -> None:
-    """
+    """quicksort.
     
+
+    Args:
+    
+        arr: List[T]
+    
+    
+    
+
     Preconditions:
-    - arr is valid slice
+    
+        - arr is valid slice
     
     
+
     Postconditions:
-    - arr is sorted ascending
+    
+        - arr is sorted ascending
     
     
     """
@@ -33,13 +44,32 @@ def quicksort(arr: List[T]) -> None:
     raise NotImplementedError
 
 def partition(arr: List[T], low: int, high: int) -> int:
-    """
+    """partition.
+    
+
+    Args:
+    
+        arr: List[T]
+    
+        low: int
+    
+        high: int
     
     
+
+    Returns:
+        int
+    
+    
+    
+
     Postconditions:
-    - pivot is in final sorted position
-    - elements left of pivot <= pivot
-    - elements right of pivot >= pivot
+    
+        - pivot is in final sorted position
+    
+        - elements left of pivot <= pivot
+    
+        - elements right of pivot >= pivot
     
     
     """

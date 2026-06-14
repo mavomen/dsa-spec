@@ -37,9 +37,16 @@ export class GraphImpl<T extends Clone & Hash & Eq> implements Graph<T> {
 
     
     /**
-     * new
+     * New.
+     
+     * @param directed - boolean.
      
      
+     * @returns Self
+     
+     
+     
+     *
      * Postconditions:
       * - vertex_count == 0
       * - edge_count == 0
@@ -53,9 +60,16 @@ export class GraphImpl<T extends Clone & Hash & Eq> implements Graph<T> {
     }
     
     /**
-     * addVertex
+     * Addvertex.
+     
+     * @param vertex - T.
      
      
+     * @returns boolean
+     
+     
+     
+     *
      * Postconditions:
       * - vertex exists in graph
      
@@ -68,8 +82,17 @@ export class GraphImpl<T extends Clone & Hash & Eq> implements Graph<T> {
     }
     
     /**
-     * addEdge
+     * Addedge.
      
+     * @param from - T.
+     
+     * @param to - T.
+     
+     
+     * @returns boolean
+     
+     
+     *
      * Preconditions:
       * - from and to exist in graph
      
@@ -83,7 +106,13 @@ export class GraphImpl<T extends Clone & Hash & Eq> implements Graph<T> {
     }
     
     /**
-     * neighbors
+     * Neighbors.
+     
+     * @param vertex - T.
+     
+     
+     * @returns &Vec<T> | null
+     
      
      
      
@@ -95,7 +124,11 @@ export class GraphImpl<T extends Clone & Hash & Eq> implements Graph<T> {
     }
     
     /**
-     * vertexCount
+     * Vertexcount.
+     
+     
+     * @returns number
+     
      
      
      
@@ -107,7 +140,11 @@ export class GraphImpl<T extends Clone & Hash & Eq> implements Graph<T> {
     }
     
     /**
-     * edgeCount
+     * Edgecount.
+     
+     
+     * @returns number
+     
      
      
      
@@ -119,7 +156,13 @@ export class GraphImpl<T extends Clone & Hash & Eq> implements Graph<T> {
     }
     
     /**
-     * hasVertex
+     * Hasvertex.
+     
+     * @param vertex - T.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -131,7 +174,15 @@ export class GraphImpl<T extends Clone & Hash & Eq> implements Graph<T> {
     }
     
     /**
-     * hasEdge
+     * Hasedge.
+     
+     * @param from - T.
+     
+     * @param to - T.
+     
+     
+     * @returns boolean
+     
      
      
      

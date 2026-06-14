@@ -36,15 +36,22 @@ public class Node<T>
 
     
     /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - head is None
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// New.
     /// </summary>
+    
+    
+    /// <returns>Self.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - head is None
+    
+    /// </remarks>
+    
+    
     public Self New()
     {
         
@@ -53,16 +60,24 @@ public class Node<T>
     }
     
     /// <summary>
-    /// Prepend
-    /// 
-    /// 
-    /// Postconditions:
-    /// - head.value == value
-    /// - list length increased by 1
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Prepend.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - head.value == value
+    
+    /// - list length increased by 1
+    
+    /// </remarks>
+    
+    
     public void Prepend(T value)
     {
         
@@ -71,15 +86,22 @@ public class Node<T>
     }
     
     /// <summary>
-    /// Append
-    /// 
-    /// 
-    /// Postconditions:
-    /// - last element == value
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Append.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - last element == value
+    
+    /// </remarks>
+    
+    
     public void Append(T value)
     {
         
@@ -88,18 +110,29 @@ public class Node<T>
     }
     
     /// <summary>
-    /// PopFront
-    /// 
-    /// Preconditions:
-    /// - !is_empty()
-    /// 
-    /// 
-    /// Postconditions:
-    /// - head == old.head.next
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Popfront.
     /// </summary>
+    
+    
+    /// <returns>T?.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - !is_empty()
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - head == old.head.next
+    
+    /// </remarks>
+    
+    
     public T? PopFront()
     {
         
@@ -108,12 +141,15 @@ public class Node<T>
     }
     
     /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Isempty.
     /// </summary>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool IsEmpty()
     {
         
@@ -122,12 +158,15 @@ public class Node<T>
     }
     
     /// <summary>
-    /// Len
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Len.
     /// </summary>
+    
+    
+    /// <returns>int.</returns>
+    
+    
+    
+    
     public int Len()
     {
         
@@ -147,15 +186,22 @@ public class SinglyLinkedList<T>
 
     
     /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - head is None
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// New.
     /// </summary>
+    
+    
+    /// <returns>Self.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - head is None
+    
+    /// </remarks>
+    
+    
     public Self New()
     {
         
@@ -164,16 +210,24 @@ public class SinglyLinkedList<T>
     }
     
     /// <summary>
-    /// Prepend
-    /// 
-    /// 
-    /// Postconditions:
-    /// - head.value == value
-    /// - list length increased by 1
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Prepend.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - head.value == value
+    
+    /// - list length increased by 1
+    
+    /// </remarks>
+    
+    
     public void Prepend(T value)
     {
         
@@ -182,15 +236,22 @@ public class SinglyLinkedList<T>
     }
     
     /// <summary>
-    /// Append
-    /// 
-    /// 
-    /// Postconditions:
-    /// - last element == value
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Append.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - last element == value
+    
+    /// </remarks>
+    
+    
     public void Append(T value)
     {
         
@@ -199,18 +260,29 @@ public class SinglyLinkedList<T>
     }
     
     /// <summary>
-    /// PopFront
-    /// 
-    /// Preconditions:
-    /// - !is_empty()
-    /// 
-    /// 
-    /// Postconditions:
-    /// - head == old.head.next
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Popfront.
     /// </summary>
+    
+    
+    /// <returns>T?.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - !is_empty()
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - head == old.head.next
+    
+    /// </remarks>
+    
+    
     public T? PopFront()
     {
         
@@ -219,12 +291,15 @@ public class SinglyLinkedList<T>
     }
     
     /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Isempty.
     /// </summary>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool IsEmpty()
     {
         
@@ -233,12 +308,15 @@ public class SinglyLinkedList<T>
     }
     
     /// <summary>
-    /// Len
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Len.
     /// </summary>
+    
+    
+    /// <returns>int.</returns>
+    
+    
+    
+    
     public int Len()
     {
         

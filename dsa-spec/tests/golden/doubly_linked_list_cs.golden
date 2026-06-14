@@ -38,16 +38,24 @@ public class Node<T>
 
     
     /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - head is None
-    /// - tail is None
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// New.
     /// </summary>
+    
+    
+    /// <returns>Self.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - head is None
+    
+    /// - tail is None
+    
+    /// </remarks>
+    
+    
     public Self New()
     {
         
@@ -56,15 +64,22 @@ public class Node<T>
     }
     
     /// <summary>
-    /// PushFront
-    /// 
-    /// 
-    /// Postconditions:
-    /// - head.value == value
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Pushfront.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - head.value == value
+    
+    /// </remarks>
+    
+    
     public void PushFront(T value)
     {
         
@@ -73,15 +88,22 @@ public class Node<T>
     }
     
     /// <summary>
-    /// PushBack
-    /// 
-    /// 
-    /// Postconditions:
-    /// - tail.value == value
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Pushback.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - tail.value == value
+    
+    /// </remarks>
+    
+    
     public void PushBack(T value)
     {
         
@@ -90,15 +112,22 @@ public class Node<T>
     }
     
     /// <summary>
-    /// PopFront
-    /// 
-    /// Preconditions:
-    /// - !is_empty()
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Popfront.
     /// </summary>
+    
+    
+    /// <returns>T?.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - !is_empty()
+    
+    /// </remarks>
+    
+    
+    
     public T? PopFront()
     {
         
@@ -107,15 +136,22 @@ public class Node<T>
     }
     
     /// <summary>
-    /// PopBack
-    /// 
-    /// Preconditions:
-    /// - !is_empty()
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Popback.
     /// </summary>
+    
+    
+    /// <returns>T?.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - !is_empty()
+    
+    /// </remarks>
+    
+    
+    
     public T? PopBack()
     {
         
@@ -124,12 +160,15 @@ public class Node<T>
     }
     
     /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Isempty.
     /// </summary>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool IsEmpty()
     {
         
@@ -138,12 +177,15 @@ public class Node<T>
     }
     
     /// <summary>
-    /// Len
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Len.
     /// </summary>
+    
+    
+    /// <returns>int.</returns>
+    
+    
+    
+    
     public int Len()
     {
         
@@ -165,16 +207,24 @@ public class DoublyLinkedList<T>
 
     
     /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - head is None
-    /// - tail is None
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// New.
     /// </summary>
+    
+    
+    /// <returns>Self.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - head is None
+    
+    /// - tail is None
+    
+    /// </remarks>
+    
+    
     public Self New()
     {
         
@@ -183,15 +233,22 @@ public class DoublyLinkedList<T>
     }
     
     /// <summary>
-    /// PushFront
-    /// 
-    /// 
-    /// Postconditions:
-    /// - head.value == value
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Pushfront.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - head.value == value
+    
+    /// </remarks>
+    
+    
     public void PushFront(T value)
     {
         
@@ -200,15 +257,22 @@ public class DoublyLinkedList<T>
     }
     
     /// <summary>
-    /// PushBack
-    /// 
-    /// 
-    /// Postconditions:
-    /// - tail.value == value
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Pushback.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - tail.value == value
+    
+    /// </remarks>
+    
+    
     public void PushBack(T value)
     {
         
@@ -217,15 +281,22 @@ public class DoublyLinkedList<T>
     }
     
     /// <summary>
-    /// PopFront
-    /// 
-    /// Preconditions:
-    /// - !is_empty()
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Popfront.
     /// </summary>
+    
+    
+    /// <returns>T?.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - !is_empty()
+    
+    /// </remarks>
+    
+    
+    
     public T? PopFront()
     {
         
@@ -234,15 +305,22 @@ public class DoublyLinkedList<T>
     }
     
     /// <summary>
-    /// PopBack
-    /// 
-    /// Preconditions:
-    /// - !is_empty()
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Popback.
     /// </summary>
+    
+    
+    /// <returns>T?.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - !is_empty()
+    
+    /// </remarks>
+    
+    
+    
     public T? PopBack()
     {
         
@@ -251,12 +329,15 @@ public class DoublyLinkedList<T>
     }
     
     /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Isempty.
     /// </summary>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool IsEmpty()
     {
         
@@ -265,12 +346,15 @@ public class DoublyLinkedList<T>
     }
     
     /// <summary>
-    /// Len
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Len.
     /// </summary>
+    
+    
+    /// <returns>int.</returns>
+    
+    
+    
+    
     public int Len()
     {
         

@@ -21,18 +21,29 @@ public static class MergesortMethods
 {
     
     /// <summary>
-    /// Mergesort
-    /// 
-    /// Preconditions:
-    /// - arr is valid slice
-    /// 
-    /// 
-    /// Postconditions:
-    /// - arr is sorted ascending
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Mergesort.
     /// </summary>
+    
+    /// <param name="arr">T[].</param>
+    
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - arr is valid slice
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - arr is sorted ascending
+    
+    /// </remarks>
+    
+    
     public static void Mergesort(T[] arr)
     {
         
@@ -41,20 +52,39 @@ public static class MergesortMethods
     }
     
     /// <summary>
-    /// Merge
-    /// 
-    /// Preconditions:
-    /// - left <= mid <= right
-    /// - arr[left..mid] is sorted
-    /// - arr[mid..right] is sorted
-    /// 
-    /// 
-    /// Postconditions:
-    /// - arr[left..right] is sorted
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Merge.
     /// </summary>
+    
+    /// <param name="arr">T[].</param>
+    
+    /// <param name="left">int.</param>
+    
+    /// <param name="mid">int.</param>
+    
+    /// <param name="right">int.</param>
+    
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - left <= mid <= right
+    
+    /// - arr[left..mid] is sorted
+    
+    /// - arr[mid..right] is sorted
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - arr[left..right] is sorted
+    
+    /// </remarks>
+    
+    
     public static void Merge(T[] arr, int left, int mid, int right)
     {
         

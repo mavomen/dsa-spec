@@ -21,7 +21,19 @@ import "testing"
 
 // No structs – standalone functions
 
-// Bfs
+// Bfs Bfs.
+
+// Parameters:
+
+//   - graph: &Graph<T>
+
+//   - start: T
+
+
+
+// Returns:
+//   - []T
+
 
 // Preconditions:
  // - start vertex exists in graph

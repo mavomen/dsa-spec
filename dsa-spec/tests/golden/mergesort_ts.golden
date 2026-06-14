@@ -13,12 +13,18 @@
 
 
 /**
- * mergesort
+ * Mergesort.
  
+ * @param arr - T[].
+ 
+ 
+ 
+ *
  * Preconditions:
   * - arr is valid slice
  
  
+ *
  * Postconditions:
   * - arr is sorted ascending
  
@@ -31,14 +37,26 @@ export function mergesort(arr: T[]): void {
 }
 
 /**
- * merge
+ * Merge.
  
+ * @param arr - T[].
+ 
+ * @param left - number.
+ 
+ * @param mid - number.
+ 
+ * @param right - number.
+ 
+ 
+ 
+ *
  * Preconditions:
   * - left <= mid <= right
   * - arr[left..mid] is sorted
   * - arr[mid..right] is sorted
  
  
+ *
  * Postconditions:
   * - arr[left..right] is sorted
  

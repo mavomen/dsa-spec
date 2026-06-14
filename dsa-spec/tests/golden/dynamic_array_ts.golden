@@ -37,9 +37,14 @@ export class DynamicArrayImpl<T extends Clone> implements DynamicArray<T> {
 
     
     /**
-     * new
+     * New.
      
      
+     * @returns Self
+     
+     
+     
+     *
      * Postconditions:
       * - length == 0
       * - capacity >= 0
@@ -53,9 +58,14 @@ export class DynamicArrayImpl<T extends Clone> implements DynamicArray<T> {
     }
     
     /**
-     * push
+     * Push.
+     
+     * @param item - T.
      
      
+     
+     
+     *
      * Postconditions:
       * - length == old.length + 1
       * - last element == item
@@ -69,12 +79,18 @@ export class DynamicArrayImpl<T extends Clone> implements DynamicArray<T> {
     }
     
     /**
-     * pop
+     * Pop.
      
+     
+     * @returns T | null
+     
+     
+     *
      * Preconditions:
       * - length > 0
      
      
+     *
      * Postconditions:
       * - length == old.length - 1
      
@@ -87,8 +103,15 @@ export class DynamicArrayImpl<T extends Clone> implements DynamicArray<T> {
     }
     
     /**
-     * get
+     * Get.
      
+     * @param index - number.
+     
+     
+     * @returns T | null
+     
+     
+     *
      * Preconditions:
       * - index < length
      
@@ -102,9 +125,14 @@ export class DynamicArrayImpl<T extends Clone> implements DynamicArray<T> {
     }
     
     /**
-     * len
+     * Len.
      
      
+     * @returns number
+     
+     
+     
+     *
      * Postconditions:
       * - result >= 0
      
@@ -117,7 +145,11 @@ export class DynamicArrayImpl<T extends Clone> implements DynamicArray<T> {
     }
     
     /**
-     * isEmpty
+     * Isempty.
+     
+     
+     * @returns boolean
+     
      
      
      

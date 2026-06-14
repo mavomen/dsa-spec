@@ -41,9 +41,14 @@ export class NodeImpl<T extends Clone> implements Node<T> {
 
     
     /**
-     * new
+     * New.
      
      
+     * @returns Self
+     
+     
+     
+     *
      * Postconditions:
       * - head is None
       * - tail is None
@@ -57,9 +62,14 @@ export class NodeImpl<T extends Clone> implements Node<T> {
     }
     
     /**
-     * pushFront
+     * Pushfront.
+     
+     * @param value - T.
      
      
+     
+     
+     *
      * Postconditions:
       * - head.value == value
      
@@ -72,9 +82,14 @@ export class NodeImpl<T extends Clone> implements Node<T> {
     }
     
     /**
-     * pushBack
+     * Pushback.
+     
+     * @param value - T.
      
      
+     
+     
+     *
      * Postconditions:
       * - tail.value == value
      
@@ -87,8 +102,13 @@ export class NodeImpl<T extends Clone> implements Node<T> {
     }
     
     /**
-     * popFront
+     * Popfront.
      
+     
+     * @returns T | null
+     
+     
+     *
      * Preconditions:
       * - !is_empty()
      
@@ -102,8 +122,13 @@ export class NodeImpl<T extends Clone> implements Node<T> {
     }
     
     /**
-     * popBack
+     * Popback.
      
+     
+     * @returns T | null
+     
+     
+     *
      * Preconditions:
       * - !is_empty()
      
@@ -117,7 +142,11 @@ export class NodeImpl<T extends Clone> implements Node<T> {
     }
     
     /**
-     * isEmpty
+     * Isempty.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -129,7 +158,11 @@ export class NodeImpl<T extends Clone> implements Node<T> {
     }
     
     /**
-     * len
+     * Len.
+     
+     
+     * @returns number
+     
      
      
      
@@ -161,9 +194,14 @@ export class DoublyLinkedListImpl<T extends Clone> implements DoublyLinkedList<T
 
     
     /**
-     * new
+     * New.
      
      
+     * @returns Self
+     
+     
+     
+     *
      * Postconditions:
       * - head is None
       * - tail is None
@@ -177,9 +215,14 @@ export class DoublyLinkedListImpl<T extends Clone> implements DoublyLinkedList<T
     }
     
     /**
-     * pushFront
+     * Pushfront.
+     
+     * @param value - T.
      
      
+     
+     
+     *
      * Postconditions:
       * - head.value == value
      
@@ -192,9 +235,14 @@ export class DoublyLinkedListImpl<T extends Clone> implements DoublyLinkedList<T
     }
     
     /**
-     * pushBack
+     * Pushback.
+     
+     * @param value - T.
      
      
+     
+     
+     *
      * Postconditions:
       * - tail.value == value
      
@@ -207,8 +255,13 @@ export class DoublyLinkedListImpl<T extends Clone> implements DoublyLinkedList<T
     }
     
     /**
-     * popFront
+     * Popfront.
      
+     
+     * @returns T | null
+     
+     
+     *
      * Preconditions:
       * - !is_empty()
      
@@ -222,8 +275,13 @@ export class DoublyLinkedListImpl<T extends Clone> implements DoublyLinkedList<T
     }
     
     /**
-     * popBack
+     * Popback.
      
+     
+     * @returns T | null
+     
+     
+     *
      * Preconditions:
       * - !is_empty()
      
@@ -237,7 +295,11 @@ export class DoublyLinkedListImpl<T extends Clone> implements DoublyLinkedList<T
     }
     
     /**
-     * isEmpty
+     * Isempty.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -249,7 +311,11 @@ export class DoublyLinkedListImpl<T extends Clone> implements DoublyLinkedList<T
     }
     
     /**
-     * len
+     * Len.
+     
+     
+     * @returns number
+     
      
      
      

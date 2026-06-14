@@ -38,11 +38,19 @@ class BSTNode(Generic[T]):
 
     
     def new(self) -> Self:
-        """
+        """new.
         
         
+
+        Returns:
+            Self
+        
+        
+        
+
         Postconditions:
-        - root is None
+        
+            - root is None
         
         
         """
@@ -51,12 +59,26 @@ class BSTNode(Generic[T]):
         raise NotImplementedError
     
     def insert(self, value: T) -> bool:
-        """
+        """insert.
+        
+
+        Args:
+        
+            value: T
         
         
+
+        Returns:
+            bool
+        
+        
+        
+
         Postconditions:
-        - tree contains value
-        - BST invariant maintained
+        
+            - tree contains value
+        
+            - BST invariant maintained
         
         
         """
@@ -65,7 +87,18 @@ class BSTNode(Generic[T]):
         raise NotImplementedError
     
     def contains(self, value: T) -> bool:
-        """
+        """contains.
+        
+
+        Args:
+        
+            value: T
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -75,11 +108,19 @@ class BSTNode(Generic[T]):
         raise NotImplementedError
     
     def inorder(self) -> List[T]:
-        """
+        """inorder.
         
         
+
+        Returns:
+            List[T]
+        
+        
+        
+
         Postconditions:
-        - result is sorted ascending
+        
+            - result is sorted ascending
         
         
         """
@@ -88,7 +129,13 @@ class BSTNode(Generic[T]):
         raise NotImplementedError
     
     def is_empty(self) -> bool:
-        """
+        """is_empty.
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -110,11 +157,19 @@ class BinarySearchTree(Generic[T]):
 
     
     def new(self) -> Self:
-        """
+        """new.
         
         
+
+        Returns:
+            Self
+        
+        
+        
+
         Postconditions:
-        - root is None
+        
+            - root is None
         
         
         """
@@ -123,12 +178,26 @@ class BinarySearchTree(Generic[T]):
         raise NotImplementedError
     
     def insert(self, value: T) -> bool:
-        """
+        """insert.
+        
+
+        Args:
+        
+            value: T
         
         
+
+        Returns:
+            bool
+        
+        
+        
+
         Postconditions:
-        - tree contains value
-        - BST invariant maintained
+        
+            - tree contains value
+        
+            - BST invariant maintained
         
         
         """
@@ -137,7 +206,18 @@ class BinarySearchTree(Generic[T]):
         raise NotImplementedError
     
     def contains(self, value: T) -> bool:
-        """
+        """contains.
+        
+
+        Args:
+        
+            value: T
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -147,11 +227,19 @@ class BinarySearchTree(Generic[T]):
         raise NotImplementedError
     
     def inorder(self) -> List[T]:
-        """
+        """inorder.
         
         
+
+        Returns:
+            List[T]
+        
+        
+        
+
         Postconditions:
-        - result is sorted ascending
+        
+            - result is sorted ascending
         
         
         """
@@ -160,7 +248,13 @@ class BinarySearchTree(Generic[T]):
         raise NotImplementedError
     
     def is_empty(self) -> bool:
-        """
+        """is_empty.
+        
+        
+
+        Returns:
+            bool
+        
         
         
         

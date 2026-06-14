@@ -20,12 +20,22 @@
 
 
 /**
- * bfs
+ * Bfs.
  
+ * @param graph - &Graph<T>.
+ 
+ * @param start - T.
+ 
+ 
+ * @returns T[]
+ 
+ 
+ *
  * Preconditions:
   * - start vertex exists in graph
  
  
+ *
  * Postconditions:
   * - result contains all reachable vertices from start
   * - result has no duplicates

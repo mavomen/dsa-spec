@@ -22,7 +22,21 @@ pub struct {{ struct.name }}<{% for generic in struct.generics %}{{ generic.name
 
 impl<{% for generic in struct.generics %}{{ generic.name }}{% if generic.bounds != "" %}: {{ generic.bounds }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}> {{ struct.name }}<{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}> {
     {% for method in methods %}
+    /// {{ method.name | replace(from="_", to=" ") | capitalize }}.
+    {% if method.params %}
+    ///
+    /// # Parameters
+    {% for param in method.params %}
+    /// - `{{ param.name }}`: `{{ param.param_type }}`
+    {% endfor %}
+    {% endif %}
+    {% if method.returns %}
+    ///
+    /// # Returns
+    /// `{{ method.returns }}`
+    {% endif %}
     {% if method.preconditions or method.postconditions %}
+    ///
     /// # Contracts
     {% for pre in method.preconditions %}
     /// - **Precondition:** {{ pre }}

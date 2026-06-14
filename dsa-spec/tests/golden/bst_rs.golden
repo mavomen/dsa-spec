@@ -20,6 +20,13 @@ pub struct BSTNode<T: Ord + Clone> {
 }
 
 impl<T: Ord + Clone> BSTNode<T> {
+    /// New.
+
+    ///
+    /// # Returns
+    /// `Self`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** root is None
@@ -29,6 +36,18 @@ impl<T: Ord + Clone> BSTNode<T> {
         todo!()
     }
 
+    /// Insert.
+
+    ///
+    /// # Parameters
+
+    /// - `value`: `T`
+
+    ///
+    /// # Returns
+    /// `bool`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** tree contains value
@@ -40,11 +59,29 @@ impl<T: Ord + Clone> BSTNode<T> {
         todo!()
     }
 
+    /// Contains.
+
+    ///
+    /// # Parameters
+
+    /// - `value`: `T`
+
+    ///
+    /// # Returns
+    /// `bool`
+
     pub fn contains(&self, value: T) -> bool {
         // TODO: Implement contains
         todo!()
     }
 
+    /// Inorder.
+
+    ///
+    /// # Returns
+    /// `Vec<T>`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** result is sorted ascending
@@ -53,6 +90,12 @@ impl<T: Ord + Clone> BSTNode<T> {
         // TODO: Implement inorder
         todo!()
     }
+
+    /// Is empty.
+
+    ///
+    /// # Returns
+    /// `bool`
 
     pub fn is_empty(&self) -> bool {
         // TODO: Implement is_empty
@@ -65,6 +108,13 @@ pub struct BinarySearchTree<T: Ord + Clone> {
 }
 
 impl<T: Ord + Clone> BinarySearchTree<T> {
+    /// New.
+
+    ///
+    /// # Returns
+    /// `Self`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** root is None
@@ -74,6 +124,18 @@ impl<T: Ord + Clone> BinarySearchTree<T> {
         todo!()
     }
 
+    /// Insert.
+
+    ///
+    /// # Parameters
+
+    /// - `value`: `T`
+
+    ///
+    /// # Returns
+    /// `bool`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** tree contains value
@@ -85,11 +147,29 @@ impl<T: Ord + Clone> BinarySearchTree<T> {
         todo!()
     }
 
+    /// Contains.
+
+    ///
+    /// # Parameters
+
+    /// - `value`: `T`
+
+    ///
+    /// # Returns
+    /// `bool`
+
     pub fn contains(&self, value: T) -> bool {
         // TODO: Implement contains
         todo!()
     }
 
+    /// Inorder.
+
+    ///
+    /// # Returns
+    /// `Vec<T>`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** result is sorted ascending
@@ -98,6 +178,12 @@ impl<T: Ord + Clone> BinarySearchTree<T> {
         // TODO: Implement inorder
         todo!()
     }
+
+    /// Is empty.
+
+    ///
+    /// # Returns
+    /// `bool`
 
     pub fn is_empty(&self) -> bool {
         // TODO: Implement is_empty

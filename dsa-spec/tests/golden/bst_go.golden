@@ -51,7 +51,12 @@ type BSTNode[T constraints.Ordered] struct {
 }
 
 
-// New
+// New New.
+
+
+// Returns:
+//   - Self
+
 
 
 // Postconditions:
@@ -65,7 +70,17 @@ func (s *BSTNode[T]) New() Self {
 	panic("not implemented")
 }
 
-// Insert
+// Insert Insert.
+
+// Parameters:
+
+//   - value: T
+
+
+
+// Returns:
+//   - bool
+
 
 
 // Postconditions:
@@ -80,7 +95,17 @@ func (s *BSTNode[T]) Insert(value T) bool {
 	panic("not implemented")
 }
 
-// Contains
+// Contains Contains.
+
+// Parameters:
+
+//   - value: T
+
+
+
+// Returns:
+//   - bool
+
 
 
 
@@ -90,7 +115,12 @@ func (s *BSTNode[T]) Contains(value T) bool {
 	panic("not implemented")
 }
 
-// Inorder
+// Inorder Inorder.
+
+
+// Returns:
+//   - []T
+
 
 
 // Postconditions:
@@ -104,7 +134,12 @@ func (s *BSTNode[T]) Inorder() []T {
 	panic("not implemented")
 }
 
-// IsEmpty
+// IsEmpty IsEmpty.
+
+
+// Returns:
+//   - bool
+
 
 
 
@@ -142,7 +177,12 @@ type BinarySearchTree[T constraints.Ordered] struct {
 }
 
 
-// New
+// New New.
+
+
+// Returns:
+//   - Self
+
 
 
 // Postconditions:
@@ -156,7 +196,17 @@ func (s *BinarySearchTree[T]) New() Self {
 	panic("not implemented")
 }
 
-// Insert
+// Insert Insert.
+
+// Parameters:
+
+//   - value: T
+
+
+
+// Returns:
+//   - bool
+
 
 
 // Postconditions:
@@ -171,7 +221,17 @@ func (s *BinarySearchTree[T]) Insert(value T) bool {
 	panic("not implemented")
 }
 
-// Contains
+// Contains Contains.
+
+// Parameters:
+
+//   - value: T
+
+
+
+// Returns:
+//   - bool
+
 
 
 
@@ -181,7 +241,12 @@ func (s *BinarySearchTree[T]) Contains(value T) bool {
 	panic("not implemented")
 }
 
-// Inorder
+// Inorder Inorder.
+
+
+// Returns:
+//   - []T
+
 
 
 // Postconditions:
@@ -195,7 +260,12 @@ func (s *BinarySearchTree[T]) Inorder() []T {
 	panic("not implemented")
 }
 
-// IsEmpty
+// IsEmpty IsEmpty.
+
+
+// Returns:
+//   - bool
+
 
 
 

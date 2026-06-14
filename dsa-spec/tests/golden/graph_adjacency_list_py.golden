@@ -36,12 +36,26 @@ class Graph(Generic[T]):
 
     
     def new(self, directed: bool) -> Self:
-        """
+        """new.
+        
+
+        Args:
+        
+            directed: bool
         
         
+
+        Returns:
+            Self
+        
+        
+        
+
         Postconditions:
-        - vertex_count == 0
-        - edge_count == 0
+        
+            - vertex_count == 0
+        
+            - edge_count == 0
         
         
         """
@@ -50,11 +64,24 @@ class Graph(Generic[T]):
         raise NotImplementedError
     
     def add_vertex(self, vertex: T) -> bool:
-        """
+        """add_vertex.
+        
+
+        Args:
+        
+            vertex: T
         
         
+
+        Returns:
+            bool
+        
+        
+        
+
         Postconditions:
-        - vertex exists in graph
+        
+            - vertex exists in graph
         
         
         """
@@ -63,10 +90,25 @@ class Graph(Generic[T]):
         raise NotImplementedError
     
     def add_edge(self, from: T, to: T) -> bool:
-        """
+        """add_edge.
         
+
+        Args:
+        
+            from: T
+        
+            to: T
+        
+        
+
+        Returns:
+            bool
+        
+        
+
         Preconditions:
-        - from and to exist in graph
+        
+            - from and to exist in graph
         
         
         
@@ -76,7 +118,18 @@ class Graph(Generic[T]):
         raise NotImplementedError
     
     def neighbors(self, vertex: T) -> Optional[&Vec<T>]:
-        """
+        """neighbors.
+        
+
+        Args:
+        
+            vertex: T
+        
+        
+
+        Returns:
+            Optional[&Vec<T>]
+        
         
         
         
@@ -86,7 +139,13 @@ class Graph(Generic[T]):
         raise NotImplementedError
     
     def vertex_count(self) -> int:
-        """
+        """vertex_count.
+        
+        
+
+        Returns:
+            int
+        
         
         
         
@@ -96,7 +155,13 @@ class Graph(Generic[T]):
         raise NotImplementedError
     
     def edge_count(self) -> int:
-        """
+        """edge_count.
+        
+        
+
+        Returns:
+            int
+        
         
         
         
@@ -106,7 +171,18 @@ class Graph(Generic[T]):
         raise NotImplementedError
     
     def has_vertex(self, vertex: T) -> bool:
-        """
+        """has_vertex.
+        
+
+        Args:
+        
+            vertex: T
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -116,7 +192,20 @@ class Graph(Generic[T]):
         raise NotImplementedError
     
     def has_edge(self, from: T, to: T) -> bool:
-        """
+        """has_edge.
+        
+
+        Args:
+        
+            from: T
+        
+            to: T
+        
+        
+
+        Returns:
+            bool
+        
         
         
         

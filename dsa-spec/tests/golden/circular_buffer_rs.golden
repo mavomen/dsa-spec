@@ -26,6 +26,18 @@ pub struct CircularBuffer<T: Clone + Default> {
 }
 
 impl<T: Clone + Default> CircularBuffer<T> {
+    /// New.
+
+    ///
+    /// # Parameters
+
+    /// - `capacity`: `usize`
+
+    ///
+    /// # Returns
+    /// `Self`
+
+    ///
     /// # Contracts
 
     /// - **Precondition:** capacity > 0
@@ -39,6 +51,18 @@ impl<T: Clone + Default> CircularBuffer<T> {
         todo!()
     }
 
+    /// Enqueue.
+
+    ///
+    /// # Parameters
+
+    /// - `item`: `T`
+
+    ///
+    /// # Returns
+    /// `Result<(), String>`
+
+    ///
     /// # Contracts
 
     /// - **Precondition:** size < capacity
@@ -50,6 +74,13 @@ impl<T: Clone + Default> CircularBuffer<T> {
         todo!()
     }
 
+    /// Dequeue.
+
+    ///
+    /// # Returns
+    /// `Option<T>`
+
+    ///
     /// # Contracts
 
     /// - **Precondition:** size > 0
@@ -61,15 +92,33 @@ impl<T: Clone + Default> CircularBuffer<T> {
         todo!()
     }
 
+    /// Is full.
+
+    ///
+    /// # Returns
+    /// `bool`
+
     pub fn is_full(&self) -> bool {
         // TODO: Implement is_full
         todo!()
     }
 
+    /// Is empty.
+
+    ///
+    /// # Returns
+    /// `bool`
+
     pub fn is_empty(&self) -> bool {
         // TODO: Implement is_empty
         todo!()
     }
+
+    /// Len.
+
+    ///
+    /// # Returns
+    /// `usize`
 
     pub fn len(&self) -> usize {
         // TODO: Implement len

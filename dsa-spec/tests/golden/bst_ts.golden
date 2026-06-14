@@ -41,9 +41,14 @@ export class BSTNodeImpl<T extends Ord & Clone> implements BSTNode<T> {
 
     
     /**
-     * new
+     * New.
      
      
+     * @returns Self
+     
+     
+     
+     *
      * Postconditions:
       * - root is None
      
@@ -56,9 +61,16 @@ export class BSTNodeImpl<T extends Ord & Clone> implements BSTNode<T> {
     }
     
     /**
-     * insert
+     * Insert.
+     
+     * @param value - T.
      
      
+     * @returns boolean
+     
+     
+     
+     *
      * Postconditions:
       * - tree contains value
       * - BST invariant maintained
@@ -72,7 +84,13 @@ export class BSTNodeImpl<T extends Ord & Clone> implements BSTNode<T> {
     }
     
     /**
-     * contains
+     * Contains.
+     
+     * @param value - T.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -84,9 +102,14 @@ export class BSTNodeImpl<T extends Ord & Clone> implements BSTNode<T> {
     }
     
     /**
-     * inorder
+     * Inorder.
      
      
+     * @returns T[]
+     
+     
+     
+     *
      * Postconditions:
       * - result is sorted ascending
      
@@ -99,7 +122,11 @@ export class BSTNodeImpl<T extends Ord & Clone> implements BSTNode<T> {
     }
     
     /**
-     * isEmpty
+     * Isempty.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -127,9 +154,14 @@ export class BinarySearchTreeImpl<T extends Ord & Clone> implements BinarySearch
 
     
     /**
-     * new
+     * New.
      
      
+     * @returns Self
+     
+     
+     
+     *
      * Postconditions:
       * - root is None
      
@@ -142,9 +174,16 @@ export class BinarySearchTreeImpl<T extends Ord & Clone> implements BinarySearch
     }
     
     /**
-     * insert
+     * Insert.
+     
+     * @param value - T.
      
      
+     * @returns boolean
+     
+     
+     
+     *
      * Postconditions:
       * - tree contains value
       * - BST invariant maintained
@@ -158,7 +197,13 @@ export class BinarySearchTreeImpl<T extends Ord & Clone> implements BinarySearch
     }
     
     /**
-     * contains
+     * Contains.
+     
+     * @param value - T.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -170,9 +215,14 @@ export class BinarySearchTreeImpl<T extends Ord & Clone> implements BinarySearch
     }
     
     /**
-     * inorder
+     * Inorder.
      
      
+     * @returns T[]
+     
+     
+     
+     *
      * Postconditions:
       * - result is sorted ascending
      
@@ -185,7 +235,11 @@ export class BinarySearchTreeImpl<T extends Ord & Clone> implements BinarySearch
     }
     
     /**
-     * isEmpty
+     * Isempty.
+     
+     
+     * @returns boolean
+     
      
      
      

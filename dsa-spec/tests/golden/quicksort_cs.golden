@@ -21,18 +21,29 @@ public static class QuicksortMethods
 {
     
     /// <summary>
-    /// Quicksort
-    /// 
-    /// Preconditions:
-    /// - arr is valid slice
-    /// 
-    /// 
-    /// Postconditions:
-    /// - arr is sorted ascending
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Quicksort.
     /// </summary>
+    
+    /// <param name="arr">T[].</param>
+    
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - arr is valid slice
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - arr is sorted ascending
+    
+    /// </remarks>
+    
+    
     public static void Quicksort(T[] arr)
     {
         
@@ -41,17 +52,32 @@ public static class QuicksortMethods
     }
     
     /// <summary>
-    /// Partition
-    /// 
-    /// 
-    /// Postconditions:
-    /// - pivot is in final sorted position
-    /// - elements left of pivot <= pivot
-    /// - elements right of pivot >= pivot
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Partition.
     /// </summary>
+    
+    /// <param name="arr">T[].</param>
+    
+    /// <param name="low">int.</param>
+    
+    /// <param name="high">int.</param>
+    
+    
+    /// <returns>int.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - pivot is in final sorted position
+    
+    /// - elements left of pivot <= pivot
+    
+    /// - elements right of pivot >= pivot
+    
+    /// </remarks>
+    
+    
     public static int Partition(T[] arr, int low, int high)
     {
         

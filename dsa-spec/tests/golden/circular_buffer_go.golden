@@ -59,7 +59,17 @@ type CircularBuffer[T any] struct {
 }
 
 
-// New
+// New New.
+
+// Parameters:
+
+//   - capacity: int
+
+
+
+// Returns:
+//   - Self
+
 
 // Preconditions:
  // - capacity > 0
@@ -78,7 +88,17 @@ func (s *CircularBuffer[T]) New(capacity int) Self {
 	panic("not implemented")
 }
 
-// Enqueue
+// Enqueue Enqueue.
+
+// Parameters:
+
+//   - item: T
+
+
+
+// Returns:
+//   - ((), error)
+
 
 // Preconditions:
  // - size < capacity
@@ -98,7 +118,12 @@ func (s *CircularBuffer[T]) Enqueue(item T) ((), error) {
 	panic("not implemented")
 }
 
-// Dequeue
+// Dequeue Dequeue.
+
+
+// Returns:
+//   - *T
+
 
 // Preconditions:
  // - size > 0
@@ -116,7 +141,12 @@ func (s *CircularBuffer[T]) Dequeue() *T {
 	panic("not implemented")
 }
 
-// IsFull
+// IsFull IsFull.
+
+
+// Returns:
+//   - bool
+
 
 
 
@@ -126,7 +156,12 @@ func (s *CircularBuffer[T]) IsFull() bool {
 	panic("not implemented")
 }
 
-// IsEmpty
+// IsEmpty IsEmpty.
+
+
+// Returns:
+//   - bool
+
 
 
 
@@ -136,7 +171,12 @@ func (s *CircularBuffer[T]) IsEmpty() bool {
 	panic("not implemented")
 }
 
-// Len
+// Len Len.
+
+
+// Returns:
+//   - int
+
 
 
 

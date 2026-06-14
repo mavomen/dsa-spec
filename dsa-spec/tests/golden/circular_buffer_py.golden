@@ -44,15 +44,31 @@ class CircularBuffer(Generic[T]):
 
     
     def new(self, capacity: int) -> Self:
-        """
+        """new.
         
+
+        Args:
+        
+            capacity: int
+        
+        
+
+        Returns:
+            Self
+        
+        
+
         Preconditions:
-        - capacity > 0
+        
+            - capacity > 0
         
         
+
         Postconditions:
-        - is_empty() == true
-        - capacity == capacity
+        
+            - is_empty() == true
+        
+            - capacity == capacity
         
         
         """
@@ -61,16 +77,32 @@ class CircularBuffer(Generic[T]):
         raise NotImplementedError
     
     def enqueue(self, item: T) -> ():
-        """
+        """enqueue.
         
+
+        Args:
+        
+            item: T
+        
+        
+
+        Returns:
+            ()
+        
+        
+
         Preconditions:
-        - size < capacity
+        
+            - size < capacity
         
         
+
         Postconditions:
-        - size == old.size + 1
+        
+            - size == old.size + 1
         
         
+
         Raises:
             Exception: on error (from Result type)
         
@@ -80,14 +112,24 @@ class CircularBuffer(Generic[T]):
         raise NotImplementedError
     
     def dequeue(self) -> Optional[T]:
-        """
+        """dequeue.
         
+        
+
+        Returns:
+            Optional[T]
+        
+        
+
         Preconditions:
-        - size > 0
+        
+            - size > 0
         
         
+
         Postconditions:
-        - size == old.size - 1
+        
+            - size == old.size - 1
         
         
         """
@@ -96,7 +138,13 @@ class CircularBuffer(Generic[T]):
         raise NotImplementedError
     
     def is_full(self) -> bool:
-        """
+        """is_full.
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -106,7 +154,13 @@ class CircularBuffer(Generic[T]):
         raise NotImplementedError
     
     def is_empty(self) -> bool:
-        """
+        """is_empty.
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -116,7 +170,13 @@ class CircularBuffer(Generic[T]):
         raise NotImplementedError
     
     def len(self) -> int:
-        """
+        """len.
+        
+        
+
+        Returns:
+            int
+        
         
         
         

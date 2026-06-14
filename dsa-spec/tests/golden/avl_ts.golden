@@ -47,9 +47,14 @@ export class AVLNodeImpl<T extends Ord & Clone> implements AVLNode<T> {
 
     
     /**
-     * new
+     * New.
      
      
+     * @returns Self
+     
+     
+     
+     *
      * Postconditions:
       * - root is None
      
@@ -62,9 +67,16 @@ export class AVLNodeImpl<T extends Ord & Clone> implements AVLNode<T> {
     }
     
     /**
-     * insert
+     * Insert.
+     
+     * @param value - T.
      
      
+     * @returns boolean
+     
+     
+     
+     *
      * Postconditions:
       * - tree contains value
       * - AVL invariant maintained
@@ -78,7 +90,13 @@ export class AVLNodeImpl<T extends Ord & Clone> implements AVLNode<T> {
     }
     
     /**
-     * contains
+     * Contains.
+     
+     * @param value - T.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -90,9 +108,14 @@ export class AVLNodeImpl<T extends Ord & Clone> implements AVLNode<T> {
     }
     
     /**
-     * inorder
+     * Inorder.
      
      
+     * @returns T[]
+     
+     
+     
+     *
      * Postconditions:
       * - result is sorted ascending
      
@@ -105,7 +128,11 @@ export class AVLNodeImpl<T extends Ord & Clone> implements AVLNode<T> {
     }
     
     /**
-     * height
+     * Height.
+     
+     
+     * @returns number
+     
      
      
      
@@ -117,7 +144,11 @@ export class AVLNodeImpl<T extends Ord & Clone> implements AVLNode<T> {
     }
     
     /**
-     * isEmpty
+     * Isempty.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -145,9 +176,14 @@ export class AVLTreeImpl<T extends Ord & Clone> implements AVLTree<T> {
 
     
     /**
-     * new
+     * New.
      
      
+     * @returns Self
+     
+     
+     
+     *
      * Postconditions:
       * - root is None
      
@@ -160,9 +196,16 @@ export class AVLTreeImpl<T extends Ord & Clone> implements AVLTree<T> {
     }
     
     /**
-     * insert
+     * Insert.
+     
+     * @param value - T.
      
      
+     * @returns boolean
+     
+     
+     
+     *
      * Postconditions:
       * - tree contains value
       * - AVL invariant maintained
@@ -176,7 +219,13 @@ export class AVLTreeImpl<T extends Ord & Clone> implements AVLTree<T> {
     }
     
     /**
-     * contains
+     * Contains.
+     
+     * @param value - T.
+     
+     
+     * @returns boolean
+     
      
      
      
@@ -188,9 +237,14 @@ export class AVLTreeImpl<T extends Ord & Clone> implements AVLTree<T> {
     }
     
     /**
-     * inorder
+     * Inorder.
      
      
+     * @returns T[]
+     
+     
+     
+     *
      * Postconditions:
       * - result is sorted ascending
      
@@ -203,7 +257,11 @@ export class AVLTreeImpl<T extends Ord & Clone> implements AVLTree<T> {
     }
     
     /**
-     * height
+     * Height.
+     
+     
+     * @returns number
+     
      
      
      
@@ -215,7 +273,11 @@ export class AVLTreeImpl<T extends Ord & Clone> implements AVLTree<T> {
     }
     
     /**
-     * isEmpty
+     * Isempty.
+     
+     
+     * @returns boolean
+     
      
      
      

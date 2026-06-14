@@ -42,15 +42,22 @@ public class AVLNode<T>
 
     
     /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - root is None
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// New.
     /// </summary>
+    
+    
+    /// <returns>Self.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - root is None
+    
+    /// </remarks>
+    
+    
     public Self New()
     {
         
@@ -59,16 +66,26 @@ public class AVLNode<T>
     }
     
     /// <summary>
-    /// Insert
-    /// 
-    /// 
-    /// Postconditions:
-    /// - tree contains value
-    /// - AVL invariant maintained
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Insert.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - tree contains value
+    
+    /// - AVL invariant maintained
+    
+    /// </remarks>
+    
+    
     public bool Insert(T value)
     {
         
@@ -77,12 +94,17 @@ public class AVLNode<T>
     }
     
     /// <summary>
-    /// Contains
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Contains.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool Contains(T value)
     {
         
@@ -91,15 +113,22 @@ public class AVLNode<T>
     }
     
     /// <summary>
-    /// Inorder
-    /// 
-    /// 
-    /// Postconditions:
-    /// - result is sorted ascending
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Inorder.
     /// </summary>
+    
+    
+    /// <returns>List<T>.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - result is sorted ascending
+    
+    /// </remarks>
+    
+    
     public List<T> Inorder()
     {
         
@@ -108,12 +137,15 @@ public class AVLNode<T>
     }
     
     /// <summary>
-    /// Height
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Height.
     /// </summary>
+    
+    
+    /// <returns>int.</returns>
+    
+    
+    
+    
     public int Height()
     {
         
@@ -122,12 +154,15 @@ public class AVLNode<T>
     }
     
     /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Isempty.
     /// </summary>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool IsEmpty()
     {
         
@@ -147,15 +182,22 @@ public class AVLTree<T>
 
     
     /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - root is None
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// New.
     /// </summary>
+    
+    
+    /// <returns>Self.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - root is None
+    
+    /// </remarks>
+    
+    
     public Self New()
     {
         
@@ -164,16 +206,26 @@ public class AVLTree<T>
     }
     
     /// <summary>
-    /// Insert
-    /// 
-    /// 
-    /// Postconditions:
-    /// - tree contains value
-    /// - AVL invariant maintained
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Insert.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - tree contains value
+    
+    /// - AVL invariant maintained
+    
+    /// </remarks>
+    
+    
     public bool Insert(T value)
     {
         
@@ -182,12 +234,17 @@ public class AVLTree<T>
     }
     
     /// <summary>
-    /// Contains
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Contains.
     /// </summary>
+    
+    /// <param name="value">T.</param>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool Contains(T value)
     {
         
@@ -196,15 +253,22 @@ public class AVLTree<T>
     }
     
     /// <summary>
-    /// Inorder
-    /// 
-    /// 
-    /// Postconditions:
-    /// - result is sorted ascending
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Inorder.
     /// </summary>
+    
+    
+    /// <returns>List<T>.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - result is sorted ascending
+    
+    /// </remarks>
+    
+    
     public List<T> Inorder()
     {
         
@@ -213,12 +277,15 @@ public class AVLTree<T>
     }
     
     /// <summary>
-    /// Height
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Height.
     /// </summary>
+    
+    
+    /// <returns>int.</returns>
+    
+    
+    
+    
     public int Height()
     {
         
@@ -227,12 +294,15 @@ public class AVLTree<T>
     }
     
     /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Isempty.
     /// </summary>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool IsEmpty()
     {
         

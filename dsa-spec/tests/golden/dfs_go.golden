@@ -21,7 +21,19 @@ import "testing"
 
 // No structs – standalone functions
 
-// Dfs
+// Dfs Dfs.
+
+// Parameters:
+
+//   - graph: &Graph<T>
+
+//   - start: T
+
+
+
+// Returns:
+//   - []T
+
 
 // Preconditions:
  // - start vertex exists in graph
@@ -41,7 +53,20 @@ func Dfs(graph &Graph<T>, start T) []T {
 	panic("not implemented")
 }
 
-// DfsRecursiveHelper
+// DfsRecursiveHelper DfsRecursiveHelper.
+
+// Parameters:
+
+//   - graph: &Graph<T>
+
+//   - vertex: T
+
+//   - visited: &mut HashSet<T>
+
+//   - result: &mut Vec<T>
+
+
+
 
 
 

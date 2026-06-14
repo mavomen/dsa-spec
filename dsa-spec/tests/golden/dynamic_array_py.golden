@@ -36,12 +36,21 @@ class DynamicArray(Generic[T]):
 
     
     def new(self) -> Self:
-        """
+        """new.
         
         
+
+        Returns:
+            Self
+        
+        
+        
+
         Postconditions:
-        - length == 0
-        - capacity >= 0
+        
+            - length == 0
+        
+            - capacity >= 0
         
         
         """
@@ -50,12 +59,22 @@ class DynamicArray(Generic[T]):
         raise NotImplementedError
     
     def push(self, item: T) -> None:
-        """
+        """push.
+        
+
+        Args:
+        
+            item: T
         
         
+        
+        
+
         Postconditions:
-        - length == old.length + 1
-        - last element == item
+        
+            - length == old.length + 1
+        
+            - last element == item
         
         
         """
@@ -64,14 +83,24 @@ class DynamicArray(Generic[T]):
         raise NotImplementedError
     
     def pop(self) -> Optional[T]:
-        """
+        """pop.
         
+        
+
+        Returns:
+            Optional[T]
+        
+        
+
         Preconditions:
-        - length > 0
+        
+            - length > 0
         
         
+
         Postconditions:
-        - length == old.length - 1
+        
+            - length == old.length - 1
         
         
         """
@@ -80,10 +109,23 @@ class DynamicArray(Generic[T]):
         raise NotImplementedError
     
     def get(self, index: int) -> Optional[T]:
-        """
+        """get.
         
+
+        Args:
+        
+            index: int
+        
+        
+
+        Returns:
+            Optional[T]
+        
+        
+
         Preconditions:
-        - index < length
+        
+            - index < length
         
         
         
@@ -93,11 +135,19 @@ class DynamicArray(Generic[T]):
         raise NotImplementedError
     
     def len(self) -> int:
-        """
+        """len.
         
         
+
+        Returns:
+            int
+        
+        
+        
+
         Postconditions:
-        - result >= 0
+        
+            - result >= 0
         
         
         """
@@ -106,7 +156,13 @@ class DynamicArray(Generic[T]):
         raise NotImplementedError
     
     def is_empty(self) -> bool:
-        """
+        """is_empty.
+        
+        
+
+        Returns:
+            bool
+        
         
         
         

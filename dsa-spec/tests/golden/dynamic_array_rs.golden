@@ -18,6 +18,13 @@ pub struct DynamicArray<T: Clone> {
 }
 
 impl<T: Clone> DynamicArray<T> {
+    /// New.
+
+    ///
+    /// # Returns
+    /// `Self`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** length == 0
@@ -29,6 +36,14 @@ impl<T: Clone> DynamicArray<T> {
         todo!()
     }
 
+    /// Push.
+
+    ///
+    /// # Parameters
+
+    /// - `item`: `T`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** length == old.length + 1
@@ -40,6 +55,13 @@ impl<T: Clone> DynamicArray<T> {
         todo!()
     }
 
+    /// Pop.
+
+    ///
+    /// # Returns
+    /// `Option<T>`
+
+    ///
     /// # Contracts
 
     /// - **Precondition:** length > 0
@@ -51,6 +73,18 @@ impl<T: Clone> DynamicArray<T> {
         todo!()
     }
 
+    /// Get.
+
+    ///
+    /// # Parameters
+
+    /// - `index`: `usize`
+
+    ///
+    /// # Returns
+    /// `Option<&T>`
+
+    ///
     /// # Contracts
 
     /// - **Precondition:** index < length
@@ -60,6 +94,13 @@ impl<T: Clone> DynamicArray<T> {
         todo!()
     }
 
+    /// Len.
+
+    ///
+    /// # Returns
+    /// `usize`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** result >= 0
@@ -68,6 +109,12 @@ impl<T: Clone> DynamicArray<T> {
         // TODO: Implement len
         todo!()
     }
+
+    /// Is empty.
+
+    ///
+    /// # Returns
+    /// `bool`
 
     pub fn is_empty(&self) -> bool {
         // TODO: Implement is_empty

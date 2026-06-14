@@ -42,11 +42,19 @@ class AVLNode(Generic[T]):
 
     
     def new(self) -> Self:
-        """
+        """new.
         
         
+
+        Returns:
+            Self
+        
+        
+        
+
         Postconditions:
-        - root is None
+        
+            - root is None
         
         
         """
@@ -55,12 +63,26 @@ class AVLNode(Generic[T]):
         raise NotImplementedError
     
     def insert(self, value: T) -> bool:
-        """
+        """insert.
+        
+
+        Args:
+        
+            value: T
         
         
+
+        Returns:
+            bool
+        
+        
+        
+
         Postconditions:
-        - tree contains value
-        - AVL invariant maintained
+        
+            - tree contains value
+        
+            - AVL invariant maintained
         
         
         """
@@ -69,7 +91,18 @@ class AVLNode(Generic[T]):
         raise NotImplementedError
     
     def contains(self, value: T) -> bool:
-        """
+        """contains.
+        
+
+        Args:
+        
+            value: T
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -79,11 +112,19 @@ class AVLNode(Generic[T]):
         raise NotImplementedError
     
     def inorder(self) -> List[T]:
-        """
+        """inorder.
         
         
+
+        Returns:
+            List[T]
+        
+        
+        
+
         Postconditions:
-        - result is sorted ascending
+        
+            - result is sorted ascending
         
         
         """
@@ -92,7 +133,13 @@ class AVLNode(Generic[T]):
         raise NotImplementedError
     
     def height(self) -> int:
-        """
+        """height.
+        
+        
+
+        Returns:
+            int
+        
         
         
         
@@ -102,7 +149,13 @@ class AVLNode(Generic[T]):
         raise NotImplementedError
     
     def is_empty(self) -> bool:
-        """
+        """is_empty.
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -124,11 +177,19 @@ class AVLTree(Generic[T]):
 
     
     def new(self) -> Self:
-        """
+        """new.
         
         
+
+        Returns:
+            Self
+        
+        
+        
+
         Postconditions:
-        - root is None
+        
+            - root is None
         
         
         """
@@ -137,12 +198,26 @@ class AVLTree(Generic[T]):
         raise NotImplementedError
     
     def insert(self, value: T) -> bool:
-        """
+        """insert.
+        
+
+        Args:
+        
+            value: T
         
         
+
+        Returns:
+            bool
+        
+        
+        
+
         Postconditions:
-        - tree contains value
-        - AVL invariant maintained
+        
+            - tree contains value
+        
+            - AVL invariant maintained
         
         
         """
@@ -151,7 +226,18 @@ class AVLTree(Generic[T]):
         raise NotImplementedError
     
     def contains(self, value: T) -> bool:
-        """
+        """contains.
+        
+
+        Args:
+        
+            value: T
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -161,11 +247,19 @@ class AVLTree(Generic[T]):
         raise NotImplementedError
     
     def inorder(self) -> List[T]:
-        """
+        """inorder.
         
         
+
+        Returns:
+            List[T]
+        
+        
+        
+
         Postconditions:
-        - result is sorted ascending
+        
+            - result is sorted ascending
         
         
         """
@@ -174,7 +268,13 @@ class AVLTree(Generic[T]):
         raise NotImplementedError
     
     def height(self) -> int:
-        """
+        """height.
+        
+        
+
+        Returns:
+            int
+        
         
         
         
@@ -184,7 +284,13 @@ class AVLTree(Generic[T]):
         raise NotImplementedError
     
     def is_empty(self) -> bool:
-        """
+        """is_empty.
+        
+        
+
+        Returns:
+            bool
+        
         
         
         

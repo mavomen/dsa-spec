@@ -18,6 +18,18 @@ pub struct Graph<T: Clone + Hash + Eq> {
 }
 
 impl<T: Clone + Hash + Eq> Graph<T> {
+    /// New.
+
+    ///
+    /// # Parameters
+
+    /// - `directed`: `bool`
+
+    ///
+    /// # Returns
+    /// `Self`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** vertex_count == 0
@@ -29,6 +41,18 @@ impl<T: Clone + Hash + Eq> Graph<T> {
         todo!()
     }
 
+    /// Add vertex.
+
+    ///
+    /// # Parameters
+
+    /// - `vertex`: `T`
+
+    ///
+    /// # Returns
+    /// `bool`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** vertex exists in graph
@@ -38,6 +62,20 @@ impl<T: Clone + Hash + Eq> Graph<T> {
         todo!()
     }
 
+    /// Add edge.
+
+    ///
+    /// # Parameters
+
+    /// - `from`: `T`
+
+    /// - `to`: `T`
+
+    ///
+    /// # Returns
+    /// `bool`
+
+    ///
     /// # Contracts
 
     /// - **Precondition:** from and to exist in graph
@@ -47,25 +85,72 @@ impl<T: Clone + Hash + Eq> Graph<T> {
         todo!()
     }
 
+    /// Neighbors.
+
+    ///
+    /// # Parameters
+
+    /// - `vertex`: `T`
+
+    ///
+    /// # Returns
+    /// `Option<&Vec<T>>`
+
     pub fn neighbors(&self, vertex: T) -> Option<&Vec<T>> {
         // TODO: Implement neighbors
         todo!()
     }
+
+    /// Vertex count.
+
+    ///
+    /// # Returns
+    /// `usize`
 
     pub fn vertex_count(&self) -> usize {
         // TODO: Implement vertex_count
         todo!()
     }
 
+    /// Edge count.
+
+    ///
+    /// # Returns
+    /// `usize`
+
     pub fn edge_count(&self) -> usize {
         // TODO: Implement edge_count
         todo!()
     }
 
+    /// Has vertex.
+
+    ///
+    /// # Parameters
+
+    /// - `vertex`: `T`
+
+    ///
+    /// # Returns
+    /// `bool`
+
     pub fn has_vertex(&self, vertex: T) -> bool {
         // TODO: Implement has_vertex
         todo!()
     }
+
+    /// Has edge.
+
+    ///
+    /// # Parameters
+
+    /// - `from`: `T`
+
+    /// - `to`: `T`
+
+    ///
+    /// # Returns
+    /// `bool`
 
     pub fn has_edge(&self, from: T, to: T) -> bool {
         // TODO: Implement has_edge

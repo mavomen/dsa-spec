@@ -51,7 +51,12 @@ type Node[T any] struct {
 }
 
 
-// New
+// New New.
+
+
+// Returns:
+//   - Self
+
 
 
 // Postconditions:
@@ -65,7 +70,14 @@ func (s *Node[T]) New() Self {
 	panic("not implemented")
 }
 
-// Prepend
+// Prepend Prepend.
+
+// Parameters:
+
+//   - value: T
+
+
+
 
 
 // Postconditions:
@@ -80,7 +92,14 @@ func (s *Node[T]) Prepend(value T)  {
 	panic("not implemented")
 }
 
-// Append
+// Append Append.
+
+// Parameters:
+
+//   - value: T
+
+
+
 
 
 // Postconditions:
@@ -94,7 +113,12 @@ func (s *Node[T]) Append(value T)  {
 	panic("not implemented")
 }
 
-// PopFront
+// PopFront PopFront.
+
+
+// Returns:
+//   - *T
+
 
 // Preconditions:
  // - !is_empty()
@@ -112,7 +136,12 @@ func (s *Node[T]) PopFront() *T {
 	panic("not implemented")
 }
 
-// IsEmpty
+// IsEmpty IsEmpty.
+
+
+// Returns:
+//   - bool
+
 
 
 
@@ -122,7 +151,12 @@ func (s *Node[T]) IsEmpty() bool {
 	panic("not implemented")
 }
 
-// Len
+// Len Len.
+
+
+// Returns:
+//   - int
+
 
 
 
@@ -162,7 +196,12 @@ type SinglyLinkedList[T any] struct {
 }
 
 
-// New
+// New New.
+
+
+// Returns:
+//   - Self
+
 
 
 // Postconditions:
@@ -176,7 +215,14 @@ func (s *SinglyLinkedList[T]) New() Self {
 	panic("not implemented")
 }
 
-// Prepend
+// Prepend Prepend.
+
+// Parameters:
+
+//   - value: T
+
+
+
 
 
 // Postconditions:
@@ -191,7 +237,14 @@ func (s *SinglyLinkedList[T]) Prepend(value T)  {
 	panic("not implemented")
 }
 
-// Append
+// Append Append.
+
+// Parameters:
+
+//   - value: T
+
+
+
 
 
 // Postconditions:
@@ -205,7 +258,12 @@ func (s *SinglyLinkedList[T]) Append(value T)  {
 	panic("not implemented")
 }
 
-// PopFront
+// PopFront PopFront.
+
+
+// Returns:
+//   - *T
+
 
 // Preconditions:
  // - !is_empty()
@@ -223,7 +281,12 @@ func (s *SinglyLinkedList[T]) PopFront() *T {
 	panic("not implemented")
 }
 
-// IsEmpty
+// IsEmpty IsEmpty.
+
+
+// Returns:
+//   - bool
+
 
 
 
@@ -233,7 +296,12 @@ func (s *SinglyLinkedList[T]) IsEmpty() bool {
 	panic("not implemented")
 }
 
-// Len
+// Len Len.
+
+
+// Returns:
+//   - int
+
 
 
 

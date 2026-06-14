@@ -38,12 +38,21 @@ class Node(Generic[T]):
 
     
     def new(self) -> Self:
-        """
+        """new.
         
         
+
+        Returns:
+            Self
+        
+        
+        
+
         Postconditions:
-        - head is None
-        - tail is None
+        
+            - head is None
+        
+            - tail is None
         
         
         """
@@ -52,11 +61,20 @@ class Node(Generic[T]):
         raise NotImplementedError
     
     def push_front(self, value: T) -> None:
-        """
+        """push_front.
+        
+
+        Args:
+        
+            value: T
         
         
+        
+        
+
         Postconditions:
-        - head.value == value
+        
+            - head.value == value
         
         
         """
@@ -65,11 +83,20 @@ class Node(Generic[T]):
         raise NotImplementedError
     
     def push_back(self, value: T) -> None:
-        """
+        """push_back.
+        
+
+        Args:
+        
+            value: T
         
         
+        
+        
+
         Postconditions:
-        - tail.value == value
+        
+            - tail.value == value
         
         
         """
@@ -78,10 +105,18 @@ class Node(Generic[T]):
         raise NotImplementedError
     
     def pop_front(self) -> Optional[T]:
-        """
+        """pop_front.
         
+        
+
+        Returns:
+            Optional[T]
+        
+        
+
         Preconditions:
-        - !is_empty()
+        
+            - !is_empty()
         
         
         
@@ -91,10 +126,18 @@ class Node(Generic[T]):
         raise NotImplementedError
     
     def pop_back(self) -> Optional[T]:
-        """
+        """pop_back.
         
+        
+
+        Returns:
+            Optional[T]
+        
+        
+
         Preconditions:
-        - !is_empty()
+        
+            - !is_empty()
         
         
         
@@ -104,7 +147,13 @@ class Node(Generic[T]):
         raise NotImplementedError
     
     def is_empty(self) -> bool:
-        """
+        """is_empty.
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -114,7 +163,13 @@ class Node(Generic[T]):
         raise NotImplementedError
     
     def len(self) -> int:
-        """
+        """len.
+        
+        
+
+        Returns:
+            int
+        
         
         
         
@@ -138,12 +193,21 @@ class DoublyLinkedList(Generic[T]):
 
     
     def new(self) -> Self:
-        """
+        """new.
         
         
+
+        Returns:
+            Self
+        
+        
+        
+
         Postconditions:
-        - head is None
-        - tail is None
+        
+            - head is None
+        
+            - tail is None
         
         
         """
@@ -152,11 +216,20 @@ class DoublyLinkedList(Generic[T]):
         raise NotImplementedError
     
     def push_front(self, value: T) -> None:
-        """
+        """push_front.
+        
+
+        Args:
+        
+            value: T
         
         
+        
+        
+
         Postconditions:
-        - head.value == value
+        
+            - head.value == value
         
         
         """
@@ -165,11 +238,20 @@ class DoublyLinkedList(Generic[T]):
         raise NotImplementedError
     
     def push_back(self, value: T) -> None:
-        """
+        """push_back.
+        
+
+        Args:
+        
+            value: T
         
         
+        
+        
+
         Postconditions:
-        - tail.value == value
+        
+            - tail.value == value
         
         
         """
@@ -178,10 +260,18 @@ class DoublyLinkedList(Generic[T]):
         raise NotImplementedError
     
     def pop_front(self) -> Optional[T]:
-        """
+        """pop_front.
         
+        
+
+        Returns:
+            Optional[T]
+        
+        
+
         Preconditions:
-        - !is_empty()
+        
+            - !is_empty()
         
         
         
@@ -191,10 +281,18 @@ class DoublyLinkedList(Generic[T]):
         raise NotImplementedError
     
     def pop_back(self) -> Optional[T]:
-        """
+        """pop_back.
         
+        
+
+        Returns:
+            Optional[T]
+        
+        
+
         Preconditions:
-        - !is_empty()
+        
+            - !is_empty()
         
         
         
@@ -204,7 +302,13 @@ class DoublyLinkedList(Generic[T]):
         raise NotImplementedError
     
     def is_empty(self) -> bool:
-        """
+        """is_empty.
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -214,7 +318,13 @@ class DoublyLinkedList(Generic[T]):
         raise NotImplementedError
     
     def len(self) -> int:
-        """
+        """len.
+        
+        
+
+        Returns:
+            int
+        
         
         
         

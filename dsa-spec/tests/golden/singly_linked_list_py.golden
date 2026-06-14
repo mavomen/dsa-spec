@@ -36,11 +36,19 @@ class Node(Generic[T]):
 
     
     def new(self) -> Self:
-        """
+        """new.
         
         
+
+        Returns:
+            Self
+        
+        
+        
+
         Postconditions:
-        - head is None
+        
+            - head is None
         
         
         """
@@ -49,12 +57,22 @@ class Node(Generic[T]):
         raise NotImplementedError
     
     def prepend(self, value: T) -> None:
-        """
+        """prepend.
+        
+
+        Args:
+        
+            value: T
         
         
+        
+        
+
         Postconditions:
-        - head.value == value
-        - list length increased by 1
+        
+            - head.value == value
+        
+            - list length increased by 1
         
         
         """
@@ -63,11 +81,20 @@ class Node(Generic[T]):
         raise NotImplementedError
     
     def append(self, value: T) -> None:
-        """
+        """append.
+        
+
+        Args:
+        
+            value: T
         
         
+        
+        
+
         Postconditions:
-        - last element == value
+        
+            - last element == value
         
         
         """
@@ -76,14 +103,24 @@ class Node(Generic[T]):
         raise NotImplementedError
     
     def pop_front(self) -> Optional[T]:
-        """
+        """pop_front.
         
+        
+
+        Returns:
+            Optional[T]
+        
+        
+
         Preconditions:
-        - !is_empty()
+        
+            - !is_empty()
         
         
+
         Postconditions:
-        - head == old.head.next
+        
+            - head == old.head.next
         
         
         """
@@ -92,7 +129,13 @@ class Node(Generic[T]):
         raise NotImplementedError
     
     def is_empty(self) -> bool:
-        """
+        """is_empty.
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -102,7 +145,13 @@ class Node(Generic[T]):
         raise NotImplementedError
     
     def len(self) -> int:
-        """
+        """len.
+        
+        
+
+        Returns:
+            int
+        
         
         
         
@@ -124,11 +173,19 @@ class SinglyLinkedList(Generic[T]):
 
     
     def new(self) -> Self:
-        """
+        """new.
         
         
+
+        Returns:
+            Self
+        
+        
+        
+
         Postconditions:
-        - head is None
+        
+            - head is None
         
         
         """
@@ -137,12 +194,22 @@ class SinglyLinkedList(Generic[T]):
         raise NotImplementedError
     
     def prepend(self, value: T) -> None:
-        """
+        """prepend.
+        
+
+        Args:
+        
+            value: T
         
         
+        
+        
+
         Postconditions:
-        - head.value == value
-        - list length increased by 1
+        
+            - head.value == value
+        
+            - list length increased by 1
         
         
         """
@@ -151,11 +218,20 @@ class SinglyLinkedList(Generic[T]):
         raise NotImplementedError
     
     def append(self, value: T) -> None:
-        """
+        """append.
+        
+
+        Args:
+        
+            value: T
         
         
+        
+        
+
         Postconditions:
-        - last element == value
+        
+            - last element == value
         
         
         """
@@ -164,14 +240,24 @@ class SinglyLinkedList(Generic[T]):
         raise NotImplementedError
     
     def pop_front(self) -> Optional[T]:
-        """
+        """pop_front.
         
+        
+
+        Returns:
+            Optional[T]
+        
+        
+
         Preconditions:
-        - !is_empty()
+        
+            - !is_empty()
         
         
+
         Postconditions:
-        - head == old.head.next
+        
+            - head == old.head.next
         
         
         """
@@ -180,7 +266,13 @@ class SinglyLinkedList(Generic[T]):
         raise NotImplementedError
     
     def is_empty(self) -> bool:
-        """
+        """is_empty.
+        
+        
+
+        Returns:
+            bool
+        
         
         
         
@@ -190,7 +282,13 @@ class SinglyLinkedList(Generic[T]):
         raise NotImplementedError
     
     def len(self) -> int:
-        """
+        """len.
+        
+        
+
+        Returns:
+            int
+        
         
         
         

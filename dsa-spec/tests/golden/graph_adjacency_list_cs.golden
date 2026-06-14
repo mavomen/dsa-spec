@@ -36,16 +36,26 @@ public class Graph<T>
 
     
     /// <summary>
-    /// New
-    /// 
-    /// 
-    /// Postconditions:
-    /// - vertex_count == 0
-    /// - edge_count == 0
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// New.
     /// </summary>
+    
+    /// <param name="directed">bool.</param>
+    
+    
+    /// <returns>Self.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - vertex_count == 0
+    
+    /// - edge_count == 0
+    
+    /// </remarks>
+    
+    
     public Self New(bool directed)
     {
         
@@ -54,15 +64,24 @@ public class Graph<T>
     }
     
     /// <summary>
-    /// AddVertex
-    /// 
-    /// 
-    /// Postconditions:
-    /// - vertex exists in graph
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Addvertex.
     /// </summary>
+    
+    /// <param name="vertex">T.</param>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - vertex exists in graph
+    
+    /// </remarks>
+    
+    
     public bool AddVertex(T vertex)
     {
         
@@ -71,15 +90,26 @@ public class Graph<T>
     }
     
     /// <summary>
-    /// AddEdge
-    /// 
-    /// Preconditions:
-    /// - from and to exist in graph
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Addedge.
     /// </summary>
+    
+    /// <param name="from">T.</param>
+    
+    /// <param name="to">T.</param>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - from and to exist in graph
+    
+    /// </remarks>
+    
+    
+    
     public bool AddEdge(T from, T to)
     {
         
@@ -88,12 +118,17 @@ public class Graph<T>
     }
     
     /// <summary>
-    /// Neighbors
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Neighbors.
     /// </summary>
+    
+    /// <param name="vertex">T.</param>
+    
+    
+    /// <returns>&Vec<T>?.</returns>
+    
+    
+    
+    
     public &Vec<T>? Neighbors(T vertex)
     {
         
@@ -102,12 +137,15 @@ public class Graph<T>
     }
     
     /// <summary>
-    /// VertexCount
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Vertexcount.
     /// </summary>
+    
+    
+    /// <returns>int.</returns>
+    
+    
+    
+    
     public int VertexCount()
     {
         
@@ -116,12 +154,15 @@ public class Graph<T>
     }
     
     /// <summary>
-    /// EdgeCount
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Edgecount.
     /// </summary>
+    
+    
+    /// <returns>int.</returns>
+    
+    
+    
+    
     public int EdgeCount()
     {
         
@@ -130,12 +171,17 @@ public class Graph<T>
     }
     
     /// <summary>
-    /// HasVertex
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Hasvertex.
     /// </summary>
+    
+    /// <param name="vertex">T.</param>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool HasVertex(T vertex)
     {
         
@@ -144,12 +190,19 @@ public class Graph<T>
     }
     
     /// <summary>
-    /// HasEdge
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Hasedge.
     /// </summary>
+    
+    /// <param name="from">T.</param>
+    
+    /// <param name="to">T.</param>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool HasEdge(T from, T to)
     {
         

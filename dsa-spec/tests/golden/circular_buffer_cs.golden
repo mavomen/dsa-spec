@@ -44,19 +44,33 @@ public class CircularBuffer<T>
 
     
     /// <summary>
-    /// New
-    /// 
-    /// Preconditions:
-    /// - capacity > 0
-    /// 
-    /// 
-    /// Postconditions:
-    /// - is_empty() == true
-    /// - capacity == capacity
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// New.
     /// </summary>
+    
+    /// <param name="capacity">int.</param>
+    
+    
+    /// <returns>Self.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - capacity > 0
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - is_empty() == true
+    
+    /// - capacity == capacity
+    
+    /// </remarks>
+    
+    
     public Self New(int capacity)
     {
         
@@ -65,20 +79,33 @@ public class CircularBuffer<T>
     }
     
     /// <summary>
-    /// Enqueue
-    /// 
-    /// Preconditions:
-    /// - size < capacity
-    /// 
-    /// 
-    /// Postconditions:
-    /// - size == old.size + 1
-    /// 
-    /// 
-    /// Throws: Exception (from Result type)
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Enqueue.
     /// </summary>
+    
+    /// <param name="item">T.</param>
+    
+    
+    /// <returns>().</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - size < capacity
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - size == old.size + 1
+    
+    /// </remarks>
+    
+    
+    /// <exception cref="Exception">Thrown when an error occurs (from Result type).</exception>
+    
     public () Enqueue(T item)
     {
         
@@ -87,18 +114,29 @@ public class CircularBuffer<T>
     }
     
     /// <summary>
-    /// Dequeue
-    /// 
-    /// Preconditions:
-    /// - size > 0
-    /// 
-    /// 
-    /// Postconditions:
-    /// - size == old.size - 1
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Dequeue.
     /// </summary>
+    
+    
+    /// <returns>T?.</returns>
+    
+    
+    /// <remarks>
+    /// Preconditions:
+    
+    /// - size > 0
+    
+    /// </remarks>
+    
+    
+    /// <remarks>
+    /// Postconditions:
+    
+    /// - size == old.size - 1
+    
+    /// </remarks>
+    
+    
     public T? Dequeue()
     {
         
@@ -107,12 +145,15 @@ public class CircularBuffer<T>
     }
     
     /// <summary>
-    /// IsFull
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Isfull.
     /// </summary>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool IsFull()
     {
         
@@ -121,12 +162,15 @@ public class CircularBuffer<T>
     }
     
     /// <summary>
-    /// IsEmpty
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Isempty.
     /// </summary>
+    
+    
+    /// <returns>bool.</returns>
+    
+    
+    
+    
     public bool IsEmpty()
     {
         
@@ -135,12 +179,15 @@ public class CircularBuffer<T>
     }
     
     /// <summary>
-    /// Len
-    /// 
-    /// 
-    /// 
-    /// Consider using LINQ for expressive iteration and transformations.
+    /// Len.
     /// </summary>
+    
+    
+    /// <returns>int.</returns>
+    
+    
+    
+    
     public int Len()
     {
         

@@ -18,6 +18,13 @@ pub struct Node<T: Clone> {
 }
 
 impl<T: Clone> Node<T> {
+    /// New.
+
+    ///
+    /// # Returns
+    /// `Self`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** head is None
@@ -27,6 +34,14 @@ impl<T: Clone> Node<T> {
         todo!()
     }
 
+    /// Prepend.
+
+    ///
+    /// # Parameters
+
+    /// - `value`: `T`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** head.value == value
@@ -38,6 +53,14 @@ impl<T: Clone> Node<T> {
         todo!()
     }
 
+    /// Append.
+
+    ///
+    /// # Parameters
+
+    /// - `value`: `T`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** last element == value
@@ -47,6 +70,13 @@ impl<T: Clone> Node<T> {
         todo!()
     }
 
+    /// Pop front.
+
+    ///
+    /// # Returns
+    /// `Option<T>`
+
+    ///
     /// # Contracts
 
     /// - **Precondition:** !is_empty()
@@ -58,10 +88,22 @@ impl<T: Clone> Node<T> {
         todo!()
     }
 
+    /// Is empty.
+
+    ///
+    /// # Returns
+    /// `bool`
+
     pub fn is_empty(&self) -> bool {
         // TODO: Implement is_empty
         todo!()
     }
+
+    /// Len.
+
+    ///
+    /// # Returns
+    /// `usize`
 
     pub fn len(&self) -> usize {
         // TODO: Implement len
@@ -74,6 +116,13 @@ pub struct SinglyLinkedList<T: Clone> {
 }
 
 impl<T: Clone> SinglyLinkedList<T> {
+    /// New.
+
+    ///
+    /// # Returns
+    /// `Self`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** head is None
@@ -83,6 +132,14 @@ impl<T: Clone> SinglyLinkedList<T> {
         todo!()
     }
 
+    /// Prepend.
+
+    ///
+    /// # Parameters
+
+    /// - `value`: `T`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** head.value == value
@@ -94,6 +151,14 @@ impl<T: Clone> SinglyLinkedList<T> {
         todo!()
     }
 
+    /// Append.
+
+    ///
+    /// # Parameters
+
+    /// - `value`: `T`
+
+    ///
     /// # Contracts
 
     /// - **Postcondition:** last element == value
@@ -103,6 +168,13 @@ impl<T: Clone> SinglyLinkedList<T> {
         todo!()
     }
 
+    /// Pop front.
+
+    ///
+    /// # Returns
+    /// `Option<T>`
+
+    ///
     /// # Contracts
 
     /// - **Precondition:** !is_empty()
@@ -114,10 +186,22 @@ impl<T: Clone> SinglyLinkedList<T> {
         todo!()
     }
 
+    /// Is empty.
+
+    ///
+    /// # Returns
+    /// `bool`
+
     pub fn is_empty(&self) -> bool {
         // TODO: Implement is_empty
         todo!()
     }
+
+    /// Len.
+
+    ///
+    /// # Returns
+    /// `usize`
 
     pub fn len(&self) -> usize {
         // TODO: Implement len

@@ -51,7 +51,12 @@ type DynamicArray[T any] struct {
 }
 
 
-// New
+// New New.
+
+
+// Returns:
+//   - Self
+
 
 
 // Postconditions:
@@ -66,7 +71,14 @@ func (s *DynamicArray[T]) New() Self {
 	panic("not implemented")
 }
 
-// Push
+// Push Push.
+
+// Parameters:
+
+//   - item: T
+
+
+
 
 
 // Postconditions:
@@ -81,7 +93,12 @@ func (s *DynamicArray[T]) Push(item T)  {
 	panic("not implemented")
 }
 
-// Pop
+// Pop Pop.
+
+
+// Returns:
+//   - *T
+
 
 // Preconditions:
  // - length > 0
@@ -99,7 +116,17 @@ func (s *DynamicArray[T]) Pop() *T {
 	panic("not implemented")
 }
 
-// Get
+// Get Get.
+
+// Parameters:
+
+//   - index: int
+
+
+
+// Returns:
+//   - *T
+
 
 // Preconditions:
  // - index < length
@@ -113,7 +140,12 @@ func (s *DynamicArray[T]) Get(index int) *T {
 	panic("not implemented")
 }
 
-// Len
+// Len Len.
+
+
+// Returns:
+//   - int
+
 
 
 // Postconditions:
@@ -127,7 +159,12 @@ func (s *DynamicArray[T]) Len() int {
 	panic("not implemented")
 }
 
-// IsEmpty
+// IsEmpty IsEmpty.
+
+
+// Returns:
+//   - bool
+
 
 
 
