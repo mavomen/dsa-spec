@@ -491,6 +491,69 @@ fn test_visualize_graphviz_format_alias() {
 }
 
 #[test]
+fn test_doc_command_exists() {
+    let spec = create_temp_spec();
+    let output = Command::new("cargo")
+        .args(["run", "--", "doc", spec.path().to_str().unwrap()])
+        .output()
+        .expect("failed to run cli");
+    assert!(
+        output.status.success(),
+        "doc failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(
+        stdout.contains("# Test"),
+        "doc should produce markdown title"
+    );
+    assert!(
+        stdout.contains("**Category:** test"),
+        "doc should include metadata"
+    );
+}
+
+#[test]
+fn test_doc_output_to_file() {
+    let spec = create_temp_spec();
+    let out_dir = tempfile::TempDir::new().expect("temp dir");
+    let out_file = out_dir.path().join("doc.md");
+    let output = Command::new("cargo")
+        .args([
+            "run",
+            "--",
+            "doc",
+            spec.path().to_str().unwrap(),
+            "--output",
+            out_file.to_str().unwrap(),
+        ])
+        .output()
+        .expect("failed to run cli");
+    assert!(
+        output.status.success(),
+        "doc with output failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert!(out_file.exists(), "doc output file should exist");
+    let content = std::fs::read_to_string(&out_file).unwrap();
+    assert!(content.contains("# Test"));
+}
+
+#[test]
+fn test_doc_invalid_spec_fails() {
+    let file = tempfile::NamedTempFile::new().expect("failed to create temp file");
+    std::fs::write(file.path(), "invalid: [unclosed").expect("write");
+    let output = Command::new("cargo")
+        .args(["run", "--", "doc", file.path().to_str().unwrap()])
+        .output()
+        .expect("failed to run cli");
+    assert!(
+        !output.status.success(),
+        "doc with invalid spec should fail"
+    );
+}
+
+#[test]
 fn test_visualize_missing_spec_fails() {
     let output = Command::new("cargo")
         .args(["run", "--", "visualize", "/nonexistent/spec.yaml"])

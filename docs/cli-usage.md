@@ -100,6 +100,17 @@ dsa-spec visualize specs/stack.yaml --format sequence
 
 Supports Graphviz DOT, Mermaid class diagrams, and Mermaid sequence diagrams.
 
+### `doc` -- generate markdown documentation
+
+Parses a spec and renders a human-readable markdown reference with metadata, structs, methods, contracts, and test cases.
+
+```
+dsa-spec doc specs/bst.yaml
+dsa-spec doc specs/bst.yaml --output docs/bst.md
+```
+
+If `--output` is omitted, the markdown is printed to stdout.
+
 ### `migrate` -- upgrade spec schema version
 
 ```

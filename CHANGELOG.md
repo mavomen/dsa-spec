@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+- **`doc` CLI subcommand**: render spec metadata, structs, methods, contracts, and test cases as human-readable Markdown from `dsa-spec doc specs/<name>.yaml`. Supports `--output` for file output.
+
 ## [1.0.0] - 2026-06-12
 
 ### Added
