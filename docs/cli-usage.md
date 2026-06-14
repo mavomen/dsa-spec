@@ -28,11 +28,11 @@ dsa-spec validate --help
 Generate a single language:
 
 ```
+# Single-file output (all methods concatenated):
 dsa-spec generate specs/bst.yaml --lang rust --output src/bst.rs
-dsa-spec generate specs/bst.yaml --lang python --output bst.py
-dsa-spec generate specs/bst.yaml --lang csharp -o Models/Bst.cs
-dsa-spec generate specs/bst.yaml --lang typescript -o bst.ts
-dsa-spec generate specs/bst.yaml --lang go -o bst.go
+
+# Multi-file output (one file per method):
+dsa-spec generate specs/bst.yaml --lang rust --output-dir src/
 ```
 
 Generate all five languages at once:
@@ -41,15 +41,17 @@ Generate all five languages at once:
 dsa-spec generate specs/bst.yaml --lang all --output-dir generated/
 ```
 
-This creates:
+This creates per-method files:
 
 ```
 generated/
-  bst.rs
-  bst.py
-  bst.cs
-  bst.ts
-  bst.go
+  bst.rs              # struct/class definition (from class template)
+  bst_insert.rs       # insert method + tests
+  bst_contains.rs     # contains method + tests
+  bst.py              # class definition
+  bst_insert.py       # insert method + tests
+  bst_contains.py
+  ...
 ```
 
 If you omit `--output`, the code is printed to stdout.
@@ -111,7 +113,7 @@ Creates a `.bak` backup before modifying the file.
 **Iterative development:**
 
 ```
-dsa-spec generate my-algo.yaml -l rust -o src/my_algo.rs
+dsa-spec generate my-algo.yaml -l rust --output-dir src/
 cargo test
 ```
 
@@ -120,6 +122,6 @@ cargo test
 ```
 for spec in specs/*.yaml; do
   dsa-spec validate "$spec"
-  dsa-spec generate "$spec" -l all -o generated/
+  dsa-spec generate "$spec" -l all --output-dir generated/
 done
 ```

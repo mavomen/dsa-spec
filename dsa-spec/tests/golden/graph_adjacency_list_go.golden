@@ -1,70 +1,36 @@
+// --- Graph.go ---
 // Graph
+ // Time complexity: O(V+E) for traversal
 
-// Time complexity: O(V+E) for traversal
-
-
-// Space complexity: O(V+E)
+ // Space complexity: O(V+E)
 
 
 // Invariants:
-
-// - all edges reference valid vertices
-
-// - vertex count >= 0
-
+ // - all edges reference valid vertices
+ // - vertex count >= 0
 
 
 package graph
 
-import "testing"
 
-
-
-
-
-// GraphInterface defines the contract for Graph
-type GraphInterface[T any] interface {
-
-	
-	New(directed bool) Self
-	
-	AddVertex(vertex T) bool
-	
-	AddEdge(from T, to T) bool
-	
-	Neighbors(vertex T) *&Vec<T>
-	
-	VertexCount() int
-	
-	EdgeCount() int
-	
-	HasVertex(vertex T) bool
-	
-	HasEdge(from T, to T) bool
-	
-}
-
-
-// Graph represents a Graph
 type Graph[T any] struct {
-	
-	AdjacencyList HashMap<T, Vec<T>>
-	
-	Directed bool
-	
+
+    
+    AdjacencyList HashMap<T, Vec<T>>
+    
+    Directed bool
+    
 }
 
+func NewGraph[T any]() *Graph[T] {
+    return &Graph[T]{}
+}
 
-// New New.
+// --- Graph_new.go ---
+// Graph.New
+ // @param directed - bool
 
-// Parameters:
-
-//   - directed: bool
-
-
-
-// Returns:
-//   - Self
+ // @returns Self
 
 
 
@@ -73,23 +39,41 @@ type Graph[T any] struct {
  // - edge_count == 0
 
 
+package graph
+
 
 func (s *Graph[T]) New(directed bool) Self {
-	
-	// TODO: Implement New
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
 
-// AddVertex AddVertex.
+// ========== Generated tests ==========
 
-// Parameters:
+func TestGraphNewadd_vertex_and_edge(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_vertex(1)) { t.Errorf("assertion failed: g.has_vertex(1)") }if !(g.has_vertex(2)) { t.Errorf("assertion failed: g.has_vertex(2)") }if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if g.vertex_count() != 2 { t.Errorf("got %v, want %v", g.vertex_count(), 2) }if g.edge_count() != 1 { t.Errorf("got %v, want %v", g.edge_count(), 1) }
+}
 
-//   - vertex: T
+func TestGraphNewundirected_graph_symmetric_edges(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(g.has_edge(2, 1)) { t.Errorf("assertion failed: g.has_edge(2, 1)") }
+}
+
+func TestGraphNewdirected_graph_no_symmetry(t *testing.T) {
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(!g.has_edge(2, 1)) { t.Errorf("assertion failed: !g.has_edge(2, 1)") }
+}
 
 
+// --- Graph_add_vertex.go ---
+// Graph.AddVertex
+ // @param vertex - T
 
-// Returns:
-//   - bool
+ // @returns bool
 
 
 
@@ -97,25 +81,42 @@ func (s *Graph[T]) New(directed bool) Self {
  // - vertex exists in graph
 
 
+package graph
+
 
 func (s *Graph[T]) AddVertex(vertex T) bool {
-	
-	// TODO: Implement AddVertex
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
 
-// AddEdge AddEdge.
+// ========== Generated tests ==========
 
-// Parameters:
+func TestGraphAddVertexadd_vertex_and_edge(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_vertex(1)) { t.Errorf("assertion failed: g.has_vertex(1)") }if !(g.has_vertex(2)) { t.Errorf("assertion failed: g.has_vertex(2)") }if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if g.vertex_count() != 2 { t.Errorf("got %v, want %v", g.vertex_count(), 2) }if g.edge_count() != 1 { t.Errorf("got %v, want %v", g.edge_count(), 1) }
+}
 
-//   - from: T
+func TestGraphAddVertexundirected_graph_symmetric_edges(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(g.has_edge(2, 1)) { t.Errorf("assertion failed: g.has_edge(2, 1)") }
+}
 
-//   - to: T
+func TestGraphAddVertexdirected_graph_no_symmetry(t *testing.T) {
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(!g.has_edge(2, 1)) { t.Errorf("assertion failed: !g.has_edge(2, 1)") }
+}
 
 
+// --- Graph_add_edge.go ---
+// Graph.AddEdge
+ // @param from - T
+ // @param to - T
 
-// Returns:
-//   - bool
+ // @returns bool
 
 
 // Preconditions:
@@ -123,125 +124,226 @@ func (s *Graph[T]) AddVertex(vertex T) bool {
 
 
 
+package graph
+
 
 func (s *Graph[T]) AddEdge(from T, to T) bool {
-	
-	// TODO: Implement AddEdge
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
-
-// Neighbors Neighbors.
-
-// Parameters:
-
-//   - vertex: T
-
-
-
-// Returns:
-//   - *&Vec<T>
-
-
-
-
-func (s *Graph[T]) Neighbors(vertex T) *&Vec<T> {
-	
-	// TODO: Implement Neighbors
-	panic("not implemented")
-}
-
-// VertexCount VertexCount.
-
-
-// Returns:
-//   - int
-
-
-
-
-func (s *Graph[T]) VertexCount() int {
-	
-	// TODO: Implement VertexCount
-	panic("not implemented")
-}
-
-// EdgeCount EdgeCount.
-
-
-// Returns:
-//   - int
-
-
-
-
-func (s *Graph[T]) EdgeCount() int {
-	
-	// TODO: Implement EdgeCount
-	panic("not implemented")
-}
-
-// HasVertex HasVertex.
-
-// Parameters:
-
-//   - vertex: T
-
-
-
-// Returns:
-//   - bool
-
-
-
-
-func (s *Graph[T]) HasVertex(vertex T) bool {
-	
-	// TODO: Implement HasVertex
-	panic("not implemented")
-}
-
-// HasEdge HasEdge.
-
-// Parameters:
-
-//   - from: T
-
-//   - to: T
-
-
-
-// Returns:
-//   - bool
-
-
-
-
-func (s *Graph[T]) HasEdge(from T, to T) bool {
-	
-	// TODO: Implement HasEdge
-	panic("not implemented")
-}
-
-
-
 
 // ========== Generated tests ==========
 
-func Testadd_vertex_and_edge(t *testing.T) {
-	let mut g = Graph::new(false);
-	g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
-	if !(g.has_vertex(1)) { t.Errorf("assertion failed: g.has_vertex(1)") }if !(g.has_vertex(2)) { t.Errorf("assertion failed: g.has_vertex(2)") }if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if g.vertex_count() != 2 { t.Errorf("got %v, want %v", g.vertex_count(), 2) }if g.edge_count() != 1 { t.Errorf("got %v, want %v", g.edge_count(), 1) }
+func TestGraphAddEdgeadd_vertex_and_edge(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_vertex(1)) { t.Errorf("assertion failed: g.has_vertex(1)") }if !(g.has_vertex(2)) { t.Errorf("assertion failed: g.has_vertex(2)") }if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if g.vertex_count() != 2 { t.Errorf("got %v, want %v", g.vertex_count(), 2) }if g.edge_count() != 1 { t.Errorf("got %v, want %v", g.edge_count(), 1) }
 }
 
-func Testundirected_graph_symmetric_edges(t *testing.T) {
-	let mut g = Graph::new(false);
-	g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
-	if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(g.has_edge(2, 1)) { t.Errorf("assertion failed: g.has_edge(2, 1)") }
+func TestGraphAddEdgeundirected_graph_symmetric_edges(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(g.has_edge(2, 1)) { t.Errorf("assertion failed: g.has_edge(2, 1)") }
 }
 
-func Testdirected_graph_no_symmetry(t *testing.T) {
-	let mut g = Graph::new(true);
-	g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
-	if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(!g.has_edge(2, 1)) { t.Errorf("assertion failed: !g.has_edge(2, 1)") }
+func TestGraphAddEdgedirected_graph_no_symmetry(t *testing.T) {
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(!g.has_edge(2, 1)) { t.Errorf("assertion failed: !g.has_edge(2, 1)") }
+}
+
+
+// --- Graph_neighbors.go ---
+// Graph.Neighbors
+ // @param vertex - T
+
+ // @returns *&Vec<T>
+
+
+
+
+package graph
+
+
+func (s *Graph[T]) Neighbors(vertex T) *&Vec<T> {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestGraphNeighborsadd_vertex_and_edge(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_vertex(1)) { t.Errorf("assertion failed: g.has_vertex(1)") }if !(g.has_vertex(2)) { t.Errorf("assertion failed: g.has_vertex(2)") }if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if g.vertex_count() != 2 { t.Errorf("got %v, want %v", g.vertex_count(), 2) }if g.edge_count() != 1 { t.Errorf("got %v, want %v", g.edge_count(), 1) }
+}
+
+func TestGraphNeighborsundirected_graph_symmetric_edges(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(g.has_edge(2, 1)) { t.Errorf("assertion failed: g.has_edge(2, 1)") }
+}
+
+func TestGraphNeighborsdirected_graph_no_symmetry(t *testing.T) {
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(!g.has_edge(2, 1)) { t.Errorf("assertion failed: !g.has_edge(2, 1)") }
+}
+
+
+// --- Graph_vertex_count.go ---
+// Graph.VertexCount
+
+ // @returns int
+
+
+
+
+package graph
+
+
+func (s *Graph[T]) VertexCount() int {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestGraphVertexCountadd_vertex_and_edge(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_vertex(1)) { t.Errorf("assertion failed: g.has_vertex(1)") }if !(g.has_vertex(2)) { t.Errorf("assertion failed: g.has_vertex(2)") }if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if g.vertex_count() != 2 { t.Errorf("got %v, want %v", g.vertex_count(), 2) }if g.edge_count() != 1 { t.Errorf("got %v, want %v", g.edge_count(), 1) }
+}
+
+func TestGraphVertexCountundirected_graph_symmetric_edges(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(g.has_edge(2, 1)) { t.Errorf("assertion failed: g.has_edge(2, 1)") }
+}
+
+func TestGraphVertexCountdirected_graph_no_symmetry(t *testing.T) {
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(!g.has_edge(2, 1)) { t.Errorf("assertion failed: !g.has_edge(2, 1)") }
+}
+
+
+// --- Graph_edge_count.go ---
+// Graph.EdgeCount
+
+ // @returns int
+
+
+
+
+package graph
+
+
+func (s *Graph[T]) EdgeCount() int {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestGraphEdgeCountadd_vertex_and_edge(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_vertex(1)) { t.Errorf("assertion failed: g.has_vertex(1)") }if !(g.has_vertex(2)) { t.Errorf("assertion failed: g.has_vertex(2)") }if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if g.vertex_count() != 2 { t.Errorf("got %v, want %v", g.vertex_count(), 2) }if g.edge_count() != 1 { t.Errorf("got %v, want %v", g.edge_count(), 1) }
+}
+
+func TestGraphEdgeCountundirected_graph_symmetric_edges(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(g.has_edge(2, 1)) { t.Errorf("assertion failed: g.has_edge(2, 1)") }
+}
+
+func TestGraphEdgeCountdirected_graph_no_symmetry(t *testing.T) {
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(!g.has_edge(2, 1)) { t.Errorf("assertion failed: !g.has_edge(2, 1)") }
+}
+
+
+// --- Graph_has_vertex.go ---
+// Graph.HasVertex
+ // @param vertex - T
+
+ // @returns bool
+
+
+
+
+package graph
+
+
+func (s *Graph[T]) HasVertex(vertex T) bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestGraphHasVertexadd_vertex_and_edge(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_vertex(1)) { t.Errorf("assertion failed: g.has_vertex(1)") }if !(g.has_vertex(2)) { t.Errorf("assertion failed: g.has_vertex(2)") }if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if g.vertex_count() != 2 { t.Errorf("got %v, want %v", g.vertex_count(), 2) }if g.edge_count() != 1 { t.Errorf("got %v, want %v", g.edge_count(), 1) }
+}
+
+func TestGraphHasVertexundirected_graph_symmetric_edges(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(g.has_edge(2, 1)) { t.Errorf("assertion failed: g.has_edge(2, 1)") }
+}
+
+func TestGraphHasVertexdirected_graph_no_symmetry(t *testing.T) {
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(!g.has_edge(2, 1)) { t.Errorf("assertion failed: !g.has_edge(2, 1)") }
+}
+
+
+// --- Graph_has_edge.go ---
+// Graph.HasEdge
+ // @param from - T
+ // @param to - T
+
+ // @returns bool
+
+
+
+
+package graph
+
+
+func (s *Graph[T]) HasEdge(from T, to T) bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestGraphHasEdgeadd_vertex_and_edge(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_vertex(1)) { t.Errorf("assertion failed: g.has_vertex(1)") }if !(g.has_vertex(2)) { t.Errorf("assertion failed: g.has_vertex(2)") }if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if g.vertex_count() != 2 { t.Errorf("got %v, want %v", g.vertex_count(), 2) }if g.edge_count() != 1 { t.Errorf("got %v, want %v", g.edge_count(), 1) }
+}
+
+func TestGraphHasEdgeundirected_graph_symmetric_edges(t *testing.T) {
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(g.has_edge(2, 1)) { t.Errorf("assertion failed: g.has_edge(2, 1)") }
+}
+
+func TestGraphHasEdgedirected_graph_no_symmetry(t *testing.T) {
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    if !(g.has_edge(1, 2)) { t.Errorf("assertion failed: g.has_edge(1, 2)") }if !(!g.has_edge(2, 1)) { t.Errorf("assertion failed: !g.has_edge(2, 1)") }
 }
 

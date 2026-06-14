@@ -1,3 +1,4 @@
+// --- DFSMethods.go ---
 // DFS
 
 // Time complexity: O(V + E)

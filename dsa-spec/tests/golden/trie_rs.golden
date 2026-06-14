@@ -1,0 +1,385 @@
+// --- TrieNode.rs ---
+/// Trie
+/// Time complexity: O(k) insert/search/starts_with (k = key length)
+
+/// Space complexity: O(n * k)
+
+/// Invariants:
+/// - each node has at most one parent
+/// - root is always empty (no character)
+
+#[derive(Debug, Clone)]
+pub struct TrieNode {
+    pub children: HashMap<char, Box<TrieNode>>,
+
+    pub is_end: bool,
+}
+
+impl TrieNode {
+    pub fn new() -> Self {
+        Self {
+            children: Default::default(),
+
+            is_end: Default::default(),
+        }
+    }
+}
+
+// --- TrieNode_new.rs ---
+/// Trie.new
+
+/// Returns: Self
+
+/// Postconditions:
+/// - is_empty() == true
+
+impl TrieNode {
+    pub fn new(&mut self) -> Self {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn insert_and_search() {
+        let mut trie = Trie::new();
+        trie.insert("hello");
+        trie.insert("world");
+        assert!(trie.search("hello"));
+        assert!(trie.search("world"));
+        assert!(!trie.search("hell"));
+        assert!(!trie.search("foo"));
+    }
+
+    #[test]
+    fn prefix_matching() {
+        let mut trie = Trie::new();
+        trie.insert("cat");
+        trie.insert("car");
+        trie.insert("dog");
+        assert!(trie.starts_with("ca"));
+        assert!(trie.starts_with("c"));
+        assert!(trie.starts_with("do"));
+        assert!(!trie.starts_with("bat"));
+    }
+
+    #[test]
+    fn delete_word() {
+        let mut trie = Trie::new();
+        trie.insert("test");
+        trie.insert("testing");
+        assert!(trie.delete("test"));
+        assert!(!trie.search("test"));
+        assert!(trie.search("testing"));
+    }
+
+    #[test]
+    fn empty_trie() {
+        let trie: Trie = Trie::new();
+
+        assert!(trie.is_empty());
+        assert!(!trie.search("anything"));
+        assert!(!trie.starts_with("x"));
+    }
+}
+
+// --- TrieNode_insert.rs ---
+/// Trie.insert
+/// * `word` - String
+
+/// Postconditions:
+/// - search(word) == true
+
+impl TrieNode {
+    pub fn insert(&mut self, word: String) -> () {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn insert_and_search() {
+        let mut trie = Trie::new();
+        trie.insert("hello");
+        trie.insert("world");
+        assert!(trie.search("hello"));
+        assert!(trie.search("world"));
+        assert!(!trie.search("hell"));
+        assert!(!trie.search("foo"));
+    }
+
+    #[test]
+    fn prefix_matching() {
+        let mut trie = Trie::new();
+        trie.insert("cat");
+        trie.insert("car");
+        trie.insert("dog");
+        assert!(trie.starts_with("ca"));
+        assert!(trie.starts_with("c"));
+        assert!(trie.starts_with("do"));
+        assert!(!trie.starts_with("bat"));
+    }
+
+    #[test]
+    fn delete_word() {
+        let mut trie = Trie::new();
+        trie.insert("test");
+        trie.insert("testing");
+        assert!(trie.delete("test"));
+        assert!(!trie.search("test"));
+        assert!(trie.search("testing"));
+    }
+
+    #[test]
+    fn empty_trie() {
+        let trie: Trie = Trie::new();
+
+        assert!(trie.is_empty());
+        assert!(!trie.search("anything"));
+        assert!(!trie.starts_with("x"));
+    }
+}
+
+// --- TrieNode_search.rs ---
+/// Trie.search
+/// * `word` - String
+
+/// Returns: bool
+
+impl TrieNode {
+    pub fn search(&mut self, word: String) -> bool {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn insert_and_search() {
+        let mut trie = Trie::new();
+        trie.insert("hello");
+        trie.insert("world");
+        assert!(trie.search("hello"));
+        assert!(trie.search("world"));
+        assert!(!trie.search("hell"));
+        assert!(!trie.search("foo"));
+    }
+
+    #[test]
+    fn prefix_matching() {
+        let mut trie = Trie::new();
+        trie.insert("cat");
+        trie.insert("car");
+        trie.insert("dog");
+        assert!(trie.starts_with("ca"));
+        assert!(trie.starts_with("c"));
+        assert!(trie.starts_with("do"));
+        assert!(!trie.starts_with("bat"));
+    }
+
+    #[test]
+    fn delete_word() {
+        let mut trie = Trie::new();
+        trie.insert("test");
+        trie.insert("testing");
+        assert!(trie.delete("test"));
+        assert!(!trie.search("test"));
+        assert!(trie.search("testing"));
+    }
+
+    #[test]
+    fn empty_trie() {
+        let trie: Trie = Trie::new();
+
+        assert!(trie.is_empty());
+        assert!(!trie.search("anything"));
+        assert!(!trie.starts_with("x"));
+    }
+}
+
+// --- TrieNode_starts_with.rs ---
+/// Trie.starts_with
+/// * `prefix` - String
+
+/// Returns: bool
+
+impl TrieNode {
+    pub fn starts_with(&mut self, prefix: String) -> bool {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn insert_and_search() {
+        let mut trie = Trie::new();
+        trie.insert("hello");
+        trie.insert("world");
+        assert!(trie.search("hello"));
+        assert!(trie.search("world"));
+        assert!(!trie.search("hell"));
+        assert!(!trie.search("foo"));
+    }
+
+    #[test]
+    fn prefix_matching() {
+        let mut trie = Trie::new();
+        trie.insert("cat");
+        trie.insert("car");
+        trie.insert("dog");
+        assert!(trie.starts_with("ca"));
+        assert!(trie.starts_with("c"));
+        assert!(trie.starts_with("do"));
+        assert!(!trie.starts_with("bat"));
+    }
+
+    #[test]
+    fn delete_word() {
+        let mut trie = Trie::new();
+        trie.insert("test");
+        trie.insert("testing");
+        assert!(trie.delete("test"));
+        assert!(!trie.search("test"));
+        assert!(trie.search("testing"));
+    }
+
+    #[test]
+    fn empty_trie() {
+        let trie: Trie = Trie::new();
+
+        assert!(trie.is_empty());
+        assert!(!trie.search("anything"));
+        assert!(!trie.starts_with("x"));
+    }
+}
+
+// --- TrieNode_delete.rs ---
+/// Trie.delete
+/// * `word` - String
+
+/// Returns: bool
+
+/// Postconditions:
+/// - search(word) == false
+
+impl TrieNode {
+    pub fn delete(&mut self, word: String) -> bool {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn insert_and_search() {
+        let mut trie = Trie::new();
+        trie.insert("hello");
+        trie.insert("world");
+        assert!(trie.search("hello"));
+        assert!(trie.search("world"));
+        assert!(!trie.search("hell"));
+        assert!(!trie.search("foo"));
+    }
+
+    #[test]
+    fn prefix_matching() {
+        let mut trie = Trie::new();
+        trie.insert("cat");
+        trie.insert("car");
+        trie.insert("dog");
+        assert!(trie.starts_with("ca"));
+        assert!(trie.starts_with("c"));
+        assert!(trie.starts_with("do"));
+        assert!(!trie.starts_with("bat"));
+    }
+
+    #[test]
+    fn delete_word() {
+        let mut trie = Trie::new();
+        trie.insert("test");
+        trie.insert("testing");
+        assert!(trie.delete("test"));
+        assert!(!trie.search("test"));
+        assert!(trie.search("testing"));
+    }
+
+    #[test]
+    fn empty_trie() {
+        let trie: Trie = Trie::new();
+
+        assert!(trie.is_empty());
+        assert!(!trie.search("anything"));
+        assert!(!trie.starts_with("x"));
+    }
+}
+
+// --- TrieNode_is_empty.rs ---
+/// Trie.is_empty
+
+/// Returns: bool
+
+impl TrieNode {
+    pub fn is_empty(&mut self) -> bool {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn insert_and_search() {
+        let mut trie = Trie::new();
+        trie.insert("hello");
+        trie.insert("world");
+        assert!(trie.search("hello"));
+        assert!(trie.search("world"));
+        assert!(!trie.search("hell"));
+        assert!(!trie.search("foo"));
+    }
+
+    #[test]
+    fn prefix_matching() {
+        let mut trie = Trie::new();
+        trie.insert("cat");
+        trie.insert("car");
+        trie.insert("dog");
+        assert!(trie.starts_with("ca"));
+        assert!(trie.starts_with("c"));
+        assert!(trie.starts_with("do"));
+        assert!(!trie.starts_with("bat"));
+    }
+
+    #[test]
+    fn delete_word() {
+        let mut trie = Trie::new();
+        trie.insert("test");
+        trie.insert("testing");
+        assert!(trie.delete("test"));
+        assert!(!trie.search("test"));
+        assert!(trie.search("testing"));
+    }
+
+    #[test]
+    fn empty_trie() {
+        let trie: Trie = Trie::new();
+
+        assert!(trie.is_empty());
+        assert!(!trie.search("anything"));
+        assert!(!trie.starts_with("x"));
+    }
+}

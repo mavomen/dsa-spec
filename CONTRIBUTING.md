@@ -17,7 +17,7 @@ skeleton generator. We're thrilled you want to help.
 
 ## Adding a new language backend
 1. Create `dsa-spec/src/<lang>_backend.rs` implementing the `Backend` trait
-2. Add a Tera template in `dsa-spec/templates/<lang>.<ext>.tera`
+2. Add Tera templates in `dsa-spec/templates/<lang>/` (`class.<ext>.tera` and `method.<ext>.tera`), plus a monolithic fallback `dsa-spec/templates/<lang>.<ext>.tera` for no-struct specs
 3. Register the module in `dsa-spec/src/lib.rs`
 4. Add an integration test in `dsa-spec/tests/<lang>_backend.rs`
 5. Update `.github/workflows/ci.yml` to include the new language

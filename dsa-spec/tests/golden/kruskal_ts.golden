@@ -1,0 +1,102 @@
+// --- KruskalMethods.ts ---
+/**
+ * Kruskal
+
+ * Time complexity: O(E log E)
+
+
+ * Space complexity: O(V + E)
+
+
+ */
+
+
+
+
+/**
+ * Kruskal.
+ 
+ * @param vertices - number.
+ 
+ * @param edges - (usize, usize, usize)[].
+ 
+ 
+ * @returns (usize, usize, usize)[]
+ 
+ 
+ *
+ * Preconditions:
+  * - vertices > 0
+ 
+ 
+ *
+ * Postconditions:
+  * - result contains vertices - 1 edges when graph is connected
+ 
+ 
+ */
+export function kruskal(vertices: number, edges: (usize, usize, usize)[]): (usize, usize, usize)[] {
+    
+    // TODO: Implement kruskal
+    throw new Error('Not implemented');
+}
+
+/**
+ * Totalweight.
+ 
+ * @param mst - (usize, usize, usize)[].
+ 
+ 
+ * @returns number
+ 
+ 
+ 
+ *
+ * Postconditions:
+  * - sum of edge weights in MST
+ 
+ 
+ */
+export function totalWeight(mst: (usize, usize, usize)[]): number {
+    
+    // TODO: Implement totalWeight
+    throw new Error('Not implemented');
+}
+
+
+
+// ========== Generated Jest tests ==========
+
+describe('simple_graph_mst', () => {
+    it('should work', () => {
+        // Setup
+        let vertices = 4;
+        // Actions
+        let edges = vec![(0, 1, 10), (0, 2, 6), (0, 3, 5), (1, 3, 15), (2, 3, 4)];let mst = kruskal(vertices, edges);
+        // Assertions
+        expect(mst.len()).toBe(3);expect(total_weight(&mst)).toBe(19);
+    });
+});
+
+describe('single_vertex', () => {
+    it('should work', () => {
+        // Setup
+        let vertices = 1;
+        // Actions
+        let edges: Vec<(usize, usize, usize)> = vec![];let mst = kruskal(vertices, edges);
+        // Assertions
+        expect(mst.len()).toBe(0);
+    });
+});
+
+describe('disconnected_graph', () => {
+    it('should work', () => {
+        // Setup
+        let vertices = 3;
+        // Actions
+        let edges = vec![(0, 1, 5)];let mst = kruskal(vertices, edges);
+        // Assertions
+        expect(mst.len()).toBe(1);
+    });
+});
+

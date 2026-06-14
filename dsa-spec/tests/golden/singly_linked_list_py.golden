@@ -1,28 +1,21 @@
+// --- Node.py ---
 """
 SinglyLinkedList
-
 Time complexity: O(1) prepend, O(n) append/search
-
-
 Space complexity: O(n)
 
-
-# Invariants
-
-# - no cycles
-
-# - head is None iff tail is None
-
+Invariants:
+    - no cycles
+    - head is None iff tail is None
 
 """
 
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Optional, List, Dict
-import pytest
-
+from typing import Generic, TypeVar, Optional, List, Dict
 
 
 T = TypeVar('T')
+
 
 
 @dataclass
@@ -34,292 +27,252 @@ class Node(Generic[T]):
     next: Optional[Node<T>]
     
 
+// --- Node_new.py ---
+"""
+SinglyLinkedList.new
+
+
+Postconditions:
+    - head is None
+
+"""
+
+from node import Node
+
+
+def new(self, ) -> Self:
+    """new."""
     
-    def new(self) -> Self:
-        """new.
-        
-        
-
-        Returns:
-            Self
-        
-        
-        
-
-        Postconditions:
-        
-            - head is None
-        
-        
-        """
-        
-        # TODO: Implement new
-        raise NotImplementedError
-    
-    def prepend(self, value: T) -> None:
-        """prepend.
-        
-
-        Args:
-        
-            value: T
-        
-        
-        
-        
-
-        Postconditions:
-        
-            - head.value == value
-        
-            - list length increased by 1
-        
-        
-        """
-        
-        # TODO: Implement prepend
-        raise NotImplementedError
-    
-    def append(self, value: T) -> None:
-        """append.
-        
-
-        Args:
-        
-            value: T
-        
-        
-        
-        
-
-        Postconditions:
-        
-            - last element == value
-        
-        
-        """
-        
-        # TODO: Implement append
-        raise NotImplementedError
-    
-    def pop_front(self) -> Optional[T]:
-        """pop_front.
-        
-        
-
-        Returns:
-            Optional[T]
-        
-        
-
-        Preconditions:
-        
-            - !is_empty()
-        
-        
-
-        Postconditions:
-        
-            - head == old.head.next
-        
-        
-        """
-        
-        # TODO: Implement pop_front
-        raise NotImplementedError
-    
-    def is_empty(self) -> bool:
-        """is_empty.
-        
-        
-
-        Returns:
-            bool
-        
-        
-        
-        
-        """
-        
-        # TODO: Implement is_empty
-        raise NotImplementedError
-    
-    def len(self) -> int:
-        """len.
-        
-        
-
-        Returns:
-            int
-        
-        
-        
-        
-        """
-        
-        # TODO: Implement len
-        raise NotImplementedError
-    
-
-T = TypeVar('T')
+    raise NotImplementedError
 
 
-@dataclass
-class SinglyLinkedList(Generic[T]):
-    """SinglyLinkedList"""
-    
-    head: Optional[Node<T>]
-    
+Node.new = new
 
-    
-    def new(self) -> Self:
-        """new.
-        
-        
-
-        Returns:
-            Self
-        
-        
-        
-
-        Postconditions:
-        
-            - head is None
-        
-        
-        """
-        
-        # TODO: Implement new
-        raise NotImplementedError
-    
-    def prepend(self, value: T) -> None:
-        """prepend.
-        
-
-        Args:
-        
-            value: T
-        
-        
-        
-        
-
-        Postconditions:
-        
-            - head.value == value
-        
-            - list length increased by 1
-        
-        
-        """
-        
-        # TODO: Implement prepend
-        raise NotImplementedError
-    
-    def append(self, value: T) -> None:
-        """append.
-        
-
-        Args:
-        
-            value: T
-        
-        
-        
-        
-
-        Postconditions:
-        
-            - last element == value
-        
-        
-        """
-        
-        # TODO: Implement append
-        raise NotImplementedError
-    
-    def pop_front(self) -> Optional[T]:
-        """pop_front.
-        
-        
-
-        Returns:
-            Optional[T]
-        
-        
-
-        Preconditions:
-        
-            - !is_empty()
-        
-        
-
-        Postconditions:
-        
-            - head == old.head.next
-        
-        
-        """
-        
-        # TODO: Implement pop_front
-        raise NotImplementedError
-    
-    def is_empty(self) -> bool:
-        """is_empty.
-        
-        
-
-        Returns:
-            bool
-        
-        
-        
-        
-        """
-        
-        # TODO: Implement is_empty
-        raise NotImplementedError
-    
-    def len(self) -> int:
-        """len.
-        
-        
-
-        Returns:
-            int
-        
-        
-        
-        
-        """
-        
-        # TODO: Implement len
-        raise NotImplementedError
-    
+del new
 
 
-
-# ========== Generated pytest tests ==========
+# ========== Generated tests ==========
 
 def test_prepend_pop_front():
-    """Test: prepend_pop_front"""
     let mut list = SinglyLinkedList::new();
     list.prepend(1)list.prepend(2)
     assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
 
 def test_append_order():
-    """Test: append_order"""
     let mut list = SinglyLinkedList::new();
     list.append(1)list.append(2)
     assert list.pop_front() == Some(1)
 
 def test_pop_front_empty():
-    """Test: pop_front_empty"""
     let list = SinglyLinkedList::<i32>::new();
     
     assert list.pop_front() == None
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
+// --- Node_prepend.py ---
+"""
+SinglyLinkedList.prepend
+
+
+Postconditions:
+    - head.value == value
+    - list length increased by 1
+
+"""
+
+from node import Node
+
+
+def prepend(self, value: T) -> None:
+    """prepend."""
+    
+    raise NotImplementedError
+
+
+Node.prepend = prepend
+
+del prepend
+
+
+# ========== Generated tests ==========
+
+def test_prepend_pop_front():
+    let mut list = SinglyLinkedList::new();
+    list.prepend(1)list.prepend(2)
+    assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
+
+def test_append_order():
+    let mut list = SinglyLinkedList::new();
+    list.append(1)list.append(2)
+    assert list.pop_front() == Some(1)
+
+def test_pop_front_empty():
+    let list = SinglyLinkedList::<i32>::new();
+    
+    assert list.pop_front() == None
+
+
+// --- Node_append.py ---
+"""
+SinglyLinkedList.append
+
+
+Postconditions:
+    - last element == value
+
+"""
+
+from node import Node
+
+
+def append(self, value: T) -> None:
+    """append."""
+    
+    raise NotImplementedError
+
+
+Node.append = append
+
+del append
+
+
+# ========== Generated tests ==========
+
+def test_prepend_pop_front():
+    let mut list = SinglyLinkedList::new();
+    list.prepend(1)list.prepend(2)
+    assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
+
+def test_append_order():
+    let mut list = SinglyLinkedList::new();
+    list.append(1)list.append(2)
+    assert list.pop_front() == Some(1)
+
+def test_pop_front_empty():
+    let list = SinglyLinkedList::<i32>::new();
+    
+    assert list.pop_front() == None
+
+
+// --- Node_pop_front.py ---
+"""
+SinglyLinkedList.pop_front
+
+Preconditions:
+    - !is_empty()
+
+
+Postconditions:
+    - head == old.head.next
+
+"""
+
+from node import Node
+
+
+def pop_front(self, ) -> Optional[T]:
+    """pop_front."""
+    
+    raise NotImplementedError
+
+
+Node.pop_front = pop_front
+
+del pop_front
+
+
+# ========== Generated tests ==========
+
+def test_prepend_pop_front():
+    let mut list = SinglyLinkedList::new();
+    list.prepend(1)list.prepend(2)
+    assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
+
+def test_append_order():
+    let mut list = SinglyLinkedList::new();
+    list.append(1)list.append(2)
+    assert list.pop_front() == Some(1)
+
+def test_pop_front_empty():
+    let list = SinglyLinkedList::<i32>::new();
+    
+    assert list.pop_front() == None
+
+
+// --- Node_is_empty.py ---
+"""
+SinglyLinkedList.is_empty
+
+
+"""
+
+from node import Node
+
+
+def is_empty(self, ) -> bool:
+    """is_empty."""
+    
+    raise NotImplementedError
+
+
+Node.is_empty = is_empty
+
+del is_empty
+
+
+# ========== Generated tests ==========
+
+def test_prepend_pop_front():
+    let mut list = SinglyLinkedList::new();
+    list.prepend(1)list.prepend(2)
+    assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
+
+def test_append_order():
+    let mut list = SinglyLinkedList::new();
+    list.append(1)list.append(2)
+    assert list.pop_front() == Some(1)
+
+def test_pop_front_empty():
+    let list = SinglyLinkedList::<i32>::new();
+    
+    assert list.pop_front() == None
+
+
+// --- Node_len.py ---
+"""
+SinglyLinkedList.len
+
+
+"""
+
+from node import Node
+
+
+def len(self, ) -> int:
+    """len."""
+    
+    raise NotImplementedError
+
+
+Node.len = len
+
+del len
+
+
+# ========== Generated tests ==========
+
+def test_prepend_pop_front():
+    let mut list = SinglyLinkedList::new();
+    list.prepend(1)list.prepend(2)
+    assert list.pop_front() == Some(2)assert list.pop_front() == Some(1)
+
+def test_append_order():
+    let mut list = SinglyLinkedList::new();
+    list.append(1)list.append(2)
+    assert list.pop_front() == Some(1)
+
+def test_pop_front_empty():
+    let list = SinglyLinkedList::<i32>::new();
+    
+    assert list.pop_front() == None
+

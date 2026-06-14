@@ -1,0 +1,488 @@
+// --- TrieNode.cs ---
+/// <summary>
+/// Trie
+
+/// Time complexity: O(k) insert/search/starts_with (k = key length)
+
+
+/// Space complexity: O(n * k)
+
+
+/// Invariants:
+
+/// - each node has at most one parent
+
+/// - root is always empty (no character)
+
+
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Trie
+{
+    public partial class TrieNode<>
+
+    {
+        
+        public HashMap<char, Box<TrieNode>> Children { get; set; }
+        
+        public bool IsEnd { get; set; }
+        
+    }
+}
+
+// --- TrieNode.New.cs ---
+namespace Trie
+{
+    public partial class TrieNode<>
+
+    {
+        /// <summary>
+        /// New.
+        /// </summary>
+        
+        
+        /// <returns>Self.</returns>
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - is_empty() == true
+        
+        /// </remarks>
+        
+        
+        public Self New()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class TrieNodeinsert_and_searchTests
+{
+    [Fact]
+    public void insert_and_search_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("hello");trie.insert("world");
+        Assert.IsTrue(trie.search("hello"));Assert.IsTrue(trie.search("world"));Assert.IsTrue(!trie.search("hell"));Assert.IsTrue(!trie.search("foo"));
+    }
+}
+
+public class TrieNodeprefix_matchingTests
+{
+    [Fact]
+    public void prefix_matching_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("cat");trie.insert("car");trie.insert("dog");
+        Assert.IsTrue(trie.starts_with("ca"));Assert.IsTrue(trie.starts_with("c"));Assert.IsTrue(trie.starts_with("do"));Assert.IsTrue(!trie.starts_with("bat"));
+    }
+}
+
+public class TrieNodedelete_wordTests
+{
+    [Fact]
+    public void delete_word_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("test");trie.insert("testing");
+        Assert.IsTrue(trie.delete("test"));Assert.IsTrue(!trie.search("test"));Assert.IsTrue(trie.search("testing"));
+    }
+}
+
+public class TrieNodeempty_trieTests
+{
+    [Fact]
+    public void empty_trie_Test()
+    {
+        let trie: Trie = Trie::new();
+        
+        Assert.IsTrue(trie.is_empty());Assert.IsTrue(!trie.search("anything"));Assert.IsTrue(!trie.starts_with("x"));
+    }
+}
+
+
+// --- TrieNode.Insert.cs ---
+namespace Trie
+{
+    public partial class TrieNode<>
+
+    {
+        /// <summary>
+        /// Insert.
+        /// </summary>
+        
+        /// <param name="word">String.</param>
+        
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - search(word) == true
+        
+        /// </remarks>
+        
+        
+        public void Insert(String word)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class TrieNodeinsert_and_searchTests
+{
+    [Fact]
+    public void insert_and_search_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("hello");trie.insert("world");
+        Assert.IsTrue(trie.search("hello"));Assert.IsTrue(trie.search("world"));Assert.IsTrue(!trie.search("hell"));Assert.IsTrue(!trie.search("foo"));
+    }
+}
+
+public class TrieNodeprefix_matchingTests
+{
+    [Fact]
+    public void prefix_matching_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("cat");trie.insert("car");trie.insert("dog");
+        Assert.IsTrue(trie.starts_with("ca"));Assert.IsTrue(trie.starts_with("c"));Assert.IsTrue(trie.starts_with("do"));Assert.IsTrue(!trie.starts_with("bat"));
+    }
+}
+
+public class TrieNodedelete_wordTests
+{
+    [Fact]
+    public void delete_word_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("test");trie.insert("testing");
+        Assert.IsTrue(trie.delete("test"));Assert.IsTrue(!trie.search("test"));Assert.IsTrue(trie.search("testing"));
+    }
+}
+
+public class TrieNodeempty_trieTests
+{
+    [Fact]
+    public void empty_trie_Test()
+    {
+        let trie: Trie = Trie::new();
+        
+        Assert.IsTrue(trie.is_empty());Assert.IsTrue(!trie.search("anything"));Assert.IsTrue(!trie.starts_with("x"));
+    }
+}
+
+
+// --- TrieNode.Search.cs ---
+namespace Trie
+{
+    public partial class TrieNode<>
+
+    {
+        /// <summary>
+        /// Search.
+        /// </summary>
+        
+        /// <param name="word">String.</param>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool Search(String word)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class TrieNodeinsert_and_searchTests
+{
+    [Fact]
+    public void insert_and_search_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("hello");trie.insert("world");
+        Assert.IsTrue(trie.search("hello"));Assert.IsTrue(trie.search("world"));Assert.IsTrue(!trie.search("hell"));Assert.IsTrue(!trie.search("foo"));
+    }
+}
+
+public class TrieNodeprefix_matchingTests
+{
+    [Fact]
+    public void prefix_matching_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("cat");trie.insert("car");trie.insert("dog");
+        Assert.IsTrue(trie.starts_with("ca"));Assert.IsTrue(trie.starts_with("c"));Assert.IsTrue(trie.starts_with("do"));Assert.IsTrue(!trie.starts_with("bat"));
+    }
+}
+
+public class TrieNodedelete_wordTests
+{
+    [Fact]
+    public void delete_word_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("test");trie.insert("testing");
+        Assert.IsTrue(trie.delete("test"));Assert.IsTrue(!trie.search("test"));Assert.IsTrue(trie.search("testing"));
+    }
+}
+
+public class TrieNodeempty_trieTests
+{
+    [Fact]
+    public void empty_trie_Test()
+    {
+        let trie: Trie = Trie::new();
+        
+        Assert.IsTrue(trie.is_empty());Assert.IsTrue(!trie.search("anything"));Assert.IsTrue(!trie.starts_with("x"));
+    }
+}
+
+
+// --- TrieNode.StartsWith.cs ---
+namespace Trie
+{
+    public partial class TrieNode<>
+
+    {
+        /// <summary>
+        /// StartsWith.
+        /// </summary>
+        
+        /// <param name="prefix">String.</param>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool StartsWith(String prefix)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class TrieNodeinsert_and_searchTests
+{
+    [Fact]
+    public void insert_and_search_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("hello");trie.insert("world");
+        Assert.IsTrue(trie.search("hello"));Assert.IsTrue(trie.search("world"));Assert.IsTrue(!trie.search("hell"));Assert.IsTrue(!trie.search("foo"));
+    }
+}
+
+public class TrieNodeprefix_matchingTests
+{
+    [Fact]
+    public void prefix_matching_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("cat");trie.insert("car");trie.insert("dog");
+        Assert.IsTrue(trie.starts_with("ca"));Assert.IsTrue(trie.starts_with("c"));Assert.IsTrue(trie.starts_with("do"));Assert.IsTrue(!trie.starts_with("bat"));
+    }
+}
+
+public class TrieNodedelete_wordTests
+{
+    [Fact]
+    public void delete_word_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("test");trie.insert("testing");
+        Assert.IsTrue(trie.delete("test"));Assert.IsTrue(!trie.search("test"));Assert.IsTrue(trie.search("testing"));
+    }
+}
+
+public class TrieNodeempty_trieTests
+{
+    [Fact]
+    public void empty_trie_Test()
+    {
+        let trie: Trie = Trie::new();
+        
+        Assert.IsTrue(trie.is_empty());Assert.IsTrue(!trie.search("anything"));Assert.IsTrue(!trie.starts_with("x"));
+    }
+}
+
+
+// --- TrieNode.Delete.cs ---
+namespace Trie
+{
+    public partial class TrieNode<>
+
+    {
+        /// <summary>
+        /// Delete.
+        /// </summary>
+        
+        /// <param name="word">String.</param>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - search(word) == false
+        
+        /// </remarks>
+        
+        
+        public bool Delete(String word)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class TrieNodeinsert_and_searchTests
+{
+    [Fact]
+    public void insert_and_search_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("hello");trie.insert("world");
+        Assert.IsTrue(trie.search("hello"));Assert.IsTrue(trie.search("world"));Assert.IsTrue(!trie.search("hell"));Assert.IsTrue(!trie.search("foo"));
+    }
+}
+
+public class TrieNodeprefix_matchingTests
+{
+    [Fact]
+    public void prefix_matching_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("cat");trie.insert("car");trie.insert("dog");
+        Assert.IsTrue(trie.starts_with("ca"));Assert.IsTrue(trie.starts_with("c"));Assert.IsTrue(trie.starts_with("do"));Assert.IsTrue(!trie.starts_with("bat"));
+    }
+}
+
+public class TrieNodedelete_wordTests
+{
+    [Fact]
+    public void delete_word_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("test");trie.insert("testing");
+        Assert.IsTrue(trie.delete("test"));Assert.IsTrue(!trie.search("test"));Assert.IsTrue(trie.search("testing"));
+    }
+}
+
+public class TrieNodeempty_trieTests
+{
+    [Fact]
+    public void empty_trie_Test()
+    {
+        let trie: Trie = Trie::new();
+        
+        Assert.IsTrue(trie.is_empty());Assert.IsTrue(!trie.search("anything"));Assert.IsTrue(!trie.starts_with("x"));
+    }
+}
+
+
+// --- TrieNode.IsEmpty.cs ---
+namespace Trie
+{
+    public partial class TrieNode<>
+
+    {
+        /// <summary>
+        /// IsEmpty.
+        /// </summary>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool IsEmpty()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class TrieNodeinsert_and_searchTests
+{
+    [Fact]
+    public void insert_and_search_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("hello");trie.insert("world");
+        Assert.IsTrue(trie.search("hello"));Assert.IsTrue(trie.search("world"));Assert.IsTrue(!trie.search("hell"));Assert.IsTrue(!trie.search("foo"));
+    }
+}
+
+public class TrieNodeprefix_matchingTests
+{
+    [Fact]
+    public void prefix_matching_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("cat");trie.insert("car");trie.insert("dog");
+        Assert.IsTrue(trie.starts_with("ca"));Assert.IsTrue(trie.starts_with("c"));Assert.IsTrue(trie.starts_with("do"));Assert.IsTrue(!trie.starts_with("bat"));
+    }
+}
+
+public class TrieNodedelete_wordTests
+{
+    [Fact]
+    public void delete_word_Test()
+    {
+        let mut trie = Trie::new();
+        trie.insert("test");trie.insert("testing");
+        Assert.IsTrue(trie.delete("test"));Assert.IsTrue(!trie.search("test"));Assert.IsTrue(trie.search("testing"));
+    }
+}
+
+public class TrieNodeempty_trieTests
+{
+    [Fact]
+    public void empty_trie_Test()
+    {
+        let trie: Trie = Trie::new();
+        
+        Assert.IsTrue(trie.is_empty());Assert.IsTrue(!trie.search("anything"));Assert.IsTrue(!trie.starts_with("x"));
+    }
+}
+

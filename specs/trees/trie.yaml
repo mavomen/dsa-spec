@@ -1,0 +1,104 @@
+spec_version: "1.0"
+metadata:
+  name: "Trie"
+  category: "trees"
+  complexity:
+    time: "O(k) insert/search/starts_with (k = key length)"
+    space: "O(n * k)"
+  tags: ["trie", "prefix-tree", "string", "search"]
+
+contracts:
+  invariants:
+    - "each node has at most one parent"
+    - "root is always empty (no character)"
+
+structs:
+  - name: "TrieNode"
+    fields:
+      - name: "children"
+        type: "HashMap<char, Box<TrieNode>>"
+      - name: "is_end"
+        type: "bool"
+
+  - name: "Trie"
+    fields:
+      - name: "root"
+        type: "Box<TrieNode>"
+
+methods:
+  - name: "new"
+    returns: "Self"
+    postconditions:
+      - "is_empty() == true"
+
+  - name: "insert"
+    params:
+      - name: "word"
+        type: "String"
+    postconditions:
+      - "search(word) == true"
+
+  - name: "search"
+    params:
+      - name: "word"
+        type: "String"
+    returns: "bool"
+
+  - name: "starts_with"
+    params:
+      - name: "prefix"
+        type: "String"
+    returns: "bool"
+
+  - name: "delete"
+    params:
+      - name: "word"
+        type: "String"
+    returns: "bool"
+    postconditions:
+      - "search(word) == false"
+
+  - name: "is_empty"
+    returns: "bool"
+
+verification:
+  test_cases:
+    - name: "insert_and_search"
+      setup: "let mut trie = Trie::new();"
+      actions:
+        - "trie.insert(\"hello\")"
+        - "trie.insert(\"world\")"
+      assertions:
+        - "assert!(trie.search(\"hello\"))"
+        - "assert!(trie.search(\"world\"))"
+        - "assert!(!trie.search(\"hell\"))"
+        - "assert!(!trie.search(\"foo\"))"
+
+    - name: "prefix_matching"
+      setup: "let mut trie = Trie::new();"
+      actions:
+        - "trie.insert(\"cat\")"
+        - "trie.insert(\"car\")"
+        - "trie.insert(\"dog\")"
+      assertions:
+        - "assert!(trie.starts_with(\"ca\"))"
+        - "assert!(trie.starts_with(\"c\"))"
+        - "assert!(trie.starts_with(\"do\"))"
+        - "assert!(!trie.starts_with(\"bat\"))"
+
+    - name: "delete_word"
+      setup: "let mut trie = Trie::new();"
+      actions:
+        - "trie.insert(\"test\")"
+        - "trie.insert(\"testing\")"
+      assertions:
+        - "assert!(trie.delete(\"test\"))"
+        - "assert!(!trie.search(\"test\"))"
+        - "assert!(trie.search(\"testing\"))"
+
+    - name: "empty_trie"
+      setup: "let trie: Trie = Trie::new();"
+      assertions:
+        - "assert!(trie.is_empty())"
+        - "assert!(!trie.search(\"anything\"))"
+        - "assert!(!trie.starts_with(\"x\"))"

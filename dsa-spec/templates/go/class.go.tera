@@ -1,0 +1,25 @@
+// {{ metadata.name }}
+{% if metadata.complexity.time %} // Time complexity: {{ metadata.complexity.time }}
+{% endif %}
+{% if metadata.complexity.space %} // Space complexity: {{ metadata.complexity.space }}
+{% endif %}
+{% if contracts.invariants %}
+// Invariants:
+{% for inv in contracts.invariants %} // - {{ inv }}
+{% endfor %}{% endif %}
+
+package {{ metadata.name | lower }}
+
+{% if struct.generics %}
+type {{ struct.name }}[{% for generic in struct.generics %}{{ generic.name }} {{ generic.bound }}{% if not loop.last %}, {% endif %}{% endfor %}] struct {
+{% else %}
+type {{ struct.name }} struct {
+{% endif %}
+    {% for field in struct.fields %}
+    {{ field.name }} {{ field.go_type }}
+    {% endfor %}
+}
+
+func New{{ struct.name }}[{% for generic in struct.generics %}{{ generic.name }} {{ generic.bound }}{% if not loop.last %}, {% endif %}{% endfor %}]() *{{ struct.name }}[{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}] {
+    return &{{ struct.name }}[{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}]{}
+}

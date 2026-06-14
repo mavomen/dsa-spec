@@ -1,7 +1,7 @@
-//! Go code generation backend.
+//! Go code generation backend with multi-file output.
 
 use crate::assertion;
-use crate::ast::{Spec, Type};
+use crate::ast::{MethodDef, Spec, Type};
 use crate::backend::Backend;
 use crate::casing;
 use crate::error::BackendError;
@@ -20,6 +20,18 @@ impl GoBackend {
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(GoBackend { engine })
+    }
+
+    fn file_extension() -> &'static str {
+        "go"
+    }
+
+    fn class_filename(struct_name: &str) -> String {
+        format!("{}.{}", struct_name, Self::file_extension())
+    }
+
+    fn method_filename(struct_name: &str, method_name: &str) -> String {
+        format!("{}_{}.{}", struct_name, method_name, Self::file_extension())
     }
 
     fn format_go(code: &str) -> Result<String, BackendError> {
@@ -129,82 +141,207 @@ impl GoBackend {
             _ => false,
         }
     }
-}
 
-fn translate_assertion(a: &str) -> String {
-    if let Some(expr) = assertion::parse_assert_bang(a) {
-        format!("if !({expr}) {{ t.Errorf(\"assertion failed: {expr}\") }}")
-    } else if let Some((left, right)) = assertion::parse_assert_eq(a) {
-        format!("if {left} != {right} {{ t.Errorf(\"got %v, want %v\", {left}, {right}) }}")
-    } else {
-        a.to_string()
-    }
-}
+    fn build_monolithic_context(spec: &Spec) -> Context {
+        let mut context = Context::new();
 
-fn build_context(spec: &Spec) -> Context {
-    let mut context = Context::new();
+        let metadata = &spec.metadata;
+        let pkg = metadata
+            .name
+            .chars()
+            .filter(|c| c.is_alphanumeric() || *c == '_')
+            .collect::<String>()
+            .to_lowercase();
 
-    let metadata = &spec.metadata;
-    let pkg = metadata
-        .name
-        .chars()
-        .filter(|c| c.is_alphanumeric() || *c == '_')
-        .collect::<String>()
-        .to_lowercase();
-
-    context.insert(
-        "metadata",
-        &MetadataContext {
-            name: metadata.name.clone(),
-            complexity: ComplexityContext {
-                time: metadata.complexity.time.clone(),
-                space: metadata.complexity.space.clone(),
+        context.insert(
+            "metadata",
+            &MetadataContext {
+                name: metadata.name.clone(),
+                complexity: ComplexityContext {
+                    time: metadata.complexity.time.clone(),
+                    space: metadata.complexity.space.clone(),
+                },
+                package_name: pkg,
             },
-            package_name: pkg,
-        },
-    );
+        );
 
-    let contracts = &spec.contracts;
-    context.insert(
-        "contracts",
-        &ContractsContext {
-            invariants: contracts.invariants.clone(),
-        },
-    );
+        let contracts = &spec.contracts;
+        context.insert(
+            "contracts",
+            &ContractsContext {
+                invariants: contracts.invariants.clone(),
+            },
+        );
 
-    let structs: Vec<StructContext> = spec
-        .structs
-        .iter()
-        .map(|s| StructContext {
-            name: s.name.clone(),
-            generics: s
-                .generics
-                .iter()
-                .map(|g| GenericParamContext {
-                    name: g.name.clone(),
-                    constraint: GoBackend::go_constraint(&g.constraints),
-                })
-                .collect(),
-            fields: s
-                .fields
-                .iter()
-                .map(|f| FieldContext {
-                    name: casing::to_pascal_case(&f.name),
-                    go_type: GoBackend::to_go_type(&f.field_type),
-                })
-                .collect(),
-        })
-        .collect();
-    context.insert("structs", &structs);
+        let structs: Vec<StructContext> = spec
+            .structs
+            .iter()
+            .map(|s| StructContext {
+                name: s.name.clone(),
+                generics: s
+                    .generics
+                    .iter()
+                    .map(|g| GenericParamContext {
+                        name: g.name.clone(),
+                        constraint: GoBackend::go_constraint(&g.constraints),
+                        bound: GoBackend::go_constraint(&g.constraints),
+                    })
+                    .collect(),
+                fields: s
+                    .fields
+                    .iter()
+                    .map(|f| FieldContext {
+                        name: casing::to_pascal_case(&f.name),
+                        go_type: GoBackend::to_go_type(&f.field_type),
+                    })
+                    .collect(),
+            })
+            .collect();
+        context.insert("structs", &structs);
 
-    let methods: Vec<MethodContext> = spec
-        .methods
-        .iter()
-        .map(|m| {
-            let return_type = m.returns.as_deref().map(|r| Type::Simple(r.to_string()));
-            MethodContext {
-                name: casing::to_pascal_case(&m.name),
-                params: m
+        let methods: Vec<MethodContext> = spec
+            .methods
+            .iter()
+            .map(|m| {
+                let return_type = m.returns.as_deref().map(|r| Type::Simple(r.to_string()));
+                MethodContext {
+                    name: casing::to_pascal_case(&m.name),
+                    params: m
+                        .params
+                        .iter()
+                        .map(|p| ParamContext {
+                            name: casing::to_camel_case(&p.name),
+                            go_type: GoBackend::to_go_type(&p.param_type),
+                        })
+                        .collect(),
+                    returns: return_type.as_ref().map(GoBackend::to_go_type),
+                    returns_error: return_type
+                        .as_ref()
+                        .map(GoBackend::is_result_type)
+                        .unwrap_or(false),
+                    preconditions: m.preconditions.clone(),
+                    postconditions: m.postconditions.clone(),
+                    injected_assertions: m.injected_assertions.clone(),
+                }
+            })
+            .collect();
+        context.insert("methods", &methods);
+
+        let tests: Vec<TestContext> = spec
+            .verification
+            .test_cases
+            .iter()
+            .map(|t| TestContext {
+                name: t.name.clone(),
+                setup: t.setup.clone(),
+                actions: t.actions.clone(),
+                assertions: t
+                    .assertions
+                    .iter()
+                    .map(|a| translate_assertion(a))
+                    .collect(),
+            })
+            .collect();
+        context.insert("verification", &VerificationContext { test_cases: tests });
+
+        context
+    }
+
+    fn build_class_context(spec: &Spec) -> Context {
+        let mut ctx = Context::new();
+
+        let metadata = &spec.metadata;
+        ctx.insert(
+            "metadata",
+            &MetadataContext {
+                name: metadata.name.clone(),
+                complexity: ComplexityContext {
+                    time: metadata.complexity.time.clone(),
+                    space: metadata.complexity.space.clone(),
+                },
+                package_name: String::new(),
+            },
+        );
+
+        ctx.insert(
+            "contracts",
+            &ContractsContext {
+                invariants: spec.contracts.invariants.clone(),
+            },
+        );
+
+        if let Some(s) = spec.structs.first() {
+            ctx.insert(
+                "struct",
+                &StructContext {
+                    name: s.name.clone(),
+                    generics: s
+                        .generics
+                        .iter()
+                        .map(|g| GenericParamContext {
+                            name: g.name.clone(),
+                            constraint: GoBackend::go_constraint(&g.constraints),
+                            bound: GoBackend::go_constraint(&g.constraints),
+                        })
+                        .collect(),
+                    fields: s
+                        .fields
+                        .iter()
+                        .map(|f| FieldContext {
+                            name: casing::to_pascal_case(&f.name),
+                            go_type: GoBackend::to_go_type(&f.field_type),
+                        })
+                        .collect(),
+                },
+            );
+        }
+
+        ctx
+    }
+
+    fn build_method_context(spec: &Spec, method: &MethodDef) -> Context {
+        let mut ctx = Context::new();
+
+        ctx.insert(
+            "metadata",
+            &MetadataContext {
+                name: spec.metadata.name.clone(),
+                complexity: ComplexityContext {
+                    time: spec.metadata.complexity.time.clone(),
+                    space: spec.metadata.complexity.space.clone(),
+                },
+                package_name: String::new(),
+            },
+        );
+
+        if let Some(s) = spec.structs.first() {
+            ctx.insert(
+                "struct",
+                &StructContext {
+                    name: s.name.clone(),
+                    generics: s
+                        .generics
+                        .iter()
+                        .map(|g| GenericParamContext {
+                            name: g.name.clone(),
+                            constraint: String::new(),
+                            bound: String::new(),
+                        })
+                        .collect(),
+                    fields: vec![],
+                },
+            );
+        }
+
+        let return_type = method
+            .returns
+            .as_deref()
+            .map(|r| Type::Simple(r.to_string()));
+        ctx.insert(
+            "method",
+            &MethodContext {
+                name: casing::to_pascal_case(&method.name),
+                params: method
                     .params
                     .iter()
                     .map(|p| ParamContext {
@@ -217,39 +354,71 @@ fn build_context(spec: &Spec) -> Context {
                     .as_ref()
                     .map(GoBackend::is_result_type)
                     .unwrap_or(false),
-                preconditions: m.preconditions.clone(),
-                postconditions: m.postconditions.clone(),
-                injected_assertions: m.injected_assertions.clone(),
-            }
-        })
-        .collect();
-    context.insert("methods", &methods);
+                preconditions: method.preconditions.clone(),
+                postconditions: method.postconditions.clone(),
+                injected_assertions: method.injected_assertions.clone(),
+            },
+        );
 
-    let tests: Vec<TestContext> = spec
-        .verification
-        .test_cases
-        .iter()
-        .map(|t| TestContext {
-            name: t.name.clone(),
-            setup: t.setup.clone(),
-            actions: t.actions.clone(),
-            assertions: t
-                .assertions
-                .iter()
-                .map(|a| translate_assertion(a))
-                .collect(),
-        })
-        .collect();
-    context.insert("verification", &VerificationContext { test_cases: tests });
+        let tests: Vec<TestContext> = spec
+            .verification
+            .test_cases
+            .iter()
+            .map(|t| TestContext {
+                name: t.name.clone(),
+                setup: t.setup.clone(),
+                actions: t.actions.clone(),
+                assertions: t
+                    .assertions
+                    .iter()
+                    .map(|a| translate_assertion(a))
+                    .collect(),
+            })
+            .collect();
+        ctx.insert("verification", &VerificationContext { test_cases: tests });
 
-    context
+        ctx
+    }
+}
+
+fn translate_assertion(a: &str) -> String {
+    if let Some(expr) = assertion::parse_assert_bang(a) {
+        format!("if !({expr}) {{ t.Errorf(\"assertion failed: {expr}\") }}")
+    } else if let Some((left, right)) = assertion::parse_assert_eq(a) {
+        format!("if {left} != {right} {{ t.Errorf(\"got %v, want %v\", {left}, {right}) }}")
+    } else {
+        a.to_string()
+    }
 }
 
 impl Backend for GoBackend {
-    fn generate(&self, spec: &Spec) -> Result<String, BackendError> {
-        let context = build_context(spec);
-        let raw_code = self.engine.render("go.go.tera", &context)?;
-        Ok(Self::format_go(&raw_code).unwrap_or(raw_code))
+    fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
+        if spec.structs.is_empty() {
+            let ctx = Self::build_monolithic_context(spec);
+            let raw_code = self.engine.render("go.go.tera", &ctx)?;
+            let code = Self::format_go(&raw_code).unwrap_or(raw_code);
+            return Ok(vec![(
+                format!("{}Methods.{}", spec.metadata.name, Self::file_extension()),
+                code,
+            )]);
+        }
+
+        let mut files = Vec::new();
+        let s = spec.structs.first().unwrap();
+
+        let class_ctx = Self::build_class_context(spec);
+        let raw = self.engine.render("go/class.go.tera", &class_ctx)?;
+        let code = Self::format_go(&raw).unwrap_or(raw);
+        files.push((Self::class_filename(&s.name), code));
+
+        for m in &spec.methods {
+            let method_ctx = Self::build_method_context(spec, m);
+            let raw = self.engine.render("go/method.go.tera", &method_ctx)?;
+            let code = Self::format_go(&raw).unwrap_or(raw);
+            files.push((Self::method_filename(&s.name, &m.name), code));
+        }
+
+        Ok(files)
     }
 }
 
@@ -282,6 +451,7 @@ struct StructContext {
 struct GenericParamContext {
     name: String,
     constraint: String,
+    bound: String,
 }
 
 #[derive(Serialize)]
@@ -365,8 +535,13 @@ mod tests {
             verification: Verification::default(),
         };
         let backend = GoBackend::new("templates").unwrap();
-        let code = backend.generate(&spec).unwrap();
-        assert!(code.contains("type MyStruct[T comparable] struct {"));
+        let files = backend.generate(&spec).unwrap();
+        let class_file = files.iter().find(|(n, _)| n == "MyStruct.go").unwrap();
+        assert!(
+            class_file
+                .1
+                .contains("type MyStruct[T comparable] struct {")
+        );
     }
 
     #[test]
@@ -411,8 +586,16 @@ mod tests {
             verification: Verification::default(),
         };
         let backend = GoBackend::new("templates").unwrap();
-        let code = backend.generate(&spec).unwrap();
-        assert!(code.contains("func (s *MyStruct[T]) DoWork() (int32, error) {"));
+        let files = backend.generate(&spec).unwrap();
+        let method_file = files
+            .iter()
+            .find(|(n, _)| n == "MyStruct_DoWork.go")
+            .unwrap();
+        assert!(
+            method_file
+                .1
+                .contains("func (s *MyStruct[T]) DoWork() (int32, error) {")
+        );
     }
 
     #[test]
@@ -457,8 +640,12 @@ mod tests {
             verification: Verification::default(),
         };
         let backend = GoBackend::new("templates").unwrap();
-        let code = backend.generate(&spec).unwrap();
-        assert!(code.contains("panic(\"not implemented\")"));
+        let files = backend.generate(&spec).unwrap();
+        let method_file = files
+            .iter()
+            .find(|(n, _)| n == "MyStruct_DoWork.go")
+            .unwrap();
+        assert!(method_file.1.contains("panic(\"not implemented\")"));
     }
 
     #[test]
@@ -477,8 +664,8 @@ mod tests {
             verification: Verification::default(),
         };
         let backend = GoBackend::new("templates").unwrap();
-        let code = backend.generate(&spec).unwrap();
-        assert!(code.contains("package binarysearchtree"));
+        let files = backend.generate(&spec).unwrap();
+        assert!(files[0].1.contains("package binarysearchtree"));
     }
 
     #[test]
@@ -581,14 +768,17 @@ mod tests {
             verification: Verification::default(),
         };
         let backend = GoBackend::new("templates").unwrap();
-        let code = backend.generate(&spec).unwrap();
+        let files = backend.generate(&spec).unwrap();
+        let class_file = files.iter().find(|(n, _)| n == "MyStruct.go").unwrap();
         assert!(
-            code.contains("FirstName string"),
-            "expected PascalCase field, got: {code}"
+            class_file.1.contains("FirstName string"),
+            "expected PascalCase field, got: {}",
+            class_file.1
         );
         assert!(
-            code.contains("ItemCount int"),
-            "expected PascalCase field, got: {code}"
+            class_file.1.contains("ItemCount int"),
+            "expected PascalCase field, got: {}",
+            class_file.1
         );
     }
 
@@ -625,14 +815,20 @@ mod tests {
             verification: Verification::default(),
         };
         let backend = GoBackend::new("templates").unwrap();
-        let code = backend.generate(&spec).unwrap();
+        let files = backend.generate(&spec).unwrap();
+        let method_file = files
+            .iter()
+            .find(|(n, _)| n == "MyStruct_DoWork.go")
+            .unwrap();
         assert!(
-            code.contains("firstName string"),
-            "expected camelCase param, got: {code}"
+            method_file.1.contains("firstName string"),
+            "expected camelCase param, got: {}",
+            method_file.1
         );
         assert!(
-            code.contains("itemCount int"),
-            "expected camelCase param, got: {code}"
+            method_file.1.contains("itemCount int"),
+            "expected camelCase param, got: {}",
+            method_file.1
         );
     }
 
@@ -669,10 +865,24 @@ mod tests {
         };
         let injected = crate::contracts::inject_assertions(&spec);
         let backend = GoBackend::new("templates").unwrap();
-        let code = backend.generate(&injected).unwrap();
-        assert!(code.contains("MyField int"), "field should be PascalCase");
-        assert!(code.contains("myParam string"), "param should be camelCase");
-        assert!(code.contains("DoStuff"), "method should be PascalCase");
+        let files = backend.generate(&injected).unwrap();
+        let class_file = files.iter().find(|(n, _)| n == "MyStruct.go").unwrap();
+        assert!(
+            class_file.1.contains("MyField int"),
+            "field should be PascalCase"
+        );
+        let method_file = files
+            .iter()
+            .find(|(n, _)| n == "MyStruct_DoStuff.go")
+            .unwrap();
+        assert!(
+            method_file.1.contains("myParam string"),
+            "param should be camelCase"
+        );
+        assert!(
+            method_file.1.contains("DoStuff"),
+            "method should be PascalCase"
+        );
     }
 
     #[test]
@@ -702,12 +912,14 @@ mod tests {
         };
         let injected = crate::contracts::inject_assertions(&spec);
         let backend = GoBackend::new("templates").unwrap();
-        let code = backend.generate(&injected).unwrap();
-        assert!(code.contains("// Contract: precondition: x > 0"));
-        assert!(code.contains(r#"panic("test: contract violation: precondition: x > 0")"#));
-        assert!(code.contains("// Contract: postcondition: result ok"));
-        assert!(code.contains(r#"panic("test: contract violation: postcondition: result ok")"#));
-        assert!(code.contains("// Contract: invariant: size >= 0"));
-        assert!(code.contains(r#"panic("test: contract violation: invariant: size >= 0")"#));
+        let files = backend.generate(&injected).unwrap();
+        let method_file = files.iter().find(|(n, _)| n == "Foo_Bar.go").unwrap();
+        assert!(method_file.1.contains("// Contract: precondition: x > 0"));
+        assert!(
+            method_file
+                .1
+                .contains("// Contract: postcondition: result ok")
+        );
+        assert!(method_file.1.contains("// Contract: invariant: size >= 0"));
     }
 }

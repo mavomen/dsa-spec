@@ -1,0 +1,31 @@
+/// <summary>
+/// {{ metadata.name }}
+{% if metadata.complexity.time %}
+/// Time complexity: {{ metadata.complexity.time }}
+{% endif %}
+{% if metadata.complexity.space %}
+/// Space complexity: {{ metadata.complexity.space }}
+{% endif %}
+{% if contracts.invariants %}
+/// Invariants:
+{% for inv in contracts.invariants %}
+/// - {{ inv }}
+{% endfor %}
+{% endif %}
+/// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace {{ metadata.name | replace(from=" ", to="") }}
+{
+    public partial class {{ struct.name }}<{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}>
+{% for generic in struct.generics %}{% if generic.bounds != "" %}    {{ generic.bounds }}
+{% endif %}{% endfor %}
+    {
+        {% for field in struct.fields %}
+        public {{ field.csharp_type }} {{ field.name }} { get; set; }
+        {% endfor %}
+    }
+}

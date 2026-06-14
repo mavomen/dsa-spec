@@ -1,0 +1,299 @@
+// --- TrieNode.py ---
+"""
+Trie
+Time complexity: O(k) insert/search/starts_with (k = key length)
+Space complexity: O(n * k)
+
+Invariants:
+    - each node has at most one parent
+    - root is always empty (no character)
+
+"""
+
+from dataclasses import dataclass
+from typing import Generic, TypeVar, Optional, List, Dict
+
+
+
+
+@dataclass
+class TrieNode(Generic[]):
+    """Trie"""
+    
+    children: Dict[char, TrieNode]
+    
+    is_end: bool
+    
+
+// --- TrieNode_new.py ---
+"""
+Trie.new
+
+
+Postconditions:
+    - is_empty() == true
+
+"""
+
+from trienode import TrieNode
+
+
+def new(self, ) -> Self:
+    """new."""
+    
+    raise NotImplementedError
+
+
+TrieNode.new = new
+
+del new
+
+
+# ========== Generated tests ==========
+
+def test_insert_and_search():
+    let mut trie = Trie::new();
+    trie.insert("hello")trie.insert("world")
+    assert trie.search("hello")assert trie.search("world")assert !trie.search("hell")assert !trie.search("foo")
+
+def test_prefix_matching():
+    let mut trie = Trie::new();
+    trie.insert("cat")trie.insert("car")trie.insert("dog")
+    assert trie.starts_with("ca")assert trie.starts_with("c")assert trie.starts_with("do")assert !trie.starts_with("bat")
+
+def test_delete_word():
+    let mut trie = Trie::new();
+    trie.insert("test")trie.insert("testing")
+    assert trie.delete("test")assert !trie.search("test")assert trie.search("testing")
+
+def test_empty_trie():
+    let trie: Trie = Trie::new();
+    
+    assert trie.is_empty()assert !trie.search("anything")assert !trie.starts_with("x")
+
+
+// --- TrieNode_insert.py ---
+"""
+Trie.insert
+
+
+Postconditions:
+    - search(word) == true
+
+"""
+
+from trienode import TrieNode
+
+
+def insert(self, word: String) -> None:
+    """insert."""
+    
+    raise NotImplementedError
+
+
+TrieNode.insert = insert
+
+del insert
+
+
+# ========== Generated tests ==========
+
+def test_insert_and_search():
+    let mut trie = Trie::new();
+    trie.insert("hello")trie.insert("world")
+    assert trie.search("hello")assert trie.search("world")assert !trie.search("hell")assert !trie.search("foo")
+
+def test_prefix_matching():
+    let mut trie = Trie::new();
+    trie.insert("cat")trie.insert("car")trie.insert("dog")
+    assert trie.starts_with("ca")assert trie.starts_with("c")assert trie.starts_with("do")assert !trie.starts_with("bat")
+
+def test_delete_word():
+    let mut trie = Trie::new();
+    trie.insert("test")trie.insert("testing")
+    assert trie.delete("test")assert !trie.search("test")assert trie.search("testing")
+
+def test_empty_trie():
+    let trie: Trie = Trie::new();
+    
+    assert trie.is_empty()assert !trie.search("anything")assert !trie.starts_with("x")
+
+
+// --- TrieNode_search.py ---
+"""
+Trie.search
+
+
+"""
+
+from trienode import TrieNode
+
+
+def search(self, word: String) -> bool:
+    """search."""
+    
+    raise NotImplementedError
+
+
+TrieNode.search = search
+
+del search
+
+
+# ========== Generated tests ==========
+
+def test_insert_and_search():
+    let mut trie = Trie::new();
+    trie.insert("hello")trie.insert("world")
+    assert trie.search("hello")assert trie.search("world")assert !trie.search("hell")assert !trie.search("foo")
+
+def test_prefix_matching():
+    let mut trie = Trie::new();
+    trie.insert("cat")trie.insert("car")trie.insert("dog")
+    assert trie.starts_with("ca")assert trie.starts_with("c")assert trie.starts_with("do")assert !trie.starts_with("bat")
+
+def test_delete_word():
+    let mut trie = Trie::new();
+    trie.insert("test")trie.insert("testing")
+    assert trie.delete("test")assert !trie.search("test")assert trie.search("testing")
+
+def test_empty_trie():
+    let trie: Trie = Trie::new();
+    
+    assert trie.is_empty()assert !trie.search("anything")assert !trie.starts_with("x")
+
+
+// --- TrieNode_starts_with.py ---
+"""
+Trie.starts_with
+
+
+"""
+
+from trienode import TrieNode
+
+
+def starts_with(self, prefix: String) -> bool:
+    """starts_with."""
+    
+    raise NotImplementedError
+
+
+TrieNode.starts_with = starts_with
+
+del starts_with
+
+
+# ========== Generated tests ==========
+
+def test_insert_and_search():
+    let mut trie = Trie::new();
+    trie.insert("hello")trie.insert("world")
+    assert trie.search("hello")assert trie.search("world")assert !trie.search("hell")assert !trie.search("foo")
+
+def test_prefix_matching():
+    let mut trie = Trie::new();
+    trie.insert("cat")trie.insert("car")trie.insert("dog")
+    assert trie.starts_with("ca")assert trie.starts_with("c")assert trie.starts_with("do")assert !trie.starts_with("bat")
+
+def test_delete_word():
+    let mut trie = Trie::new();
+    trie.insert("test")trie.insert("testing")
+    assert trie.delete("test")assert !trie.search("test")assert trie.search("testing")
+
+def test_empty_trie():
+    let trie: Trie = Trie::new();
+    
+    assert trie.is_empty()assert !trie.search("anything")assert !trie.starts_with("x")
+
+
+// --- TrieNode_delete.py ---
+"""
+Trie.delete
+
+
+Postconditions:
+    - search(word) == false
+
+"""
+
+from trienode import TrieNode
+
+
+def delete(self, word: String) -> bool:
+    """delete."""
+    
+    raise NotImplementedError
+
+
+TrieNode.delete = delete
+
+del delete
+
+
+# ========== Generated tests ==========
+
+def test_insert_and_search():
+    let mut trie = Trie::new();
+    trie.insert("hello")trie.insert("world")
+    assert trie.search("hello")assert trie.search("world")assert !trie.search("hell")assert !trie.search("foo")
+
+def test_prefix_matching():
+    let mut trie = Trie::new();
+    trie.insert("cat")trie.insert("car")trie.insert("dog")
+    assert trie.starts_with("ca")assert trie.starts_with("c")assert trie.starts_with("do")assert !trie.starts_with("bat")
+
+def test_delete_word():
+    let mut trie = Trie::new();
+    trie.insert("test")trie.insert("testing")
+    assert trie.delete("test")assert !trie.search("test")assert trie.search("testing")
+
+def test_empty_trie():
+    let trie: Trie = Trie::new();
+    
+    assert trie.is_empty()assert !trie.search("anything")assert !trie.starts_with("x")
+
+
+// --- TrieNode_is_empty.py ---
+"""
+Trie.is_empty
+
+
+"""
+
+from trienode import TrieNode
+
+
+def is_empty(self, ) -> bool:
+    """is_empty."""
+    
+    raise NotImplementedError
+
+
+TrieNode.is_empty = is_empty
+
+del is_empty
+
+
+# ========== Generated tests ==========
+
+def test_insert_and_search():
+    let mut trie = Trie::new();
+    trie.insert("hello")trie.insert("world")
+    assert trie.search("hello")assert trie.search("world")assert !trie.search("hell")assert !trie.search("foo")
+
+def test_prefix_matching():
+    let mut trie = Trie::new();
+    trie.insert("cat")trie.insert("car")trie.insert("dog")
+    assert trie.starts_with("ca")assert trie.starts_with("c")assert trie.starts_with("do")assert !trie.starts_with("bat")
+
+def test_delete_word():
+    let mut trie = Trie::new();
+    trie.insert("test")trie.insert("testing")
+    assert trie.delete("test")assert !trie.search("test")assert trie.search("testing")
+
+def test_empty_trie():
+    let trie: Trie = Trie::new();
+    
+    assert trie.is_empty()assert !trie.search("anything")assert !trie.starts_with("x")
+

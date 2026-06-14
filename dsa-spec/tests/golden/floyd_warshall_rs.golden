@@ -1,0 +1,66 @@
+// --- FloydWarshallMethods.rs ---
+/// FloydWarshall
+
+/// Time complexity: O(V^3)
+
+/// Space complexity: O(V^2)
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_three_vertex_graph() {
+        let n = 3;
+        let mut graph = vec![vec![None; n]; n];
+        graph[0][0] = Some(0);
+        graph[0][1] = Some(3);
+        graph[0][2] = Some(8);
+        graph[1][0] = Some(3);
+        graph[1][1] = Some(0);
+        graph[1][2] = Some(1);
+        graph[2][0] = Some(8);
+        graph[2][1] = Some(1);
+        graph[2][2] = Some(0);
+        let dist = floyd_warshall(&graph);
+        assert_eq!(dist[0][1], Some(3));
+        assert_eq!(dist[0][2], Some(4));
+        assert_eq!(dist[1][2], Some(1));
+        assert_eq!(dist[2][0], Some(4));
+        assert_eq!(dist[0][0], Some(0));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_single_vertex() {
+        let n = 1;
+        let graph = vec![vec![Some(0)]];
+        let dist = floyd_warshall(&graph);
+        assert_eq!(dist[0][0], Some(0));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_disconnected_vertices() {
+        let n = 4;
+        let mut graph = vec![vec![None; n]; n];
+        graph[0][0] = Some(0);
+        graph[0][1] = Some(2);
+        graph[1][0] = Some(2);
+        graph[1][1] = Some(0);
+        graph[2][2] = Some(0);
+        graph[3][3] = Some(0);
+        let dist = floyd_warshall(&graph);
+        assert_eq!(dist[0][1], Some(2));
+        assert!(dist[0][2].is_none());
+        assert!(dist[2][3].is_none());
+    }
+}

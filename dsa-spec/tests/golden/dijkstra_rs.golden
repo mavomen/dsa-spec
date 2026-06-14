@@ -1,0 +1,42 @@
+// --- DijkstraMethods.rs ---
+/// Dijkstra
+
+/// Time complexity: O((V + E) log V)
+
+/// Space complexity: O(V)
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_simple_path() {
+        let mut graph: HashMap<usize, Vec<(usize, usize)>> = HashMap::new();
+        graph.insert(0, vec![(1, 4), (2, 1)]);
+        graph.insert(1, vec![(3, 1)]);
+        graph.insert(2, vec![(1, 2), (3, 5)]);
+        graph.insert(3, vec![]);
+        let dist = dijkstra(&graph, 0);
+        assert_eq!(dist[&0], 0);
+        assert_eq!(dist[&1], 3);
+        assert_eq!(dist[&2], 1);
+        assert_eq!(dist[&3], 4);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_unreachable_vertex() {
+        let mut graph: HashMap<usize, Vec<(usize, usize)>> = HashMap::new();
+        graph.insert(0, vec![(1, 1)]);
+        graph.insert(1, vec![]);
+        graph.insert(2, vec![]);
+        let dist = dijkstra(&graph, 0);
+        assert_eq!(dist[&0], 0);
+        assert_eq!(dist[&1], 1);
+        assert!(!dist.contains_key(&2));
+    }
+}

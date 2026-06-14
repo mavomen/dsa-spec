@@ -1,290 +1,266 @@
+// --- BSTNode.ts ---
 /**
  * BinarySearchTree
-
  * Time complexity: O(log n) average, O(n) worst
-
 
  * Space complexity: O(n)
 
 
  * Invariants:
-
  * - left.value < node.value < right.value
-
  * - no duplicate values
-
 
  */
 
 
+export class BSTNode<T> {
 
-export interface BSTNode<T extends Ord & Clone> {
     
-    value: T;
+    public value: T;
     
-    left: BSTNode<T> | null;
+    public left: BSTNode<T> | null;
     
-    right: BSTNode<T> | null;
+    public right: BSTNode<T> | null;
     
 }
 
-export class BSTNodeImpl<T extends Ord & Clone> implements BSTNode<T> {
-    constructor(
-        
-        public value: T,
-        
-        public left: BSTNode<T> | null,
-        
-        public right: BSTNode<T> | null
-        
-    ) {}
+// --- BSTNode_new.ts ---
+/**
+ * BinarySearchTree.new
 
-    
-    /**
-     * New.
-     
-     
-     * @returns Self
-     
-     
-     
-     *
-     * Postconditions:
-      * - root is None
-     
-     
-     */
-    new(): Self {
-        
-        // TODO: Implement new
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Insert.
-     
-     * @param value - T.
-     
-     
-     * @returns boolean
-     
-     
-     
-     *
-     * Postconditions:
-      * - tree contains value
-      * - BST invariant maintained
-     
-     
-     */
-    insert(value: T): boolean {
-        
-        // TODO: Implement insert
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Contains.
-     
-     * @param value - T.
-     
-     
-     * @returns boolean
-     
-     
-     
-     
-     */
-    contains(value: T): boolean {
-        
-        // TODO: Implement contains
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Inorder.
-     
-     
-     * @returns T[]
-     
-     
-     
-     *
-     * Postconditions:
-      * - result is sorted ascending
-     
-     
-     */
-    inorder(): T[] {
-        
-        // TODO: Implement inorder
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Isempty.
-     
-     
-     * @returns boolean
-     
-     
-     
-     
-     */
-    isEmpty(): boolean {
-        
-        // TODO: Implement isEmpty
-        throw new Error('Not implemented');
-    }
-    
-}
-
-export interface BinarySearchTree<T extends Ord & Clone> {
-    
-    root: BSTNode<T> | null;
-    
-}
-
-export class BinarySearchTreeImpl<T extends Ord & Clone> implements BinarySearchTree<T> {
-    constructor(
-        
-        public root: BSTNode<T> | null
-        
-    ) {}
-
-    
-    /**
-     * New.
-     
-     
-     * @returns Self
-     
-     
-     
-     *
-     * Postconditions:
-      * - root is None
-     
-     
-     */
-    new(): Self {
-        
-        // TODO: Implement new
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Insert.
-     
-     * @param value - T.
-     
-     
-     * @returns boolean
-     
-     
-     
-     *
-     * Postconditions:
-      * - tree contains value
-      * - BST invariant maintained
-     
-     
-     */
-    insert(value: T): boolean {
-        
-        // TODO: Implement insert
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Contains.
-     
-     * @param value - T.
-     
-     
-     * @returns boolean
-     
-     
-     
-     
-     */
-    contains(value: T): boolean {
-        
-        // TODO: Implement contains
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Inorder.
-     
-     
-     * @returns T[]
-     
-     
-     
-     *
-     * Postconditions:
-      * - result is sorted ascending
-     
-     
-     */
-    inorder(): T[] {
-        
-        // TODO: Implement inorder
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Isempty.
-     
-     
-     * @returns boolean
-     
-     
-     
-     
-     */
-    isEmpty(): boolean {
-        
-        // TODO: Implement isEmpty
-        throw new Error('Not implemented');
-    }
-    
-}
+ * @returns Self
 
 
 
-// ========== Generated Jest tests ==========
+ * Postconditions:
+ * - root is None
+
+ */
+
+import { BSTNode } from './bstnode';
+
+
+(BSTNode.prototype as any).new = function <T>(): Self {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
 
 describe('insert_and_contains', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let mut bst = BinarySearchTree::new();
-        // Actions
         bst.insert(5);bst.insert(3);bst.insert(7);
-        // Assertions
         expect(bst.contains(5)).toBe(true);expect(bst.contains(3)).toBe(true);expect(bst.contains(7)).toBe(true);expect(!bst.contains(10)).toBe(true);
     });
 });
 
 describe('inorder_returns_sorted', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let mut bst = BinarySearchTree::new();
-        // Actions
         bst.insert(5);bst.insert(3);bst.insert(7);bst.insert(1);bst.insert(9);
-        // Assertions
         expect(bst.inorder()).toBe(vec![1, 3, 5, 7, 9]);
     });
 });
 
 describe('duplicate_insert_returns_false', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let mut bst = BinarySearchTree::new();
-        // Actions
         bst.insert(10);
-        // Assertions
+        expect(bst.insert(10)).toBe(false);
+    });
+});
+
+
+// --- BSTNode_insert.ts ---
+/**
+ * BinarySearchTree.insert
+ * @param value - T
+
+ * @returns boolean
+
+
+
+ * Postconditions:
+ * - tree contains value
+ * - BST invariant maintained
+
+ */
+
+import { BSTNode } from './bstnode';
+
+
+(BSTNode.prototype as any).insert = function <T>(value: T): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_contains', () => {
+    it('should pass', () => {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);
+        expect(bst.contains(5)).toBe(true);expect(bst.contains(3)).toBe(true);expect(bst.contains(7)).toBe(true);expect(!bst.contains(10)).toBe(true);
+    });
+});
+
+describe('inorder_returns_sorted', () => {
+    it('should pass', () => {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);bst.insert(1);bst.insert(9);
+        expect(bst.inorder()).toBe(vec![1, 3, 5, 7, 9]);
+    });
+});
+
+describe('duplicate_insert_returns_false', () => {
+    it('should pass', () => {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(10);
+        expect(bst.insert(10)).toBe(false);
+    });
+});
+
+
+// --- BSTNode_contains.ts ---
+/**
+ * BinarySearchTree.contains
+ * @param value - T
+
+ * @returns boolean
+
+
+
+ */
+
+import { BSTNode } from './bstnode';
+
+
+(BSTNode.prototype as any).contains = function <T>(value: T): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_contains', () => {
+    it('should pass', () => {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);
+        expect(bst.contains(5)).toBe(true);expect(bst.contains(3)).toBe(true);expect(bst.contains(7)).toBe(true);expect(!bst.contains(10)).toBe(true);
+    });
+});
+
+describe('inorder_returns_sorted', () => {
+    it('should pass', () => {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);bst.insert(1);bst.insert(9);
+        expect(bst.inorder()).toBe(vec![1, 3, 5, 7, 9]);
+    });
+});
+
+describe('duplicate_insert_returns_false', () => {
+    it('should pass', () => {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(10);
+        expect(bst.insert(10)).toBe(false);
+    });
+});
+
+
+// --- BSTNode_inorder.ts ---
+/**
+ * BinarySearchTree.inorder
+
+ * @returns T[]
+
+
+
+ * Postconditions:
+ * - result is sorted ascending
+
+ */
+
+import { BSTNode } from './bstnode';
+
+
+(BSTNode.prototype as any).inorder = function <T>(): T[] {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_contains', () => {
+    it('should pass', () => {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);
+        expect(bst.contains(5)).toBe(true);expect(bst.contains(3)).toBe(true);expect(bst.contains(7)).toBe(true);expect(!bst.contains(10)).toBe(true);
+    });
+});
+
+describe('inorder_returns_sorted', () => {
+    it('should pass', () => {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);bst.insert(1);bst.insert(9);
+        expect(bst.inorder()).toBe(vec![1, 3, 5, 7, 9]);
+    });
+});
+
+describe('duplicate_insert_returns_false', () => {
+    it('should pass', () => {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(10);
+        expect(bst.insert(10)).toBe(false);
+    });
+});
+
+
+// --- BSTNode_isEmpty.ts ---
+/**
+ * BinarySearchTree.isEmpty
+
+ * @returns boolean
+
+
+
+ */
+
+import { BSTNode } from './bstnode';
+
+
+(BSTNode.prototype as any).isEmpty = function <T>(): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_contains', () => {
+    it('should pass', () => {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);
+        expect(bst.contains(5)).toBe(true);expect(bst.contains(3)).toBe(true);expect(bst.contains(7)).toBe(true);expect(!bst.contains(10)).toBe(true);
+    });
+});
+
+describe('inorder_returns_sorted', () => {
+    it('should pass', () => {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);bst.insert(3);bst.insert(7);bst.insert(1);bst.insert(9);
+        expect(bst.inorder()).toBe(vec![1, 3, 5, 7, 9]);
+    });
+});
+
+describe('duplicate_insert_returns_false', () => {
+    it('should pass', () => {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(10);
         expect(bst.insert(10)).toBe(false);
     });
 });

@@ -1,3 +1,4 @@
+// --- Node.cs ---
 /// <summary>
 /// DoublyLinkedList
 
@@ -22,392 +23,480 @@ using System.Linq;
 
 namespace DoublyLinkedList
 {
-
-
-public class Node<T>
+    public partial class Node<T>
     where T : Clone
 
-{
-    
-    public T Value { get; set; }
-    
-    public Node<T>? Prev { get; set; }
-    
-    public Node<T>? Next { get; set; }
-    
-
-    
-    /// <summary>
-    /// New.
-    /// </summary>
-    
-    
-    /// <returns>Self.</returns>
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - head is None
-    
-    /// - tail is None
-    
-    /// </remarks>
-    
-    
-    public Self New()
     {
         
-        // TODO: Implement New
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Pushfront.
-    /// </summary>
-    
-    /// <param name="value">T.</param>
-    
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - head.value == value
-    
-    /// </remarks>
-    
-    
-    public void PushFront(T value)
-    {
+        public T Value { get; set; }
         
-        // TODO: Implement PushFront
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Pushback.
-    /// </summary>
-    
-    /// <param name="value">T.</param>
-    
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - tail.value == value
-    
-    /// </remarks>
-    
-    
-    public void PushBack(T value)
-    {
+        public Node<T>? Prev { get; set; }
         
-        // TODO: Implement PushBack
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Popfront.
-    /// </summary>
-    
-    
-    /// <returns>T?.</returns>
-    
-    
-    /// <remarks>
-    /// Preconditions:
-    
-    /// - !is_empty()
-    
-    /// </remarks>
-    
-    
-    
-    public T? PopFront()
-    {
+        public Node<T>? Next { get; set; }
         
-        // TODO: Implement PopFront
-        throw new NotImplementedException();
     }
-    
-    /// <summary>
-    /// Popback.
-    /// </summary>
-    
-    
-    /// <returns>T?.</returns>
-    
-    
-    /// <remarks>
-    /// Preconditions:
-    
-    /// - !is_empty()
-    
-    /// </remarks>
-    
-    
-    
-    public T? PopBack()
-    {
-        
-        // TODO: Implement PopBack
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Isempty.
-    /// </summary>
-    
-    
-    /// <returns>bool.</returns>
-    
-    
-    
-    
-    public bool IsEmpty()
-    {
-        
-        // TODO: Implement IsEmpty
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Len.
-    /// </summary>
-    
-    
-    /// <returns>int.</returns>
-    
-    
-    
-    
-    public int Len()
-    {
-        
-        // TODO: Implement Len
-        throw new NotImplementedException();
-    }
-    
 }
 
-public class DoublyLinkedList<T>
+// --- Node.New.cs ---
+namespace DoublyLinkedList
+{
+    public partial class Node<T>
     where T : Clone
 
-{
-    
-    public Node<T>? Head { get; set; }
-    
-    public Node<T>? Tail { get; set; }
-    
-
-    
-    /// <summary>
-    /// New.
-    /// </summary>
-    
-    
-    /// <returns>Self.</returns>
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - head is None
-    
-    /// - tail is None
-    
-    /// </remarks>
-    
-    
-    public Self New()
     {
+        /// <summary>
+        /// New.
+        /// </summary>
         
-        // TODO: Implement New
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Pushfront.
-    /// </summary>
-    
-    /// <param name="value">T.</param>
-    
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - head.value == value
-    
-    /// </remarks>
-    
-    
-    public void PushFront(T value)
-    {
         
-        // TODO: Implement PushFront
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Pushback.
-    /// </summary>
-    
-    /// <param name="value">T.</param>
-    
-    
-    
-    
-    /// <remarks>
-    /// Postconditions:
-    
-    /// - tail.value == value
-    
-    /// </remarks>
-    
-    
-    public void PushBack(T value)
-    {
+        /// <returns>Self.</returns>
         
-        // TODO: Implement PushBack
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Popfront.
-    /// </summary>
-    
-    
-    /// <returns>T?.</returns>
-    
-    
-    /// <remarks>
-    /// Preconditions:
-    
-    /// - !is_empty()
-    
-    /// </remarks>
-    
-    
-    
-    public T? PopFront()
-    {
         
-        // TODO: Implement PopFront
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Popback.
-    /// </summary>
-    
-    
-    /// <returns>T?.</returns>
-    
-    
-    /// <remarks>
-    /// Preconditions:
-    
-    /// - !is_empty()
-    
-    /// </remarks>
-    
-    
-    
-    public T? PopBack()
-    {
         
-        // TODO: Implement PopBack
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Isempty.
-    /// </summary>
-    
-    
-    /// <returns>bool.</returns>
-    
-    
-    
-    
-    public bool IsEmpty()
-    {
+        /// <remarks>
+        /// Postconditions:
         
-        // TODO: Implement IsEmpty
-        throw new NotImplementedException();
-    }
-    
-    /// <summary>
-    /// Len.
-    /// </summary>
-    
-    
-    /// <returns>int.</returns>
-    
-    
-    
-    
-    public int Len()
-    {
+        /// - head is None
         
-        // TODO: Implement Len
-        throw new NotImplementedException();
+        /// - tail is None
+        
+        /// </remarks>
+        
+        
+        public Self New()
+        {
+            
+            throw new NotImplementedException();
+        }
     }
-    
 }
-
-
 
 // ========== Generated xUnit tests ==========
 
-public class push_front_pop_frontTests
+public class Nodepush_front_pop_frontTests
 {
     [Fact]
     public void push_front_pop_front_Test()
     {
-        // Setup
         let mut list = DoublyLinkedList::new();
-        // Actions
         list.push_front(1);list.push_front(2);
-        // Assertions
         Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
     }
 }
 
-public class push_back_pop_backTests
+public class Nodepush_back_pop_backTests
 {
     [Fact]
     public void push_back_pop_back_Test()
     {
-        // Setup
         let mut list = DoublyLinkedList::new();
-        // Actions
         list.push_back(1);list.push_back(2);
-        // Assertions
         Assert.AreEqual(list.pop_back(), Some(2));Assert.AreEqual(list.pop_back(), Some(1));
     }
 }
 
-public class mixed_operationsTests
+public class Nodemixed_operationsTests
 {
     [Fact]
     public void mixed_operations_Test()
     {
-        // Setup
         let mut list = DoublyLinkedList::new();
-        // Actions
         list.push_front(1);list.push_back(3);list.push_front(0);
-        // Assertions
         Assert.AreEqual(list.pop_front(), Some(0));Assert.AreEqual(list.pop_back(), Some(3));Assert.AreEqual(list.pop_back(), Some(1));
     }
 }
 
+
+// --- Node.PushFront.cs ---
+namespace DoublyLinkedList
+{
+    public partial class Node<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// PushFront.
+        /// </summary>
+        
+        /// <param name="value">T.</param>
+        
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - head.value == value
+        
+        /// </remarks>
+        
+        
+        public void PushFront(T value)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
 }
+
+// ========== Generated xUnit tests ==========
+
+public class Nodepush_front_pop_frontTests
+{
+    [Fact]
+    public void push_front_pop_front_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);list.push_front(2);
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodepush_back_pop_backTests
+{
+    [Fact]
+    public void push_back_pop_back_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_back(1);list.push_back(2);
+        Assert.AreEqual(list.pop_back(), Some(2));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+public class Nodemixed_operationsTests
+{
+    [Fact]
+    public void mixed_operations_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);list.push_back(3);list.push_front(0);
+        Assert.AreEqual(list.pop_front(), Some(0));Assert.AreEqual(list.pop_back(), Some(3));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+
+// --- Node.PushBack.cs ---
+namespace DoublyLinkedList
+{
+    public partial class Node<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// PushBack.
+        /// </summary>
+        
+        /// <param name="value">T.</param>
+        
+        
+        
+        
+        /// <remarks>
+        /// Postconditions:
+        
+        /// - tail.value == value
+        
+        /// </remarks>
+        
+        
+        public void PushBack(T value)
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Nodepush_front_pop_frontTests
+{
+    [Fact]
+    public void push_front_pop_front_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);list.push_front(2);
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodepush_back_pop_backTests
+{
+    [Fact]
+    public void push_back_pop_back_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_back(1);list.push_back(2);
+        Assert.AreEqual(list.pop_back(), Some(2));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+public class Nodemixed_operationsTests
+{
+    [Fact]
+    public void mixed_operations_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);list.push_back(3);list.push_front(0);
+        Assert.AreEqual(list.pop_front(), Some(0));Assert.AreEqual(list.pop_back(), Some(3));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+
+// --- Node.PopFront.cs ---
+namespace DoublyLinkedList
+{
+    public partial class Node<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// PopFront.
+        /// </summary>
+        
+        
+        /// <returns>T?.</returns>
+        
+        
+        /// <remarks>
+        /// Preconditions:
+        
+        /// - !is_empty()
+        
+        /// </remarks>
+        
+        
+        
+        public T? PopFront()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Nodepush_front_pop_frontTests
+{
+    [Fact]
+    public void push_front_pop_front_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);list.push_front(2);
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodepush_back_pop_backTests
+{
+    [Fact]
+    public void push_back_pop_back_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_back(1);list.push_back(2);
+        Assert.AreEqual(list.pop_back(), Some(2));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+public class Nodemixed_operationsTests
+{
+    [Fact]
+    public void mixed_operations_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);list.push_back(3);list.push_front(0);
+        Assert.AreEqual(list.pop_front(), Some(0));Assert.AreEqual(list.pop_back(), Some(3));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+
+// --- Node.PopBack.cs ---
+namespace DoublyLinkedList
+{
+    public partial class Node<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// PopBack.
+        /// </summary>
+        
+        
+        /// <returns>T?.</returns>
+        
+        
+        /// <remarks>
+        /// Preconditions:
+        
+        /// - !is_empty()
+        
+        /// </remarks>
+        
+        
+        
+        public T? PopBack()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Nodepush_front_pop_frontTests
+{
+    [Fact]
+    public void push_front_pop_front_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);list.push_front(2);
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodepush_back_pop_backTests
+{
+    [Fact]
+    public void push_back_pop_back_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_back(1);list.push_back(2);
+        Assert.AreEqual(list.pop_back(), Some(2));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+public class Nodemixed_operationsTests
+{
+    [Fact]
+    public void mixed_operations_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);list.push_back(3);list.push_front(0);
+        Assert.AreEqual(list.pop_front(), Some(0));Assert.AreEqual(list.pop_back(), Some(3));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+
+// --- Node.IsEmpty.cs ---
+namespace DoublyLinkedList
+{
+    public partial class Node<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// IsEmpty.
+        /// </summary>
+        
+        
+        /// <returns>bool.</returns>
+        
+        
+        
+        
+        public bool IsEmpty()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Nodepush_front_pop_frontTests
+{
+    [Fact]
+    public void push_front_pop_front_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);list.push_front(2);
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodepush_back_pop_backTests
+{
+    [Fact]
+    public void push_back_pop_back_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_back(1);list.push_back(2);
+        Assert.AreEqual(list.pop_back(), Some(2));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+public class Nodemixed_operationsTests
+{
+    [Fact]
+    public void mixed_operations_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);list.push_back(3);list.push_front(0);
+        Assert.AreEqual(list.pop_front(), Some(0));Assert.AreEqual(list.pop_back(), Some(3));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+
+// --- Node.Len.cs ---
+namespace DoublyLinkedList
+{
+    public partial class Node<T>
+    where T : Clone
+
+    {
+        /// <summary>
+        /// Len.
+        /// </summary>
+        
+        
+        /// <returns>int.</returns>
+        
+        
+        
+        
+        public int Len()
+        {
+            
+            throw new NotImplementedException();
+        }
+    }
+}
+
+// ========== Generated xUnit tests ==========
+
+public class Nodepush_front_pop_frontTests
+{
+    [Fact]
+    public void push_front_pop_front_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);list.push_front(2);
+        Assert.AreEqual(list.pop_front(), Some(2));Assert.AreEqual(list.pop_front(), Some(1));
+    }
+}
+
+public class Nodepush_back_pop_backTests
+{
+    [Fact]
+    public void push_back_pop_back_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_back(1);list.push_back(2);
+        Assert.AreEqual(list.pop_back(), Some(2));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+
+public class Nodemixed_operationsTests
+{
+    [Fact]
+    public void mixed_operations_Test()
+    {
+        let mut list = DoublyLinkedList::new();
+        list.push_front(1);list.push_back(3);list.push_front(0);
+        Assert.AreEqual(list.pop_front(), Some(0));Assert.AreEqual(list.pop_back(), Some(3));Assert.AreEqual(list.pop_back(), Some(1));
+    }
+}
+

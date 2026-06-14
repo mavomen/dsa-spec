@@ -1,0 +1,361 @@
+// --- MaxHeap.ts ---
+/**
+ * MaxHeap
+ * Time complexity: O(log n) insert/extract, O(1) peek
+
+ * Space complexity: O(n)
+
+
+ * Invariants:
+ * - parent value >= children values
+ * - tree is complete (all levels filled left-to-right)
+ * - size == data.len()
+
+ */
+
+
+export class MaxHeap<T> {
+
+    
+    public data: T[];
+    
+}
+
+// --- MaxHeap_new.ts ---
+/**
+ * MaxHeap.new
+
+ * @returns Self
+
+
+
+ * Postconditions:
+ * - is_empty() == true
+ * - size() == 0
+
+ */
+
+import { MaxHeap } from './maxheap';
+
+
+(MaxHeap.prototype as any).new = function <T>(): Self {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_extract_max', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(3);heap.insert(5);heap.insert(1);heap.insert(4);
+        expect(heap.extract_max()).toBe(Some(5));expect(heap.extract_max()).toBe(Some(4));expect(heap.extract_max()).toBe(Some(3));expect(heap.extract_max()).toBe(Some(1));expect(heap.extract_max()).toBe(None);
+    });
+});
+
+describe('peek_returns_largest', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(10);heap.insert(20);
+        expect(*heap.peek().unwrap()).toBe(20);
+    });
+});
+
+describe('empty_heap_returns_none', () => {
+    it('should pass', () => {
+        let heap: MaxHeap<i32> = MaxHeap::new();
+        
+        expect(heap.peek().is_none()).toBe(true);expect(heap.extract_max().is_none()).toBe(true);expect(heap.is_empty()).toBe(true);
+    });
+});
+
+describe('size_tracks_insertions', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(1);heap.insert(2);heap.insert(3);
+        expect(heap.size()).toBe(3);heap.extract_max();expect(heap.size()).toBe(2);
+    });
+});
+
+
+// --- MaxHeap_insert.ts ---
+/**
+ * MaxHeap.insert
+ * @param value - T
+
+
+
+
+ * Postconditions:
+ * - size() == old.size() + 1
+ * - heap invariant maintained
+
+ */
+
+import { MaxHeap } from './maxheap';
+
+
+(MaxHeap.prototype as any).insert = function <T>(value: T): void {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_extract_max', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(3);heap.insert(5);heap.insert(1);heap.insert(4);
+        expect(heap.extract_max()).toBe(Some(5));expect(heap.extract_max()).toBe(Some(4));expect(heap.extract_max()).toBe(Some(3));expect(heap.extract_max()).toBe(Some(1));expect(heap.extract_max()).toBe(None);
+    });
+});
+
+describe('peek_returns_largest', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(10);heap.insert(20);
+        expect(*heap.peek().unwrap()).toBe(20);
+    });
+});
+
+describe('empty_heap_returns_none', () => {
+    it('should pass', () => {
+        let heap: MaxHeap<i32> = MaxHeap::new();
+        
+        expect(heap.peek().is_none()).toBe(true);expect(heap.extract_max().is_none()).toBe(true);expect(heap.is_empty()).toBe(true);
+    });
+});
+
+describe('size_tracks_insertions', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(1);heap.insert(2);heap.insert(3);
+        expect(heap.size()).toBe(3);heap.extract_max();expect(heap.size()).toBe(2);
+    });
+});
+
+
+// --- MaxHeap_extractMax.ts ---
+/**
+ * MaxHeap.extractMax
+
+ * @returns T | null
+
+
+ * Preconditions:
+ * - is_empty() == false
+
+
+ * Postconditions:
+ * - size() == old.size() - 1
+ * - heap invariant maintained
+
+ */
+
+import { MaxHeap } from './maxheap';
+
+
+(MaxHeap.prototype as any).extractMax = function <T>(): T | null {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_extract_max', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(3);heap.insert(5);heap.insert(1);heap.insert(4);
+        expect(heap.extract_max()).toBe(Some(5));expect(heap.extract_max()).toBe(Some(4));expect(heap.extract_max()).toBe(Some(3));expect(heap.extract_max()).toBe(Some(1));expect(heap.extract_max()).toBe(None);
+    });
+});
+
+describe('peek_returns_largest', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(10);heap.insert(20);
+        expect(*heap.peek().unwrap()).toBe(20);
+    });
+});
+
+describe('empty_heap_returns_none', () => {
+    it('should pass', () => {
+        let heap: MaxHeap<i32> = MaxHeap::new();
+        
+        expect(heap.peek().is_none()).toBe(true);expect(heap.extract_max().is_none()).toBe(true);expect(heap.is_empty()).toBe(true);
+    });
+});
+
+describe('size_tracks_insertions', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(1);heap.insert(2);heap.insert(3);
+        expect(heap.size()).toBe(3);heap.extract_max();expect(heap.size()).toBe(2);
+    });
+});
+
+
+// --- MaxHeap_peek.ts ---
+/**
+ * MaxHeap.peek
+
+ * @returns T | null
+
+
+
+ */
+
+import { MaxHeap } from './maxheap';
+
+
+(MaxHeap.prototype as any).peek = function <T>(): T | null {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_extract_max', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(3);heap.insert(5);heap.insert(1);heap.insert(4);
+        expect(heap.extract_max()).toBe(Some(5));expect(heap.extract_max()).toBe(Some(4));expect(heap.extract_max()).toBe(Some(3));expect(heap.extract_max()).toBe(Some(1));expect(heap.extract_max()).toBe(None);
+    });
+});
+
+describe('peek_returns_largest', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(10);heap.insert(20);
+        expect(*heap.peek().unwrap()).toBe(20);
+    });
+});
+
+describe('empty_heap_returns_none', () => {
+    it('should pass', () => {
+        let heap: MaxHeap<i32> = MaxHeap::new();
+        
+        expect(heap.peek().is_none()).toBe(true);expect(heap.extract_max().is_none()).toBe(true);expect(heap.is_empty()).toBe(true);
+    });
+});
+
+describe('size_tracks_insertions', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(1);heap.insert(2);heap.insert(3);
+        expect(heap.size()).toBe(3);heap.extract_max();expect(heap.size()).toBe(2);
+    });
+});
+
+
+// --- MaxHeap_size.ts ---
+/**
+ * MaxHeap.size
+
+ * @returns number
+
+
+
+ */
+
+import { MaxHeap } from './maxheap';
+
+
+(MaxHeap.prototype as any).size = function <T>(): number {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_extract_max', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(3);heap.insert(5);heap.insert(1);heap.insert(4);
+        expect(heap.extract_max()).toBe(Some(5));expect(heap.extract_max()).toBe(Some(4));expect(heap.extract_max()).toBe(Some(3));expect(heap.extract_max()).toBe(Some(1));expect(heap.extract_max()).toBe(None);
+    });
+});
+
+describe('peek_returns_largest', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(10);heap.insert(20);
+        expect(*heap.peek().unwrap()).toBe(20);
+    });
+});
+
+describe('empty_heap_returns_none', () => {
+    it('should pass', () => {
+        let heap: MaxHeap<i32> = MaxHeap::new();
+        
+        expect(heap.peek().is_none()).toBe(true);expect(heap.extract_max().is_none()).toBe(true);expect(heap.is_empty()).toBe(true);
+    });
+});
+
+describe('size_tracks_insertions', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(1);heap.insert(2);heap.insert(3);
+        expect(heap.size()).toBe(3);heap.extract_max();expect(heap.size()).toBe(2);
+    });
+});
+
+
+// --- MaxHeap_isEmpty.ts ---
+/**
+ * MaxHeap.isEmpty
+
+ * @returns boolean
+
+
+
+ */
+
+import { MaxHeap } from './maxheap';
+
+
+(MaxHeap.prototype as any).isEmpty = function <T>(): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('insert_and_extract_max', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(3);heap.insert(5);heap.insert(1);heap.insert(4);
+        expect(heap.extract_max()).toBe(Some(5));expect(heap.extract_max()).toBe(Some(4));expect(heap.extract_max()).toBe(Some(3));expect(heap.extract_max()).toBe(Some(1));expect(heap.extract_max()).toBe(None);
+    });
+});
+
+describe('peek_returns_largest', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(10);heap.insert(20);
+        expect(*heap.peek().unwrap()).toBe(20);
+    });
+});
+
+describe('empty_heap_returns_none', () => {
+    it('should pass', () => {
+        let heap: MaxHeap<i32> = MaxHeap::new();
+        
+        expect(heap.peek().is_none()).toBe(true);expect(heap.extract_max().is_none()).toBe(true);expect(heap.is_empty()).toBe(true);
+    });
+});
+
+describe('size_tracks_insertions', () => {
+    it('should pass', () => {
+        let mut heap = MaxHeap::new();
+        heap.insert(1);heap.insert(2);heap.insert(3);
+        expect(heap.size()).toBe(3);heap.extract_max();expect(heap.size()).toBe(2);
+    });
+});
+

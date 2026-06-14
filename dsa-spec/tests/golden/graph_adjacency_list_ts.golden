@@ -1,233 +1,408 @@
+// --- Graph.ts ---
 /**
  * Graph
-
  * Time complexity: O(V+E) for traversal
-
 
  * Space complexity: O(V+E)
 
 
  * Invariants:
-
  * - all edges reference valid vertices
-
  * - vertex count >= 0
-
 
  */
 
 
+export class Graph<T> {
 
-export interface Graph<T extends Clone & Hash & Eq> {
     
-    adjacencyList: HashMap<T, Vec<T>>;
+    public adjacencyList: HashMap<T, Vec<T>>;
     
-    directed: boolean;
+    public directed: boolean;
     
 }
 
-export class GraphImpl<T extends Clone & Hash & Eq> implements Graph<T> {
-    constructor(
-        
-        public adjacencyList: HashMap<T, Vec<T>>,
-        
-        public directed: boolean
-        
-    ) {}
+// --- Graph_new.ts ---
+/**
+ * Graph.new
+ * @param directed - boolean
 
-    
-    /**
-     * New.
-     
-     * @param directed - boolean.
-     
-     
-     * @returns Self
-     
-     
-     
-     *
-     * Postconditions:
-      * - vertex_count == 0
-      * - edge_count == 0
-     
-     
-     */
-    new(directed: boolean): Self {
-        
-        // TODO: Implement new
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Addvertex.
-     
-     * @param vertex - T.
-     
-     
-     * @returns boolean
-     
-     
-     
-     *
-     * Postconditions:
-      * - vertex exists in graph
-     
-     
-     */
-    addVertex(vertex: T): boolean {
-        
-        // TODO: Implement addVertex
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Addedge.
-     
-     * @param from - T.
-     
-     * @param to - T.
-     
-     
-     * @returns boolean
-     
-     
-     *
-     * Preconditions:
-      * - from and to exist in graph
-     
-     
-     
-     */
-    addEdge(from: T, to: T): boolean {
-        
-        // TODO: Implement addEdge
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Neighbors.
-     
-     * @param vertex - T.
-     
-     
-     * @returns &Vec<T> | null
-     
-     
-     
-     
-     */
-    neighbors(vertex: T): &Vec<T> | null {
-        
-        // TODO: Implement neighbors
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Vertexcount.
-     
-     
-     * @returns number
-     
-     
-     
-     
-     */
-    vertexCount(): number {
-        
-        // TODO: Implement vertexCount
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Edgecount.
-     
-     
-     * @returns number
-     
-     
-     
-     
-     */
-    edgeCount(): number {
-        
-        // TODO: Implement edgeCount
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Hasvertex.
-     
-     * @param vertex - T.
-     
-     
-     * @returns boolean
-     
-     
-     
-     
-     */
-    hasVertex(vertex: T): boolean {
-        
-        // TODO: Implement hasVertex
-        throw new Error('Not implemented');
-    }
-    
-    /**
-     * Hasedge.
-     
-     * @param from - T.
-     
-     * @param to - T.
-     
-     
-     * @returns boolean
-     
-     
-     
-     
-     */
-    hasEdge(from: T, to: T): boolean {
-        
-        // TODO: Implement hasEdge
-        throw new Error('Not implemented');
-    }
-    
-}
+ * @returns Self
 
 
 
-// ========== Generated Jest tests ==========
+ * Postconditions:
+ * - vertex_count == 0
+ * - edge_count == 0
+
+ */
+
+import { Graph } from './graph';
+
+
+(Graph.prototype as any).new = function <T>(directed: boolean): Self {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
 
 describe('add_vertex_and_edge', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let mut g = Graph::new(false);
-        // Actions
         g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
-        // Assertions
         expect(g.has_vertex(1)).toBe(true);expect(g.has_vertex(2)).toBe(true);expect(g.has_edge(1, 2)).toBe(true);expect(g.vertex_count()).toBe(2);expect(g.edge_count()).toBe(1);
     });
 });
 
 describe('undirected_graph_symmetric_edges', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let mut g = Graph::new(false);
-        // Actions
         g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
-        // Assertions
         expect(g.has_edge(1, 2)).toBe(true);expect(g.has_edge(2, 1)).toBe(true);
     });
 });
 
 describe('directed_graph_no_symmetry', () => {
-    it('should work', () => {
-        // Setup
+    it('should pass', () => {
         let mut g = Graph::new(true);
-        // Actions
         g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
-        // Assertions
+        expect(g.has_edge(1, 2)).toBe(true);expect(!g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+
+// --- Graph_addVertex.ts ---
+/**
+ * Graph.addVertex
+ * @param vertex - T
+
+ * @returns boolean
+
+
+
+ * Postconditions:
+ * - vertex exists in graph
+
+ */
+
+import { Graph } from './graph';
+
+
+(Graph.prototype as any).addVertex = function <T>(vertex: T): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('add_vertex_and_edge', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_vertex(1)).toBe(true);expect(g.has_vertex(2)).toBe(true);expect(g.has_edge(1, 2)).toBe(true);expect(g.vertex_count()).toBe(2);expect(g.edge_count()).toBe(1);
+    });
+});
+
+describe('undirected_graph_symmetric_edges', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+describe('directed_graph_no_symmetry', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(!g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+
+// --- Graph_addEdge.ts ---
+/**
+ * Graph.addEdge
+ * @param from - T
+ * @param to - T
+
+ * @returns boolean
+
+
+ * Preconditions:
+ * - from and to exist in graph
+
+
+ */
+
+import { Graph } from './graph';
+
+
+(Graph.prototype as any).addEdge = function <T>(from: T, to: T): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('add_vertex_and_edge', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_vertex(1)).toBe(true);expect(g.has_vertex(2)).toBe(true);expect(g.has_edge(1, 2)).toBe(true);expect(g.vertex_count()).toBe(2);expect(g.edge_count()).toBe(1);
+    });
+});
+
+describe('undirected_graph_symmetric_edges', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+describe('directed_graph_no_symmetry', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(!g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+
+// --- Graph_neighbors.ts ---
+/**
+ * Graph.neighbors
+ * @param vertex - T
+
+ * @returns &Vec<T> | null
+
+
+
+ */
+
+import { Graph } from './graph';
+
+
+(Graph.prototype as any).neighbors = function <T>(vertex: T): &Vec<T> | null {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('add_vertex_and_edge', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_vertex(1)).toBe(true);expect(g.has_vertex(2)).toBe(true);expect(g.has_edge(1, 2)).toBe(true);expect(g.vertex_count()).toBe(2);expect(g.edge_count()).toBe(1);
+    });
+});
+
+describe('undirected_graph_symmetric_edges', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+describe('directed_graph_no_symmetry', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(!g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+
+// --- Graph_vertexCount.ts ---
+/**
+ * Graph.vertexCount
+
+ * @returns number
+
+
+
+ */
+
+import { Graph } from './graph';
+
+
+(Graph.prototype as any).vertexCount = function <T>(): number {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('add_vertex_and_edge', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_vertex(1)).toBe(true);expect(g.has_vertex(2)).toBe(true);expect(g.has_edge(1, 2)).toBe(true);expect(g.vertex_count()).toBe(2);expect(g.edge_count()).toBe(1);
+    });
+});
+
+describe('undirected_graph_symmetric_edges', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+describe('directed_graph_no_symmetry', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(!g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+
+// --- Graph_edgeCount.ts ---
+/**
+ * Graph.edgeCount
+
+ * @returns number
+
+
+
+ */
+
+import { Graph } from './graph';
+
+
+(Graph.prototype as any).edgeCount = function <T>(): number {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('add_vertex_and_edge', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_vertex(1)).toBe(true);expect(g.has_vertex(2)).toBe(true);expect(g.has_edge(1, 2)).toBe(true);expect(g.vertex_count()).toBe(2);expect(g.edge_count()).toBe(1);
+    });
+});
+
+describe('undirected_graph_symmetric_edges', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+describe('directed_graph_no_symmetry', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(!g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+
+// --- Graph_hasVertex.ts ---
+/**
+ * Graph.hasVertex
+ * @param vertex - T
+
+ * @returns boolean
+
+
+
+ */
+
+import { Graph } from './graph';
+
+
+(Graph.prototype as any).hasVertex = function <T>(vertex: T): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('add_vertex_and_edge', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_vertex(1)).toBe(true);expect(g.has_vertex(2)).toBe(true);expect(g.has_edge(1, 2)).toBe(true);expect(g.vertex_count()).toBe(2);expect(g.edge_count()).toBe(1);
+    });
+});
+
+describe('undirected_graph_symmetric_edges', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+describe('directed_graph_no_symmetry', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(!g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+
+// --- Graph_hasEdge.ts ---
+/**
+ * Graph.hasEdge
+ * @param from - T
+ * @param to - T
+
+ * @returns boolean
+
+
+
+ */
+
+import { Graph } from './graph';
+
+
+(Graph.prototype as any).hasEdge = function <T>(from: T, to: T): boolean {
+
+    
+    throw new Error('Not implemented');
+};
+
+// ========== Generated tests ==========
+
+describe('add_vertex_and_edge', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_vertex(1)).toBe(true);expect(g.has_vertex(2)).toBe(true);expect(g.has_edge(1, 2)).toBe(true);expect(g.vertex_count()).toBe(2);expect(g.edge_count()).toBe(1);
+    });
+});
+
+describe('undirected_graph_symmetric_edges', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(false);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
+        expect(g.has_edge(1, 2)).toBe(true);expect(g.has_edge(2, 1)).toBe(true);
+    });
+});
+
+describe('directed_graph_no_symmetry', () => {
+    it('should pass', () => {
+        let mut g = Graph::new(true);
+        g.add_vertex(1);g.add_vertex(2);g.add_edge(1, 2);
         expect(g.has_edge(1, 2)).toBe(true);expect(!g.has_edge(2, 1)).toBe(true);
     });
 });

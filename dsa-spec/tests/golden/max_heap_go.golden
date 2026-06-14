@@ -1,0 +1,299 @@
+// --- MaxHeap.go ---
+// MaxHeap
+// Time complexity: O(log n) insert/extract, O(1) peek
+
+// Space complexity: O(n)
+
+// Invariants:
+// - parent value >= children values
+// - tree is complete (all levels filled left-to-right)
+// - size == data.len()
+
+package maxheap
+
+type MaxHeap[T constraints.Ordered] struct {
+	Data []T
+}
+
+func NewMaxHeap[T constraints.Ordered]() *MaxHeap[T] {
+	return &MaxHeap[T]{}
+}
+
+// --- MaxHeap_new.go ---
+// MaxHeap.New
+
+ // @returns Self
+
+
+
+// Postconditions:
+ // - is_empty() == true
+ // - size() == 0
+
+
+package maxheap
+
+
+func (s *MaxHeap[T]) New() Self {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestMaxHeapNewinsert_and_extract_max(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(3)heap.insert(5)heap.insert(1)heap.insert(4)
+    if heap.extract_max() != Some(5) { t.Errorf("got %v, want %v", heap.extract_max(), Some(5)) }if heap.extract_max() != Some(4) { t.Errorf("got %v, want %v", heap.extract_max(), Some(4)) }if heap.extract_max() != Some(3) { t.Errorf("got %v, want %v", heap.extract_max(), Some(3)) }if heap.extract_max() != Some(1) { t.Errorf("got %v, want %v", heap.extract_max(), Some(1)) }if heap.extract_max() != None { t.Errorf("got %v, want %v", heap.extract_max(), None) }
+}
+
+func TestMaxHeapNewpeek_returns_largest(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(10)heap.insert(20)
+    if *heap.peek().unwrap() != 20 { t.Errorf("got %v, want %v", *heap.peek().unwrap(), 20) }
+}
+
+func TestMaxHeapNewempty_heap_returns_none(t *testing.T) {
+    let heap: MaxHeap<i32> = MaxHeap::new();
+    
+    if !(heap.peek().is_none()) { t.Errorf("assertion failed: heap.peek().is_none()") }if !(heap.extract_max().is_none()) { t.Errorf("assertion failed: heap.extract_max().is_none()") }if !(heap.is_empty()) { t.Errorf("assertion failed: heap.is_empty()") }
+}
+
+func TestMaxHeapNewsize_tracks_insertions(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(1)heap.insert(2)heap.insert(3)
+    if heap.size() != 3 { t.Errorf("got %v, want %v", heap.size(), 3) }heap.extract_max()if heap.size() != 2 { t.Errorf("got %v, want %v", heap.size(), 2) }
+}
+
+
+// --- MaxHeap_insert.go ---
+// MaxHeap.Insert
+ // @param value - T
+
+
+
+
+// Postconditions:
+ // - size() == old.size() + 1
+ // - heap invariant maintained
+
+
+package maxheap
+
+
+func (s *MaxHeap[T]) Insert(value T)  {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestMaxHeapInsertinsert_and_extract_max(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(3)heap.insert(5)heap.insert(1)heap.insert(4)
+    if heap.extract_max() != Some(5) { t.Errorf("got %v, want %v", heap.extract_max(), Some(5)) }if heap.extract_max() != Some(4) { t.Errorf("got %v, want %v", heap.extract_max(), Some(4)) }if heap.extract_max() != Some(3) { t.Errorf("got %v, want %v", heap.extract_max(), Some(3)) }if heap.extract_max() != Some(1) { t.Errorf("got %v, want %v", heap.extract_max(), Some(1)) }if heap.extract_max() != None { t.Errorf("got %v, want %v", heap.extract_max(), None) }
+}
+
+func TestMaxHeapInsertpeek_returns_largest(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(10)heap.insert(20)
+    if *heap.peek().unwrap() != 20 { t.Errorf("got %v, want %v", *heap.peek().unwrap(), 20) }
+}
+
+func TestMaxHeapInsertempty_heap_returns_none(t *testing.T) {
+    let heap: MaxHeap<i32> = MaxHeap::new();
+    
+    if !(heap.peek().is_none()) { t.Errorf("assertion failed: heap.peek().is_none()") }if !(heap.extract_max().is_none()) { t.Errorf("assertion failed: heap.extract_max().is_none()") }if !(heap.is_empty()) { t.Errorf("assertion failed: heap.is_empty()") }
+}
+
+func TestMaxHeapInsertsize_tracks_insertions(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(1)heap.insert(2)heap.insert(3)
+    if heap.size() != 3 { t.Errorf("got %v, want %v", heap.size(), 3) }heap.extract_max()if heap.size() != 2 { t.Errorf("got %v, want %v", heap.size(), 2) }
+}
+
+
+// --- MaxHeap_extract_max.go ---
+// MaxHeap.ExtractMax
+
+ // @returns *T
+
+
+// Preconditions:
+ // - is_empty() == false
+
+
+// Postconditions:
+ // - size() == old.size() - 1
+ // - heap invariant maintained
+
+
+package maxheap
+
+
+func (s *MaxHeap[T]) ExtractMax() *T {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestMaxHeapExtractMaxinsert_and_extract_max(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(3)heap.insert(5)heap.insert(1)heap.insert(4)
+    if heap.extract_max() != Some(5) { t.Errorf("got %v, want %v", heap.extract_max(), Some(5)) }if heap.extract_max() != Some(4) { t.Errorf("got %v, want %v", heap.extract_max(), Some(4)) }if heap.extract_max() != Some(3) { t.Errorf("got %v, want %v", heap.extract_max(), Some(3)) }if heap.extract_max() != Some(1) { t.Errorf("got %v, want %v", heap.extract_max(), Some(1)) }if heap.extract_max() != None { t.Errorf("got %v, want %v", heap.extract_max(), None) }
+}
+
+func TestMaxHeapExtractMaxpeek_returns_largest(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(10)heap.insert(20)
+    if *heap.peek().unwrap() != 20 { t.Errorf("got %v, want %v", *heap.peek().unwrap(), 20) }
+}
+
+func TestMaxHeapExtractMaxempty_heap_returns_none(t *testing.T) {
+    let heap: MaxHeap<i32> = MaxHeap::new();
+    
+    if !(heap.peek().is_none()) { t.Errorf("assertion failed: heap.peek().is_none()") }if !(heap.extract_max().is_none()) { t.Errorf("assertion failed: heap.extract_max().is_none()") }if !(heap.is_empty()) { t.Errorf("assertion failed: heap.is_empty()") }
+}
+
+func TestMaxHeapExtractMaxsize_tracks_insertions(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(1)heap.insert(2)heap.insert(3)
+    if heap.size() != 3 { t.Errorf("got %v, want %v", heap.size(), 3) }heap.extract_max()if heap.size() != 2 { t.Errorf("got %v, want %v", heap.size(), 2) }
+}
+
+
+// --- MaxHeap_peek.go ---
+// MaxHeap.Peek
+
+ // @returns *T
+
+
+
+
+package maxheap
+
+
+func (s *MaxHeap[T]) Peek() *T {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestMaxHeapPeekinsert_and_extract_max(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(3)heap.insert(5)heap.insert(1)heap.insert(4)
+    if heap.extract_max() != Some(5) { t.Errorf("got %v, want %v", heap.extract_max(), Some(5)) }if heap.extract_max() != Some(4) { t.Errorf("got %v, want %v", heap.extract_max(), Some(4)) }if heap.extract_max() != Some(3) { t.Errorf("got %v, want %v", heap.extract_max(), Some(3)) }if heap.extract_max() != Some(1) { t.Errorf("got %v, want %v", heap.extract_max(), Some(1)) }if heap.extract_max() != None { t.Errorf("got %v, want %v", heap.extract_max(), None) }
+}
+
+func TestMaxHeapPeekpeek_returns_largest(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(10)heap.insert(20)
+    if *heap.peek().unwrap() != 20 { t.Errorf("got %v, want %v", *heap.peek().unwrap(), 20) }
+}
+
+func TestMaxHeapPeekempty_heap_returns_none(t *testing.T) {
+    let heap: MaxHeap<i32> = MaxHeap::new();
+    
+    if !(heap.peek().is_none()) { t.Errorf("assertion failed: heap.peek().is_none()") }if !(heap.extract_max().is_none()) { t.Errorf("assertion failed: heap.extract_max().is_none()") }if !(heap.is_empty()) { t.Errorf("assertion failed: heap.is_empty()") }
+}
+
+func TestMaxHeapPeeksize_tracks_insertions(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(1)heap.insert(2)heap.insert(3)
+    if heap.size() != 3 { t.Errorf("got %v, want %v", heap.size(), 3) }heap.extract_max()if heap.size() != 2 { t.Errorf("got %v, want %v", heap.size(), 2) }
+}
+
+
+// --- MaxHeap_size.go ---
+// MaxHeap.Size
+
+ // @returns int
+
+
+
+
+package maxheap
+
+
+func (s *MaxHeap[T]) Size() int {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestMaxHeapSizeinsert_and_extract_max(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(3)heap.insert(5)heap.insert(1)heap.insert(4)
+    if heap.extract_max() != Some(5) { t.Errorf("got %v, want %v", heap.extract_max(), Some(5)) }if heap.extract_max() != Some(4) { t.Errorf("got %v, want %v", heap.extract_max(), Some(4)) }if heap.extract_max() != Some(3) { t.Errorf("got %v, want %v", heap.extract_max(), Some(3)) }if heap.extract_max() != Some(1) { t.Errorf("got %v, want %v", heap.extract_max(), Some(1)) }if heap.extract_max() != None { t.Errorf("got %v, want %v", heap.extract_max(), None) }
+}
+
+func TestMaxHeapSizepeek_returns_largest(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(10)heap.insert(20)
+    if *heap.peek().unwrap() != 20 { t.Errorf("got %v, want %v", *heap.peek().unwrap(), 20) }
+}
+
+func TestMaxHeapSizeempty_heap_returns_none(t *testing.T) {
+    let heap: MaxHeap<i32> = MaxHeap::new();
+    
+    if !(heap.peek().is_none()) { t.Errorf("assertion failed: heap.peek().is_none()") }if !(heap.extract_max().is_none()) { t.Errorf("assertion failed: heap.extract_max().is_none()") }if !(heap.is_empty()) { t.Errorf("assertion failed: heap.is_empty()") }
+}
+
+func TestMaxHeapSizesize_tracks_insertions(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(1)heap.insert(2)heap.insert(3)
+    if heap.size() != 3 { t.Errorf("got %v, want %v", heap.size(), 3) }heap.extract_max()if heap.size() != 2 { t.Errorf("got %v, want %v", heap.size(), 2) }
+}
+
+
+// --- MaxHeap_is_empty.go ---
+// MaxHeap.IsEmpty
+
+ // @returns bool
+
+
+
+
+package maxheap
+
+
+func (s *MaxHeap[T]) IsEmpty() bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestMaxHeapIsEmptyinsert_and_extract_max(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(3)heap.insert(5)heap.insert(1)heap.insert(4)
+    if heap.extract_max() != Some(5) { t.Errorf("got %v, want %v", heap.extract_max(), Some(5)) }if heap.extract_max() != Some(4) { t.Errorf("got %v, want %v", heap.extract_max(), Some(4)) }if heap.extract_max() != Some(3) { t.Errorf("got %v, want %v", heap.extract_max(), Some(3)) }if heap.extract_max() != Some(1) { t.Errorf("got %v, want %v", heap.extract_max(), Some(1)) }if heap.extract_max() != None { t.Errorf("got %v, want %v", heap.extract_max(), None) }
+}
+
+func TestMaxHeapIsEmptypeek_returns_largest(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(10)heap.insert(20)
+    if *heap.peek().unwrap() != 20 { t.Errorf("got %v, want %v", *heap.peek().unwrap(), 20) }
+}
+
+func TestMaxHeapIsEmptyempty_heap_returns_none(t *testing.T) {
+    let heap: MaxHeap<i32> = MaxHeap::new();
+    
+    if !(heap.peek().is_none()) { t.Errorf("assertion failed: heap.peek().is_none()") }if !(heap.extract_max().is_none()) { t.Errorf("assertion failed: heap.extract_max().is_none()") }if !(heap.is_empty()) { t.Errorf("assertion failed: heap.is_empty()") }
+}
+
+func TestMaxHeapIsEmptysize_tracks_insertions(t *testing.T) {
+    let mut heap = MaxHeap::new();
+    heap.insert(1)heap.insert(2)heap.insert(3)
+    if heap.size() != 3 { t.Errorf("got %v, want %v", heap.size(), 3) }heap.extract_max()if heap.size() != 2 { t.Errorf("got %v, want %v", heap.size(), 2) }
+}
+

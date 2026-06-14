@@ -1,0 +1,110 @@
+// --- DijkstraMethods.py ---
+"""
+Dijkstra
+
+Time complexity: O((V + E) log V)
+
+
+Space complexity: O(V)
+
+
+"""
+
+from dataclasses import dataclass
+from typing import TypeVar, Generic, Optional, List, Dict
+import pytest
+
+
+
+
+def dijkstra(graph: HashMap<usize, Vec<(usize, usize)>>, start: int) -> Dict[int, int]:
+    """dijkstra.
+    
+
+    Args:
+    
+        graph: HashMap<usize, Vec<(usize, usize)>>
+    
+        start: int
+    
+    
+
+    Returns:
+        Dict[int, int]
+    
+    
+
+    Preconditions:
+    
+        - start vertex exists in graph
+    
+        - all edge weights >= 0
+    
+    
+
+    Postconditions:
+    
+        - result contains all reachable vertices
+    
+        - result[start] == 0
+    
+    
+    """
+    
+    # TODO: Implement dijkstra
+    raise NotImplementedError
+
+def shortest_path(graph: HashMap<usize, Vec<(usize, usize)>>, start: int, end: int) -> Optional[List[int]]:
+    """shortest_path.
+    
+
+    Args:
+    
+        graph: HashMap<usize, Vec<(usize, usize)>>
+    
+        start: int
+    
+        end: int
+    
+    
+
+    Returns:
+        Optional[List[int]]
+    
+    
+
+    Preconditions:
+    
+        - start and end exist in graph
+    
+    
+
+    Postconditions:
+    
+        - if path exists, first element is start and last is end
+    
+    
+    """
+    
+    # TODO: Implement shortest_path
+    raise NotImplementedError
+
+
+
+# ========== Generated pytest tests ==========
+
+def test_simple_path():
+    """Test: simple_path"""
+    let mut graph: HashMap<usize, Vec<(usize, usize)>> = HashMap::new();
+    graph.insert(0, vec![(1, 4), (2, 1)])graph.insert(1, vec![(3, 1)])graph.insert(2, vec![(1, 2), (3, 5)])graph.insert(3, vec![])let dist = dijkstra(&graph, 0)
+    assert dist[&0] == 0assert dist[&1] == 3assert dist[&2] == 1assert dist[&3] == 4
+
+def test_unreachable_vertex():
+    """Test: unreachable_vertex"""
+    let mut graph: HashMap<usize, Vec<(usize, usize)>> = HashMap::new();
+    graph.insert(0, vec![(1, 1)])graph.insert(1, vec![])graph.insert(2, vec![])let dist = dijkstra(&graph, 0)
+    assert dist[&0] == 0assert dist[&1] == 1assert !dist.contains_key(&2)
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

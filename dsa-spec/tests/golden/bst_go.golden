@@ -1,300 +1,231 @@
+// --- BSTNode.go ---
 // BinarySearchTree
+ // Time complexity: O(log n) average, O(n) worst
 
-// Time complexity: O(log n) average, O(n) worst
-
-
-// Space complexity: O(n)
+ // Space complexity: O(n)
 
 
 // Invariants:
+ // - left.value < node.value < right.value
+ // - no duplicate values
 
-// - left.value < node.value < right.value
 
-// - no duplicate values
+package binarysearchtree
+
+
+type BSTNode[T constraints.Ordered] struct {
+
+    
+    Value T
+    
+    Left *BSTNode<T>
+    
+    Right *BSTNode<T>
+    
+}
+
+func NewBSTNode[T constraints.Ordered]() *BSTNode[T] {
+    return &BSTNode[T]{}
+}
+
+// --- BSTNode_new.go ---
+// BinarySearchTree.New
+
+ // @returns Self
+
+
+
+// Postconditions:
+ // - root is None
+
+
+package binarysearchtree
+
+
+func (s *BSTNode[T]) New() Self {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestBSTNodeNewinsert_and_contains(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(5)bst.insert(3)bst.insert(7)
+    if !(bst.contains(5)) { t.Errorf("assertion failed: bst.contains(5)") }if !(bst.contains(3)) { t.Errorf("assertion failed: bst.contains(3)") }if !(bst.contains(7)) { t.Errorf("assertion failed: bst.contains(7)") }if !(!bst.contains(10)) { t.Errorf("assertion failed: !bst.contains(10)") }
+}
+
+func TestBSTNodeNewinorder_returns_sorted(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(5)bst.insert(3)bst.insert(7)bst.insert(1)bst.insert(9)
+    if bst.inorder() != vec![1, 3, 5, 7, 9] { t.Errorf("got %v, want %v", bst.inorder(), vec![1, 3, 5, 7, 9]) }
+}
+
+func TestBSTNodeNewduplicate_insert_returns_false(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(10)
+    if bst.insert(10) != false { t.Errorf("got %v, want %v", bst.insert(10), false) }
+}
+
+
+// --- BSTNode_insert.go ---
+// BinarySearchTree.Insert
+ // @param value - T
+
+ // @returns bool
+
+
+
+// Postconditions:
+ // - tree contains value
+ // - BST invariant maintained
+
+
+package binarysearchtree
+
+
+func (s *BSTNode[T]) Insert(value T) bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestBSTNodeInsertinsert_and_contains(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(5)bst.insert(3)bst.insert(7)
+    if !(bst.contains(5)) { t.Errorf("assertion failed: bst.contains(5)") }if !(bst.contains(3)) { t.Errorf("assertion failed: bst.contains(3)") }if !(bst.contains(7)) { t.Errorf("assertion failed: bst.contains(7)") }if !(!bst.contains(10)) { t.Errorf("assertion failed: !bst.contains(10)") }
+}
+
+func TestBSTNodeInsertinorder_returns_sorted(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(5)bst.insert(3)bst.insert(7)bst.insert(1)bst.insert(9)
+    if bst.inorder() != vec![1, 3, 5, 7, 9] { t.Errorf("got %v, want %v", bst.inorder(), vec![1, 3, 5, 7, 9]) }
+}
+
+func TestBSTNodeInsertduplicate_insert_returns_false(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(10)
+    if bst.insert(10) != false { t.Errorf("got %v, want %v", bst.insert(10), false) }
+}
+
+
+// --- BSTNode_contains.go ---
+// BinarySearchTree.Contains
+ // @param value - T
+
+ // @returns bool
+
 
 
 
 package binarysearchtree
 
-import "testing"
-
-
-
-
-
-// BSTNodeInterface defines the contract for BSTNode
-type BSTNodeInterface[T constraints.Ordered] interface {
-
-	
-	New() Self
-	
-	Insert(value T) bool
-	
-	Contains(value T) bool
-	
-	Inorder() []T
-	
-	IsEmpty() bool
-	
-}
-
-
-// BSTNode represents a BinarySearchTree
-type BSTNode[T constraints.Ordered] struct {
-	
-	Value T
-	
-	Left *BSTNode<T>
-	
-	Right *BSTNode<T>
-	
-}
-
-
-// New New.
-
-
-// Returns:
-//   - Self
-
-
-
-// Postconditions:
- // - root is None
-
-
-
-func (s *BSTNode[T]) New() Self {
-	
-	// TODO: Implement New
-	panic("not implemented")
-}
-
-// Insert Insert.
-
-// Parameters:
-
-//   - value: T
-
-
-
-// Returns:
-//   - bool
-
-
-
-// Postconditions:
- // - tree contains value
- // - BST invariant maintained
-
-
-
-func (s *BSTNode[T]) Insert(value T) bool {
-	
-	// TODO: Implement Insert
-	panic("not implemented")
-}
-
-// Contains Contains.
-
-// Parameters:
-
-//   - value: T
-
-
-
-// Returns:
-//   - bool
-
-
-
 
 func (s *BSTNode[T]) Contains(value T) bool {
-	
-	// TODO: Implement Contains
-	panic("not implemented")
+
+    
+    panic("not implemented")
 }
-
-// Inorder Inorder.
-
-
-// Returns:
-//   - []T
-
-
-
-// Postconditions:
- // - result is sorted ascending
-
-
-
-func (s *BSTNode[T]) Inorder() []T {
-	
-	// TODO: Implement Inorder
-	panic("not implemented")
-}
-
-// IsEmpty IsEmpty.
-
-
-// Returns:
-//   - bool
-
-
-
-
-func (s *BSTNode[T]) IsEmpty() bool {
-	
-	// TODO: Implement IsEmpty
-	panic("not implemented")
-}
-
-
-
-
-// BinarySearchTreeInterface defines the contract for BinarySearchTree
-type BinarySearchTreeInterface[T constraints.Ordered] interface {
-
-	
-	New() Self
-	
-	Insert(value T) bool
-	
-	Contains(value T) bool
-	
-	Inorder() []T
-	
-	IsEmpty() bool
-	
-}
-
-
-// BinarySearchTree represents a BinarySearchTree
-type BinarySearchTree[T constraints.Ordered] struct {
-	
-	Root *BSTNode<T>
-	
-}
-
-
-// New New.
-
-
-// Returns:
-//   - Self
-
-
-
-// Postconditions:
- // - root is None
-
-
-
-func (s *BinarySearchTree[T]) New() Self {
-	
-	// TODO: Implement New
-	panic("not implemented")
-}
-
-// Insert Insert.
-
-// Parameters:
-
-//   - value: T
-
-
-
-// Returns:
-//   - bool
-
-
-
-// Postconditions:
- // - tree contains value
- // - BST invariant maintained
-
-
-
-func (s *BinarySearchTree[T]) Insert(value T) bool {
-	
-	// TODO: Implement Insert
-	panic("not implemented")
-}
-
-// Contains Contains.
-
-// Parameters:
-
-//   - value: T
-
-
-
-// Returns:
-//   - bool
-
-
-
-
-func (s *BinarySearchTree[T]) Contains(value T) bool {
-	
-	// TODO: Implement Contains
-	panic("not implemented")
-}
-
-// Inorder Inorder.
-
-
-// Returns:
-//   - []T
-
-
-
-// Postconditions:
- // - result is sorted ascending
-
-
-
-func (s *BinarySearchTree[T]) Inorder() []T {
-	
-	// TODO: Implement Inorder
-	panic("not implemented")
-}
-
-// IsEmpty IsEmpty.
-
-
-// Returns:
-//   - bool
-
-
-
-
-func (s *BinarySearchTree[T]) IsEmpty() bool {
-	
-	// TODO: Implement IsEmpty
-	panic("not implemented")
-}
-
-
-
 
 // ========== Generated tests ==========
 
-func Testinsert_and_contains(t *testing.T) {
-	let mut bst = BinarySearchTree::new();
-	bst.insert(5)bst.insert(3)bst.insert(7)
-	if !(bst.contains(5)) { t.Errorf("assertion failed: bst.contains(5)") }if !(bst.contains(3)) { t.Errorf("assertion failed: bst.contains(3)") }if !(bst.contains(7)) { t.Errorf("assertion failed: bst.contains(7)") }if !(!bst.contains(10)) { t.Errorf("assertion failed: !bst.contains(10)") }
+func TestBSTNodeContainsinsert_and_contains(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(5)bst.insert(3)bst.insert(7)
+    if !(bst.contains(5)) { t.Errorf("assertion failed: bst.contains(5)") }if !(bst.contains(3)) { t.Errorf("assertion failed: bst.contains(3)") }if !(bst.contains(7)) { t.Errorf("assertion failed: bst.contains(7)") }if !(!bst.contains(10)) { t.Errorf("assertion failed: !bst.contains(10)") }
 }
 
-func Testinorder_returns_sorted(t *testing.T) {
-	let mut bst = BinarySearchTree::new();
-	bst.insert(5)bst.insert(3)bst.insert(7)bst.insert(1)bst.insert(9)
-	if bst.inorder() != vec![1, 3, 5, 7, 9] { t.Errorf("got %v, want %v", bst.inorder(), vec![1, 3, 5, 7, 9]) }
+func TestBSTNodeContainsinorder_returns_sorted(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(5)bst.insert(3)bst.insert(7)bst.insert(1)bst.insert(9)
+    if bst.inorder() != vec![1, 3, 5, 7, 9] { t.Errorf("got %v, want %v", bst.inorder(), vec![1, 3, 5, 7, 9]) }
 }
 
-func Testduplicate_insert_returns_false(t *testing.T) {
-	let mut bst = BinarySearchTree::new();
-	bst.insert(10)
-	if bst.insert(10) != false { t.Errorf("got %v, want %v", bst.insert(10), false) }
+func TestBSTNodeContainsduplicate_insert_returns_false(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(10)
+    if bst.insert(10) != false { t.Errorf("got %v, want %v", bst.insert(10), false) }
+}
+
+
+// --- BSTNode_inorder.go ---
+// BinarySearchTree.Inorder
+
+ // @returns []T
+
+
+
+// Postconditions:
+ // - result is sorted ascending
+
+
+package binarysearchtree
+
+
+func (s *BSTNode[T]) Inorder() []T {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestBSTNodeInorderinsert_and_contains(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(5)bst.insert(3)bst.insert(7)
+    if !(bst.contains(5)) { t.Errorf("assertion failed: bst.contains(5)") }if !(bst.contains(3)) { t.Errorf("assertion failed: bst.contains(3)") }if !(bst.contains(7)) { t.Errorf("assertion failed: bst.contains(7)") }if !(!bst.contains(10)) { t.Errorf("assertion failed: !bst.contains(10)") }
+}
+
+func TestBSTNodeInorderinorder_returns_sorted(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(5)bst.insert(3)bst.insert(7)bst.insert(1)bst.insert(9)
+    if bst.inorder() != vec![1, 3, 5, 7, 9] { t.Errorf("got %v, want %v", bst.inorder(), vec![1, 3, 5, 7, 9]) }
+}
+
+func TestBSTNodeInorderduplicate_insert_returns_false(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(10)
+    if bst.insert(10) != false { t.Errorf("got %v, want %v", bst.insert(10), false) }
+}
+
+
+// --- BSTNode_is_empty.go ---
+// BinarySearchTree.IsEmpty
+
+ // @returns bool
+
+
+
+
+package binarysearchtree
+
+
+func (s *BSTNode[T]) IsEmpty() bool {
+
+    
+    panic("not implemented")
+}
+
+// ========== Generated tests ==========
+
+func TestBSTNodeIsEmptyinsert_and_contains(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(5)bst.insert(3)bst.insert(7)
+    if !(bst.contains(5)) { t.Errorf("assertion failed: bst.contains(5)") }if !(bst.contains(3)) { t.Errorf("assertion failed: bst.contains(3)") }if !(bst.contains(7)) { t.Errorf("assertion failed: bst.contains(7)") }if !(!bst.contains(10)) { t.Errorf("assertion failed: !bst.contains(10)") }
+}
+
+func TestBSTNodeIsEmptyinorder_returns_sorted(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(5)bst.insert(3)bst.insert(7)bst.insert(1)bst.insert(9)
+    if bst.inorder() != vec![1, 3, 5, 7, 9] { t.Errorf("got %v, want %v", bst.inorder(), vec![1, 3, 5, 7, 9]) }
+}
+
+func TestBSTNodeIsEmptyduplicate_insert_returns_false(t *testing.T) {
+    let mut bst = BinarySearchTree::new();
+    bst.insert(10)
+    if bst.insert(10) != false { t.Errorf("got %v, want %v", bst.insert(10), false) }
 }
 

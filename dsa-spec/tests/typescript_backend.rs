@@ -8,7 +8,12 @@ fn parse_spec(yaml: &str) -> Spec {
 
 fn generate(spec: &Spec) -> String {
     let backend = TypeScriptBackend::new("templates").expect("Failed to create TypeScriptBackend");
-    backend.generate(spec).expect("Generation failed")
+    let files = backend.generate(spec).expect("Generation failed");
+    files
+        .into_iter()
+        .map(|(_, code)| code)
+        .collect::<Vec<_>>()
+        .join("\n")
 }
 
 #[test]
@@ -37,10 +42,9 @@ verification:
 "#,
     );
     let code = generate(&spec);
-    assert!(code.contains("export interface Stack<T>"));
-    assert!(code.contains("export class StackImpl<T>"));
+    assert!(code.contains("export class Stack<T>"));
     assert!(code.contains("items: T[]"));
-    assert!(code.contains("push(item: T): void"));
+    assert!(code.contains("push = function <T>(item: T): void"));
     assert!(code.contains("throw new Error('Not implemented');"));
 }
 

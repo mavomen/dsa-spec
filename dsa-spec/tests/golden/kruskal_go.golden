@@ -1,0 +1,93 @@
+// --- KruskalMethods.go ---
+// Kruskal
+
+// Time complexity: O(E log E)
+
+
+// Space complexity: O(V + E)
+
+
+
+package kruskal
+
+import "testing"
+
+
+// No structs – standalone functions
+
+// Kruskal Kruskal.
+
+// Parameters:
+
+//   - vertices: int
+
+//   - edges: [](usize, usize, usize)
+
+
+
+// Returns:
+//   - [](usize, usize, usize)
+
+
+// Preconditions:
+ // - vertices > 0
+
+
+
+// Postconditions:
+ // - result contains vertices - 1 edges when graph is connected
+
+
+
+func Kruskal(vertices int, edges [](usize, usize, usize)) [](usize, usize, usize) {
+	
+	// TODO: Implement Kruskal
+	panic("not implemented")
+}
+
+// TotalWeight TotalWeight.
+
+// Parameters:
+
+//   - mst: [](usize, usize, usize)
+
+
+
+// Returns:
+//   - int
+
+
+
+// Postconditions:
+ // - sum of edge weights in MST
+
+
+
+func TotalWeight(mst [](usize, usize, usize)) int {
+	
+	// TODO: Implement TotalWeight
+	panic("not implemented")
+}
+
+
+
+// ========== Generated tests ==========
+
+func Testsimple_graph_mst(t *testing.T) {
+	let vertices = 4;
+	let edges = vec![(0, 1, 10), (0, 2, 6), (0, 3, 5), (1, 3, 15), (2, 3, 4)]let mst = kruskal(vertices, edges)
+	if mst.len() != 3 { t.Errorf("got %v, want %v", mst.len(), 3) }if total_weight(&mst) != 19 { t.Errorf("got %v, want %v", total_weight(&mst), 19) }
+}
+
+func Testsingle_vertex(t *testing.T) {
+	let vertices = 1;
+	let edges: Vec<(usize, usize, usize)> = vec![]let mst = kruskal(vertices, edges)
+	if mst.len() != 0 { t.Errorf("got %v, want %v", mst.len(), 0) }
+}
+
+func Testdisconnected_graph(t *testing.T) {
+	let vertices = 3;
+	let edges = vec![(0, 1, 5)]let mst = kruskal(vertices, edges)
+	if mst.len() != 1 { t.Errorf("got %v, want %v", mst.len(), 1) }
+}
+

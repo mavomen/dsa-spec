@@ -1,219 +1,315 @@
+// --- CircularBuffer.py ---
 """
 CircularBuffer
-
 Time complexity: O(1) enqueue/dequeue
-
-
 Space complexity: O(n)
 
-
-# Invariants
-
-# - length <= capacity
-
-# - 0 <= head < capacity
-
-# - 0 <= tail < capacity
-
+Invariants:
+    - length <= capacity
+    - 0 <= head < capacity
+    - 0 <= tail < capacity
 
 """
 
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Optional, List, Dict
-import pytest
+from typing import Generic, TypeVar, Optional, List, Dict
 
-
-
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 @dataclass
 class CircularBuffer(Generic[T]):
     """CircularBuffer"""
-    
+
     buffer: List[Optional[T]]
-    
+
     head: int
-    
+
     tail: int
-    
+
     size: int
-    
+
     capacity: int
+
+// --- CircularBuffer_new.py ---
+"""
+CircularBuffer.new
+
+Preconditions:
+    - capacity > 0
+
+
+Postconditions:
+    - is_empty() == true
+    - capacity == capacity
+
+"""
+
+from circularbuffer import CircularBuffer
+
+
+def new(self, capacity: int) -> Self:
+    """new."""
     
-
-    
-    def new(self, capacity: int) -> Self:
-        """new.
-        
-
-        Args:
-        
-            capacity: int
-        
-        
-
-        Returns:
-            Self
-        
-        
-
-        Preconditions:
-        
-            - capacity > 0
-        
-        
-
-        Postconditions:
-        
-            - is_empty() == true
-        
-            - capacity == capacity
-        
-        
-        """
-        
-        # TODO: Implement new
-        raise NotImplementedError
-    
-    def enqueue(self, item: T) -> ():
-        """enqueue.
-        
-
-        Args:
-        
-            item: T
-        
-        
-
-        Returns:
-            ()
-        
-        
-
-        Preconditions:
-        
-            - size < capacity
-        
-        
-
-        Postconditions:
-        
-            - size == old.size + 1
-        
-        
-
-        Raises:
-            Exception: on error (from Result type)
-        
-        """
-        
-        # TODO: Implement enqueue
-        raise NotImplementedError
-    
-    def dequeue(self) -> Optional[T]:
-        """dequeue.
-        
-        
-
-        Returns:
-            Optional[T]
-        
-        
-
-        Preconditions:
-        
-            - size > 0
-        
-        
-
-        Postconditions:
-        
-            - size == old.size - 1
-        
-        
-        """
-        
-        # TODO: Implement dequeue
-        raise NotImplementedError
-    
-    def is_full(self) -> bool:
-        """is_full.
-        
-        
-
-        Returns:
-            bool
-        
-        
-        
-        
-        """
-        
-        # TODO: Implement is_full
-        raise NotImplementedError
-    
-    def is_empty(self) -> bool:
-        """is_empty.
-        
-        
-
-        Returns:
-            bool
-        
-        
-        
-        
-        """
-        
-        # TODO: Implement is_empty
-        raise NotImplementedError
-    
-    def len(self) -> int:
-        """len.
-        
-        
-
-        Returns:
-            int
-        
-        
-        
-        
-        """
-        
-        # TODO: Implement len
-        raise NotImplementedError
-    
+    raise NotImplementedError
 
 
+CircularBuffer.new = new
 
-# ========== Generated pytest tests ==========
+del new
+
+
+# ========== Generated tests ==========
 
 def test_enqueue_dequeue_fifo():
-    """Test: enqueue_dequeue_fifo"""
     let mut buf = CircularBuffer::new(3);
     buf.enqueue(1)buf.enqueue(2)
     assert buf.dequeue() == Some(1)assert buf.dequeue() == Some(2)
 
 def test_full_buffer_prevents_enqueue():
-    """Test: full_buffer_prevents_enqueue"""
     let mut buf = CircularBuffer::new(1);
     buf.enqueue(42)
     assert buf.is_full()assert buf.enqueue(43).is_err()
 
 def test_empty_buffer_returns_none():
-    """Test: empty_buffer_returns_none"""
     let buf = CircularBuffer::<i32>::new(5);
     
     assert buf.dequeue() == None
 
 def test_wrap_around_works():
-    """Test: wrap_around_works"""
     let mut buf = CircularBuffer::new(3);
     buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
     assert buf.dequeue() == Some(2)assert buf.dequeue() == Some(3)assert buf.dequeue() == Some(4)
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
+// --- CircularBuffer_enqueue.py ---
+"""
+CircularBuffer.enqueue
+
+Preconditions:
+    - size < capacity
+
+
+Postconditions:
+    - size == old.size + 1
+
+"""
+
+from circularbuffer import CircularBuffer
+
+
+def enqueue(self, item: T) -> ():
+    """enqueue."""
+    
+    raise NotImplementedError
+
+
+CircularBuffer.enqueue = enqueue
+
+del enqueue
+
+
+# ========== Generated tests ==========
+
+def test_enqueue_dequeue_fifo():
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)
+    assert buf.dequeue() == Some(1)assert buf.dequeue() == Some(2)
+
+def test_full_buffer_prevents_enqueue():
+    let mut buf = CircularBuffer::new(1);
+    buf.enqueue(42)
+    assert buf.is_full()assert buf.enqueue(43).is_err()
+
+def test_empty_buffer_returns_none():
+    let buf = CircularBuffer::<i32>::new(5);
+    
+    assert buf.dequeue() == None
+
+def test_wrap_around_works():
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
+    assert buf.dequeue() == Some(2)assert buf.dequeue() == Some(3)assert buf.dequeue() == Some(4)
+
+
+// --- CircularBuffer_dequeue.py ---
+"""
+CircularBuffer.dequeue
+
+Preconditions:
+    - size > 0
+
+
+Postconditions:
+    - size == old.size - 1
+
+"""
+
+from circularbuffer import CircularBuffer
+
+
+def dequeue(self, ) -> Optional[T]:
+    """dequeue."""
+    
+    raise NotImplementedError
+
+
+CircularBuffer.dequeue = dequeue
+
+del dequeue
+
+
+# ========== Generated tests ==========
+
+def test_enqueue_dequeue_fifo():
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)
+    assert buf.dequeue() == Some(1)assert buf.dequeue() == Some(2)
+
+def test_full_buffer_prevents_enqueue():
+    let mut buf = CircularBuffer::new(1);
+    buf.enqueue(42)
+    assert buf.is_full()assert buf.enqueue(43).is_err()
+
+def test_empty_buffer_returns_none():
+    let buf = CircularBuffer::<i32>::new(5);
+    
+    assert buf.dequeue() == None
+
+def test_wrap_around_works():
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
+    assert buf.dequeue() == Some(2)assert buf.dequeue() == Some(3)assert buf.dequeue() == Some(4)
+
+
+// --- CircularBuffer_is_full.py ---
+"""
+CircularBuffer.is_full
+
+
+"""
+
+from circularbuffer import CircularBuffer
+
+
+def is_full(self, ) -> bool:
+    """is_full."""
+    
+    raise NotImplementedError
+
+
+CircularBuffer.is_full = is_full
+
+del is_full
+
+
+# ========== Generated tests ==========
+
+def test_enqueue_dequeue_fifo():
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)
+    assert buf.dequeue() == Some(1)assert buf.dequeue() == Some(2)
+
+def test_full_buffer_prevents_enqueue():
+    let mut buf = CircularBuffer::new(1);
+    buf.enqueue(42)
+    assert buf.is_full()assert buf.enqueue(43).is_err()
+
+def test_empty_buffer_returns_none():
+    let buf = CircularBuffer::<i32>::new(5);
+    
+    assert buf.dequeue() == None
+
+def test_wrap_around_works():
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
+    assert buf.dequeue() == Some(2)assert buf.dequeue() == Some(3)assert buf.dequeue() == Some(4)
+
+
+// --- CircularBuffer_is_empty.py ---
+"""
+CircularBuffer.is_empty
+
+
+"""
+
+from circularbuffer import CircularBuffer
+
+
+def is_empty(self, ) -> bool:
+    """is_empty."""
+    
+    raise NotImplementedError
+
+
+CircularBuffer.is_empty = is_empty
+
+del is_empty
+
+
+# ========== Generated tests ==========
+
+def test_enqueue_dequeue_fifo():
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)
+    assert buf.dequeue() == Some(1)assert buf.dequeue() == Some(2)
+
+def test_full_buffer_prevents_enqueue():
+    let mut buf = CircularBuffer::new(1);
+    buf.enqueue(42)
+    assert buf.is_full()assert buf.enqueue(43).is_err()
+
+def test_empty_buffer_returns_none():
+    let buf = CircularBuffer::<i32>::new(5);
+    
+    assert buf.dequeue() == None
+
+def test_wrap_around_works():
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
+    assert buf.dequeue() == Some(2)assert buf.dequeue() == Some(3)assert buf.dequeue() == Some(4)
+
+
+// --- CircularBuffer_len.py ---
+"""
+CircularBuffer.len
+
+
+"""
+
+from circularbuffer import CircularBuffer
+
+
+def len(self, ) -> int:
+    """len."""
+    
+    raise NotImplementedError
+
+
+CircularBuffer.len = len
+
+del len
+
+
+# ========== Generated tests ==========
+
+def test_enqueue_dequeue_fifo():
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)
+    assert buf.dequeue() == Some(1)assert buf.dequeue() == Some(2)
+
+def test_full_buffer_prevents_enqueue():
+    let mut buf = CircularBuffer::new(1);
+    buf.enqueue(42)
+    assert buf.is_full()assert buf.enqueue(43).is_err()
+
+def test_empty_buffer_returns_none():
+    let buf = CircularBuffer::<i32>::new(5);
+    
+    assert buf.dequeue() == None
+
+def test_wrap_around_works():
+    let mut buf = CircularBuffer::new(3);
+    buf.enqueue(1)buf.enqueue(2)buf.dequeue()buf.enqueue(3)buf.enqueue(4)
+    assert buf.dequeue() == Some(2)assert buf.dequeue() == Some(3)assert buf.dequeue() == Some(4)
+

@@ -1,0 +1,24 @@
+"""
+{{ metadata.name }}
+{% if metadata.complexity.time %}Time complexity: {{ metadata.complexity.time }}{% endif %}
+{% if metadata.complexity.space %}Space complexity: {{ metadata.complexity.space }}{% endif %}
+{% if contracts.invariants %}
+Invariants:
+{% for inv in contracts.invariants %}    - {{ inv }}
+{% endfor %}{% endif %}
+"""
+
+from dataclasses import dataclass
+from typing import Generic, TypeVar, Optional, List, Dict
+
+{% for generic in struct.generics %}
+{{ generic.name }} = TypeVar('{{ generic.name }}')
+{% endfor %}
+
+
+@dataclass
+class {{ struct.name }}(Generic[{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}]):
+    """{{ metadata.name }}"""
+    {% for field in struct.fields %}
+    {{ field.name }}: {{ field.python_type }}
+    {% endfor %}

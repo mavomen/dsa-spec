@@ -1,0 +1,97 @@
+// --- DijkstraMethods.go ---
+// Dijkstra
+
+// Time complexity: O((V + E) log V)
+
+
+// Space complexity: O(V)
+
+
+
+package dijkstra
+
+import "testing"
+
+
+// No structs – standalone functions
+
+// Dijkstra Dijkstra.
+
+// Parameters:
+
+//   - graph: HashMap<usize, Vec<(usize, usize)>>
+
+//   - start: int
+
+
+
+// Returns:
+//   - HashMap<usize, usize>
+
+
+// Preconditions:
+ // - start vertex exists in graph
+ // - all edge weights >= 0
+
+
+
+// Postconditions:
+ // - result contains all reachable vertices
+ // - result[start] == 0
+
+
+
+func Dijkstra(graph HashMap<usize, Vec<(usize, usize)>>, start int) HashMap<usize, usize> {
+	
+	// TODO: Implement Dijkstra
+	panic("not implemented")
+}
+
+// ShortestPath ShortestPath.
+
+// Parameters:
+
+//   - graph: HashMap<usize, Vec<(usize, usize)>>
+
+//   - start: int
+
+//   - end: int
+
+
+
+// Returns:
+//   - *[]int
+
+
+// Preconditions:
+ // - start and end exist in graph
+
+
+
+// Postconditions:
+ // - if path exists, first element is start and last is end
+
+
+
+func ShortestPath(graph HashMap<usize, Vec<(usize, usize)>>, start int, end int) *[]int {
+	
+	// TODO: Implement ShortestPath
+	panic("not implemented")
+}
+
+
+
+// ========== Generated tests ==========
+
+func Testsimple_path(t *testing.T) {
+	let mut graph: HashMap<usize, Vec<(usize, usize)>> = HashMap::new();
+	graph.insert(0, vec![(1, 4), (2, 1)])graph.insert(1, vec![(3, 1)])graph.insert(2, vec![(1, 2), (3, 5)])graph.insert(3, vec![])let dist = dijkstra(&graph, 0)
+	if dist[&0] != 0 { t.Errorf("got %v, want %v", dist[&0], 0) }if dist[&1] != 3 { t.Errorf("got %v, want %v", dist[&1], 3) }if dist[&2] != 1 { t.Errorf("got %v, want %v", dist[&2], 1) }if dist[&3] != 4 { t.Errorf("got %v, want %v", dist[&3], 4) }
+}
+
+func Testunreachable_vertex(t *testing.T) {
+	let mut graph: HashMap<usize, Vec<(usize, usize)>> = HashMap::new();
+	graph.insert(0, vec![(1, 1)])graph.insert(1, vec![])graph.insert(2, vec![])let dist = dijkstra(&graph, 0)
+	if dist[&0] != 0 { t.Errorf("got %v, want %v", dist[&0], 0) }if dist[&1] != 1 { t.Errorf("got %v, want %v", dist[&1], 1) }if !(!dist.contains_key(&2)) { t.Errorf("assertion failed: !dist.contains_key(&2)") }
+}
+

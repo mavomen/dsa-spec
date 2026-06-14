@@ -1,0 +1,101 @@
+// --- DijkstraMethods.ts ---
+/**
+ * Dijkstra
+
+ * Time complexity: O((V + E) log V)
+
+
+ * Space complexity: O(V)
+
+
+ */
+
+
+
+
+/**
+ * Dijkstra.
+ 
+ * @param graph - HashMap<usize, Vec<(usize, usize)>>.
+ 
+ * @param start - number.
+ 
+ 
+ * @returns HashMap<usize, usize>
+ 
+ 
+ *
+ * Preconditions:
+  * - start vertex exists in graph
+  * - all edge weights >= 0
+ 
+ 
+ *
+ * Postconditions:
+  * - result contains all reachable vertices
+  * - result[start] == 0
+ 
+ 
+ */
+export function dijkstra(graph: HashMap<usize, Vec<(usize, usize)>>, start: number): HashMap<usize, usize> {
+    
+    // TODO: Implement dijkstra
+    throw new Error('Not implemented');
+}
+
+/**
+ * Shortestpath.
+ 
+ * @param graph - HashMap<usize, Vec<(usize, usize)>>.
+ 
+ * @param start - number.
+ 
+ * @param end - number.
+ 
+ 
+ * @returns number[] | null
+ 
+ 
+ *
+ * Preconditions:
+  * - start and end exist in graph
+ 
+ 
+ *
+ * Postconditions:
+  * - if path exists, first element is start and last is end
+ 
+ 
+ */
+export function shortestPath(graph: HashMap<usize, Vec<(usize, usize)>>, start: number, end: number): number[] | null {
+    
+    // TODO: Implement shortestPath
+    throw new Error('Not implemented');
+}
+
+
+
+// ========== Generated Jest tests ==========
+
+describe('simple_path', () => {
+    it('should work', () => {
+        // Setup
+        let mut graph: HashMap<usize, Vec<(usize, usize)>> = HashMap::new();
+        // Actions
+        graph.insert(0, vec![(1, 4), (2, 1)]);graph.insert(1, vec![(3, 1)]);graph.insert(2, vec![(1, 2), (3, 5)]);graph.insert(3, vec![]);let dist = dijkstra(&graph, 0);
+        // Assertions
+        expect(dist[&0]).toBe(0);expect(dist[&1]).toBe(3);expect(dist[&2]).toBe(1);expect(dist[&3]).toBe(4);
+    });
+});
+
+describe('unreachable_vertex', () => {
+    it('should work', () => {
+        // Setup
+        let mut graph: HashMap<usize, Vec<(usize, usize)>> = HashMap::new();
+        // Actions
+        graph.insert(0, vec![(1, 1)]);graph.insert(1, vec![]);graph.insert(2, vec![]);let dist = dijkstra(&graph, 0);
+        // Assertions
+        expect(dist[&0]).toBe(0);expect(dist[&1]).toBe(1);expect(!dist.contains_key(&2)).toBe(true);
+    });
+});
+

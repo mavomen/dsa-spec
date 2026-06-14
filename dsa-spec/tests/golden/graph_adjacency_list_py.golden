@@ -1,242 +1,347 @@
+// --- Graph.py ---
 """
 Graph
-
 Time complexity: O(V+E) for traversal
-
-
 Space complexity: O(V+E)
 
-
-# Invariants
-
-# - all edges reference valid vertices
-
-# - vertex count >= 0
-
+Invariants:
+    - all edges reference valid vertices
+    - vertex count >= 0
 
 """
 
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Optional, List, Dict
-import pytest
+from typing import Generic, TypeVar, Optional, List, Dict
 
-
-
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 @dataclass
 class Graph(Generic[T]):
     """Graph"""
-    
+
     adjacency_list: Dict[T, List[T]]
-    
+
     directed: bool
+
+// --- Graph_new.py ---
+"""
+Graph.new
+
+
+Postconditions:
+    - vertex_count == 0
+    - edge_count == 0
+
+"""
+
+from graph import Graph
+
+
+def new(self, directed: bool) -> Self:
+    """new."""
     
-
-    
-    def new(self, directed: bool) -> Self:
-        """new.
-        
-
-        Args:
-        
-            directed: bool
-        
-        
-
-        Returns:
-            Self
-        
-        
-        
-
-        Postconditions:
-        
-            - vertex_count == 0
-        
-            - edge_count == 0
-        
-        
-        """
-        
-        # TODO: Implement new
-        raise NotImplementedError
-    
-    def add_vertex(self, vertex: T) -> bool:
-        """add_vertex.
-        
-
-        Args:
-        
-            vertex: T
-        
-        
-
-        Returns:
-            bool
-        
-        
-        
-
-        Postconditions:
-        
-            - vertex exists in graph
-        
-        
-        """
-        
-        # TODO: Implement add_vertex
-        raise NotImplementedError
-    
-    def add_edge(self, from: T, to: T) -> bool:
-        """add_edge.
-        
-
-        Args:
-        
-            from: T
-        
-            to: T
-        
-        
-
-        Returns:
-            bool
-        
-        
-
-        Preconditions:
-        
-            - from and to exist in graph
-        
-        
-        
-        """
-        
-        # TODO: Implement add_edge
-        raise NotImplementedError
-    
-    def neighbors(self, vertex: T) -> Optional[&Vec<T>]:
-        """neighbors.
-        
-
-        Args:
-        
-            vertex: T
-        
-        
-
-        Returns:
-            Optional[&Vec<T>]
-        
-        
-        
-        
-        """
-        
-        # TODO: Implement neighbors
-        raise NotImplementedError
-    
-    def vertex_count(self) -> int:
-        """vertex_count.
-        
-        
-
-        Returns:
-            int
-        
-        
-        
-        
-        """
-        
-        # TODO: Implement vertex_count
-        raise NotImplementedError
-    
-    def edge_count(self) -> int:
-        """edge_count.
-        
-        
-
-        Returns:
-            int
-        
-        
-        
-        
-        """
-        
-        # TODO: Implement edge_count
-        raise NotImplementedError
-    
-    def has_vertex(self, vertex: T) -> bool:
-        """has_vertex.
-        
-
-        Args:
-        
-            vertex: T
-        
-        
-
-        Returns:
-            bool
-        
-        
-        
-        
-        """
-        
-        # TODO: Implement has_vertex
-        raise NotImplementedError
-    
-    def has_edge(self, from: T, to: T) -> bool:
-        """has_edge.
-        
-
-        Args:
-        
-            from: T
-        
-            to: T
-        
-        
-
-        Returns:
-            bool
-        
-        
-        
-        
-        """
-        
-        # TODO: Implement has_edge
-        raise NotImplementedError
-    
+    raise NotImplementedError
 
 
+Graph.new = new
 
-# ========== Generated pytest tests ==========
+del new
+
+
+# ========== Generated tests ==========
 
 def test_add_vertex_and_edge():
-    """Test: add_vertex_and_edge"""
     let mut g = Graph::new(false);
     g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
     assert g.has_vertex(1)assert g.has_vertex(2)assert g.has_edge(1, 2)assert g.vertex_count() == 2assert g.edge_count() == 1
 
 def test_undirected_graph_symmetric_edges():
-    """Test: undirected_graph_symmetric_edges"""
     let mut g = Graph::new(false);
     g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
     assert g.has_edge(1, 2)assert g.has_edge(2, 1)
 
 def test_directed_graph_no_symmetry():
-    """Test: directed_graph_no_symmetry"""
     let mut g = Graph::new(true);
     g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
     assert g.has_edge(1, 2)assert !g.has_edge(2, 1)
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
+// --- Graph_add_vertex.py ---
+"""
+Graph.add_vertex
+
+
+Postconditions:
+    - vertex exists in graph
+
+"""
+
+from graph import Graph
+
+
+def add_vertex(self, vertex: T) -> bool:
+    """add_vertex."""
+    
+    raise NotImplementedError
+
+
+Graph.add_vertex = add_vertex
+
+del add_vertex
+
+
+# ========== Generated tests ==========
+
+def test_add_vertex_and_edge():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_vertex(1)assert g.has_vertex(2)assert g.has_edge(1, 2)assert g.vertex_count() == 2assert g.edge_count() == 1
+
+def test_undirected_graph_symmetric_edges():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert g.has_edge(2, 1)
+
+def test_directed_graph_no_symmetry():
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert !g.has_edge(2, 1)
+
+
+// --- Graph_add_edge.py ---
+"""
+Graph.add_edge
+
+Preconditions:
+    - from and to exist in graph
+
+
+"""
+
+from graph import Graph
+
+
+def add_edge(self, from: T, to: T) -> bool:
+    """add_edge."""
+    
+    raise NotImplementedError
+
+
+Graph.add_edge = add_edge
+
+del add_edge
+
+
+# ========== Generated tests ==========
+
+def test_add_vertex_and_edge():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_vertex(1)assert g.has_vertex(2)assert g.has_edge(1, 2)assert g.vertex_count() == 2assert g.edge_count() == 1
+
+def test_undirected_graph_symmetric_edges():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert g.has_edge(2, 1)
+
+def test_directed_graph_no_symmetry():
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert !g.has_edge(2, 1)
+
+
+// --- Graph_neighbors.py ---
+"""
+Graph.neighbors
+
+
+"""
+
+from graph import Graph
+
+
+def neighbors(self, vertex: T) -> Optional[&Vec<T>]:
+    """neighbors."""
+    
+    raise NotImplementedError
+
+
+Graph.neighbors = neighbors
+
+del neighbors
+
+
+# ========== Generated tests ==========
+
+def test_add_vertex_and_edge():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_vertex(1)assert g.has_vertex(2)assert g.has_edge(1, 2)assert g.vertex_count() == 2assert g.edge_count() == 1
+
+def test_undirected_graph_symmetric_edges():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert g.has_edge(2, 1)
+
+def test_directed_graph_no_symmetry():
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert !g.has_edge(2, 1)
+
+
+// --- Graph_vertex_count.py ---
+"""
+Graph.vertex_count
+
+
+"""
+
+from graph import Graph
+
+
+def vertex_count(self, ) -> int:
+    """vertex_count."""
+    
+    raise NotImplementedError
+
+
+Graph.vertex_count = vertex_count
+
+del vertex_count
+
+
+# ========== Generated tests ==========
+
+def test_add_vertex_and_edge():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_vertex(1)assert g.has_vertex(2)assert g.has_edge(1, 2)assert g.vertex_count() == 2assert g.edge_count() == 1
+
+def test_undirected_graph_symmetric_edges():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert g.has_edge(2, 1)
+
+def test_directed_graph_no_symmetry():
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert !g.has_edge(2, 1)
+
+
+// --- Graph_edge_count.py ---
+"""
+Graph.edge_count
+
+
+"""
+
+from graph import Graph
+
+
+def edge_count(self, ) -> int:
+    """edge_count."""
+    
+    raise NotImplementedError
+
+
+Graph.edge_count = edge_count
+
+del edge_count
+
+
+# ========== Generated tests ==========
+
+def test_add_vertex_and_edge():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_vertex(1)assert g.has_vertex(2)assert g.has_edge(1, 2)assert g.vertex_count() == 2assert g.edge_count() == 1
+
+def test_undirected_graph_symmetric_edges():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert g.has_edge(2, 1)
+
+def test_directed_graph_no_symmetry():
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert !g.has_edge(2, 1)
+
+
+// --- Graph_has_vertex.py ---
+"""
+Graph.has_vertex
+
+
+"""
+
+from graph import Graph
+
+
+def has_vertex(self, vertex: T) -> bool:
+    """has_vertex."""
+    
+    raise NotImplementedError
+
+
+Graph.has_vertex = has_vertex
+
+del has_vertex
+
+
+# ========== Generated tests ==========
+
+def test_add_vertex_and_edge():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_vertex(1)assert g.has_vertex(2)assert g.has_edge(1, 2)assert g.vertex_count() == 2assert g.edge_count() == 1
+
+def test_undirected_graph_symmetric_edges():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert g.has_edge(2, 1)
+
+def test_directed_graph_no_symmetry():
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert !g.has_edge(2, 1)
+
+
+// --- Graph_has_edge.py ---
+"""
+Graph.has_edge
+
+
+"""
+
+from graph import Graph
+
+
+def has_edge(self, from: T, to: T) -> bool:
+    """has_edge."""
+    
+    raise NotImplementedError
+
+
+Graph.has_edge = has_edge
+
+del has_edge
+
+
+# ========== Generated tests ==========
+
+def test_add_vertex_and_edge():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_vertex(1)assert g.has_vertex(2)assert g.has_edge(1, 2)assert g.vertex_count() == 2assert g.edge_count() == 1
+
+def test_undirected_graph_symmetric_edges():
+    let mut g = Graph::new(false);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert g.has_edge(2, 1)
+
+def test_directed_graph_no_symmetry():
+    let mut g = Graph::new(true);
+    g.add_vertex(1)g.add_vertex(2)g.add_edge(1, 2)
+    assert g.has_edge(1, 2)assert !g.has_edge(2, 1)
+
