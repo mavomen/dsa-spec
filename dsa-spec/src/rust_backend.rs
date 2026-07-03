@@ -3,9 +3,10 @@
 use crate::ast::{MethodDef, Spec};
 use crate::backend::Backend;
 use crate::error::BackendError;
-use crate::template_engine::TemplateEngine;
+use crate::template_engine::{
+    TemplateEngine, format_code, sanitize_filename, validate_unique_names,
+};
 use serde::Serialize;
-use std::process::Command;
 use tera::Context;
 
 /// Rust backend using Tera templates with rustfmt formatting.
@@ -23,42 +24,7 @@ impl RustBackend {
     /// Format Rust code via rustfmt (edition 2024).
     /// Falls back to raw code if rustfmt is not installed.
     fn format_rust(code: &str) -> Result<String, BackendError> {
-        let mut child = Command::new("rustfmt")
-            .arg("--edition")
-            .arg("2024")
-            .stdin(std::process::Stdio::piped())
-            .stdout(std::process::Stdio::piped())
-            .stderr(std::process::Stdio::piped())
-            .spawn()
-            .map_err(|e| BackendError::Formatter {
-                message: format!("Failed to spawn rustfmt: {e}"),
-            })?;
-
-        if let Some(stdin) = child.stdin.as_mut() {
-            use std::io::Write;
-            stdin
-                .write_all(code.as_bytes())
-                .map_err(|e| BackendError::Formatter {
-                    message: format!("Failed to write to rustfmt stdin: {e}"),
-                })?;
-        }
-
-        let output = child
-            .wait_with_output()
-            .map_err(|e| BackendError::Formatter {
-                message: format!("Failed to wait on rustfmt: {e}"),
-            })?;
-
-        if output.status.success() {
-            Ok(String::from_utf8_lossy(&output.stdout).to_string())
-        } else {
-            Err(BackendError::Formatter {
-                message: format!(
-                    "rustfmt error: {} (falling back to unformatted)",
-                    String::from_utf8_lossy(&output.stderr)
-                ),
-            })
-        }
+        format_code(code, "rustfmt", &["--edition", "2024"])
     }
 
     fn file_extension() -> &'static str {
@@ -66,11 +32,20 @@ impl RustBackend {
     }
 
     fn class_filename(struct_name: &str) -> String {
-        format!("{}.{}", struct_name, Self::file_extension())
+        format!(
+            "{}.{}",
+            sanitize_filename(struct_name),
+            Self::file_extension()
+        )
     }
 
     fn method_filename(struct_name: &str, method_name: &str) -> String {
-        format!("{}_{}.{}", struct_name, method_name, Self::file_extension())
+        format!(
+            "{}_{}.{}",
+            sanitize_filename(struct_name),
+            sanitize_filename(method_name),
+            Self::file_extension()
+        )
     }
 
     /// Build monolithic Tera context (all structs, all methods, no partial files).
@@ -286,11 +261,15 @@ impl RustBackend {
 
 impl Backend for RustBackend {
     fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
+        validate_unique_names(spec)?;
         if spec.structs.is_empty() {
             let ctx = Self::build_monolithic_context(spec);
             let raw_code = self.engine.render("rust.rs.tera", &ctx)?;
             let code = Self::format_rust(&raw_code).unwrap_or(raw_code);
-            return Ok(vec![(format!("{}Methods.rs", spec.metadata.name), code)]);
+            return Ok(vec![(
+                format!("{}Methods.rs", sanitize_filename(&spec.metadata.name)),
+                code,
+            )]);
         }
 
         let mut files = Vec::new();

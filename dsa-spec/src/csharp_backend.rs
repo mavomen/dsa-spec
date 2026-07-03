@@ -5,7 +5,7 @@ use crate::ast::{Spec, Type};
 use crate::backend::Backend;
 use crate::casing;
 use crate::error::BackendError;
-use crate::template_engine::TemplateEngine;
+use crate::template_engine::{TemplateEngine, sanitize_filename, validate_unique_names};
 use serde::Serialize;
 use tera::Context;
 
@@ -25,13 +25,17 @@ impl CSharpBackend {
     }
 
     fn class_filename(struct_name: &str) -> String {
-        format!("{}.{}", struct_name, Self::file_extension())
+        format!(
+            "{}.{}",
+            sanitize_filename(struct_name),
+            Self::file_extension()
+        )
     }
 
     fn method_filename(struct_name: &str, method_name: &str) -> String {
         format!(
             "{}.{}.{}",
-            struct_name,
+            sanitize_filename(struct_name),
             casing::to_pascal_case(method_name),
             Self::file_extension()
         )
@@ -352,6 +356,7 @@ impl CSharpBackend {
 
 impl Backend for CSharpBackend {
     fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
+        validate_unique_names(spec)?;
         if spec.structs.is_empty() {
             let ctx = Self::build_monolithic_context(spec);
             let raw = self.engine.render("csharp.cs.tera", &ctx)?;

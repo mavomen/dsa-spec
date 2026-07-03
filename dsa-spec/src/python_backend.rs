@@ -4,7 +4,7 @@ use crate::assertion;
 use crate::ast::{MethodDef, Spec, Type};
 use crate::backend::Backend;
 use crate::error::BackendError;
-use crate::template_engine::TemplateEngine;
+use crate::template_engine::{TemplateEngine, sanitize_filename, validate_unique_names};
 use serde::Serialize;
 use std::process::Command;
 use tera::Context;
@@ -26,11 +26,15 @@ impl PythonBackend {
     }
 
     fn class_filename(class_name: &str) -> String {
-        format!("{}.py", class_name)
+        format!("{}.py", sanitize_filename(class_name))
     }
 
     fn method_filename(class_name: &str, method_name: &str) -> String {
-        format!("{}_{}.py", class_name, method_name)
+        format!(
+            "{}_{}.py",
+            sanitize_filename(class_name),
+            sanitize_filename(method_name)
+        )
     }
 
     fn format_python(code: &str) -> Result<String, BackendError> {
@@ -309,6 +313,7 @@ impl PythonBackend {
 
 impl Backend for PythonBackend {
     fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
+        validate_unique_names(spec)?;
         if spec.structs.is_empty() {
             let ctx = Self::build_monolithic_context(spec);
             let raw = self.engine.render("python.py.tera", &ctx)?;
