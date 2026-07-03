@@ -302,6 +302,7 @@ pub(crate) fn is_result_type(typ: &Type) -> bool {
     }
 }
 
+/// Convert a Rust-style assertion string to Python `assert` syntax.
 fn translate_assertion(a: &str) -> String {
     if let Some(expr) = assertion::parse_assert_bang(a) {
         format!("assert {}", expr.trim())
@@ -312,6 +313,7 @@ fn translate_assertion(a: &str) -> String {
     }
 }
 
+/// Template context for a Python class definition.
 #[derive(Serialize)]
 struct ClassStructContext<'a> {
     name: &'a str,
@@ -319,18 +321,21 @@ struct ClassStructContext<'a> {
     fields: Vec<FieldContext>,
 }
 
+/// Template context for a generic type parameter.
 #[derive(Serialize)]
 struct GenericParamContext<'a> {
     name: &'a str,
     bounds: String,
 }
 
+/// Template context for a Python class field.
 #[derive(Serialize)]
 struct FieldContext {
     name: String,
     python_type: String,
 }
 
+/// Template context for a Python method with exception awareness.
 #[derive(Serialize)]
 struct MethodContext<'a> {
     name: &'a str,
@@ -342,6 +347,7 @@ struct MethodContext<'a> {
     injected_assertions: &'a [String],
 }
 
+/// Template context for a Python method parameter.
 #[derive(Serialize)]
 struct ParamContext {
     name: String,

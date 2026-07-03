@@ -13,30 +13,33 @@ use crate::ast::Spec;
 use serde::Serialize;
 use tera::Context;
 
-// ── shared context structs (borrowed) ──────────────────────────────
-
+/// Template context carrying spec name and complexity (borrowed form).
 #[derive(Serialize)]
 pub struct MetadataContext<'a> {
     pub name: &'a str,
     pub complexity: ComplexityContext<'a>,
 }
 
+/// Template context for Big-O complexity annotations (borrowed form).
 #[derive(Serialize)]
 pub struct ComplexityContext<'a> {
     pub time: Option<&'a str>,
     pub space: Option<&'a str>,
 }
 
+/// Template context for invariants (borrowed form).
 #[derive(Serialize)]
 pub struct ContractsContext<'a> {
     pub invariants: &'a [String],
 }
 
+/// Template context for test case collections (borrowed form).
 #[derive(Serialize)]
 pub struct VerificationContext<'a> {
     pub test_cases: Vec<TestContext<'a>>,
 }
 
+/// Template context for a single test scenario (borrowed form).
 #[derive(Serialize)]
 pub struct TestContext<'a> {
     pub name: &'a str,

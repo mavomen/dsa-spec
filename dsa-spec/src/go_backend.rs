@@ -97,6 +97,7 @@ impl GoBackend {
         }
     }
 
+    /// Strip non-alphanumeric characters and lowercase for a valid Go package name.
     fn sanitize_package_name(name: &str) -> String {
         name.chars()
             .filter(|c| c.is_alphanumeric() || *c == '_')
@@ -374,6 +375,7 @@ impl Backend for GoBackend {
     }
 }
 
+/// Convert a Rust-style assertion string to Go `t.Errorf` syntax.
 fn translate_assertion(a: &str) -> String {
     if let Some(expr) = assertion::parse_assert_bang(a) {
         format!("if !({expr}) {{ t.Errorf(\"assertion failed: {expr}\") }}")
@@ -384,6 +386,7 @@ fn translate_assertion(a: &str) -> String {
     }
 }
 
+/// Template context carrying spec name, complexity and package name (owned form).
 #[derive(Serialize)]
 struct MetadataContext {
     name: String,
@@ -391,17 +394,20 @@ struct MetadataContext {
     package_name: String,
 }
 
+/// Template context for Big-O complexity annotations (owned form).
 #[derive(Serialize)]
 struct ComplexityContext {
     time: Option<String>,
     space: Option<String>,
 }
 
+/// Template context for invariants (owned form).
 #[derive(Serialize)]
 struct ContractsContext {
     invariants: Vec<String>,
 }
 
+/// Template context for a Go struct definition.
 #[derive(Serialize)]
 struct StructContext {
     name: String,
@@ -409,6 +415,7 @@ struct StructContext {
     fields: Vec<FieldContext>,
 }
 
+/// Template context for a generic type parameter with Go constraint.
 #[derive(Serialize)]
 struct GenericParamContext {
     name: String,
@@ -416,12 +423,14 @@ struct GenericParamContext {
     bound: String,
 }
 
+/// Template context for a Go struct field.
 #[derive(Serialize)]
 struct FieldContext {
     name: String,
     go_type: String,
 }
 
+/// Template context for a Go method with tuple-error awareness.
 #[derive(Serialize)]
 struct MethodContext {
     name: String,
@@ -433,17 +442,20 @@ struct MethodContext {
     injected_assertions: Vec<String>,
 }
 
+/// Template context for a Go method parameter.
 #[derive(Serialize)]
 struct ParamContext {
     name: String,
     go_type: String,
 }
 
+/// Template context for test case collections (owned form).
 #[derive(Serialize)]
 struct VerificationContext {
     test_cases: Vec<TestContext>,
 }
 
+/// Template context for a single test scenario (owned form).
 #[derive(Serialize)]
 struct TestContext {
     name: String,

@@ -194,20 +194,21 @@ impl Backend for RustBackend {
     }
 }
 
-// === Context structs for monolithic template ===
-
+/// Template context for a generic parameter with trait bounds.
 #[derive(Serialize)]
 struct GenericParamContext<'a> {
     name: &'a str,
     bounds: String,
 }
 
+/// Template context for a struct field.
 #[derive(Serialize)]
 struct FieldContext<'a> {
     name: &'a str,
     field_type: &'a crate::ast::Type,
 }
 
+/// Template context for a full struct definition.
 #[derive(Serialize)]
 struct StructContext<'a> {
     name: &'a str,
@@ -215,12 +216,14 @@ struct StructContext<'a> {
     fields: Vec<FieldContext<'a>>,
 }
 
+/// Template context for a method parameter.
 #[derive(Serialize)]
 struct ParamContext<'a> {
     name: &'a str,
     param_type: &'a crate::ast::Type,
 }
 
+/// Template context for a method signature.
 #[derive(Serialize)]
 struct MethodContext<'a> {
     name: &'a str,
@@ -231,14 +234,14 @@ struct MethodContext<'a> {
     injected_assertions: &'a [String],
 }
 
-// === Context structs for multi-file (class/method) templates ===
-
+/// Template context for a class-level field with owned string values.
 #[derive(Serialize)]
 struct ClassFieldContext {
     name: String,
     rust_type: String,
 }
 
+/// Template context for a struct in multi-file mode.
 #[derive(Serialize)]
 struct ClassStructContext<'a> {
     name: &'a str,
@@ -246,12 +249,14 @@ struct ClassStructContext<'a> {
     fields: Vec<ClassFieldContext>,
 }
 
+/// Template context for a method parameter in multi-file mode.
 #[derive(Serialize)]
 struct MethodParamContext {
     name: String,
     rust_type: String,
 }
 
+/// Template context for a single-method file with owned and borrowed data.
 #[derive(Serialize)]
 struct MethodFileContext<'a> {
     name: String,

@@ -156,6 +156,10 @@ pub fn generate_mermaid(spec: &Spec) -> String {
     mermaid
 }
 
+/// Extract struct names referenced in a type string via token matching.
+///
+/// Splits on non-alphanumeric characters and checks each token against
+/// the known struct name set. `"Option<Box<BSTNode<T>>>"` yields `["BSTNode"]`.
 fn find_edge_targets(type_str: &str, struct_names: &HashSet<String>) -> Vec<String> {
     let tokens: Vec<&str> = type_str
         .split(|c: char| !c.is_alphanumeric() && c != '_')
@@ -170,6 +174,8 @@ fn find_edge_targets(type_str: &str, struct_names: &HashSet<String>) -> Vec<Stri
     result
 }
 
+/// Replace angle brackets with tildes for Mermaid syntax compatibility.
+/// `"Vec<u8>"` → `"Vec~u8~"`
 fn escape_mermaid_type(s: &str) -> String {
     s.replace(['<', '>'], "~").replace('&', "&amp;")
 }
