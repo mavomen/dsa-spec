@@ -8,7 +8,6 @@ use std::fmt;
 /// Carries line/column information when available for parse errors,
 /// and JSON Schema instance path for validation errors.
 #[derive(Debug)]
-#[allow(dead_code)] // variants used by migrate & emitter modules (future)
 pub enum SpecError {
     /// YAML parse failure with optional source location.
     ParseError {
@@ -60,7 +59,6 @@ impl std::error::Error for SpecError {}
 
 /// Errors produced during code generation and formatting.
 #[derive(Debug)]
-#[allow(dead_code)] // TypeMapping & Io variants used by future emitter & validate
 pub enum BackendError {
     /// Tera template engine initialization failure.
     TemplateInit { message: String },
@@ -68,10 +66,6 @@ pub enum BackendError {
     TemplateRender { message: String },
     /// External code formatter failure (rustfmt, black, etc.).
     Formatter { message: String },
-    /// Unsupported type mapping for the target language.
-    TypeMapping { message: String },
-    /// I/O error during file operations.
-    Io { message: String },
 }
 
 impl fmt::Display for BackendError {
@@ -85,12 +79,6 @@ impl fmt::Display for BackendError {
             }
             BackendError::Formatter { message } => {
                 write!(f, "formatter error: {message}")
-            }
-            BackendError::TypeMapping { message } => {
-                write!(f, "type mapping error: {message}")
-            }
-            BackendError::Io { message } => {
-                write!(f, "I/O error: {message}")
             }
         }
     }

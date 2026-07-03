@@ -157,9 +157,13 @@ pub fn generate_mermaid(spec: &Spec) -> String {
 }
 
 fn find_edge_targets(type_str: &str, struct_names: &HashSet<String>) -> Vec<String> {
-    let mut result = Vec::new();
+    let tokens: Vec<&str> = type_str
+        .split(|c: char| !c.is_alphanumeric() && c != '_')
+        .filter(|t| !t.is_empty())
+        .collect();
+    let mut result: Vec<String> = Vec::new();
     for name in struct_names {
-        if type_str.contains(name.as_str()) {
+        if tokens.contains(&name.as_str()) {
             result.push(name.clone());
         }
     }
