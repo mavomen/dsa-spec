@@ -147,6 +147,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let use_json = cli.json;
 
     let make_backends = |lang_lower: &str| -> BackendResult {
+        // Create backends for the requested language(s).
         match lang_lower {
             "rust" => Ok(vec![(
                 "rust",
@@ -197,6 +198,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
+    // Map language name to file extension.
     let _lang_ext = |name: &str| -> &str {
         match name {
             "rust" => "rs",
@@ -208,6 +210,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
+    // Serialize a JSON value to string with a fallback error message.
     let json_str = |val: &serde_json::Value| -> String {
         serde_json::to_string(val).unwrap_or_else(|_| r#"{"error":"serialization failed"}"#.into())
     };

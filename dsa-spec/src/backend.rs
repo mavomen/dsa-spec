@@ -17,27 +17,38 @@ use tera::Context;
 /// filename and formatting decisions to the individual methods below.
 /// Language backends override only what varies per language.
 pub trait Backend {
-    // ── required: engine & identity ────────────────────────────────
-
+    /// Reference to the shared template engine instance.
     fn engine(&self) -> &TemplateEngine;
+    /// Short identifier for the target language. `"rust"`, `"go"`, etc.
     #[allow(dead_code)]
     fn name(&self) -> &'static str;
+    /// File extension including the leading dot. `"rs"`, `"py"`, `"go"`, ...
     fn file_extension(&self) -> &'static str;
 
-    // ── required: formatting ──────────────────────────────────────
-
+    /// Format generated source code with the language's formatter.
+    ///
+    /// Returns the formatted string on success. Callers typically fall
+    /// back to unformatted code when formatting fails.
     fn format_code(&self, code: &str) -> Result<String, BackendError>;
 
-    // ── required: template paths ──────────────────────────────────
-
+    /// Template filename for the monolithic (no-struct) output variant.
+    /// `"rust.rs.tera"`, `"python.py.tera"`, ...
     fn monolithic_template(&self) -> &'static str;
+    /// Template filename for the class definition output.
+    /// `"rust/class.rs.tera"`, `"go/class.go.tera"`, ...
     fn class_template(&self) -> &'static str;
+    /// Template filename for the per-method output.
+    /// `"rust/method.rs.tera"`, `"typescript/method.ts.tera"`, ...
     fn method_template(&self) -> &'static str;
 
-    // ── required: filenames (no defaults — vary per backend) ──────
-
+    /// Output filename for the monolithic variant.
+    /// E.g. `"StackMethods.rs"`, `"StackMethods.py"`.
     fn monolithic_filename(&self, spec: &Spec) -> String;
 
+    /// Output filename for a class definition.
+    ///
+    /// Defaults to `"{struct_name}.{ext}"`. Override for backends that
+    /// need a different convention (e.g. C# partial classes).
     fn class_filename(&self, struct_name: &str) -> String {
         format!(
             "{}.{}",
@@ -46,6 +57,10 @@ pub trait Backend {
         )
     }
 
+    /// Output filename for a per-method file.
+    ///
+    /// Defaults to `"{struct_name}_{method_name}.{ext}"`. Override for
+    /// backends that use a different scheme (e.g. C#'s `Struct.Method.cs`).
     fn method_filename(&self, struct_name: &str, method_name: &str) -> String {
         format!(
             "{}_{}.{}",
@@ -55,13 +70,12 @@ pub trait Backend {
         )
     }
 
-    // ── required: context builders ────────────────────────────────
-
+    /// Build the Tera context for the monolithic template.
     fn build_monolithic_context(&self, spec: &Spec) -> Context;
+    /// Build the Tera context for the class template.
     fn build_class_context(&self, spec: &Spec) -> Context;
+    /// Build the Tera context for a single-method template.
     fn build_method_context(&self, spec: &Spec, method: &MethodDef) -> Context;
-
-    // ── default generate() ────────────────────────────────────────
 
     /// Generate code from a spec.
     ///

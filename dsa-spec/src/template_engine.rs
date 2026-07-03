@@ -14,6 +14,9 @@ pub struct TemplateEngine {
 }
 
 impl TemplateEngine {
+    /// Create a new engine, loading templates from a directory tree.
+    ///
+    /// Loads all files matching `{template_dir}/**/*` as Tera templates.
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let tera = Tera::new(&format!("{}/**/*", template_dir)).map_err(|e| {
             BackendError::TemplateInit {

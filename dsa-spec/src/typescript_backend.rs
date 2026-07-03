@@ -278,6 +278,7 @@ impl Backend for TypeScriptBackend {
     }
 }
 
+/// Convert a Rust-style assertion string to Jest `expect()` syntax.
 fn translate_assertion(a: &str) -> String {
     if let Some(expr) = assertion::parse_assert_bang(a) {
         format!("expect({}).toBe(true)", expr.trim())
@@ -288,6 +289,7 @@ fn translate_assertion(a: &str) -> String {
     }
 }
 
+/// Template context for a TypeScript class definition.
 #[derive(Serialize)]
 struct ClassStructContext<'a> {
     name: &'a str,
@@ -295,18 +297,21 @@ struct ClassStructContext<'a> {
     fields: Vec<FieldContext>,
 }
 
+/// Template context for a generic type parameter.
 #[derive(Serialize)]
 struct GenericParamContext<'a> {
     name: &'a str,
     constraints: String,
 }
 
+/// Template context for a TypeScript class field.
 #[derive(Serialize)]
 struct FieldContext {
     name: String,
     ts_type: String,
 }
 
+/// Template context for a TypeScript method with exception awareness.
 #[derive(Serialize)]
 struct MethodContext<'a> {
     name: String,
@@ -318,6 +323,7 @@ struct MethodContext<'a> {
     injected_assertions: &'a [String],
 }
 
+/// Template context for a TypeScript method parameter.
 #[derive(Serialize)]
 struct ParamContext {
     name: String,

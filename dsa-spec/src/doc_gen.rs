@@ -6,7 +6,6 @@ use crate::ast::Spec;
 pub fn generate_doc(spec: &Spec) -> String {
     let mut doc = String::new();
 
-    // Title
     doc.push_str(&format!("# {}\n\n", spec.metadata.name));
     doc.push_str(&format!("**Category:** {}\n\n", spec.metadata.category));
 

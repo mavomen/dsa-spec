@@ -16,11 +16,13 @@ pub struct CSharpBackend {
 }
 
 impl CSharpBackend {
+    /// Create a new C# backend loading templates from the given directory.
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(CSharpBackend { engine })
     }
 
+    /// Convert an AST type to a C# type string with nullable and collection translations.
     pub(crate) fn to_csharp_type(typ: &Type) -> String {
         match typ {
             Type::Simple(s) => Self::translate_simple_type(s),
@@ -32,6 +34,8 @@ impl CSharpBackend {
         }
     }
 
+    /// Translate a type name string to a C# type expression.
+    /// `Option<T>` → `T?`, `Vec<T>` → `List<T>`, `i32` → `int`
     pub(crate) fn translate_simple_type(s: &str) -> String {
         match s {
             "Option<T>" => "T?".to_string(),
@@ -68,6 +72,7 @@ impl CSharpBackend {
         }
     }
 
+    /// Return true if the type is a `Result<T, E>` (C# uses exceptions).
     pub(crate) fn is_result_type(typ: &Type) -> bool {
         match typ {
             Type::Simple(s) => s.starts_with("Result<"),
@@ -279,6 +284,7 @@ impl Backend for CSharpBackend {
     }
 }
 
+/// Convert a Rust-style assertion string to C# `Assert.Xxx` syntax.
 fn translate_assertion(a: &str) -> String {
     if let Some(expr) = assertion::parse_assert_bang(a) {
         format!("Assert.IsTrue({})", expr.trim())
@@ -289,6 +295,7 @@ fn translate_assertion(a: &str) -> String {
     }
 }
 
+/// Template context for a C# class definition.
 #[derive(Serialize)]
 struct ClassStructContext<'a> {
     name: &'a str,
@@ -296,18 +303,21 @@ struct ClassStructContext<'a> {
     fields: Vec<FieldContext>,
 }
 
+/// Template context for a generic type parameter.
 #[derive(Serialize)]
 struct GenericParamContext<'a> {
     name: &'a str,
     bounds: String,
 }
 
+/// Template context for a C# class field/property.
 #[derive(Serialize)]
 struct FieldContext {
     name: String,
     csharp_type: String,
 }
 
+/// Template context for a C# method with nullable awareness.
 #[derive(Serialize)]
 struct MethodContext<'a> {
     name: String,
@@ -319,6 +329,7 @@ struct MethodContext<'a> {
     injected_assertions: &'a [String],
 }
 
+/// Template context for a C# method parameter.
 #[derive(Serialize)]
 struct ParamContext {
     name: String,
