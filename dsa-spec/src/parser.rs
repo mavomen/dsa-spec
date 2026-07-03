@@ -8,7 +8,7 @@ use crate::error::SpecError;
 ///
 /// Returns parse errors with line and column numbers when available.
 pub fn parse(spec_text: &str) -> Result<Spec, SpecError> {
-    serde_yaml::from_str::<Spec>(spec_text).map_err(|e| SpecError::ParseError {
+    serde_yml::from_str::<Spec>(spec_text).map_err(|e| SpecError::ParseError {
         message: format!("YAML parse error: {e}"),
         line: e.location().map(|loc| loc.line()),
         column: e.location().map(|loc| loc.column()),

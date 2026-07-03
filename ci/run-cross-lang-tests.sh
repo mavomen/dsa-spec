@@ -22,7 +22,7 @@ for spec in specs/**/*.yaml; do
 	}
 
 	# Rust: check syntax with rustfmt
-	if rustfmt --edition 2021 "/tmp/dsa-cross-test/$name/$name.rs" 2>/dev/null; then
+	if rustfmt --edition 2024 "/tmp/dsa-cross-test/$name/$name.rs" 2>/dev/null; then
 		echo "  Rust: OK"
 	else
 		echo "  Rust: FAILED"

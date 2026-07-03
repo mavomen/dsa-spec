@@ -20,7 +20,7 @@ src/
   main.rs              # CLI entrypoint (clap)
   lib.rs               # Re-exports all modules
   ast.rs               # Language-agnostic AST: Spec, StructDef, MethodDef, Type, TestCase
-  parser.rs            # YAML → AST deserialization via serde_yaml
+  parser.rs            # YAML → AST deserialization via serde_yml
   spec_schema.rs       # JSON Schema for spec validation (Draft 7)
   validator.rs         # Runs JSON Schema validation against parsed Spec
   backend.rs           # Backend trait: generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError>
@@ -302,4 +302,4 @@ Produces Markdown documentation from a spec's metadata, contracts, structs, meth
 2. **Template-based generation**: Tera templates keep backend code generation readable and maintainable.
 3. **Best-effort formatting**: External formatters are optional; the tool works without them.
 4. **Single crate**: Not split into a workspace. May be reconsidered if backends grow substantially.
-5. **Dependency surface**: Minimal — `serde` + `serde_yaml`, `clap`, `tera`, `jsonschema`. No `anyhow`/`thiserror`.
+5. **Dependency surface**: Minimal — `serde` + `serde_yml`, `clap`, `tera`, `jsonschema`. No `anyhow`/`thiserror`.

@@ -226,7 +226,7 @@ verification:
   test_cases: []
 "#;
         // Missing "type" key in field fails at deserialization (serde requires it)
-        let result = serde_yaml::from_str::<crate::ast::Spec>(yaml);
+        let result = serde_yml::from_str::<crate::ast::Spec>(yaml);
         assert!(
             result.is_err(),
             "missing field 'type' should fail deserialization"
@@ -247,12 +247,12 @@ verification:
   test_cases: []
 "#;
         // YAML type mismatch: complexity expects an object, got a string
-        assert!(serde_yaml::from_str::<crate::ast::Spec>(yaml).is_err());
+        assert!(serde_yml::from_str::<crate::ast::Spec>(yaml).is_err());
     }
 
     #[test]
     fn test_tags_as_string_fails() {
-        // Should this pass? serde_yaml will fail to deserialize tags: "lifo"
+        // Should this pass? serde_yml will fail to deserialize tags: "lifo"
         let yaml = r#"
 spec_version: "1.0"
 metadata:
@@ -265,7 +265,7 @@ verification:
   test_cases: []
 "#;
         // YAML type mismatch: tags is expected to be an array
-        assert!(serde_yaml::from_str::<crate::ast::Spec>(yaml).is_err());
+        assert!(serde_yml::from_str::<crate::ast::Spec>(yaml).is_err());
     }
 
     #[test]

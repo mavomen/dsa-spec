@@ -20,6 +20,8 @@ Add a new file `src/<language>_backend.rs`. It must:
 - Implement the `Backend` trait defined in `src/backend.rs`
 - Provide a constructor that accepts the template directory
 
+The `Backend` trait provides a default `generate()` implementation that calls the methods below. You only need to override the methods that vary per language:
+
 ```rust
 use crate::ast::Spec;
 use crate::backend::Backend;
@@ -27,13 +29,17 @@ use crate::error::BackendError;
 use crate::template_engine::TemplateEngine;
 
 impl Backend for MyBackend {
-    fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
-        // 1. Build a Tera context from the AST
-        // 2. Render the class template (struct/class definition)
-        // 3. Render one method template per method (with inline tests)
-        // 4. Optionally pipe through a code formatter
-        // Returns Vec<(filename, source_code)> pairs
-    }
+    fn engine(&self) -> &TemplateEngine;
+    fn name(&self) -> &'static str;
+    fn file_extension(&self) -> &'static str;
+    fn format_code(&self, code: &str) -> Result<String, BackendError>;
+    fn monolithic_template(&self) -> &'static str;
+    fn class_template(&self) -> &'static str;
+    fn method_template(&self) -> &'static str;
+    fn monolithic_filename(&self, spec: &Spec) -> String;
+    fn build_monolithic_context(&self, spec: &Spec) -> Context;
+    fn build_class_context(&self, spec: &Spec) -> Context;
+    fn build_method_context(&self, spec: &Spec, method: &MethodDef) -> Context;
 }
 ```
 
@@ -59,16 +65,16 @@ Create `tests/<language>_backend.rs`. Use the existing integration tests as a te
 
 ### 6. Update CI
 
-If the language requires external tools, add them to `.github/workflows/ci.yml`.
+Add the required toolchain to `.github/workflows/ci.yml` and update `ci/run-cross-lang-tests.sh`.
 
 ## Type translation
 
 The `Type` enum in `ast.rs` has two variants:
 
-- `Type::Simple(String)` -- e.g. `"i32"`, `"Vec<T>"`
-- `Type::Parameterized { base, params }` -- e.g. `HashMap<K, V>`
+- `Type::Simple(String)` — e.g. `"i32"`, `"Vec<T>"`
+- `Type::Parameterized { base, params }` — e.g. `HashMap<K, V>`
 
-Your backend should provide a `to_<lang>_type` function that converts AST types to the target language's type syntax. Each backend also registers its supported type mappings in the `casing` module for validation-time reporting.
+Your backend should provide a `to_<lang>_type` function that converts AST types to the target language's type syntax. Each backend also registers its supported type mappings for validation-time reporting.
 
 ## Casing conventions
 
@@ -88,7 +94,15 @@ If `--contracts` is enabled, each method's `injected_assertions` vector contains
 
 ## Formatter integration
 
-Most backends pipe the raw template output through a code formatter before returning it. If the formatter is not installed, the raw code is returned as a fallback. See the `format_python`, `format_csharp`, `format_typescript`, `format_go`, or `format_rust` methods for examples.
+Use `crate::template_engine::format_code()` to pipe generated code through a language formatter:
+
+```rust
+fn format_code(&self, code: &str) -> Result<String, BackendError> {
+    format_code(code, "rustfmt", &["--edition", "2024"])
+}
+```
+
+If the formatter is not installed, the raw code is returned as a fallback. For languages whose formatter supports multi-file invocation (e.g. `rustfmt`), override `format_all()` to batch-format all files at once instead of spawning the formatter once per file.
 
 ## Stub patterns
 

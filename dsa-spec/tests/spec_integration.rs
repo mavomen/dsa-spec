@@ -25,7 +25,7 @@ fn walkdir_specs(dir: &Path, files: &mut Vec<std::path::PathBuf>) {
 fn parse_spec(path: &std::path::Path) -> dsa_spec::ast::Spec {
     let content =
         fs::read_to_string(path).unwrap_or_else(|_| panic!("Failed to read spec: {:?}", path));
-    serde_yaml::from_str(&content)
+    serde_yml::from_str(&content)
         .unwrap_or_else(|e| panic!("Failed to parse spec {}: {}", path.display(), e))
 }
 
