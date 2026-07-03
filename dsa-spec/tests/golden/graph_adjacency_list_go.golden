@@ -13,7 +13,7 @@
 package graph
 
 
-type Graph[T any] struct {
+type Graph[T comparable] struct {
 
     
     AdjacencyList HashMap<T, Vec<T>>
@@ -22,7 +22,7 @@ type Graph[T any] struct {
     
 }
 
-func NewGraph[T any]() *Graph[T] {
+func NewGraph[T comparable]() *Graph[T] {
     return &Graph[T]{}
 }
 

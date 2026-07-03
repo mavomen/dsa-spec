@@ -566,6 +566,7 @@ mod python_type_tests {
             },
             contracts: crate::ast::Contracts {
                 invariants: vec!["size >= 0".into()],
+                ..Default::default()
             },
             structs: vec![],
             methods: vec![crate::ast::MethodDef {
