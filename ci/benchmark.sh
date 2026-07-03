@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+shopt -s globstar
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -8,7 +9,7 @@ echo ""
 
 total_start=$(date +%s%N)
 
-for spec in specs/*.yaml; do
+for spec in specs/**/*.yaml; do
   name=$(basename "$spec" .yaml)
   echo "## $name"
   echo "| Language | Time (ms) | Status |"

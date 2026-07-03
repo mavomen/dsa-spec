@@ -45,10 +45,10 @@ impl<{% for generic in struct.generics %}{{ generic.name }}{% if generic.bounds 
     /// - **Postcondition:** {{ post }}
     {% endfor %}
     {% endif %}
-    pub fn {{ method.name }}(&self{% for param in method.params %}, {{ param.name }}: {{ param.param_type }}{% endfor %}){% if method.returns %} -> {{ method.returns }}{% endif %} {
+    pub fn {{ method.name }}(&mut self{% for param in method.params %}, {{ param.name }}: {{ param.param_type }}{% endfor %}){% if method.returns %} -> {{ method.returns }}{% endif %} {
         {% for assertion in method.injected_assertions %}
         // Contract: {{ assertion }}
-        assert!(false, "{{ assertion }}");
+        assert!(false, "{{ assertion | addslashes }}");
         {% endfor %}
         // TODO: Implement {{ method.name }}
         todo!()

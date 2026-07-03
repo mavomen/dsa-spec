@@ -36,7 +36,7 @@ namespace {{ metadata.name | replace(from=" ", to="") }}
         {
             {% for assertion in method.injected_assertions %}
             // Contract: {{ assertion }}
-            System.Diagnostics.Debug.Assert(false, "{{ assertion }}");
+            System.Diagnostics.Debug.Assert(false, "{{ assertion | addslashes }}");
             {% endfor %}
             throw new NotImplementedException();
         }

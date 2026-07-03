@@ -5,9 +5,8 @@ use crate::ast::{MethodDef, Spec, Type};
 use crate::backend::Backend;
 use crate::casing;
 use crate::error::BackendError;
-use crate::template_engine::TemplateEngine;
+use crate::template_engine::{TemplateEngine, format_code};
 use serde::Serialize;
-use std::process::Command;
 use tera::Context;
 
 /// Go backend using Tera templates with gofmt formatting.
@@ -20,55 +19,6 @@ impl GoBackend {
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(GoBackend { engine })
-    }
-
-    fn file_extension() -> &'static str {
-        "go"
-    }
-
-    fn class_filename(struct_name: &str) -> String {
-        format!("{}.{}", struct_name, Self::file_extension())
-    }
-
-    fn method_filename(struct_name: &str, method_name: &str) -> String {
-        format!("{}_{}.{}", struct_name, method_name, Self::file_extension())
-    }
-
-    fn format_go(code: &str) -> Result<String, BackendError> {
-        let mut child = Command::new("gofmt")
-            .stdin(std::process::Stdio::piped())
-            .stdout(std::process::Stdio::piped())
-            .stderr(std::process::Stdio::piped())
-            .spawn()
-            .map_err(|e| BackendError::Formatter {
-                message: format!("Failed to spawn gofmt: {e}"),
-            })?;
-
-        if let Some(stdin) = child.stdin.as_mut() {
-            use std::io::Write;
-            stdin
-                .write_all(code.as_bytes())
-                .map_err(|e| BackendError::Formatter {
-                    message: format!("Failed to write to gofmt stdin: {e}"),
-                })?;
-        }
-
-        let output = child
-            .wait_with_output()
-            .map_err(|e| BackendError::Formatter {
-                message: format!("Failed to wait on gofmt: {e}"),
-            })?;
-
-        if output.status.success() {
-            Ok(String::from_utf8_lossy(&output.stdout).to_string())
-        } else {
-            Err(BackendError::Formatter {
-                message: format!(
-                    "gofmt error: {} (falling back to unformatted)",
-                    String::from_utf8_lossy(&output.stderr)
-                ),
-            })
-        }
     }
 
     /// Convert an AST type to a Go type string with pointer-based optionality.
@@ -131,6 +81,11 @@ impl GoBackend {
         if constraints.contains(&"comparable".to_string()) {
             return "comparable".to_string();
         }
+        if constraints.contains(&"Eq".to_string()) || constraints.contains(&"PartialEq".to_string())
+        {
+            return "comparable".to_string();
+        }
+        // Clone, Copy, Debug, Hash, Default have no Go equivalent
         "any".to_string()
     }
 
@@ -138,22 +93,59 @@ impl GoBackend {
     pub(crate) fn is_result_type(typ: &Type) -> bool {
         match typ {
             Type::Simple(s) => s.starts_with("Result<"),
-            _ => false,
+            Type::Parameterized { base, .. } => base == "Result",
         }
     }
 
-    fn build_monolithic_context(spec: &Spec) -> Context {
-        let mut context = Context::new();
-
-        let metadata = &spec.metadata;
-        let pkg = metadata
-            .name
-            .chars()
+    /// Strip non-alphanumeric characters and lowercase for a valid Go package name.
+    fn sanitize_package_name(name: &str) -> String {
+        name.chars()
             .filter(|c| c.is_alphanumeric() || *c == '_')
             .collect::<String>()
-            .to_lowercase();
+            .to_lowercase()
+    }
+}
 
-        context.insert(
+impl Backend for GoBackend {
+    fn engine(&self) -> &TemplateEngine {
+        &self.engine
+    }
+
+    fn name(&self) -> &'static str {
+        "go"
+    }
+
+    fn file_extension(&self) -> &'static str {
+        "go"
+    }
+
+    fn format_code(&self, code: &str) -> Result<String, BackendError> {
+        format_code(code, "gofmt", &[])
+    }
+
+    fn monolithic_template(&self) -> &'static str {
+        "go.go.tera"
+    }
+
+    fn class_template(&self) -> &'static str {
+        "go/class.go.tera"
+    }
+
+    fn method_template(&self) -> &'static str {
+        "go/method.go.tera"
+    }
+
+    fn monolithic_filename(&self, spec: &Spec) -> String {
+        format!("{}Methods.{}", spec.metadata.name, self.file_extension())
+    }
+
+    fn build_monolithic_context(&self, spec: &Spec) -> Context {
+        let mut ctx = Context::new();
+
+        let metadata = &spec.metadata;
+        let pkg = Self::sanitize_package_name(&metadata.name);
+
+        ctx.insert(
             "metadata",
             &MetadataContext {
                 name: metadata.name.clone(),
@@ -166,7 +158,7 @@ impl GoBackend {
         );
 
         let contracts = &spec.contracts;
-        context.insert(
+        ctx.insert(
             "contracts",
             &ContractsContext {
                 invariants: contracts.invariants.clone(),
@@ -197,7 +189,7 @@ impl GoBackend {
                     .collect(),
             })
             .collect();
-        context.insert("structs", &structs);
+        ctx.insert("structs", &structs);
 
         let methods: Vec<MethodContext> = spec
             .methods
@@ -225,7 +217,7 @@ impl GoBackend {
                 }
             })
             .collect();
-        context.insert("methods", &methods);
+        ctx.insert("methods", &methods);
 
         let tests: Vec<TestContext> = spec
             .verification
@@ -242,15 +234,16 @@ impl GoBackend {
                     .collect(),
             })
             .collect();
-        context.insert("verification", &VerificationContext { test_cases: tests });
+        ctx.insert("verification", &VerificationContext { test_cases: tests });
 
-        context
+        ctx
     }
 
-    fn build_class_context(spec: &Spec) -> Context {
+    fn build_class_context(&self, spec: &Spec) -> Context {
         let mut ctx = Context::new();
 
         let metadata = &spec.metadata;
+        let pkg = Self::sanitize_package_name(&metadata.name);
         ctx.insert(
             "metadata",
             &MetadataContext {
@@ -259,7 +252,7 @@ impl GoBackend {
                     time: metadata.complexity.time.clone(),
                     space: metadata.complexity.space.clone(),
                 },
-                package_name: String::new(),
+                package_name: pkg,
             },
         );
 
@@ -299,9 +292,10 @@ impl GoBackend {
         ctx
     }
 
-    fn build_method_context(spec: &Spec, method: &MethodDef) -> Context {
+    fn build_method_context(&self, spec: &Spec, method: &MethodDef) -> Context {
         let mut ctx = Context::new();
 
+        let pkg = Self::sanitize_package_name(&spec.metadata.name);
         ctx.insert(
             "metadata",
             &MetadataContext {
@@ -310,7 +304,7 @@ impl GoBackend {
                     time: spec.metadata.complexity.time.clone(),
                     space: spec.metadata.complexity.space.clone(),
                 },
-                package_name: String::new(),
+                package_name: pkg,
             },
         );
 
@@ -381,6 +375,7 @@ impl GoBackend {
     }
 }
 
+/// Convert a Rust-style assertion string to Go `t.Errorf` syntax.
 fn translate_assertion(a: &str) -> String {
     if let Some(expr) = assertion::parse_assert_bang(a) {
         format!("if !({expr}) {{ t.Errorf(\"assertion failed: {expr}\") }}")
@@ -391,37 +386,7 @@ fn translate_assertion(a: &str) -> String {
     }
 }
 
-impl Backend for GoBackend {
-    fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
-        if spec.structs.is_empty() {
-            let ctx = Self::build_monolithic_context(spec);
-            let raw_code = self.engine.render("go.go.tera", &ctx)?;
-            let code = Self::format_go(&raw_code).unwrap_or(raw_code);
-            return Ok(vec![(
-                format!("{}Methods.{}", spec.metadata.name, Self::file_extension()),
-                code,
-            )]);
-        }
-
-        let mut files = Vec::new();
-        let s = spec.structs.first().unwrap();
-
-        let class_ctx = Self::build_class_context(spec);
-        let raw = self.engine.render("go/class.go.tera", &class_ctx)?;
-        let code = Self::format_go(&raw).unwrap_or(raw);
-        files.push((Self::class_filename(&s.name), code));
-
-        for m in &spec.methods {
-            let method_ctx = Self::build_method_context(spec, m);
-            let raw = self.engine.render("go/method.go.tera", &method_ctx)?;
-            let code = Self::format_go(&raw).unwrap_or(raw);
-            files.push((Self::method_filename(&s.name, &m.name), code));
-        }
-
-        Ok(files)
-    }
-}
-
+/// Template context carrying spec name, complexity and package name (owned form).
 #[derive(Serialize)]
 struct MetadataContext {
     name: String,
@@ -429,17 +394,20 @@ struct MetadataContext {
     package_name: String,
 }
 
+/// Template context for Big-O complexity annotations (owned form).
 #[derive(Serialize)]
 struct ComplexityContext {
     time: Option<String>,
     space: Option<String>,
 }
 
+/// Template context for invariants (owned form).
 #[derive(Serialize)]
 struct ContractsContext {
     invariants: Vec<String>,
 }
 
+/// Template context for a Go struct definition.
 #[derive(Serialize)]
 struct StructContext {
     name: String,
@@ -447,6 +415,7 @@ struct StructContext {
     fields: Vec<FieldContext>,
 }
 
+/// Template context for a generic type parameter with Go constraint.
 #[derive(Serialize)]
 struct GenericParamContext {
     name: String,
@@ -454,12 +423,14 @@ struct GenericParamContext {
     bound: String,
 }
 
+/// Template context for a Go struct field.
 #[derive(Serialize)]
 struct FieldContext {
     name: String,
     go_type: String,
 }
 
+/// Template context for a Go method with tuple-error awareness.
 #[derive(Serialize)]
 struct MethodContext {
     name: String,
@@ -471,17 +442,20 @@ struct MethodContext {
     injected_assertions: Vec<String>,
 }
 
+/// Template context for a Go method parameter.
 #[derive(Serialize)]
 struct ParamContext {
     name: String,
     go_type: String,
 }
 
+/// Template context for test case collections (owned form).
 #[derive(Serialize)]
 struct VerificationContext {
     test_cases: Vec<TestContext>,
 }
 
+/// Template context for a single test scenario (owned form).
 #[derive(Serialize)]
 struct TestContext {
     name: String,
@@ -726,12 +700,12 @@ mod tests {
     }
 
     #[test]
-    fn test_is_result_type_parameterized_returns_false() {
+    fn test_is_result_type_parameterized_returns_true() {
         let typ = Type::Parameterized {
             base: "Result".into(),
             params: vec![Type::Simple("T".into()), Type::Simple("E".into())],
         };
-        assert!(!GoBackend::is_result_type(&typ));
+        assert!(GoBackend::is_result_type(&typ));
     }
 
     #[test]
@@ -897,6 +871,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["size >= 0".into()],
+                ..Default::default()
             },
             structs: vec![StructDef {
                 name: "Foo".into(),

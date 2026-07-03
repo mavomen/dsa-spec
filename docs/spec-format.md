@@ -21,7 +21,7 @@ DSA-SPEC uses YAML to define the interface, contracts, and tests of a data struc
 spec_version: "1.0"
 metadata:
   name: "Stack"
-  category: "linear"
+  category: "arrays"
   complexity:
     time: "O(1) push/pop"
     space: "O(n)"

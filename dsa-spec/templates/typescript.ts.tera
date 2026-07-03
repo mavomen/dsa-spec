@@ -55,7 +55,7 @@ export class {{ struct.name }}Impl<{% for generic in struct.generics %}{{ generi
     {{ method.name }}({% for param in method.params %}{{ param.name }}: {{ param.ts_type }}{% if not loop.last %}, {% endif %}{% endfor %}): {{ method.returns | default(value="void") }} {
         {% for assertion in method.injected_assertions %}
         // Contract: {{ assertion }}
-        console.assert(false, "{{ assertion }}");
+        console.assert(false, "{{ assertion | addslashes }}");
         {% endfor %}
         // TODO: Implement {{ method.name }}
         throw new Error('Not implemented');

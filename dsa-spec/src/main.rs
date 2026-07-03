@@ -4,6 +4,7 @@
 use clap::{Parser, Subcommand};
 use std::fs;
 use std::path::PathBuf;
+use template_engine::atomic_write;
 use tracing_subscriber::EnvFilter;
 
 mod assertion;
@@ -11,6 +12,7 @@ mod ast;
 mod backend;
 mod casing;
 mod complexity;
+mod context;
 mod contracts;
 mod csharp_backend;
 mod error;
@@ -146,6 +148,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let use_json = cli.json;
 
     let make_backends = |lang_lower: &str| -> BackendResult {
+        // Create backends for the requested language(s).
         match lang_lower {
             "rust" => Ok(vec![(
                 "rust",
@@ -196,6 +199,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
+    // Map language name to file extension.
     let _lang_ext = |name: &str| -> &str {
         match name {
             "rust" => "rs",
@@ -207,6 +211,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
+    // Serialize a JSON value to string with a fallback error message.
     let json_str = |val: &serde_json::Value| -> String {
         serde_json::to_string(val).unwrap_or_else(|_| r#"{"error":"serialization failed"}"#.into())
     };
@@ -257,14 +262,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                             .map(|(_, code)| code.as_str())
                             .collect::<Vec<_>>()
                             .join("\n");
-                        fs::write(path, combined)?;
+                        atomic_write(path, &combined)?;
                         tracing::info!(out = %path.display(), "wrote output");
                     }
                     _ if lang_lower == "all" || !out_dir.as_os_str().is_empty() => {
                         fs::create_dir_all(&out_dir)?;
                         for (file_name, file_code) in files {
                             let out_path = out_dir.join(file_name);
-                            fs::write(&out_path, file_code)?;
+                            atomic_write(&out_path, file_code)?;
                             tracing::info!(out = %out_path.display(), "wrote output");
                         }
                     }
@@ -392,7 +397,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let doc = doc_gen::generate_doc(&parsed);
             match output {
                 Some(path) => {
-                    fs::write(&path, &doc)?;
+                    atomic_write(&path, &doc)?;
                     if use_json {
                         let entry = serde_json::json!({"path": path});
                         println!("{}", json_str(&entry));

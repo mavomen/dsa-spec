@@ -6,7 +6,6 @@ use crate::ast::Spec;
 pub fn generate_doc(spec: &Spec) -> String {
     let mut doc = String::new();
 
-    // Title
     doc.push_str(&format!("# {}\n\n", spec.metadata.name));
     doc.push_str(&format!("**Category:** {}\n\n", spec.metadata.category));
 
@@ -122,6 +121,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["size >= 0".into()],
+                ..Default::default()
             },
             structs: vec![StructDef {
                 name: "Stack".into(),

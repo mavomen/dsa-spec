@@ -4,36 +4,30 @@
 
 /// Space complexity: O(n)
 
-
 /// Invariants:
 /// - no cycles
 /// - for each node, node.next.prev == node
 
-
-
 #[derive(Debug, Clone)]
 pub struct Node<T>
-where T: Clone 
-
-    
+where
+    T: Clone,
+{
     pub value: T,
-    
+
     pub prev: Option<Box<Node<T>>>,
-    
+
     pub next: Option<Box<Node<T>>>,
-    
 }
 
 impl<T> Node<T> {
     pub fn new() -> Self {
         Self {
-            
             value: Default::default(),
-            
+
             prev: Default::default(),
-            
+
             next: Default::default(),
-            
         }
     }
 }

@@ -10,7 +10,7 @@ pub struct Spec {
     pub spec_version: String,
     /// Name, category, complexity, tags.
     pub metadata: Metadata,
-    /// Invariants that must always hold.
+    /// Contracts with invariants and spec-level pre/postconditions.
     #[serde(default)]
     pub contracts: Contracts,
     /// Data structure definitions.
@@ -48,17 +48,24 @@ pub struct Complexity {
     pub space: Option<String>,
 }
 
-/// Invariants that must hold for all instances of the data structure.
+/// Invariants and spec-level pre/postconditions.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Contracts {
     /// Invariant conditions expressed as strings.
     #[serde(default)]
     pub invariants: Vec<String>,
+    /// Preconditions that must hold before any method call.
+    #[serde(default)]
+    pub preconditions: Vec<String>,
+    /// Postconditions that must hold after any method call.
+    #[serde(default)]
+    pub postconditions: Vec<String>,
 }
 
 /// A struct or type definition in the spec.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct StructDef {
+    /// Struct name (PascalCase convention).
     pub name: String,
     /// Generic type parameters.
     #[serde(default)]
@@ -71,6 +78,7 @@ pub struct StructDef {
 /// A generic type parameter with optional trait bounds.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct GenericParam {
+    /// Type parameter name (e.g. `"T"`, `"K"`, `"V"`).
     pub name: String,
     /// Constraint trait names (e.g. `"Clone"`, `"Ord"`).
     #[serde(default)]
@@ -80,6 +88,7 @@ pub struct GenericParam {
 /// A named field with a type.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct FieldDef {
+    /// Field name (snake_case by convention).
     pub name: String,
     /// The field's type (language-agnostic).
     #[serde(rename = "type")]
@@ -89,6 +98,7 @@ pub struct FieldDef {
 /// A method signature with optional contracts.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct MethodDef {
+    /// Method name (snake_case by convention).
     pub name: String,
     /// Ordered parameter list.
     #[serde(default)]
@@ -109,6 +119,7 @@ pub struct MethodDef {
 /// A method parameter.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ParamDef {
+    /// Parameter name (snake_case by convention).
     pub name: String,
     /// Parameter type.
     #[serde(rename = "type")]
@@ -126,6 +137,7 @@ pub struct Verification {
 /// A single test scenario with setup, actions, and assertions.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct TestCase {
+    /// Test case name (descriptive label for the scenario).
     pub name: String,
     /// Optional setup code (e.g. constructor call).
     pub setup: Option<String>,
@@ -239,6 +251,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["invariant 1".into()],
+                ..Default::default()
             },
             structs: vec![StructDef {
                 name: "Foo".into(),

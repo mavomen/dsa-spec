@@ -4,30 +4,22 @@
 
 /// Space complexity: O(n)
 
-
 /// Invariants:
 /// - parent value >= children values
 /// - tree is complete (all levels filled left-to-right)
 /// - size == data.len()
 
-
-
 #[derive(Debug, Clone)]
 pub struct MaxHeap<T>
-where T: Ord + Clone 
-
-    
+where
+    T: Ord + Clone,
+{
     pub data: Vec<T>,
-    
 }
 
 impl<T> MaxHeap<T> {
     pub fn new() -> Self {
-        Self {
-            
-            data: Vec::new(),
-            
-        }
+        Self { data: Vec::new() }
     }
 }
 

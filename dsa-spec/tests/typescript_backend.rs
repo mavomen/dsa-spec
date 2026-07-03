@@ -3,7 +3,7 @@ use dsa_spec::backend::Backend;
 use dsa_spec::typescript_backend::TypeScriptBackend;
 
 fn parse_spec(yaml: &str) -> Spec {
-    serde_yaml::from_str(yaml).expect("Failed to parse test spec")
+    serde_yml::from_str(yaml).expect("Failed to parse test spec")
 }
 
 fn generate(spec: &Spec) -> String {

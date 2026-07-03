@@ -4,32 +4,26 @@
 
 /// Space complexity: O(n)
 
-
 /// Invariants:
 /// - length >= 0
 /// - capacity >= length
 
-
-
 #[derive(Debug, Clone)]
 pub struct DynamicArray<T>
-where T: Clone 
-
-    
+where
+    T: Clone,
+{
     pub data: Vec<T>,
-    
+
     pub len: usize,
-    
 }
 
 impl<T> DynamicArray<T> {
     pub fn new() -> Self {
         Self {
-            
             data: Vec::new(),
-            
+
             len: Default::default(),
-            
         }
     }
 }

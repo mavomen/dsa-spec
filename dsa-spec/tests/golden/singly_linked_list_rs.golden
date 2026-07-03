@@ -4,32 +4,26 @@
 
 /// Space complexity: O(n)
 
-
 /// Invariants:
 /// - no cycles
 /// - head is None iff tail is None
 
-
-
 #[derive(Debug, Clone)]
 pub struct Node<T>
-where T: Clone 
-
-    
+where
+    T: Clone,
+{
     pub value: T,
-    
+
     pub next: Option<Box<Node<T>>>,
-    
 }
 
 impl<T> Node<T> {
     pub fn new() -> Self {
         Self {
-            
             value: Default::default(),
-            
+
             next: Default::default(),
-            
         }
     }
 }

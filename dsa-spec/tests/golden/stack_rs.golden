@@ -4,28 +4,20 @@
 
 /// Space complexity: O(n)
 
-
 /// Invariants:
 /// - length >= 0
 
-
-
 #[derive(Debug, Clone)]
 pub struct Stack<T>
-where T: Clone 
-
-    
+where
+    T: Clone,
+{
     pub items: Vec<T>,
-    
 }
 
 impl<T> Stack<T> {
     pub fn new() -> Self {
-        Self {
-            
-            items: Vec::new(),
-            
-        }
+        Self { items: Vec::new() }
     }
 }
 

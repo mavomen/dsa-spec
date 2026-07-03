@@ -1,11 +1,12 @@
 //! TypeScript code generation backend with multi-file output.
 
 use crate::assertion;
-use crate::ast::{Spec, Type};
+use crate::ast::{MethodDef, Spec, Type};
 use crate::backend::Backend;
 use crate::casing;
+use crate::context::{add_metadata_and_contracts, add_test_cases_translated};
 use crate::error::BackendError;
-use crate::template_engine::TemplateEngine;
+use crate::template_engine::{TemplateEngine, sanitize_filename};
 use serde::Serialize;
 use tera::Context;
 
@@ -19,23 +20,6 @@ impl TypeScriptBackend {
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(TypeScriptBackend { engine })
-    }
-
-    fn file_extension() -> &'static str {
-        "ts"
-    }
-
-    fn class_filename(struct_name: &str) -> String {
-        format!("{}.{}", struct_name, Self::file_extension())
-    }
-
-    fn method_filename(struct_name: &str, method_name: &str) -> String {
-        format!(
-            "{}_{}.{}",
-            struct_name,
-            casing::to_camel_case(method_name),
-            Self::file_extension()
-        )
     }
 
     /// Convert an AST type to a TypeScript type string with union types.
@@ -96,30 +80,56 @@ impl TypeScriptBackend {
     pub(crate) fn is_result_type(typ: &Type) -> bool {
         match typ {
             Type::Simple(s) => s.starts_with("Result<"),
-            _ => false,
+            Type::Parameterized { base, .. } => base == "Result",
         }
     }
+}
 
-    fn build_monolithic_context(spec: &Spec) -> Context {
-        let mut context = Context::new();
+impl Backend for TypeScriptBackend {
+    fn engine(&self) -> &TemplateEngine {
+        &self.engine
+    }
 
-        context.insert(
-            "metadata",
-            &MetadataContext {
-                name: &spec.metadata.name,
-                complexity: ComplexityContext {
-                    time: spec.metadata.complexity.time.as_deref(),
-                    space: spec.metadata.complexity.space.as_deref(),
-                },
-            },
-        );
+    fn name(&self) -> &'static str {
+        "typescript"
+    }
 
-        context.insert(
-            "contracts",
-            &ContractsContext {
-                invariants: &spec.contracts.invariants,
-            },
-        );
+    fn file_extension(&self) -> &'static str {
+        "ts"
+    }
+
+    fn format_code(&self, code: &str) -> Result<String, BackendError> {
+        Ok(code.to_string())
+    }
+
+    fn monolithic_template(&self) -> &'static str {
+        "typescript.ts.tera"
+    }
+
+    fn class_template(&self) -> &'static str {
+        "typescript/class.ts.tera"
+    }
+
+    fn method_template(&self) -> &'static str {
+        "typescript/method.ts.tera"
+    }
+
+    fn monolithic_filename(&self, spec: &Spec) -> String {
+        format!("{}Methods.{}", spec.metadata.name, self.file_extension())
+    }
+
+    fn method_filename(&self, struct_name: &str, method_name: &str) -> String {
+        format!(
+            "{}_{}.{}",
+            sanitize_filename(struct_name),
+            casing::to_camel_case(method_name),
+            self.file_extension()
+        )
+    }
+
+    fn build_monolithic_context(&self, spec: &Spec) -> Context {
+        let mut ctx = Context::new();
+        add_metadata_and_contracts(&mut ctx, spec);
 
         let structs: Vec<ClassStructContext> = spec
             .structs
@@ -144,7 +154,7 @@ impl TypeScriptBackend {
                     .collect(),
             })
             .collect();
-        context.insert("structs", &structs);
+        ctx.insert("structs", &structs);
 
         let methods: Vec<MethodContext> = spec
             .methods
@@ -174,57 +184,15 @@ impl TypeScriptBackend {
                 }
             })
             .collect();
-        context.insert("methods", &methods);
+        ctx.insert("methods", &methods);
 
-        let translated_assertions: Vec<Vec<String>> = spec
-            .verification
-            .test_cases
-            .iter()
-            .map(|t| {
-                t.assertions
-                    .iter()
-                    .map(|a| translate_assertion(a))
-                    .collect()
-            })
-            .collect();
-
-        let tests: Vec<TestContext> = spec
-            .verification
-            .test_cases
-            .iter()
-            .enumerate()
-            .map(|(i, t)| TestContext {
-                name: &t.name,
-                setup: t.setup.as_deref(),
-                actions: &t.actions,
-                assertions: &translated_assertions[i],
-            })
-            .collect();
-        context.insert("verification", &VerificationContext { test_cases: tests });
-
-        context
+        add_test_cases_translated(&mut ctx, spec, translate_assertion);
+        ctx
     }
 
-    fn build_class_context(spec: &Spec) -> Context {
+    fn build_class_context(&self, spec: &Spec) -> Context {
         let mut ctx = Context::new();
-
-        ctx.insert(
-            "metadata",
-            &MetadataContext {
-                name: &spec.metadata.name,
-                complexity: ComplexityContext {
-                    time: spec.metadata.complexity.time.as_deref(),
-                    space: spec.metadata.complexity.space.as_deref(),
-                },
-            },
-        );
-
-        ctx.insert(
-            "contracts",
-            &ContractsContext {
-                invariants: &spec.contracts.invariants,
-            },
-        );
+        add_metadata_and_contracts(&mut ctx, spec);
 
         if let Some(s) = spec.structs.first() {
             ctx.insert(
@@ -254,19 +222,9 @@ impl TypeScriptBackend {
         ctx
     }
 
-    fn build_method_context(spec: &Spec, method: &crate::ast::MethodDef) -> Context {
+    fn build_method_context(&self, spec: &Spec, method: &MethodDef) -> Context {
         let mut ctx = Context::new();
-
-        ctx.insert(
-            "metadata",
-            &MetadataContext {
-                name: &spec.metadata.name,
-                complexity: ComplexityContext {
-                    time: spec.metadata.complexity.time.as_deref(),
-                    space: spec.metadata.complexity.space.as_deref(),
-                },
-            },
-        );
+        add_metadata_and_contracts(&mut ctx, spec);
 
         if let Some(s) = spec.structs.first() {
             ctx.insert(
@@ -315,66 +273,12 @@ impl TypeScriptBackend {
             },
         );
 
-        let translated_assertions: Vec<Vec<String>> = spec
-            .verification
-            .test_cases
-            .iter()
-            .map(|t| {
-                t.assertions
-                    .iter()
-                    .map(|a| translate_assertion(a))
-                    .collect()
-            })
-            .collect();
-
-        let tests: Vec<TestContext> = spec
-            .verification
-            .test_cases
-            .iter()
-            .enumerate()
-            .map(|(i, t)| TestContext {
-                name: &t.name,
-                setup: t.setup.as_deref(),
-                actions: &t.actions,
-                assertions: &translated_assertions[i],
-            })
-            .collect();
-        ctx.insert("verification", &VerificationContext { test_cases: tests });
-
+        add_test_cases_translated(&mut ctx, spec, translate_assertion);
         ctx
     }
 }
 
-impl Backend for TypeScriptBackend {
-    fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
-        if spec.structs.is_empty() {
-            let ctx = Self::build_monolithic_context(spec);
-            let code = self.engine.render("typescript.ts.tera", &ctx)?;
-            return Ok(vec![(
-                format!("{}Methods.{}", spec.metadata.name, Self::file_extension()),
-                code,
-            )]);
-        }
-
-        let mut files = Vec::new();
-        let s = spec.structs.first().unwrap();
-
-        let class_ctx = Self::build_class_context(spec);
-        let code = self.engine.render("typescript/class.ts.tera", &class_ctx)?;
-        files.push((Self::class_filename(&s.name), code));
-
-        for m in &spec.methods {
-            let method_ctx = Self::build_method_context(spec, m);
-            let code = self
-                .engine
-                .render("typescript/method.ts.tera", &method_ctx)?;
-            files.push((Self::method_filename(&s.name, &m.name), code));
-        }
-
-        Ok(files)
-    }
-}
-
+/// Convert a Rust-style assertion string to Jest `expect()` syntax.
 fn translate_assertion(a: &str) -> String {
     if let Some(expr) = assertion::parse_assert_bang(a) {
         format!("expect({}).toBe(true)", expr.trim())
@@ -385,23 +289,7 @@ fn translate_assertion(a: &str) -> String {
     }
 }
 
-#[derive(Serialize)]
-struct MetadataContext<'a> {
-    name: &'a str,
-    complexity: ComplexityContext<'a>,
-}
-
-#[derive(Serialize)]
-struct ComplexityContext<'a> {
-    time: Option<&'a str>,
-    space: Option<&'a str>,
-}
-
-#[derive(Serialize)]
-struct ContractsContext<'a> {
-    invariants: &'a [String],
-}
-
+/// Template context for a TypeScript class definition.
 #[derive(Serialize)]
 struct ClassStructContext<'a> {
     name: &'a str,
@@ -409,18 +297,21 @@ struct ClassStructContext<'a> {
     fields: Vec<FieldContext>,
 }
 
+/// Template context for a generic type parameter.
 #[derive(Serialize)]
 struct GenericParamContext<'a> {
     name: &'a str,
     constraints: String,
 }
 
+/// Template context for a TypeScript class field.
 #[derive(Serialize)]
 struct FieldContext {
     name: String,
     ts_type: String,
 }
 
+/// Template context for a TypeScript method with exception awareness.
 #[derive(Serialize)]
 struct MethodContext<'a> {
     name: String,
@@ -432,23 +323,11 @@ struct MethodContext<'a> {
     injected_assertions: &'a [String],
 }
 
+/// Template context for a TypeScript method parameter.
 #[derive(Serialize)]
 struct ParamContext {
     name: String,
     ts_type: String,
-}
-
-#[derive(Serialize)]
-struct VerificationContext<'a> {
-    test_cases: Vec<TestContext<'a>>,
-}
-
-#[derive(Serialize)]
-struct TestContext<'a> {
-    name: &'a str,
-    setup: Option<&'a str>,
-    actions: &'a [String],
-    assertions: &'a [String],
 }
 
 #[cfg(test)]
@@ -575,7 +454,6 @@ mod tests {
 
     #[test]
     fn test_translate_result_type() {
-        // Result<T,E> strips to T
         assert_eq!(
             TypeScriptBackend::translate_simple_type("Result<i32,String>"),
             "number"
@@ -604,12 +482,12 @@ mod tests {
     }
 
     #[test]
-    fn test_is_result_type_parameterized_returns_false() {
+    fn test_is_result_type_parameterized_returns_true() {
         let typ = Type::Parameterized {
             base: "Result".into(),
             params: vec![Type::Simple("T".into()), Type::Simple("E".into())],
         };
-        assert!(!TypeScriptBackend::is_result_type(&typ));
+        assert!(TypeScriptBackend::is_result_type(&typ));
     }
 
     #[test]
@@ -630,6 +508,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["size >= 0".into()],
+                ..Default::default()
             },
             structs: vec![StructDef {
                 name: "Foo".into(),

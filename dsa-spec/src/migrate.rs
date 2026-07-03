@@ -12,7 +12,7 @@ pub fn migrate_spec_file(path: &str, target_version: &str) -> Result<(), SpecErr
         message: format!("failed to read {path}: {e}"),
     })?;
 
-    let mut spec: Spec = serde_yaml::from_str(&yaml).map_err(|e| SpecError::ParseError {
+    let mut spec: Spec = serde_yml::from_str(&yaml).map_err(|e| SpecError::ParseError {
         message: e.to_string(),
         line: e.location().map(|l| l.line()),
         column: e.location().map(|l| l.column()),
@@ -39,7 +39,7 @@ pub fn migrate_spec_file(path: &str, target_version: &str) -> Result<(), SpecErr
         message: format!("failed to create backup {bak_path}: {e}"),
     })?;
 
-    let out = serde_yaml::to_string(&spec).map_err(|e| SpecError::IoError {
+    let out = serde_yml::to_string(&spec).map_err(|e| SpecError::IoError {
         message: format!("failed to serialize spec: {e}"),
     })?;
     fs::write(path, out).map_err(|e| SpecError::IoError {
@@ -69,7 +69,7 @@ mod tests {
     #[test]
     fn test_migrate_v1_to_v2_updates_version() {
         let spec = make_v1_spec();
-        let yaml = serde_yaml::to_string(&spec).unwrap();
+        let yaml = serde_yml::to_string(&spec).unwrap();
         let dir = tempfile::TempDir::new().unwrap();
         let path = dir.path().join("spec.yaml");
         fs::write(&path, &yaml).unwrap();
@@ -77,14 +77,14 @@ mod tests {
         migrate_spec_file(path.to_str().unwrap(), "2.0").unwrap();
 
         let result = fs::read_to_string(&path).unwrap();
-        let migrated: Spec = serde_yaml::from_str(&result).unwrap();
+        let migrated: Spec = serde_yml::from_str(&result).unwrap();
         assert_eq!(migrated.spec_version, "2.0");
     }
 
     #[test]
     fn test_migrate_same_version_is_noop() {
         let spec = make_v1_spec();
-        let yaml = serde_yaml::to_string(&spec).unwrap();
+        let yaml = serde_yml::to_string(&spec).unwrap();
         let dir = tempfile::TempDir::new().unwrap();
         let path = dir.path().join("spec.yaml");
         fs::write(&path, &yaml).unwrap();
@@ -103,7 +103,7 @@ mod tests {
     #[test]
     fn test_migrate_creates_backup() {
         let spec = make_v1_spec();
-        let yaml = serde_yaml::to_string(&spec).unwrap();
+        let yaml = serde_yml::to_string(&spec).unwrap();
         let dir = tempfile::TempDir::new().unwrap();
         let path = dir.path().join("spec.yaml");
         fs::write(&path, &yaml).unwrap();
@@ -120,7 +120,7 @@ mod tests {
     fn test_migrate_unsupported_version_fails() {
         let mut spec = make_v1_spec();
         spec.spec_version = "0.5".into();
-        let yaml = serde_yaml::to_string(&spec).unwrap();
+        let yaml = serde_yml::to_string(&spec).unwrap();
         let dir = tempfile::TempDir::new().unwrap();
         let path = dir.path().join("spec.yaml");
         fs::write(&path, &yaml).unwrap();

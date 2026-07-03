@@ -1,11 +1,35 @@
 //! JSON Schema (Draft 7) for DSA-SPEC specification files.
 
 /// JSON Schema (Draft 7) defining the required structure of a spec file.
-pub const SPEC_JSON_SCHEMA: &str = r#"{
+pub const SPEC_JSON_SCHEMA: &str = r##"{
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "DSA-SPEC Schema",
   "type": "object",
   "required": ["spec_version", "metadata"],
+  "definitions": {
+    "ParameterizedType": {
+      "type": "object",
+      "required": ["base"],
+      "properties": {
+        "base": { "type": "string" },
+        "params": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              { "$ref": "#/definitions/ParameterizedType" }
+            ]
+          }
+        }
+      }
+    },
+    "TypeRef": {
+      "oneOf": [
+        { "type": "string" },
+        { "$ref": "#/definitions/ParameterizedType" }
+      ]
+    }
+  },
   "properties": {
     "spec_version": { "type": "string" },
     "metadata": {
@@ -37,6 +61,14 @@ pub const SPEC_JSON_SCHEMA: &str = r#"{
       "type": "object",
       "properties": {
         "invariants": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "preconditions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "postconditions": {
           "type": "array",
           "items": { "type": "string" }
         }
@@ -73,7 +105,7 @@ pub const SPEC_JSON_SCHEMA: &str = r#"{
               "required": ["name", "type"],
               "properties": {
                 "name": { "type": "string" },
-                "type": { "type": "string" }
+                "type": { "$ref": "#/definitions/TypeRef" }
               }
             }
           }
@@ -97,7 +129,7 @@ pub const SPEC_JSON_SCHEMA: &str = r#"{
               "required": ["name", "type"],
               "properties": {
                 "name": { "type": "string" },
-                "type": { "type": "string" }
+                "type": { "$ref": "#/definitions/TypeRef" }
               }
             }
           },
@@ -141,4 +173,4 @@ pub const SPEC_JSON_SCHEMA: &str = r#"{
       }
     }
   }
-}"#;
+}"##;

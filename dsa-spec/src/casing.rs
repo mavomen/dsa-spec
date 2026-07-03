@@ -86,8 +86,6 @@ mod tests {
         assert_eq!(to_camel_case("foo_"), "foo");
     }
 
-    // --- Edge cases: acronyms ---
-
     #[test]
     fn test_to_pascal_case_with_acronym() {
         assert_eq!(to_pascal_case("parse_xml"), "ParseXml");
@@ -102,8 +100,6 @@ mod tests {
         assert_eq!(to_camel_case("set_xml_parser"), "setXmlParser");
     }
 
-    // --- Edge cases: leading underscores ---
-
     #[test]
     fn test_to_pascal_case_leading_underscore() {
         assert_eq!(to_pascal_case("_private"), "Private");
@@ -115,8 +111,6 @@ mod tests {
         assert_eq!(to_camel_case("_private"), "Private");
     }
 
-    // --- Edge cases: multiple consecutive underscores ---
-
     #[test]
     fn test_to_pascal_case_double_underscore() {
         assert_eq!(to_pascal_case("foo__bar"), "FooBar");
@@ -127,8 +121,6 @@ mod tests {
         assert_eq!(to_camel_case("foo__bar"), "fooBar");
     }
 
-    // --- Edge cases: numbers ---
-
     #[test]
     fn test_to_pascal_case_with_numbers() {
         assert_eq!(to_pascal_case("item_2_value"), "Item2Value");
@@ -138,8 +130,6 @@ mod tests {
     fn test_to_camel_case_with_numbers() {
         assert_eq!(to_camel_case("item_2_value"), "item2Value");
     }
-
-    // --- Edge cases: already camelCase / mixed case ---
 
     #[test]
     fn test_to_camel_case_already_camel() {
@@ -158,8 +148,6 @@ mod tests {
         assert_eq!(to_camel_case("get_URL"), "getURL");
         assert_eq!(to_camel_case("set_XML_parser"), "setXMLParser");
     }
-
-    // --- Edge case: Unicode ---
 
     #[test]
     fn test_to_pascal_case_with_accented_chars() {

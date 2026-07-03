@@ -4,6 +4,26 @@
 
 ### Added
 - **`doc` CLI subcommand**: render spec metadata, structs, methods, contracts, and test cases as human-readable Markdown from `dsa-spec doc specs/<name>.yaml`. Supports `--output` for file output.
+- **Batch formatter**: `Backend::format_all()` invokes the formatter once per spec instead of N+1 times; `RustBackend` overrides with tempdir-batch `rustfmt`
+- **Lazy Tera initialisation**: `TemplateEngine` shares a single `Arc<Tera>` via `OnceLock`, eliminating redundant glob scans per backend
+- **Full benchmark corpus**: `benches/parse.rs` and `benches/generate_all.rs` now load all 18 specs from subdirectories with per-backend criterion groups
+
+### Changed
+- Migrated from deprecated `serde_yaml` to `serde_yml`
+- `ci/benchmark.sh` globs `specs/**/*.yaml` instead of `specs/*.yaml`
+- `ci/run-cross-lang-tests.sh` uses `--edition 2024` (matching project default)
+- `TemplateEngine` is now `Clone` + `Debug`; `BackendError` derives `Clone`
+- Golden files updated for new `rustfmt`-formatted output (template bug fix: missing `{` on generic structs)
+
+### Fixed
+- Atomic writes: `main.rs` now uses `atomic_write()` (temp file + rename) instead of `fs::write`
+- `rust/class.rs.tera` missing opening `{` after generic `where` clause (caused `rustfmt` to silently fall back to unformatted code)
+- Temp directory collision in `RustBackend::format_all()` (parallel tests raced on `std::process::id()`-based dir name)
+- Edition mismatch in cross-lang CI script (2021 → 2024)
+- `ci/benchmark.sh` could not discover specs in subdirectories
+
+### Removed
+- Stale golden diff files (`tests/golden/*.diff`)
 
 ## [1.0.0] - 2026-06-12
 
