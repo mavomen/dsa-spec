@@ -131,6 +131,11 @@ impl GoBackend {
         if constraints.contains(&"comparable".to_string()) {
             return "comparable".to_string();
         }
+        if constraints.contains(&"Eq".to_string()) || constraints.contains(&"PartialEq".to_string())
+        {
+            return "comparable".to_string();
+        }
+        // Clone, Copy, Debug, Hash, Default have no Go equivalent
         "any".to_string()
     }
 
@@ -901,6 +906,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["size >= 0".into()],
+                ..Default::default()
             },
             structs: vec![StructDef {
                 name: "Foo".into(),

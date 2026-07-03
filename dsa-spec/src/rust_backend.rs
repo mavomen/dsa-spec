@@ -443,6 +443,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["invariant1".into()],
+                ..Default::default()
             },
             structs: vec![StructDef {
                 name: "MyStruct".into(),
@@ -541,6 +542,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["size <= capacity".into()],
+                ..Default::default()
             },
             structs: vec![StructDef {
                 name: "Capped".into(),
@@ -570,6 +572,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["size >= 0".into()],
+                ..Default::default()
             },
             structs: vec![StructDef {
                 name: "Foo".into(),

@@ -10,7 +10,7 @@ pub struct Spec {
     pub spec_version: String,
     /// Name, category, complexity, tags.
     pub metadata: Metadata,
-    /// Invariants that must always hold.
+    /// Contracts with invariants and spec-level pre/postconditions.
     #[serde(default)]
     pub contracts: Contracts,
     /// Data structure definitions.
@@ -48,12 +48,18 @@ pub struct Complexity {
     pub space: Option<String>,
 }
 
-/// Invariants that must hold for all instances of the data structure.
+/// Invariants and spec-level pre/postconditions.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Contracts {
     /// Invariant conditions expressed as strings.
     #[serde(default)]
     pub invariants: Vec<String>,
+    /// Preconditions that must hold before any method call.
+    #[serde(default)]
+    pub preconditions: Vec<String>,
+    /// Postconditions that must hold after any method call.
+    #[serde(default)]
+    pub postconditions: Vec<String>,
 }
 
 /// A struct or type definition in the spec.
@@ -239,6 +245,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["invariant 1".into()],
+                ..Default::default()
             },
             structs: vec![StructDef {
                 name: "Foo".into(),

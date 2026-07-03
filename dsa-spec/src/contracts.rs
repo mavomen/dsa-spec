@@ -19,8 +19,14 @@ pub fn inject_assertions(spec: &Spec) -> Spec {
         for pre in &method.preconditions {
             assertions.push(format!("precondition: {pre}"));
         }
+        for spec_pre in &result.contracts.preconditions {
+            assertions.push(format!("precondition: {spec_pre}"));
+        }
         for post in &method.postconditions {
             assertions.push(format!("postcondition: {post}"));
+        }
+        for spec_post in &result.contracts.postconditions {
+            assertions.push(format!("postcondition: {spec_post}"));
         }
         for inv in &result.contracts.invariants {
             assertions.push(format!("invariant: {inv}"));
@@ -118,6 +124,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["size <= capacity".into()],
+                ..Default::default()
             },
             structs: vec![],
             methods: vec![MethodDef {
@@ -143,6 +150,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["inv1".into()],
+                ..Default::default()
             },
             structs: vec![],
             methods: vec![MethodDef {
@@ -159,6 +167,35 @@ mod tests {
         assert!(assertions[0].contains("pre1"));
         assert!(assertions[1].contains("post1"));
         assert!(assertions[2].contains("inv1"));
+    }
+
+    #[test]
+    fn test_inject_assertions_spec_level_contracts() {
+        let spec = Spec {
+            spec_version: "1.0".into(),
+            metadata: Metadata {
+                name: "Test".into(),
+                category: "test".into(),
+                ..Default::default()
+            },
+            contracts: Contracts {
+                preconditions: vec!["spec_pre".into()],
+                postconditions: vec!["spec_post".into()],
+                invariants: vec!["spec_inv".into()],
+            },
+            structs: vec![],
+            methods: vec![MethodDef {
+                name: "foo".into(),
+                ..Default::default()
+            }],
+            verification: Verification::default(),
+        };
+        let result = inject_assertions(&spec);
+        let assertions = &result.methods[0].injected_assertions;
+        assert_eq!(assertions.len(), 3);
+        assert!(assertions[0].contains("spec_pre"));
+        assert!(assertions[1].contains("spec_post"));
+        assert!(assertions[2].contains("spec_inv"));
     }
 
     #[test]
@@ -195,6 +232,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["inv".into()],
+                ..Default::default()
             },
             structs: vec![],
             methods: vec![

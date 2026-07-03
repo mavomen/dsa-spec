@@ -92,6 +92,7 @@ mod tests {
             },
             contracts: Contracts {
                 invariants: vec!["size >= 0".into()],
+                ..Default::default()
             },
             structs: vec![StructDef {
                 name: "Stack".into(),
@@ -305,6 +306,7 @@ verification:
                     "left.value < node.value < right.value".into(),
                     "no duplicate values".into(),
                 ],
+                ..Default::default()
             },
             structs: vec![
                 StructDef {
