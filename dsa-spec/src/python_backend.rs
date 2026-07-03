@@ -3,9 +3,11 @@
 use crate::assertion;
 use crate::ast::{MethodDef, Spec, Type};
 use crate::backend::Backend;
+use crate::context::{add_metadata_and_contracts, add_test_cases_translated};
 use crate::error::BackendError;
-use crate::template_engine::{TemplateEngine, sanitize_filename, validate_unique_names};
+use crate::template_engine::TemplateEngine;
 use serde::Serialize;
+use std::io::Write;
 use std::process::Command;
 use tera::Context;
 
@@ -20,24 +22,22 @@ impl PythonBackend {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(PythonBackend { engine })
     }
+}
 
-    fn file_extension() -> &'static str {
+impl Backend for PythonBackend {
+    fn engine(&self) -> &TemplateEngine {
+        &self.engine
+    }
+
+    fn name(&self) -> &'static str {
+        "python"
+    }
+
+    fn file_extension(&self) -> &'static str {
         "py"
     }
 
-    fn class_filename(class_name: &str) -> String {
-        format!("{}.py", sanitize_filename(class_name))
-    }
-
-    fn method_filename(class_name: &str, method_name: &str) -> String {
-        format!(
-            "{}_{}.py",
-            sanitize_filename(class_name),
-            sanitize_filename(method_name)
-        )
-    }
-
-    fn format_python(code: &str) -> Result<String, BackendError> {
+    fn format_code(&self, code: &str) -> Result<String, BackendError> {
         let mut child = Command::new("black")
             .arg("-c")
             .arg(code)
@@ -50,7 +50,6 @@ impl PythonBackend {
             })?;
 
         if let Some(stdin) = child.stdin.as_mut() {
-            use std::io::Write;
             stdin
                 .write_all(code.as_bytes())
                 .map_err(|e| BackendError::Formatter {
@@ -76,26 +75,25 @@ impl PythonBackend {
         }
     }
 
-    fn build_monolithic_context(spec: &Spec) -> Context {
-        let mut context = Context::new();
+    fn monolithic_template(&self) -> &'static str {
+        "python.py.tera"
+    }
 
-        context.insert(
-            "metadata",
-            &MetadataContext {
-                name: &spec.metadata.name,
-                complexity: ComplexityContext {
-                    time: spec.metadata.complexity.time.as_deref(),
-                    space: spec.metadata.complexity.space.as_deref(),
-                },
-            },
-        );
+    fn class_template(&self) -> &'static str {
+        "python/class.py.tera"
+    }
 
-        context.insert(
-            "contracts",
-            &ContractsContext {
-                invariants: &spec.contracts.invariants,
-            },
-        );
+    fn method_template(&self) -> &'static str {
+        "python/method.py.tera"
+    }
+
+    fn monolithic_filename(&self, spec: &Spec) -> String {
+        format!("{}Methods.{}", spec.metadata.name, self.file_extension())
+    }
+
+    fn build_monolithic_context(&self, spec: &Spec) -> Context {
+        let mut ctx = Context::new();
+        add_metadata_and_contracts(&mut ctx, spec);
 
         let structs: Vec<ClassStructContext> = spec
             .structs
@@ -120,7 +118,7 @@ impl PythonBackend {
                     .collect(),
             })
             .collect();
-        context.insert("structs", &structs);
+        ctx.insert("structs", &structs);
 
         let methods: Vec<MethodContext> = spec
             .methods
@@ -145,57 +143,15 @@ impl PythonBackend {
                 }
             })
             .collect();
-        context.insert("methods", &methods);
+        ctx.insert("methods", &methods);
 
-        let translated_assertions: Vec<Vec<String>> = spec
-            .verification
-            .test_cases
-            .iter()
-            .map(|t| {
-                t.assertions
-                    .iter()
-                    .map(|a| translate_assertion(a))
-                    .collect()
-            })
-            .collect();
-
-        let tests: Vec<TestContext> = spec
-            .verification
-            .test_cases
-            .iter()
-            .enumerate()
-            .map(|(i, t)| TestContext {
-                name: &t.name,
-                setup: t.setup.as_deref(),
-                actions: &t.actions,
-                assertions: &translated_assertions[i],
-            })
-            .collect();
-        context.insert("verification", &VerificationContext { test_cases: tests });
-
-        context
+        add_test_cases_translated(&mut ctx, spec, translate_assertion);
+        ctx
     }
 
-    fn build_class_context(spec: &Spec) -> Context {
+    fn build_class_context(&self, spec: &Spec) -> Context {
         let mut ctx = Context::new();
-
-        ctx.insert(
-            "metadata",
-            &MetadataContext {
-                name: &spec.metadata.name,
-                complexity: ComplexityContext {
-                    time: spec.metadata.complexity.time.as_deref(),
-                    space: spec.metadata.complexity.space.as_deref(),
-                },
-            },
-        );
-
-        ctx.insert(
-            "contracts",
-            &ContractsContext {
-                invariants: &spec.contracts.invariants,
-            },
-        );
+        add_metadata_and_contracts(&mut ctx, spec);
 
         if let Some(s) = spec.structs.first() {
             ctx.insert(
@@ -225,19 +181,9 @@ impl PythonBackend {
         ctx
     }
 
-    fn build_method_context(spec: &Spec, method: &MethodDef) -> Context {
+    fn build_method_context(&self, spec: &Spec, method: &MethodDef) -> Context {
         let mut ctx = Context::new();
-
-        ctx.insert(
-            "metadata",
-            &MetadataContext {
-                name: &spec.metadata.name,
-                complexity: ComplexityContext {
-                    time: spec.metadata.complexity.time.as_deref(),
-                    space: spec.metadata.complexity.space.as_deref(),
-                },
-            },
-        );
+        add_metadata_and_contracts(&mut ctx, spec);
 
         if let Some(s) = spec.structs.first() {
             ctx.insert(
@@ -281,65 +227,8 @@ impl PythonBackend {
             },
         );
 
-        let translated_assertions: Vec<Vec<String>> = spec
-            .verification
-            .test_cases
-            .iter()
-            .map(|t| {
-                t.assertions
-                    .iter()
-                    .map(|a| translate_assertion(a))
-                    .collect()
-            })
-            .collect();
-
-        let tests: Vec<TestContext> = spec
-            .verification
-            .test_cases
-            .iter()
-            .enumerate()
-            .map(|(i, t)| TestContext {
-                name: &t.name,
-                setup: t.setup.as_deref(),
-                actions: &t.actions,
-                assertions: &translated_assertions[i],
-            })
-            .collect();
-        ctx.insert("verification", &VerificationContext { test_cases: tests });
-
+        add_test_cases_translated(&mut ctx, spec, translate_assertion);
         ctx
-    }
-}
-
-impl Backend for PythonBackend {
-    fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
-        validate_unique_names(spec)?;
-        if spec.structs.is_empty() {
-            let ctx = Self::build_monolithic_context(spec);
-            let raw = self.engine.render("python.py.tera", &ctx)?;
-            let code = Self::format_python(&raw).unwrap_or(raw);
-            return Ok(vec![(
-                format!("{}Methods.{}", spec.metadata.name, Self::file_extension()),
-                code,
-            )]);
-        }
-
-        let mut files = Vec::new();
-        let s = spec.structs.first().unwrap();
-
-        let class_ctx = Self::build_class_context(spec);
-        let raw = self.engine.render("python/class.py.tera", &class_ctx)?;
-        let code = Self::format_python(&raw).unwrap_or(raw);
-        files.push((Self::class_filename(&s.name), code));
-
-        for m in &spec.methods {
-            let method_ctx = Self::build_method_context(spec, m);
-            let raw = self.engine.render("python/method.py.tera", &method_ctx)?;
-            let code = Self::format_python(&raw).unwrap_or(raw);
-            files.push((Self::method_filename(&s.name, &m.name), code));
-        }
-
-        Ok(files)
     }
 }
 
@@ -424,23 +313,6 @@ fn translate_assertion(a: &str) -> String {
 }
 
 #[derive(Serialize)]
-struct MetadataContext<'a> {
-    name: &'a str,
-    complexity: ComplexityContext<'a>,
-}
-
-#[derive(Serialize)]
-struct ComplexityContext<'a> {
-    time: Option<&'a str>,
-    space: Option<&'a str>,
-}
-
-#[derive(Serialize)]
-struct ContractsContext<'a> {
-    invariants: &'a [String],
-}
-
-#[derive(Serialize)]
 struct ClassStructContext<'a> {
     name: &'a str,
     generics: Vec<GenericParamContext<'a>>,
@@ -474,19 +346,6 @@ struct MethodContext<'a> {
 struct ParamContext {
     name: String,
     python_type: String,
-}
-
-#[derive(Serialize)]
-struct VerificationContext<'a> {
-    test_cases: Vec<TestContext<'a>>,
-}
-
-#[derive(Serialize)]
-struct TestContext<'a> {
-    name: &'a str,
-    setup: Option<&'a str>,
-    actions: &'a [String],
-    assertions: &'a [String],
 }
 
 #[cfg(test)]
@@ -540,8 +399,6 @@ mod python_type_tests {
                 params: vec![Type::Simple("i32".into())],
             }],
         };
-        // Note: Parameterized base types like "Vec" don't match
-        // the "Vec<T>" pattern; they pass through as-is via to_python_type
         assert_eq!(to_python_type(&typ), "Vec[Option[int]]");
     }
 
@@ -583,8 +440,8 @@ mod python_type_tests {
             verification: crate::ast::Verification::default(),
         };
         let injected = crate::contracts::inject_assertions(&spec);
-        let code = PythonBackend::build_monolithic_context(&injected);
-        // Verify template renders assertions
+        let backend = PythonBackend::new("templates").unwrap();
+        let code = backend.build_monolithic_context(&injected);
         let engine = crate::template_engine::TemplateEngine::new("templates").unwrap();
         let output = engine.render("python.py.tera", &code).unwrap();
         assert!(output.contains("# Contract: precondition: x > 0"));
