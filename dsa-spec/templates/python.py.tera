@@ -64,7 +64,7 @@ class {{ struct.name }}(Generic[{% for generic in struct.generics %}{{ generic.n
         """
         {% for assertion in method.injected_assertions %}
         # Contract: {{ assertion }}
-        assert False, "{{ assertion }}"
+        assert False, "{{ assertion | addslashes }}"
         {% endfor %}
         # TODO: Implement {{ method.name }}
         raise NotImplementedError

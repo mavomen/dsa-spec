@@ -93,7 +93,7 @@ impl CSharpBackend {
     pub(crate) fn is_result_type(typ: &Type) -> bool {
         match typ {
             Type::Simple(s) => s.starts_with("Result<"),
-            _ => false,
+            Type::Parameterized { base, .. } => base == "Result",
         }
     }
 

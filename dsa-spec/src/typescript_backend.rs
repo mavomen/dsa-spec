@@ -96,7 +96,7 @@ impl TypeScriptBackend {
     pub(crate) fn is_result_type(typ: &Type) -> bool {
         match typ {
             Type::Simple(s) => s.starts_with("Result<"),
-            _ => false,
+            Type::Parameterized { base, .. } => base == "Result",
         }
     }
 
@@ -604,12 +604,12 @@ mod tests {
     }
 
     #[test]
-    fn test_is_result_type_parameterized_returns_false() {
+    fn test_is_result_type_parameterized_returns_true() {
         let typ = Type::Parameterized {
             base: "Result".into(),
             params: vec![Type::Simple("T".into()), Type::Simple("E".into())],
         };
-        assert!(!TypeScriptBackend::is_result_type(&typ));
+        assert!(TypeScriptBackend::is_result_type(&typ));
     }
 
     #[test]
