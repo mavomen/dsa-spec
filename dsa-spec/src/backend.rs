@@ -31,6 +31,21 @@ pub trait Backend {
     /// back to unformatted code when formatting fails.
     fn format_code(&self, code: &str) -> Result<String, BackendError>;
 
+    /// Format all generated files in a single batch pass.
+    ///
+    /// The default implementation calls [`format_code`](Backend::format_code)
+    /// on each file individually. Backends whose formatter supports
+    /// multi-file input (e.g. rustfmt) should override this to spawn
+    /// the formatter once for all files.
+    fn format_all(&self, files: &mut [(String, String)]) -> Result<(), BackendError> {
+        for (_, code) in files.iter_mut() {
+            if let Ok(formatted) = self.format_code(code) {
+                *code = formatted;
+            }
+        }
+        Ok(())
+    }
+
     /// Template filename for the monolithic (no-struct) output variant.
     /// `"rust.rs.tera"`, `"python.py.tera"`, ...
     fn monolithic_template(&self) -> &'static str;
@@ -84,28 +99,24 @@ pub trait Backend {
     /// partial class backends).
     fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
         validate_unique_names(spec)?;
-        if spec.structs.is_empty() {
+        let mut files: Vec<(String, String)> = if spec.structs.is_empty() {
             let ctx = self.build_monolithic_context(spec);
             let raw_code = self.engine().render(self.monolithic_template(), &ctx)?;
-            let code = self.format_code(&raw_code).unwrap_or(raw_code);
-            return Ok(vec![(self.monolithic_filename(spec), code)]);
-        }
+            vec![(self.monolithic_filename(spec), raw_code)]
+        } else {
+            let s = spec.structs.first().unwrap();
+            let class_ctx = self.build_class_context(spec);
+            let raw = self.engine().render(self.class_template(), &class_ctx)?;
+            let mut result = vec![(self.class_filename(&s.name), raw)];
+            for m in &spec.methods {
+                let method_ctx = self.build_method_context(spec, m);
+                let raw = self.engine().render(self.method_template(), &method_ctx)?;
+                result.push((self.method_filename(&s.name, &m.name), raw));
+            }
+            result
+        };
 
-        let mut files = Vec::new();
-        let s = spec.structs.first().unwrap();
-
-        let class_ctx = self.build_class_context(spec);
-        let raw = self.engine().render(self.class_template(), &class_ctx)?;
-        let code = self.format_code(&raw).unwrap_or(raw);
-        files.push((self.class_filename(&s.name), code));
-
-        for m in &spec.methods {
-            let method_ctx = self.build_method_context(spec, m);
-            let raw = self.engine().render(self.method_template(), &method_ctx)?;
-            let code = self.format_code(&raw).unwrap_or(raw);
-            files.push((self.method_filename(&s.name, &m.name), code));
-        }
-
+        self.format_all(&mut files)?;
         Ok(files)
     }
 }

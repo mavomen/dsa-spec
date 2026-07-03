@@ -4,32 +4,26 @@
 
 /// Space complexity: O(V+E)
 
-
 /// Invariants:
 /// - all edges reference valid vertices
 /// - vertex count >= 0
 
-
-
 #[derive(Debug, Clone)]
 pub struct Graph<T>
-where T: Clone + Hash + Eq 
-
-    
+where
+    T: Clone + Hash + Eq,
+{
     pub adjacency_list: HashMap<T, Vec<T>>,
-    
+
     pub directed: bool,
-    
 }
 
 impl<T> Graph<T> {
     pub fn new() -> Self {
         Self {
-            
             adjacency_list: Default::default(),
-            
+
             directed: Default::default(),
-            
         }
     }
 }

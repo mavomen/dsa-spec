@@ -58,7 +58,7 @@ impl fmt::Display for SpecError {
 impl std::error::Error for SpecError {}
 
 /// Errors produced during code generation and formatting.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum BackendError {
     /// Tera template engine initialization failure.
     TemplateInit { message: String },

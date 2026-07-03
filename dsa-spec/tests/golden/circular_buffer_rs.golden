@@ -4,45 +4,39 @@
 
 /// Space complexity: O(n)
 
-
 /// Invariants:
 /// - length <= capacity
 /// - 0 <= head < capacity
 /// - 0 <= tail < capacity
 
-
-
 #[derive(Debug, Clone)]
 pub struct CircularBuffer<T>
-where T: Clone + Default 
-
-    
+where
+    T: Clone + Default,
+{
     pub buffer: Vec<Option<T>>,
-    
+
     pub head: usize,
-    
+
     pub tail: usize,
-    
+
     pub size: usize,
-    
+
     pub capacity: usize,
-    
 }
 
 impl<T> CircularBuffer<T> {
     pub fn new() -> Self {
         Self {
-            
             buffer: Default::default(),
-            
+
             head: Default::default(),
-            
+
             tail: Default::default(),
-            
+
             size: Default::default(),
-            
+
             capacity: Default::default(),
-            
         }
     }
 }

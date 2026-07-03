@@ -4,36 +4,30 @@
 
 /// Space complexity: O(n)
 
-
 /// Invariants:
 /// - left.value < node.value < right.value
 /// - no duplicate values
 
-
-
 #[derive(Debug, Clone)]
 pub struct BSTNode<T>
-where T: Ord + Clone 
-
-    
+where
+    T: Ord + Clone,
+{
     pub value: T,
-    
+
     pub left: Option<Box<BSTNode<T>>>,
-    
+
     pub right: Option<Box<BSTNode<T>>>,
-    
 }
 
 impl<T> BSTNode<T> {
     pub fn new() -> Self {
         Self {
-            
             value: Default::default(),
-            
+
             left: Default::default(),
-            
+
             right: Default::default(),
-            
         }
     }
 }
