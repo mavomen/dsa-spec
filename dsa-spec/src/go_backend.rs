@@ -5,9 +5,7 @@ use crate::ast::{MethodDef, Spec, Type};
 use crate::backend::Backend;
 use crate::casing;
 use crate::error::BackendError;
-use crate::template_engine::{
-    TemplateEngine, format_code, sanitize_filename, validate_unique_names,
-};
+use crate::template_engine::{TemplateEngine, format_code};
 use serde::Serialize;
 use tera::Context;
 
@@ -21,31 +19,6 @@ impl GoBackend {
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(GoBackend { engine })
-    }
-
-    fn file_extension() -> &'static str {
-        "go"
-    }
-
-    fn class_filename(struct_name: &str) -> String {
-        format!(
-            "{}.{}",
-            sanitize_filename(struct_name),
-            Self::file_extension()
-        )
-    }
-
-    fn method_filename(struct_name: &str, method_name: &str) -> String {
-        format!(
-            "{}_{}.{}",
-            sanitize_filename(struct_name),
-            sanitize_filename(method_name),
-            Self::file_extension()
-        )
-    }
-
-    fn format_go(code: &str) -> Result<String, BackendError> {
-        format_code(code, "gofmt", &[])
     }
 
     /// Convert an AST type to a Go type string with pointer-based optionality.
@@ -124,13 +97,54 @@ impl GoBackend {
         }
     }
 
-    fn build_monolithic_context(spec: &Spec) -> Context {
-        let mut context = Context::new();
+    fn sanitize_package_name(name: &str) -> String {
+        name.chars()
+            .filter(|c| c.is_alphanumeric() || *c == '_')
+            .collect::<String>()
+            .to_lowercase()
+    }
+}
+
+impl Backend for GoBackend {
+    fn engine(&self) -> &TemplateEngine {
+        &self.engine
+    }
+
+    fn name(&self) -> &'static str {
+        "go"
+    }
+
+    fn file_extension(&self) -> &'static str {
+        "go"
+    }
+
+    fn format_code(&self, code: &str) -> Result<String, BackendError> {
+        format_code(code, "gofmt", &[])
+    }
+
+    fn monolithic_template(&self) -> &'static str {
+        "go.go.tera"
+    }
+
+    fn class_template(&self) -> &'static str {
+        "go/class.go.tera"
+    }
+
+    fn method_template(&self) -> &'static str {
+        "go/method.go.tera"
+    }
+
+    fn monolithic_filename(&self, spec: &Spec) -> String {
+        format!("{}Methods.{}", spec.metadata.name, self.file_extension())
+    }
+
+    fn build_monolithic_context(&self, spec: &Spec) -> Context {
+        let mut ctx = Context::new();
 
         let metadata = &spec.metadata;
         let pkg = Self::sanitize_package_name(&metadata.name);
 
-        context.insert(
+        ctx.insert(
             "metadata",
             &MetadataContext {
                 name: metadata.name.clone(),
@@ -143,7 +157,7 @@ impl GoBackend {
         );
 
         let contracts = &spec.contracts;
-        context.insert(
+        ctx.insert(
             "contracts",
             &ContractsContext {
                 invariants: contracts.invariants.clone(),
@@ -174,7 +188,7 @@ impl GoBackend {
                     .collect(),
             })
             .collect();
-        context.insert("structs", &structs);
+        ctx.insert("structs", &structs);
 
         let methods: Vec<MethodContext> = spec
             .methods
@@ -202,7 +216,7 @@ impl GoBackend {
                 }
             })
             .collect();
-        context.insert("methods", &methods);
+        ctx.insert("methods", &methods);
 
         let tests: Vec<TestContext> = spec
             .verification
@@ -219,19 +233,12 @@ impl GoBackend {
                     .collect(),
             })
             .collect();
-        context.insert("verification", &VerificationContext { test_cases: tests });
+        ctx.insert("verification", &VerificationContext { test_cases: tests });
 
-        context
+        ctx
     }
 
-    fn sanitize_package_name(name: &str) -> String {
-        name.chars()
-            .filter(|c| c.is_alphanumeric() || *c == '_')
-            .collect::<String>()
-            .to_lowercase()
-    }
-
-    fn build_class_context(spec: &Spec) -> Context {
+    fn build_class_context(&self, spec: &Spec) -> Context {
         let mut ctx = Context::new();
 
         let metadata = &spec.metadata;
@@ -284,7 +291,7 @@ impl GoBackend {
         ctx
     }
 
-    fn build_method_context(spec: &Spec, method: &MethodDef) -> Context {
+    fn build_method_context(&self, spec: &Spec, method: &MethodDef) -> Context {
         let mut ctx = Context::new();
 
         let pkg = Self::sanitize_package_name(&spec.metadata.name);
@@ -374,38 +381,6 @@ fn translate_assertion(a: &str) -> String {
         format!("if {left} != {right} {{ t.Errorf(\"got %v, want %v\", {left}, {right}) }}")
     } else {
         a.to_string()
-    }
-}
-
-impl Backend for GoBackend {
-    fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
-        validate_unique_names(spec)?;
-        if spec.structs.is_empty() {
-            let ctx = Self::build_monolithic_context(spec);
-            let raw_code = self.engine.render("go.go.tera", &ctx)?;
-            let code = Self::format_go(&raw_code).unwrap_or(raw_code);
-            return Ok(vec![(
-                format!("{}Methods.{}", spec.metadata.name, Self::file_extension()),
-                code,
-            )]);
-        }
-
-        let mut files = Vec::new();
-        let s = spec.structs.first().unwrap();
-
-        let class_ctx = Self::build_class_context(spec);
-        let raw = self.engine.render("go/class.go.tera", &class_ctx)?;
-        let code = Self::format_go(&raw).unwrap_or(raw);
-        files.push((Self::class_filename(&s.name), code));
-
-        for m in &spec.methods {
-            let method_ctx = Self::build_method_context(spec, m);
-            let raw = self.engine.render("go/method.go.tera", &method_ctx)?;
-            let code = Self::format_go(&raw).unwrap_or(raw);
-            files.push((Self::method_filename(&s.name, &m.name), code));
-        }
-
-        Ok(files)
     }
 }
 

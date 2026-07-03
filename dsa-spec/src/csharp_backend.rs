@@ -1,11 +1,12 @@
 //! C# code generation backend with multi-file partial class output.
 
 use crate::assertion;
-use crate::ast::{Spec, Type};
+use crate::ast::{MethodDef, Spec, Type};
 use crate::backend::Backend;
 use crate::casing;
+use crate::context::{add_metadata_and_contracts, add_test_cases_translated};
 use crate::error::BackendError;
-use crate::template_engine::{TemplateEngine, sanitize_filename, validate_unique_names};
+use crate::template_engine::{TemplateEngine, sanitize_filename};
 use serde::Serialize;
 use tera::Context;
 
@@ -18,33 +19,6 @@ impl CSharpBackend {
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
         let engine = TemplateEngine::new(template_dir)?;
         Ok(CSharpBackend { engine })
-    }
-
-    fn file_extension() -> &'static str {
-        "cs"
-    }
-
-    fn class_filename(struct_name: &str) -> String {
-        format!(
-            "{}.{}",
-            sanitize_filename(struct_name),
-            Self::file_extension()
-        )
-    }
-
-    fn method_filename(struct_name: &str, method_name: &str) -> String {
-        format!(
-            "{}.{}.{}",
-            sanitize_filename(struct_name),
-            casing::to_pascal_case(method_name),
-            Self::file_extension()
-        )
-    }
-
-    fn format_csharp(_code: &str) -> Result<String, BackendError> {
-        Err(BackendError::Formatter {
-            message: "C# formatting skipped: dotnet format requires a project file".into(),
-        })
     }
 
     pub(crate) fn to_csharp_type(typ: &Type) -> String {
@@ -100,27 +74,55 @@ impl CSharpBackend {
             Type::Parameterized { base, .. } => base == "Result",
         }
     }
+}
 
-    fn build_monolithic_context(spec: &Spec) -> Context {
-        let mut context = Context::new();
+impl Backend for CSharpBackend {
+    fn engine(&self) -> &TemplateEngine {
+        &self.engine
+    }
 
-        context.insert(
-            "metadata",
-            &MetadataContext {
-                name: &spec.metadata.name,
-                complexity: ComplexityContext {
-                    time: spec.metadata.complexity.time.as_deref(),
-                    space: spec.metadata.complexity.space.as_deref(),
-                },
-            },
-        );
+    fn name(&self) -> &'static str {
+        "csharp"
+    }
 
-        context.insert(
-            "contracts",
-            &ContractsContext {
-                invariants: &spec.contracts.invariants,
-            },
-        );
+    fn file_extension(&self) -> &'static str {
+        "cs"
+    }
+
+    fn format_code(&self, _code: &str) -> Result<String, BackendError> {
+        Err(BackendError::Formatter {
+            message: "C# formatting skipped: dotnet format requires a project file".into(),
+        })
+    }
+
+    fn monolithic_template(&self) -> &'static str {
+        "csharp.cs.tera"
+    }
+
+    fn class_template(&self) -> &'static str {
+        "csharp/class.cs.tera"
+    }
+
+    fn method_template(&self) -> &'static str {
+        "csharp/method.cs.tera"
+    }
+
+    fn monolithic_filename(&self, spec: &Spec) -> String {
+        format!("{}Methods.{}", spec.metadata.name, self.file_extension())
+    }
+
+    fn method_filename(&self, struct_name: &str, method_name: &str) -> String {
+        format!(
+            "{}.{}.{}",
+            sanitize_filename(struct_name),
+            casing::to_pascal_case(method_name),
+            self.file_extension()
+        )
+    }
+
+    fn build_monolithic_context(&self, spec: &Spec) -> Context {
+        let mut ctx = Context::new();
+        add_metadata_and_contracts(&mut ctx, spec);
 
         let structs: Vec<ClassStructContext> = spec
             .structs
@@ -149,7 +151,7 @@ impl CSharpBackend {
                     .collect(),
             })
             .collect();
-        context.insert("structs", &structs);
+        ctx.insert("structs", &structs);
 
         let methods: Vec<MethodContext> = spec
             .methods
@@ -177,57 +179,15 @@ impl CSharpBackend {
                 }
             })
             .collect();
-        context.insert("methods", &methods);
+        ctx.insert("methods", &methods);
 
-        let translated_assertions: Vec<Vec<String>> = spec
-            .verification
-            .test_cases
-            .iter()
-            .map(|t| {
-                t.assertions
-                    .iter()
-                    .map(|a| translate_assertion(a))
-                    .collect()
-            })
-            .collect();
-
-        let tests: Vec<TestContext> = spec
-            .verification
-            .test_cases
-            .iter()
-            .enumerate()
-            .map(|(i, t)| TestContext {
-                name: &t.name,
-                setup: t.setup.as_deref(),
-                actions: &t.actions,
-                assertions: &translated_assertions[i],
-            })
-            .collect();
-        context.insert("verification", &VerificationContext { test_cases: tests });
-
-        context
+        add_test_cases_translated(&mut ctx, spec, translate_assertion);
+        ctx
     }
 
-    fn build_class_context(spec: &Spec) -> Context {
+    fn build_class_context(&self, spec: &Spec) -> Context {
         let mut ctx = Context::new();
-
-        ctx.insert(
-            "metadata",
-            &MetadataContext {
-                name: &spec.metadata.name,
-                complexity: ComplexityContext {
-                    time: spec.metadata.complexity.time.as_deref(),
-                    space: spec.metadata.complexity.space.as_deref(),
-                },
-            },
-        );
-
-        ctx.insert(
-            "contracts",
-            &ContractsContext {
-                invariants: &spec.contracts.invariants,
-            },
-        );
+        add_metadata_and_contracts(&mut ctx, spec);
 
         if let Some(s) = spec.structs.first() {
             ctx.insert(
@@ -261,19 +221,9 @@ impl CSharpBackend {
         ctx
     }
 
-    fn build_method_context(spec: &Spec, method: &crate::ast::MethodDef) -> Context {
+    fn build_method_context(&self, spec: &Spec, method: &MethodDef) -> Context {
         let mut ctx = Context::new();
-
-        ctx.insert(
-            "metadata",
-            &MetadataContext {
-                name: &spec.metadata.name,
-                complexity: ComplexityContext {
-                    time: spec.metadata.complexity.time.as_deref(),
-                    space: spec.metadata.complexity.space.as_deref(),
-                },
-            },
-        );
+        add_metadata_and_contracts(&mut ctx, spec);
 
         if let Some(s) = spec.structs.first() {
             ctx.insert(
@@ -324,65 +274,8 @@ impl CSharpBackend {
             },
         );
 
-        let translated_assertions: Vec<Vec<String>> = spec
-            .verification
-            .test_cases
-            .iter()
-            .map(|t| {
-                t.assertions
-                    .iter()
-                    .map(|a| translate_assertion(a))
-                    .collect()
-            })
-            .collect();
-
-        let tests: Vec<TestContext> = spec
-            .verification
-            .test_cases
-            .iter()
-            .enumerate()
-            .map(|(i, t)| TestContext {
-                name: &t.name,
-                setup: t.setup.as_deref(),
-                actions: &t.actions,
-                assertions: &translated_assertions[i],
-            })
-            .collect();
-        ctx.insert("verification", &VerificationContext { test_cases: tests });
-
+        add_test_cases_translated(&mut ctx, spec, translate_assertion);
         ctx
-    }
-}
-
-impl Backend for CSharpBackend {
-    fn generate(&self, spec: &Spec) -> Result<Vec<(String, String)>, BackendError> {
-        validate_unique_names(spec)?;
-        if spec.structs.is_empty() {
-            let ctx = Self::build_monolithic_context(spec);
-            let raw = self.engine.render("csharp.cs.tera", &ctx)?;
-            let code = Self::format_csharp(&raw).unwrap_or(raw);
-            return Ok(vec![(
-                format!("{}Methods.{}", spec.metadata.name, Self::file_extension()),
-                code,
-            )]);
-        }
-
-        let mut files = Vec::new();
-        let s = spec.structs.first().unwrap();
-
-        let class_ctx = Self::build_class_context(spec);
-        let raw = self.engine.render("csharp/class.cs.tera", &class_ctx)?;
-        let code = Self::format_csharp(&raw).unwrap_or(raw);
-        files.push((Self::class_filename(&s.name), code));
-
-        for m in &spec.methods {
-            let method_ctx = Self::build_method_context(spec, m);
-            let raw = self.engine.render("csharp/method.cs.tera", &method_ctx)?;
-            let code = Self::format_csharp(&raw).unwrap_or(raw);
-            files.push((Self::method_filename(&s.name, &m.name), code));
-        }
-
-        Ok(files)
     }
 }
 
@@ -394,23 +287,6 @@ fn translate_assertion(a: &str) -> String {
     } else {
         a.to_string()
     }
-}
-
-#[derive(Serialize)]
-struct MetadataContext<'a> {
-    name: &'a str,
-    complexity: ComplexityContext<'a>,
-}
-
-#[derive(Serialize)]
-struct ComplexityContext<'a> {
-    time: Option<&'a str>,
-    space: Option<&'a str>,
-}
-
-#[derive(Serialize)]
-struct ContractsContext<'a> {
-    invariants: &'a [String],
 }
 
 #[derive(Serialize)]
@@ -447,19 +323,6 @@ struct MethodContext<'a> {
 struct ParamContext {
     name: String,
     csharp_type: String,
-}
-
-#[derive(Serialize)]
-struct VerificationContext<'a> {
-    test_cases: Vec<TestContext<'a>>,
-}
-
-#[derive(Serialize)]
-struct TestContext<'a> {
-    name: &'a str,
-    setup: Option<&'a str>,
-    actions: &'a [String],
-    assertions: &'a [String],
 }
 
 #[cfg(test)]

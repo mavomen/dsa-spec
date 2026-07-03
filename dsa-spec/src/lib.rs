@@ -5,6 +5,7 @@ pub mod ast;
 pub mod backend;
 pub mod casing;
 pub mod complexity;
+pub mod context;
 pub mod contracts;
 pub mod csharp_backend;
 pub mod doc_gen;

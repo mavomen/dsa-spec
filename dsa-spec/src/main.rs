@@ -11,6 +11,7 @@ mod ast;
 mod backend;
 mod casing;
 mod complexity;
+mod context;
 mod contracts;
 mod csharp_backend;
 mod error;
