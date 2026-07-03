@@ -11,7 +11,7 @@
 {% if struct.generics %}
 #[derive(Debug, Clone)]
 pub struct {{ struct.name }}<{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}>
-{% for generic in struct.generics %}where {{ generic.name }}: {{ generic.bounds | default(value="Clone") }} {% if not loop.last %}, {% endif %}{% endfor %}
+{% for generic in struct.generics %}where {{ generic.name }}: {{ generic.bounds | default(value="Clone") }} {% if not loop.last %}, {% endif %}{% endfor %} {
 {% else %}
 #[derive(Debug, Clone)]
 pub struct {{ struct.name }} {

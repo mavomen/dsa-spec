@@ -4,25 +4,47 @@ use crate::ast::Spec;
 use crate::error::BackendError;
 use std::collections::HashSet;
 use std::io::Write;
+use std::path::Path;
 use std::process::{Command, Stdio};
+use std::sync::{Arc, OnceLock};
 use tera::{Context, Tera};
 
+static GLOBAL_TERA: OnceLock<Result<Arc<Tera>, BackendError>> = OnceLock::new();
+
+fn get_or_init_tera(template_dir: &str) -> Result<Arc<Tera>, BackendError> {
+    if template_dir == "templates" {
+        GLOBAL_TERA
+            .get_or_init(|| {
+                Tera::new("templates/**/*")
+                    .map(Arc::new)
+                    .map_err(|e| BackendError::TemplateInit {
+                        message: format!("{e}"),
+                    })
+            })
+            .clone()
+    } else {
+        Tera::new(&format!("{template_dir}/**/*"))
+            .map(Arc::new)
+            .map_err(|e| BackendError::TemplateInit {
+                message: format!("{e}"),
+            })
+    }
+}
+
 /// Tera template engine wrapper.
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct TemplateEngine {
-    tera: Tera,
+    tera: Arc<Tera>,
 }
 
 impl TemplateEngine {
     /// Create a new engine, loading templates from a directory tree.
     ///
     /// Loads all files matching `{template_dir}/**/*` as Tera templates.
+    /// When `template_dir` is `"templates"`, the engine is lazily
+    /// initialised once and shared across all callers.
     pub fn new(template_dir: &str) -> Result<Self, BackendError> {
-        let tera = Tera::new(&format!("{}/**/*", template_dir)).map_err(|e| {
-            BackendError::TemplateInit {
-                message: format!("{e}"),
-            }
-        })?;
+        let tera = get_or_init_tera(template_dir)?;
         Ok(TemplateEngine { tera })
     }
 
@@ -77,6 +99,17 @@ pub fn format_code(code: &str, cmd: &str, args: &[&str]) -> Result<String, Backe
     }
 }
 
+/// Write content to a file atomically via temp file + rename.
+///
+/// Writes to a `.tmp` sibling of `path` then renames, preventing
+/// partial output on crash or power loss.
+pub fn atomic_write(path: &Path, content: &str) -> std::io::Result<()> {
+    let tmp = path.with_extension("tmp");
+    std::fs::write(&tmp, content)?;
+    std::fs::rename(&tmp, path)?;
+    Ok(())
+}
+
 /// Check that struct names and method names are unique (no silent overwrites).
 pub fn validate_unique_names(spec: &Spec) -> Result<(), BackendError> {
     let mut struct_names = HashSet::new();
@@ -124,10 +157,7 @@ mod tests {
 
     #[test]
     fn test_new_with_invalid_dir_returns_empty_but_not_crash() {
-        // Tera's glob **/* on a nonexistent dir returns empty template set — not an error
-        // The engine initializes but has no templates
         let result = TemplateEngine::new("/nonexistent/path/that/does/not/exist");
-        // Engine initializes with empty template set
         assert!(result.is_ok() || result.is_err());
     }
 
@@ -163,6 +193,30 @@ mod tests {
     }
 
     #[test]
+    fn test_atomic_write_creates_file() {
+        let dir = std::env::temp_dir().join("dsa_spec_test_atomic");
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("test.txt");
+        atomic_write(&path, "hello").unwrap();
+        assert_eq!(std::fs::read_to_string(&path).unwrap(), "hello");
+        assert!(!path.with_extension("tmp").exists());
+        std::fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn test_atomic_write_overwrites_previous_content() {
+        let dir = std::env::temp_dir().join("dsa_spec_test_atomic_over");
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("data.txt");
+        atomic_write(&path, "old").unwrap();
+        atomic_write(&path, "new").unwrap();
+        assert_eq!(std::fs::read_to_string(&path).unwrap(), "new");
+        std::fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
     fn test_sanitize_filename_passes_through_safe_names() {
         assert_eq!(sanitize_filename("MyStruct"), "MyStruct");
         assert_eq!(sanitize_filename("foo_bar"), "foo_bar");
@@ -188,5 +242,22 @@ mod tests {
         assert_eq!(sanitize_filename(""), "_");
         assert_eq!(sanitize_filename("..."), "_");
         assert_eq!(sanitize_filename("   "), "_");
+    }
+
+    #[test]
+    fn test_shared_tera_does_not_panic() {
+        let a = TemplateEngine::new("templates").unwrap();
+        let b = TemplateEngine::new("templates").unwrap();
+        let mut ctx = Context::new();
+        ctx.insert(
+            "metadata",
+            &serde_json::json!({"name": "x", "complexity": {"time": null, "space": null}}),
+        );
+        ctx.insert("contracts", &serde_json::json!({"invariants": []}));
+        ctx.insert("structs", &serde_json::json!([]));
+        ctx.insert("methods", &serde_json::json!([]));
+        ctx.insert("verification", &serde_json::json!({"test_cases": []}));
+        assert!(a.render("rust.rs.tera", &ctx).is_ok());
+        assert!(b.render("rust.rs.tera", &ctx).is_ok());
     }
 }

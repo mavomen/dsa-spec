@@ -6,6 +6,7 @@ use crate::context::add_metadata_and_contracts;
 use crate::error::BackendError;
 use crate::template_engine::{TemplateEngine, format_code, sanitize_filename};
 use serde::Serialize;
+use std::io::Write;
 use tera::Context;
 
 /// Rust backend using Tera templates with rustfmt formatting.
@@ -36,6 +37,69 @@ impl Backend for RustBackend {
 
     fn format_code(&self, code: &str) -> Result<String, BackendError> {
         format_code(code, "rustfmt", &["--edition", "2024"])
+    }
+
+    fn format_all(&self, files: &mut [(String, String)]) -> Result<(), BackendError> {
+        if files.is_empty() {
+            return Ok(());
+        }
+        let tmp_dir = std::env::temp_dir().join(format!(
+            "dsa_rustfmt_{}_{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap_or_default()
+                .as_nanos()
+        ));
+        std::fs::create_dir_all(&tmp_dir).map_err(|e| BackendError::Formatter {
+            message: format!("failed to create temp dir: {e}"),
+        })?;
+
+        let mut paths = Vec::with_capacity(files.len());
+        for (name, code) in files.iter() {
+            let path = tmp_dir.join(sanitize_filename(name));
+            let mut f = std::fs::File::create(&path).map_err(|e| BackendError::Formatter {
+                message: format!("failed to create temp file {name}: {e}"),
+            })?;
+            f.write_all(code.as_bytes())
+                .map_err(|e| BackendError::Formatter {
+                    message: format!("failed to write temp file {name}: {e}"),
+                })?;
+            paths.push(path);
+        }
+
+        let output = std::process::Command::new("rustfmt")
+            .args(["--edition", "2024"])
+            .args(&paths)
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::piped())
+            .output();
+
+        match output {
+            Ok(out) if out.status.success() => {
+                for (i, (name, code)) in files.iter_mut().enumerate() {
+                    let path = &paths[i];
+                    match std::fs::read_to_string(path) {
+                        Ok(formatted) => *code = formatted,
+                        Err(e) => {
+                            return Err(BackendError::Formatter {
+                                message: format!("failed to read formatted {name}: {e}"),
+                            });
+                        }
+                    }
+                }
+            }
+            Ok(out) => {
+                let stderr = String::from_utf8_lossy(&out.stderr);
+                tracing::warn!("rustfmt batch error (falling back to unformatted): {stderr}");
+            }
+            Err(e) => {
+                tracing::warn!("rustfmt not available (falling back to unformatted): {e}");
+            }
+        }
+
+        let _ = std::fs::remove_dir_all(&tmp_dir);
+        Ok(())
     }
 
     fn monolithic_template(&self) -> &'static str {
