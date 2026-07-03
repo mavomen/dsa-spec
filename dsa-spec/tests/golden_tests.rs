@@ -89,7 +89,7 @@ fn walkdir_specs(dir: &Path) -> Vec<PathBuf> {
 fn parse_spec(path: &Path) -> dsa_spec::ast::Spec {
     let content =
         fs::read_to_string(path).unwrap_or_else(|e| panic!("Failed to read {:?}: {}", path, e));
-    serde_yaml::from_str(&content)
+    serde_yml::from_str(&content)
         .unwrap_or_else(|e| panic!("Failed to parse {}: {}", path.display(), e))
 }
 

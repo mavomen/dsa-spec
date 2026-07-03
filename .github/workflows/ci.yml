@@ -44,14 +44,6 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - run: cargo test doc_gen -- --nocapture
 
-      # Deploy docs to GitHub Pages (uncomment when ready)
-      # - name: Deploy to GitHub Pages
-      #   if: github.ref == 'refs/heads/main'
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./docs
-
   cross-lang:
     runs-on: ubuntu-latest
     defaults:
@@ -62,4 +54,18 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - run: pip install black
+      - run: dotnet tool install -g dotnet-format
       - run: bash ../ci/run-cross-lang-tests.sh
