@@ -23,7 +23,7 @@ import { {{ struct.name }} } from './{{ struct.name | lower }}';
 {% endif %}
     {% for assertion in method.injected_assertions %}
     // Contract: {{ assertion }}
-    console.assert(false, "{{ assertion }}");
+    console.assert(false, "{{ assertion | addslashes }}");
     {% endfor %}
     throw new Error('Not implemented');
 };

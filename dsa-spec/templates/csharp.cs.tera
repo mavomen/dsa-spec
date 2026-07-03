@@ -22,7 +22,7 @@ namespace {{ metadata.name | replace(from=" ", to="") }}
 {
 {% if structs %}
 {% for struct in structs %}
-public class {{ struct.name }}<{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}>
+public partial class {{ struct.name }}<{% for generic in struct.generics %}{{ generic.name }}{% if not loop.last %}, {% endif %}{% endfor %}>
 {% for generic in struct.generics %}{% if generic.bounds != "" %}    {{ generic.bounds }}
 {% endif %}{% endfor %}
 {
@@ -63,7 +63,7 @@ public class {{ struct.name }}<{% for generic in struct.generics %}{{ generic.na
     {
         {% for assertion in method.injected_assertions %}
         // Contract: {{ assertion }}
-        System.Diagnostics.Debug.Assert(false, "{{ assertion }}");
+        System.Diagnostics.Debug.Assert(false, "{{ assertion | addslashes }}");
         {% endfor %}
         // TODO: Implement {{ method.name }}
         throw new NotImplementedException();
@@ -108,7 +108,7 @@ public static class {{ metadata.name | replace(from=" ", to="") }}Methods
     {
         {% for assertion in method.injected_assertions %}
         // Contract: {{ assertion }}
-        System.Diagnostics.Debug.Assert(false, "{{ assertion }}");
+        System.Diagnostics.Debug.Assert(false, "{{ assertion | addslashes }}");
         {% endfor %}
         // TODO: Implement {{ method.name }}
         throw new NotImplementedException();

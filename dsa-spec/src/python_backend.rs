@@ -404,7 +404,7 @@ pub(crate) fn translate_simple_type(s: &str) -> String {
 pub(crate) fn is_result_type(typ: &Type) -> bool {
     match typ {
         Type::Simple(s) => s.starts_with("Result<"),
-        _ => false,
+        Type::Parameterized { base, .. } => base == "Result",
     }
 }
 
@@ -547,14 +547,12 @@ mod python_type_tests {
     }
 
     #[test]
-    fn test_is_result_type_with_parameterized_returns_false() {
+    fn test_is_result_type_with_parameterized_returns_true() {
         let typ = Type::Parameterized {
             base: "Result".into(),
             params: vec![Type::Simple("T".into()), Type::Simple("E".into())],
         };
-        // is_result_type checks Type::Simple with starts_with("Result<")
-        // Parameterized won't match that pattern
-        assert!(!is_result_type(&typ));
+        assert!(is_result_type(&typ));
     }
 
     #[test]

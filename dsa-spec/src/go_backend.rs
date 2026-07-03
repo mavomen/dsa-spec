@@ -138,7 +138,7 @@ impl GoBackend {
     pub(crate) fn is_result_type(typ: &Type) -> bool {
         match typ {
             Type::Simple(s) => s.starts_with("Result<"),
-            _ => false,
+            Type::Parameterized { base, .. } => base == "Result",
         }
     }
 
@@ -146,12 +146,7 @@ impl GoBackend {
         let mut context = Context::new();
 
         let metadata = &spec.metadata;
-        let pkg = metadata
-            .name
-            .chars()
-            .filter(|c| c.is_alphanumeric() || *c == '_')
-            .collect::<String>()
-            .to_lowercase();
+        let pkg = Self::sanitize_package_name(&metadata.name);
 
         context.insert(
             "metadata",
@@ -247,10 +242,18 @@ impl GoBackend {
         context
     }
 
+    fn sanitize_package_name(name: &str) -> String {
+        name.chars()
+            .filter(|c| c.is_alphanumeric() || *c == '_')
+            .collect::<String>()
+            .to_lowercase()
+    }
+
     fn build_class_context(spec: &Spec) -> Context {
         let mut ctx = Context::new();
 
         let metadata = &spec.metadata;
+        let pkg = Self::sanitize_package_name(&metadata.name);
         ctx.insert(
             "metadata",
             &MetadataContext {
@@ -259,7 +262,7 @@ impl GoBackend {
                     time: metadata.complexity.time.clone(),
                     space: metadata.complexity.space.clone(),
                 },
-                package_name: String::new(),
+                package_name: pkg,
             },
         );
 
@@ -302,6 +305,7 @@ impl GoBackend {
     fn build_method_context(spec: &Spec, method: &MethodDef) -> Context {
         let mut ctx = Context::new();
 
+        let pkg = Self::sanitize_package_name(&spec.metadata.name);
         ctx.insert(
             "metadata",
             &MetadataContext {
@@ -310,7 +314,7 @@ impl GoBackend {
                     time: spec.metadata.complexity.time.clone(),
                     space: spec.metadata.complexity.space.clone(),
                 },
-                package_name: String::new(),
+                package_name: pkg,
             },
         );
 
@@ -726,12 +730,12 @@ mod tests {
     }
 
     #[test]
-    fn test_is_result_type_parameterized_returns_false() {
+    fn test_is_result_type_parameterized_returns_true() {
         let typ = Type::Parameterized {
             base: "Result".into(),
             params: vec![Type::Simple("T".into()), Type::Simple("E".into())],
         };
-        assert!(!GoBackend::is_result_type(&typ));
+        assert!(GoBackend::is_result_type(&typ));
     }
 
     #[test]
